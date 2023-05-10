@@ -12,8 +12,12 @@ public class newThing extends LinearOpMode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
         Trajectory myTrajectory = drive.trajectoryBuilder(new Pose2d())
-                .strafeRight(10)
-                .forward(5)
+                .strafeRight(12)
+                .forward(12)
+                .build();
+
+        Trajectory coolT = drive.trajectoryBuilder(new Pose2d())
+                .splineToSplineHeading(new Pose2d(-24,-24,Math.toRadians(180)),Math.toRadians(90))
                 .build();
 
         waitForStart();
@@ -22,5 +26,6 @@ public class newThing extends LinearOpMode {
 
         drive.followTrajectory(myTrajectory);
         drive.followTrajectory(myTrajectory);
+        drive.followTrajectory();
     }
 }
