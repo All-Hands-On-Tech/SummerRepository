@@ -1,27 +1,20 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
 public abstract class RoboMom extends LinearOpMode {
 
+    //Initializing hardware variables
     public DcMotor rightFrontDrive = null;
     public DcMotor leftFrontDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftBackDrive = null;
 
     public void runOpMode() {
+        //Defining hardware variables
         telemetry.addData("Status", "Initialized");
         telemetry.update();
-
 
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontLeft");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backLeft");
@@ -35,18 +28,9 @@ public abstract class RoboMom extends LinearOpMode {
 
     }
 
-    public enum Element {
-        F("Hydrogen"),
-        B("Helium"),
-        NE("Neon");
-
-        public final String label;
-
-        private Element(String label) {
-            this.label = label;
-        }
-    }
-
+    //Function that has the robot drive in one of these directions:
+    //FORWARD, BACKWARD, RIGHT, LEFT, ROTATE_RIGHT, ROTATE_LEFT, STOP
+    //Uses variable power to set the power to the motors (units arbitrary 0-1)
     public void driveInDirection(double power, String direction){
         switch(direction){
             case "FORWARD":
@@ -55,26 +39,23 @@ public abstract class RoboMom extends LinearOpMode {
                 rightBackDrive.setPower(power);
                 leftBackDrive.setPower(power);
                 break;
-
             case "BACKWARD":
                 rightFrontDrive.setPower(-power);
                 leftFrontDrive.setPower(-power);
                 rightBackDrive.setPower(-power);
                 leftBackDrive.setPower(-power);
                 break;
-
-            case "LEFT":
-                rightFrontDrive.setPower(power);
-                leftFrontDrive.setPower(-power);
-                rightBackDrive.setPower(-power);
-                leftBackDrive.setPower(power);
-                break;
-
             case "RIGHT":
                 rightFrontDrive.setPower(-power);
                 leftFrontDrive.setPower(power);
                 rightBackDrive.setPower(power);
                 leftBackDrive.setPower(-power);
+                break;
+            case "LEFT":
+                rightFrontDrive.setPower(power);
+                leftFrontDrive.setPower(-power);
+                rightBackDrive.setPower(-power);
+                leftBackDrive.setPower(power);
                 break;
             case "ROTATE_RIGHT":
                 rightFrontDrive.setPower(-power);
@@ -97,6 +78,8 @@ public abstract class RoboMom extends LinearOpMode {
         }
     }
 
+    //Function uses the motor encoders to estimate distance traveled (units centimeters)
+    //Uses driveInDirection for power and direction
     public void driveForDistance(double power, double distance, String direction){
         double clicksPerMeter = 2492.788;
         double targetClicks = distance*clicksPerMeter;
@@ -131,6 +114,8 @@ public abstract class RoboMom extends LinearOpMode {
         driveInDirection(0, "FORWARD");
     }
 
+    //Function uses the internal to tell time elapsed (units seconds)
+    //Uses driveInDirection for power and direction
     public void driveForTime(String direction, double power, double time){
         time*=1000;
         driveInDirection(power, direction);

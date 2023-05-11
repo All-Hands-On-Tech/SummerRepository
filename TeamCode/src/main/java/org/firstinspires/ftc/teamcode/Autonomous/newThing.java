@@ -6,24 +6,11 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.RoboMom;
 
-public class newThing extends LinearOpMode {
-
-    public DcMotor rightFrontDrive = null;
-    public DcMotor leftFrontDrive = null;
-    public DcMotor rightBackDrive = null;
-    public DcMotor leftBackDrive = null;
+public class newThing extends RoboMom {
     @Override
     public void runOpMode() {
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "frontLeft");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "backLeft");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontRight");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "backRight");
-
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
 
