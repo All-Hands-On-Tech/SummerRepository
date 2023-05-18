@@ -1,6 +1,7 @@
 ## NOTICE
 
 This repository contains the public FTC SDK for the POWERPLAY (2022-2023) competition season.
+
 This repository is owned and maintained by the FTC team All Hands On Tech #18127
 
 ## Welcome!
@@ -11,7 +12,7 @@ This GitHub repository contains the source code that is used to build an Android
 2. Press "Open with Github Desktop"
 3. Set the local path to wherever on your computer you want to put the file
 4. Hit "clone"
-5. Pick option 2 "make changes for your own "purpose"
+5. Pick "make changes for your own purposes"
 
 ## Getting Help
 ### User Documentation and Tutorials
@@ -37,3 +38,6 @@ This project contains a large selection of Sample OpModes (robot code examples) 
 Samples Folder: &nbsp;&nbsp; [/FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples](FtcRobotController/src/main/java/org/firstinspires/ftc/robotcontroller/external/samples)
 
 The readme.md file located in the [/TeamCode/src/main/java/org/firstinspires/ftc/teamcode](TeamCode/src/main/java/org/firstinspires/ftc/teamcode) folder contains an explanation of the sample naming convention, and instructions on how to copy them to your own project space.
+
+### Tips
+Never sent pull requests to "FIRST-Tech-Challenge". The requests are always terminated in a couple of minutes
