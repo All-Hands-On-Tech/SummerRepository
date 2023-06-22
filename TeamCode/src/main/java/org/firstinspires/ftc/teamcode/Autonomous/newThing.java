@@ -15,6 +15,7 @@ public class newThing extends RoboMom {
     enum State {
         TRAJECTORY_1,
         TRAJECTORY_2,
+        ROTATION,
         IDLE
     }
 
@@ -53,6 +54,9 @@ public class newThing extends RoboMom {
                         currentState = State.IDLE;
                     }
                     break;
+                case ROTATION:
+                    //robot rotates
+                    //update trajectory
                 case IDLE:
                     //stops here
                     break;
