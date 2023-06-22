@@ -32,7 +32,7 @@ public class newThing extends RoboMom {
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
-                .splineToSplineHeading(new Pose2d(0, -24, Math.toRadians(90)), Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(0, -24, Math.toRadians(0)), Math.toRadians(180))
                 .build();
 
         waitForStart();
