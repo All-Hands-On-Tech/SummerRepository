@@ -74,8 +74,9 @@ public class SampleMecanumDrive extends MecanumDrive {
 
     private DcMotorEx leftFront, leftRear, rightRear, rightFront;
 
-    private Encoder leftEncoder,rightEncoder,frontEncoder;
+    private DcMotorEx leftEncoder,rightEncoder,frontEncoder;
     private List<DcMotorEx> motors;
+    private List<DcMotorEx> encoders;
 
     private IMU imu;
     private VoltageSensor batteryVoltageSensor;
@@ -108,11 +109,12 @@ public class SampleMecanumDrive extends MecanumDrive {
         rightRear = hardwareMap.get(DcMotorEx.class, "rightRear");
         rightFront = hardwareMap.get(DcMotorEx.class, "rightFront");
 
-        leftEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "leftEncoder"));
-        rightEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "rightEncoder"));
-        frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
+        leftEncoder = hardwareMap.get(DcMotorEx.class, "leftEncoder");
+        rightEncoder = hardwareMap.get(DcMotorEx.class, "rightEncoder");
+        frontEncoder = hardwareMap.get(DcMotorEx.class, "frontEncoder");
 
         motors = Arrays.asList(leftFront, leftRear, rightRear, rightFront);
+        encoders = Arrays.asList(leftEncoder, rightEncoder, frontEncoder);
 
         for (DcMotorEx motor : motors) {
             MotorConfigurationType motorConfigurationType = motor.getMotorType().clone();
@@ -269,7 +271,7 @@ public class SampleMecanumDrive extends MecanumDrive {
         lastEncPositions.clear();
 
         List<Double> wheelPositions = new ArrayList<>();
-        for (DcMotorEx motor : motors) {
+        for (DcMotorEx motor : encoders) {
             int position = motor.getCurrentPosition();
             lastEncPositions.add(position);
             wheelPositions.add(encoderTicksToInches(position));
@@ -288,6 +290,15 @@ public class SampleMecanumDrive extends MecanumDrive {
             wheelVelocities.add(encoderTicksToInches(vel));
         }
         return wheelVelocities;
+    }
+
+    public List<Integer> getEncoderPositions(){
+        List<Integer> positions = new ArrayList<>();
+        for(DcMotorEx encoder : motors){
+            int position = encoder.getCurrentPosition();
+            positions.add(position);
+        }
+        return positions;
     }
 
     @Override
