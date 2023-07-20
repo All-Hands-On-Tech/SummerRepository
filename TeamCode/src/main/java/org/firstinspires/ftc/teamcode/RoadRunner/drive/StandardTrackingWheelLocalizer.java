@@ -6,6 +6,7 @@ import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.localization.ThreeTrackingWheelLocalizer;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import org.firstinspires.ftc.teamcode.RoadRunner.util.Encoder;
 
@@ -27,12 +28,17 @@ import java.util.List;
  */
 @Config
 public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer {
-    public static double TICKS_PER_REV = 0;
-    public static double WHEEL_RADIUS = 2; // in
+    public static double TICKS_PER_REV = 8192;
+    public static double WHEEL_RADIUS = 1.5; // in
     public static double GEAR_RATIO = 1; // output (wheel) speed / input (encoder) speed
 
-    public static double LATERAL_DISTANCE = 10; // in; distance between the left and right wheels
-    public static double FORWARD_OFFSET = 4; // in; offset of the lateral wheel
+    public static double LATERAL_DISTANCE = 16; // in; distance between the left and right wheels
+    public static double FORWARD_OFFSET = 6.5; // in; offset of the lateral wheel
+
+    public static double X_MULTIPLIER = 1;
+    public static double Y_MULTIPLIER = 1;
+
+
 
     private Encoder leftEncoder, rightEncoder, frontEncoder;
 
@@ -53,6 +59,10 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
         frontEncoder = new Encoder(hardwareMap.get(DcMotorEx.class, "frontEncoder"));
 
         // TODO: reverse any encoders using Encoder.setDirection(Encoder.Direction.REVERSE)
+
+        //frontEncoder.setDirection(Encoder.Direction.REVERSE);
+        leftEncoder.setDirection(Encoder.Direction.REVERSE);
+        rightEncoder.setDirection(Encoder.Direction.REVERSE);
     }
 
     public static double encoderTicksToInches(double ticks) {
@@ -62,38 +72,26 @@ public class StandardTrackingWheelLocalizer extends ThreeTrackingWheelLocalizer 
     @NonNull
     @Override
     public List<Double> getWheelPositions() {
-        int leftPos = leftEncoder.getCurrentPosition();
-        int rightPos = rightEncoder.getCurrentPosition();
-        int frontPos = frontEncoder.getCurrentPosition();
-
-        lastEncPositions.clear();
-        lastEncPositions.add(leftPos);
-        lastEncPositions.add(rightPos);
-        lastEncPositions.add(frontPos);
-
         return Arrays.asList(
-                encoderTicksToInches(leftPos),
-                encoderTicksToInches(rightPos),
-                encoderTicksToInches(frontPos)
+                encoderTicksToInches(leftEncoder.getCurrentPosition()) * X_MULTIPLIER,
+                encoderTicksToInches(rightEncoder.getCurrentPosition()) * X_MULTIPLIER,
+                encoderTicksToInches(frontEncoder.getCurrentPosition()) * Y_MULTIPLIER
         );
     }
+
 
     @NonNull
     @Override
     public List<Double> getWheelVelocities() {
-        int leftVel = (int) leftEncoder.getCorrectedVelocity();
-        int rightVel = (int) rightEncoder.getCorrectedVelocity();
-        int frontVel = (int) frontEncoder.getCorrectedVelocity();
+        // TODO: If your encoder velocity can exceed 32767 counts / second (such as the REV Through Bore and other
+        //  competing magnetic encoders), change Encoder.getRawVelocity() to Encoder.getCorrectedVelocity() to enable a
+        //  compensation method
 
-        lastEncVels.clear();
-        lastEncVels.add(leftVel);
-        lastEncVels.add(rightVel);
-        lastEncVels.add(frontVel);
 
         return Arrays.asList(
-                encoderTicksToInches(leftVel),
-                encoderTicksToInches(rightVel),
-                encoderTicksToInches(frontVel)
+                encoderTicksToInches(leftEncoder.getCorrectedVelocity()) * X_MULTIPLIER,
+                encoderTicksToInches(rightEncoder.getCorrectedVelocity()) * X_MULTIPLIER,
+                encoderTicksToInches(frontEncoder.getCorrectedVelocity()) * Y_MULTIPLIER
         );
     }
 }
