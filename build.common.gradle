@@ -55,7 +55,6 @@ android {
         signingConfig signingConfigs.debug
         applicationId 'com.qualcomm.ftcrobotcontroller'
         minSdkVersion 24
-
         //noinspection ExpiredTargetSdkVersion
         targetSdkVersion 28
         multiDexEnabled true
@@ -123,8 +122,5 @@ android {
 }
 
 repositories {
-    flatDir {
-        dirs rootProject.file('libs')
-    }
 }
 
