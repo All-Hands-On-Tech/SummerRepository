@@ -21,6 +21,10 @@
 
 package org.firstinspires.ftc.teamcode.aprilTag;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
+import com.acmerobotics.roadrunner.trajectory.TrajectoryBuilder;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
@@ -29,17 +33,22 @@ import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.RoadRunner.drive.DriveConstants;
+import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.openftc.apriltag.AprilTagDetection;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 import org.openftc.easyopencv.OpenCvInternalCamera;
+import org.opencv.imgproc.Imgproc;
 
 import java.util.ArrayList;
 
 @TeleOp
 public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 {
+
+
     OpenCvCamera camera;
     AprilTagDetectionPipeline aprilTagDetectionPipeline;
 
@@ -59,11 +68,17 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
 
     int ID_TAG_OF_INTEREST = 18; // Tag ID 18 from the 36h11 family
 
+    float slowerVelocity = 0.1f;
+
     AprilTagDetection tagOfInterest = null;
 
     @Override
     public void runOpMode()
     {
+        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        Pose2d startPose = new Pose2d(0,0,0);
+        drive.setPoseEstimate(startPose);
+
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         camera = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
         aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
@@ -75,6 +90,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
             public void onOpened()
             {
                 camera.startStreaming(800,448, OpenCvCameraRotation.UPRIGHT);
+
             }
 
             @Override
@@ -167,6 +183,8 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
             telemetry.update();
         }
 
+
+
         /* Actually do something useful */
         if(tagOfInterest == null)
         {
@@ -177,9 +195,13 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         }
         else
         {
-            /*
-             * Insert your autonomous code here, probably using the tag pose to decide your configuration.
-             */
+            Vector2d endPoint = new Vector2d(tagOfInterest.pose.x, tagOfInterest.pose.z);
+            Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(0,0,0))
+                    .splineTo(endPoint, Math.toRadians(0),
+                            SampleMecanumDrive.getVelocityConstraint(slowerVelocity, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
+                            SampleMecanumDrive.getAccelerationConstraint(DriveConstants.MAX_ACCEL))
+                    .build();
+            drive.followTrajectory(traj1);
 
             // e.g.
             if(tagOfInterest.pose.x <= 20)

@@ -81,7 +81,7 @@ class AprilTagDetectionPipeline extends OpenCvPipeline
         constructMatrix();
 
         // Allocate a native context object. See the corresponding deletion in the finalizer
-        nativeApriltagPtr = AprilTagDetectorJNI.createApriltagDetector(AprilTagDetectorJNI.TagFamily.TAG_36h11.string, 3, 3);
+        nativeApriltagPtr = AprilTagDetectorJNI.createApriltagDetector(AprilTagDetectorJNI.TagFamily.TAG_16h5.string, 3, 3);
     }
 
     @Override
@@ -130,6 +130,7 @@ class AprilTagDetectionPipeline extends OpenCvPipeline
             //Pose pose = poseFromTrapezoid(detection.corners, cameraMatrix, tagsizeX, tagsizeY);
             drawAxisMarker(input, tagsizeY/2.0, 6, pose.rvec, pose.tvec, cameraMatrix);
             draw3dCubeMarker(input, tagsizeX, tagsizeX, tagsizeY, 5, pose.rvec, pose.tvec, cameraMatrix);
+
         }
 
         return input;
@@ -214,6 +215,8 @@ class AprilTagDetectionPipeline extends OpenCvPipeline
         Imgproc.line(buf, projectedPoints[0], projectedPoints[1], red, thickness);
         Imgproc.line(buf, projectedPoints[0], projectedPoints[2], green, thickness);
         Imgproc.line(buf, projectedPoints[0], projectedPoints[3], blue, thickness);
+
+        Imgproc.putText(buf, tvec.toString(), projectedPoints[0], Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, green, 2);
 
         Imgproc.circle(buf, projectedPoints[0], thickness, white, -1);
     }
