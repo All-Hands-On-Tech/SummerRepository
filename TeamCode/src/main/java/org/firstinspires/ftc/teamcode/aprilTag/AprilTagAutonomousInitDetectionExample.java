@@ -195,7 +195,7 @@ public class AprilTagAutonomousInitDetectionExample extends LinearOpMode
         }
         else
         {
-            Vector2d endPoint = new Vector2d(tagOfInterest.pose.x, tagOfInterest.pose.z);
+            Vector2d endPoint = new Vector2d(tagOfInterest.pose.x, tagOfInterest.pose.z - 5);
             Trajectory traj1 = drive.trajectoryBuilder(new Pose2d(0,0,0))
                     .splineTo(endPoint, Math.toRadians(0),
                             SampleMecanumDrive.getVelocityConstraint(slowerVelocity, DriveConstants.MAX_ANG_VEL, DriveConstants.TRACK_WIDTH),
