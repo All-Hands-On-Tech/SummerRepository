@@ -1,6 +1,6 @@
 ## NOTICE
 
-This repository contains the public FTC SDK for the POWERPLAY (2022-2023) competition season.
+This repository contains the public FTC SDK for the CENTERSTAGE (2023-2024) competition season.
 
 This repository is owned and maintained by the FTC team All Hands On Tech #18127
 
