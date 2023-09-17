@@ -63,17 +63,21 @@ public class PurplePixelRandomization extends RoboMom {
         while (opModeIsActive() && !isStopRequested()) {
             switch(finalRandomization){
                 case 1:
-
+                    //LEFT
+                    //We need to finish odometry and Roadrunner, for now we are using driveForTime
                     driveForTime("LEFT", 0.3, 0.75);
                     sleep(100);
                     driveForTime("FORWARD", 0.3, 0.75);
                     sleep(100);
                     driveForTime("BACK", 0.3, 0.5);
+                    sleep(100);
+                    //driveForTime("ROTATE_RIGHT", 0.3, 0.5);
 
                     telemetry.addLine("left");
                     break;
                 case 2:
-
+                    //MIDDLE
+                    //replace with odometry and roadrunner
                     driveForTime("FORWARD", 0.3, 1);
                     sleep(100);
                     driveForTime("BACK", 0.3, 0.5);
@@ -81,7 +85,8 @@ public class PurplePixelRandomization extends RoboMom {
                     telemetry.addLine("center");
                     break;
                 case 3:
-
+                    //replace with odometry and roadrunner
+                    //RIGHT
                     driveForTime("RIGHT", 0.3, 0.75);
                     sleep(100);
                     driveForTime("FORWARD", 0.3, 0.75);

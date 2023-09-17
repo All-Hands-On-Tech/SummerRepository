@@ -29,144 +29,378 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 
-@TeleOp(name="PowerPlayTeleop", group="Test")
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
+import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
+import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
 
-
-public class PowerPlayTeleop extends LinearOpMode {
-    double powerLevel = 0.8;
-
-    DcMotor leftFront;
-    DcMotor leftRear;
-    DcMotor rightFront;
-    DcMotor rightRear;
+import org.firstinspires.ftc.teamcode.RoboMom;
 
 
+@TeleOp(name="PowerPlay Teleop", group="Z")
 
-    public void DriveInDirection(double power, String direction){
-        switch(direction){
-            case "FORWARD":
-                rightFront.setPower(power);
-                leftFront.setPower(power);
-                rightRear.setPower(power);
-                leftRear.setPower(power);
-                break;
 
-            case "BACKWARD":
-                rightFront.setPower(-power);
-                leftFront.setPower(-power);
-                rightRear.setPower(-power);
-                leftRear.setPower(-power);
-                break;
+public class PowerPlayTeleop extends RoboMom {
 
-            case "LEFT":
-                rightFront.setPower(power);
-                leftFront.setPower(-power);
-                rightRear.setPower(-power);
-                leftRear.setPower(power);
-                break;
+    IntegratingGyroscope gyro;
 
-            case "RIGHT":
-                rightFront.setPower(-power);
-                leftFront.setPower(power);
-                rightRear.setPower(power);
-                leftRear.setPower(-power);
-                break;
-            case "ROTATE_RIGHT":
-                rightFront.setPower(-power);
-                leftFront.setPower(power);
-                rightRear.setPower(-power);
-                leftRear.setPower(power);
-                break;
-            case "ROTATE_LEFT":
-                rightFront.setPower(power);
-                leftFront.setPower(-power);
-                rightRear.setPower(power);
-                leftRear.setPower(-power);
-                break;
-            case "STOP":
-                rightFront.setPower(0);
-                leftFront.setPower(0);
-                rightRear.setPower(0);
-                leftRear.setPower(0);
-                break;
-        }
-    }
+    double integratedHeading = 0;
+    double zero = 0;
+    double powerLevel = 1;
+    double deadZone = 0.5;
+
+    double ARM_MIN_RANGE = .65;
+    double ARM_MAX_RANGE = 0.4;
+
+    public DcMotor armMotor = null;
+
+    public Servo claw = null;
 
     @Override
     public void runOpMode() {
+        super.runOpMode();
 
-        leftFront = hardwareMap.get(DcMotor.class, "leftFront");
-        leftRear = hardwareMap.get(DcMotor.class, "leftRear");
-        rightFront = hardwareMap.get(DcMotor.class, "rightFront");
-        rightRear = hardwareMap.get(DcMotor.class, "rightRear");
 
-        leftFront.setDirection(DcMotor.Direction.REVERSE);
-        leftRear.setDirection(DcMotor.Direction.REVERSE);
-        rightFront.setDirection(DcMotor.Direction.FORWARD);
-        rightRear.setDirection(DcMotor.Direction.FORWARD);
+
+        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+        double lfPower = 0;
+        double lbPower = 0;
+        double rfPower = 0;
+        double rbPower = 0;
+
+        double lfPowerStrafe = 0;
+        double lbPowerStrafe = 0;
+        double rfPowerStrafe = 0;
+        double rbPowerStrafe = 0;
+
+        double lfPowerForwards = 0;
+        double lbPowerForwards = 0;
+        double rfPowerForwards = 0;
+        double rbPowerForwards = 0;
+
+        double lfPowerRotate = 0;
+        double lbPowerRotate = 0;
+        double rfPowerRotate = 0;
+        double rbPowerRotate = 0;
+
+
+        boolean straight = false;
+        boolean strafe = false;
+        boolean rotate = false;
+        double amountOfMovements = 0;
+
+
+        initArm();
         waitForStart();
 
         while (opModeIsActive()) {
             /**GAMEPAD 1**/
             //slow down power if bumper is pressed
-            if(gamepad1.left_bumper){
-                powerLevel = 0.3;
+            if (gamepad1.left_bumper) {
+                powerLevel = 0.5;
             } else if (gamepad1.right_bumper) {
-                powerLevel = 0.6;
-            } else{
                 powerLevel = 0.8;
+            }else {
+                powerLevel = 1;
             }
 
-            //Checks if the left joystick is moved significantly, otherwise makes sure the motors are stopped
-            //Aka "If X or Y are moved more than .1"
-            if (Math.abs(gamepad1.left_stick_y) > .1 || Math.abs(gamepad1.left_stick_x) > .1) {
-                //Checks if joystick moved more up than side to side, if so, move forward or backward
-                //"If joystick moved more vertically than horizontally, then move forward/backward"
-                if (Math.abs(gamepad1.left_stick_x) < Math.abs(gamepad1.left_stick_y)) {
-                    DriveInDirection(gamepad1.left_stick_y * powerLevel,"BACKWARD");
-                    //Checks if moved more horizontally than up and down, if so, strafes
-                    //"If joystick moved more horizontally than vertically, strafe"
-                } else if (Math.abs(gamepad1.left_stick_y) < Math.abs(gamepad1.left_stick_x)) {
-                    DriveInDirection(gamepad1.left_stick_x * powerLevel,"RIGHT");
-                }
-                //Check if the right joystick is moved significantly, otherwise motors are stopped
-            }else if(Math.abs(gamepad1.right_stick_x) > 0.1){
-                DriveInDirection(gamepad1.right_stick_x * powerLevel,"ROTATE_RIGHT");
-            } else {
-                DriveInDirection(0,"STOP");
+            if(Math.abs(gamepad1.left_stick_x) > deadZone) {
+                strafe = true;
+                lfPowerStrafe = gamepad1.left_stick_x * powerLevel;
+                lbPowerStrafe = -gamepad1.left_stick_x * powerLevel;
+                rfPowerStrafe = -gamepad1.left_stick_x * powerLevel;
+                rbPowerStrafe = gamepad1.left_stick_x * powerLevel;
+            }else{
+                strafe = false;
+                lfPowerStrafe = 0;
+                lbPowerStrafe = 0;
+                rfPowerStrafe = 0;
+                rbPowerStrafe = 0;
+            }
+
+            if(Math.abs(gamepad1.left_stick_y) > deadZone) {
+                straight = true;
+                lfPowerForwards = gamepad1.left_stick_y * powerLevel;
+                lbPowerForwards = gamepad1.left_stick_y * powerLevel;
+                rfPowerForwards = gamepad1.left_stick_y * powerLevel;
+                rbPowerForwards = gamepad1.left_stick_y * powerLevel;
+            }else{
+                straight = false;
+                lfPowerForwards = 0;
+                lbPowerForwards = 0;
+                rfPowerForwards = 0;
+                rbPowerForwards = 0;
+            }
+
+            if(Math.abs(gamepad1.right_stick_x) > deadZone){
+                rotate = true;
+                lfPowerRotate = gamepad1.right_stick_x * powerLevel;
+                lbPowerRotate = gamepad1.right_stick_x * powerLevel;
+                rfPowerRotate = -gamepad1.right_stick_x * powerLevel;
+                rbPowerRotate = -gamepad1.right_stick_x * powerLevel;
+            }else{
+                rotate = false;
+                lfPowerRotate = 0;
+                lbPowerRotate = 0;
+                rfPowerRotate = 0;
+                rbPowerRotate = 0;
+            }
+
+            double temp = 0;
+
+            if(rotate){
+                temp += 1;
+            }
+            if(strafe){
+                temp += 1;
+            }
+            if(straight){
+                temp += 1;
+            }
+            amountOfMovements = temp;
+
+            lfPower = (lfPowerStrafe + lfPowerForwards + lfPowerRotate) / amountOfMovements;
+            lbPower = (lbPowerStrafe + lbPowerForwards + lbPowerRotate) / amountOfMovements;
+            rfPower = (rfPowerStrafe + rfPowerForwards + rfPowerRotate) / amountOfMovements;
+            rbPower = (rbPowerStrafe + rbPowerForwards + rbPowerRotate) / amountOfMovements;
+
+            if(amountOfMovements == 0){
+                lfPower = 0;
+                lbPower = 0;
+                rfPower = 0;
+                rbPower = 0;
+                driveInDirection(0, "FORWARD");
+            }
+
+            leftFrontDrive.setPower(lfPower);
+            leftBackDrive.setPower(lbPower);
+            rightFrontDrive.setPower(rfPower);
+            rightBackDrive.setPower(rbPower);
+
+            if(amountOfMovements == 0){
+                lfPower = 0;
+                lbPower = 0;
+                rfPower = 0;
+                rbPower = 0;
+                driveInDirection(0, "FORWARD");
+            }
+
+            if(gamepad1.y){
+                resetZero(0);
+            }
+            if(gamepad1.a){
+                resetZero(180);
+            }
+            if(gamepad1.x){
+                resetZero(90);
+            }
+            if(gamepad1.b){
+                resetZero(-90);
+            }
+
+            if(gamepad1.dpad_up){
+                rotateToZAbs(0, zero);
+            } else if(gamepad1.dpad_left){
+                rotateToZAbs(90, zero);
+            } else if(gamepad1.dpad_right){
+                rotateToZAbs(-90, zero);
+            } else if(gamepad1.dpad_down){
+                rotateToZAbs(180, zero);
             }
 
             /**GAMEPAD 2**/
-//            double armPower = 0;
-//            if (Math.abs(gamepad2.left_stick_y) > 0.1){
-//                armPower = gamepad2.left_stick_y*0.4;
+
+
+            //Distances have not been learned yet
+
+//            double targetHeight = 0;
+//            boolean setHeight = false;
+//            if (gamepad2.dpad_down) { //Ground Junction
+//                targetHeight=1;
+//                setHeight = true;
+//                //1
+//            } else if (gamepad2.dpad_left) { //Low Junction
+//                targetHeight=346;
+//                setHeight = true;
+//                //346
+//            } else if (gamepad2.dpad_right) { //Medium  Junction
+//                targetHeight=600;
+//                setHeight = true;
+//                //600
+//            } else if (gamepad2.dpad_up) { //High  Junction
+//                targetHeight=854;
+//                setHeight = true;
+//                //854
+//            }
+//            //Arm to height code doesn't work currently
+
+//            double currentHeight = getArmHeight();
+//            double error = targetHeight + currentHeight;
+//
+//            if (setHeight==true && Math.abs(error)>10) {
+//                telemetry.addData("error: ", error);
+//                telemetry.addData("Current Height: ", currentHeight);
+//                telemetry.update();
+//                armMotor.setPower(error / 100);
 //            } else {
-//                armPower = 0;
-//            }
-//            if (Math.abs(gamepad2.right_stick_y) > 0.1){
-//                armPower = gamepad2.right_stick_y*0.1;
-//            }
-//            armMotor.setPower(armPower);
-//
-//
-//            if(gamepad2.right_bumper){
-//                telemetry.addLine("close if");
-//                telemetry.update();
-//                closeClaw();
-//
-//            }else if (!isClawOpen()){
-//                telemetry.addLine("open if");
-//                telemetry.update();
-//                openClaw();
-//            }
-//            if(gamepad2.left_bumper){
-//                armStop();
-//            }
+//                setHeight = false;
+//              }
+
+            double armPower = 0;
+            if (Math.abs(gamepad2.left_stick_y) > 0.1){
+                armPower = gamepad2.left_stick_y*0.75;
+            } else {
+                armPower = 0;
+            }
+            if (Math.abs(gamepad2.right_stick_y) > 0.1){
+                armPower = gamepad2.right_stick_y*0.9;
+            }
+            armMotor.setPower(-armPower);
+
+            if(gamepad2.right_bumper){
+                closeClaw();
+
+            }else if (!isClawOpen()){
+                openClaw();
+            }
+            if(gamepad2.left_bumper){
+                armStop();
+            }
+            telemetry.addData("Straight?", straight);
+            telemetry.addData("Strafe?", strafe);
+            telemetry.addData("Rotate?", rotate);
+            telemetry.addData("AmountOfMovements:", amountOfMovements);
+            telemetry.update();
+        }
+
+
+    }
+    void resetZero(double degreeOffZero){
+        zero = getCurrentZ() - degreeOffZero;
+    }
+
+    public void initArm() {
+        armMotor = hardwareMap.get(DcMotor.class, "arm");
+        armMotor.setDirection(DcMotor.Direction.FORWARD);
+        claw = hardwareMap.get(Servo.class, "claw");
+        claw.setPosition(ARM_MIN_RANGE);
+        armMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        armMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+    }
+
+    public void rotateToZAbs(double absTargetAngle, double zero){
+        double dividend = 50;
+        sleep(20);
+        integratedHeading = 0;
+        double startAngle = getCurrentZ();
+        double error = zero + absTargetAngle - getCurrentZ();
+
+        if(error > 180){
+            error -= 360;
+        }
+        if(error < -180){
+            error += 360;
+        }
+
+        while(Math.abs(error) > 0.1){
+            while (error > 0.1) {
+                error = zero + absTargetAngle - getCurrentZ();
+                if(error > 180){
+                    error -= 360;
+                }
+                if(error < -180){
+                    error += 360;
+                }
+                double proportionalPower = error / dividend;
+                proportionalPower = Math.abs(proportionalPower);
+
+                if(proportionalPower < 0.1){
+                    proportionalPower = 0.1;
+                }
+
+                //rotate left
+                driveInDirection(proportionalPower, "ROTATE_LEFT");
+
+
+                telemetry.addLine("StartAngle: " + startAngle);
+                telemetry.addLine("TargetAngle: " + absTargetAngle);
+                telemetry.addLine("CumulativeZ: " + getCurrentZ());
+                telemetry.addLine("Error: " + error);
+                telemetry.addLine("rotation: counter clockwise");
+                telemetry.update();
+
+            }
+
+            while (error < -0.1) {
+                error = zero + absTargetAngle - getCurrentZ();
+                if(error > 180){
+                    error -= 360;
+                }
+                if(error < -180){
+                    error += 360;
+                }
+                double proportionalPower = error / dividend;
+                proportionalPower = Math.abs(proportionalPower);
+
+                if(proportionalPower < 0.1){
+                    proportionalPower = 0.1;
+                }
+
+                //rotate right
+                driveInDirection(proportionalPower, "ROTATE_RIGHT");
+
+                //telemetry
+                //            telemetry.addLine("currentZ" + getCurrentZ());
+                telemetry.addLine("StartAngle: " + startAngle);
+                telemetry.addLine("cumulativeZ" + getCurrentZ());
+                telemetry.addLine("Error: " + error);
+                telemetry.addLine("targetAngle: " + absTargetAngle);
+                telemetry.addLine("rotation: clockwise");
+                telemetry.update();
+            }
+
+
+            rightFrontDrive.setPower(0);
+            leftFrontDrive.setPower(0);
+            rightBackDrive.setPower(0);
+            leftBackDrive.setPower(0);
+
         }
     }
+
+    public double getCurrentZ() {
+        Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+        return angles.firstAngle;
+    }
+
+    public void closeClaw(){
+        claw.setPosition(ARM_MIN_RANGE);
+
+    }
+
+    public void openClaw(){
+        claw.setPosition(ARM_MAX_RANGE);
+
+    }
+
+    public boolean isClawOpen() {
+        return !(claw.getPosition() > 0.1);
+
+    }
+
+    public void armStop() {
+        armMotor.setPower(0);
+    }
+
 }
