@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
+import org.firstinspires.ftc.teamcode.aprilTag.AprilTagDetectionPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -24,17 +25,28 @@ public class PurplePixelRandomization extends RoboMom {
 
     int randomization, finalRandomization;
     int PIXEL_THRESH = 100;
-    OpenCvWebcam webcam;
+
+    double fx = 578.272;
+    double fy = 578.272;
+    double cx = 402.145;
+    double cy = 221.506;
+
+    // UNITS ARE METERS
+    double tagsize = 0.166;
+    OpenCvCamera webcam;
+
+    AprilTagDetectionPipeline aprilTagDetectionPipeline;
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
 
     @Override
     public void runOpMode() {
+        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
+        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
 
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"));
+        webcam.setPipeline(aprilTagDetectionPipeline);
 
-        webcam.setPipeline(new SamplePipeline());
 
-        webcam.setMillisecondsPermissionTimeout(1000); // Timeout for obtaining permission is configurable. Set before opening.
 
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
@@ -56,7 +68,9 @@ public class PurplePixelRandomization extends RoboMom {
 
         finalRandomization = randomization;
 
+
         telemetry.addData("Final Randomization: ", finalRandomization);
+
         telemetry.addData("Randomization: ", randomization);
         telemetry.update();
 
@@ -103,56 +117,61 @@ public class PurplePixelRandomization extends RoboMom {
         }
     }
 
-    class SamplePipeline extends OpenCvPipeline{
-        Mat HSVimage = new Mat();
-        double leftGreenPixels,midGreenPixels,rightGreenPixels;
+//    class SamplePipeline extends OpenCvPipeline{
+//        Mat HSVimage = new Mat();
+//        double leftGreenPixels,midGreenPixels,rightGreenPixels;
 
-        boolean viewportPaused;
-        Scalar greenLower = new Scalar(30, 75, 75);
-        Scalar greenHigher = new Scalar(90, 255, 255);
+//     class SamplePipeline extends OpenCvPipeline{
+//        Mat HSVimage = new Mat();
+//        double leftGreenPixels,midGreenPixels,rightGreenPixels;
+//
+//        boolean viewportPaused;
+//        Scalar greenLower = new Scalar(30, 75, 75);
+//        Scalar greenHigher = new Scalar(90, 255, 255);
 
-        @Override
-        public Mat processFrame(Mat input) {
-            //convert to hsv
-            Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
-            //create rect around bottom 2/3 of mat
-            Rect rectCropTop = new Rect(0, input.height()/3, input.width(), input.height()*(2/3));
-            //store mat ROI in cropped mat
-            Mat cropped = input.submat(rectCropTop);
 
-            //Create rects around first, second, third sections of cropped mat
-            Rect rectCropLeft = new Rect(0, 0, cropped.width()/3, cropped.height());
-            Rect rectCropMid = new Rect(cropped.width()/3, 0, cropped.width()/3, cropped.height());
-            Rect rectCropRight = new Rect(cropped.width()*(2/3), 0, cropped.width()/3, cropped.height());
-
-            //Store mat ROI in left/mid/rightROI
-            Mat leftROI = input.submat(rectCropLeft);
-            Mat midROI = input.submat(rectCropMid);
-            Mat rightROI = input.submat(rectCropRight);
-
-            //pixels in greenthreshold now = 1, outside thresh = 0
-            Core.inRange(leftROI, greenLower, greenHigher, leftROI);
-            Core.inRange(midROI, greenLower, greenHigher, midROI);
-            Core.inRange(rightROI, greenLower, greenHigher, rightROI);
-
-            //count pixels in ROI's
-            leftGreenPixels = Core.sumElems(leftROI).val[0];
-            midGreenPixels = Core.sumElems(midROI).val[0];
-            rightGreenPixels = Core.sumElems(rightROI).val[0];
-
-            //Check if ROI has enough green (left)
-            if(leftGreenPixels > PIXEL_THRESH){
-                randomization = 1;
-            }
-            //check right, else: mid
-            if(rightGreenPixels > leftGreenPixels && rightGreenPixels > PIXEL_THRESH){
-                randomization = 3;
-            } else {
-                randomization = 2;
-            }
-
-            return null;
-        }
-    }
+      //  @Override
+//        public Mat processFrame(Mat input) {
+//            //convert to hsv
+//            Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
+//            //create rect around bottom 2/3 of mat
+//            Rect rectCropTop = new Rect(0, input.height()/3, input.width(), input.height()*(2/3));
+//            //store mat ROI in cropped mat
+//            Mat cropped = input.submat(rectCropTop);
+//
+//            //Create rects around first, second, third sections of cropped mat
+//            Rect rectCropLeft = new Rect(0, 0, cropped.width()/3, cropped.height());
+//            Rect rectCropMid = new Rect(cropped.width()/3, 0, cropped.width()/3, cropped.height());
+//            Rect rectCropRight = new Rect(cropped.width()*(2/3), 0, cropped.width()/3, cropped.height());
+//
+//            //Store mat ROI in left/mid/rightROI
+//            Mat leftROI = input.submat(rectCropLeft);
+//            Mat midROI = input.submat(rectCropMid);
+//            Mat rightROI = input.submat(rectCropRight);
+//
+//            //pixels in greenthreshold now = 1, outside thresh = 0
+//            Core.inRange(leftROI, greenLower, greenHigher, leftROI);
+//            Core.inRange(midROI, greenLower, greenHigher, midROI);
+//            Core.inRange(rightROI, greenLower, greenHigher, rightROI);
+//
+//            //count pixels in ROI's
+//            leftGreenPixels = Core.sumElems(leftROI).val[0];
+//            midGreenPixels = Core.sumElems(midROI).val[0];
+//            rightGreenPixels = Core.sumElems(rightROI).val[0];
+//
+//            //Check if ROI has enough green (left)
+//            if(leftGreenPixels > PIXEL_THRESH){
+//                randomization = 1;
+//            }
+//            //check right, else: mid
+//            if(rightGreenPixels > leftGreenPixels && rightGreenPixels > PIXEL_THRESH){
+//                randomization = 3;
+//            } else {
+//                randomization = 2;
+//            }
+//
+//            return null;
+//        }
+//    }
 
 }

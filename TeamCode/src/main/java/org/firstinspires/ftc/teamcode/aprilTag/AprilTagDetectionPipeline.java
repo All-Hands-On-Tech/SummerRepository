@@ -22,6 +22,7 @@
 package org.firstinspires.ftc.teamcode.aprilTag;
 
 import org.opencv.calib3d.Calib3d;
+import org.opencv.core.Core;
 import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.MatOfDouble;
@@ -38,7 +39,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-class AprilTagDetectionPipeline extends OpenCvPipeline
+public class AprilTagDetectionPipeline extends OpenCvPipeline
 {
     private long nativeApriltagPtr;
     private Mat grey = new Mat();
@@ -335,4 +336,69 @@ class AprilTagDetectionPipeline extends OpenCvPipeline
             this.tvec = tvec;
         }
     }
+
+
+    public int CheckSpike(Mat input) {
+        int PIXEL_THRESH = 100;
+        int randomization;
+
+        Mat HSVimage = new Mat();
+        double leftGreenPixels,midGreenPixels,rightGreenPixels;
+
+        boolean viewportPaused;
+        Scalar greenLower = new Scalar(30, 75, 75);
+        Scalar greenHigher = new Scalar(90, 255, 255);
+
+        //convert to hsv
+        Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
+        //create rect around bottom 2/3 of mat
+        //store mat ROI in cropped mat
+        int croppedWidth = input.rows();
+        int croppedHeight = input.cols();
+        Mat cropped = input.submat(0, croppedWidth, croppedHeight/3, croppedHeight);
+
+        //Create rects around first, second, third sections of cropped mat
+
+        int ROIwidth = cropped.cols()/3;
+        int ROIheight = cropped.rows();
+
+        //Store mat ROI in left/mid/rightROI
+        Mat leftROI = input.submat(0, ROIwidth, 0, ROIheight);
+        Mat midROI = input.submat(ROIwidth * 1, ROIwidth * 2, 0, ROIheight);
+        Mat rightROI = input.submat(ROIwidth * 2, ROIwidth * 3, 0, ROIheight);
+
+        //pixels in greenthreshold now = 1, outside thresh = 0
+
+        if(!leftROI.empty()){
+            Core.inRange(leftROI, greenLower, greenHigher, leftROI);
+        }
+
+        if(!midROI.empty()){
+            Core.inRange(midROI, greenLower, greenHigher, midROI);
+        }
+
+        if(!rightROI.empty()){
+            Core.inRange(rightROI, greenLower, greenHigher, rightROI);
+        }
+
+
+        //count pixels in ROI's
+        leftGreenPixels = Core.sumElems(leftROI).val[0];
+        midGreenPixels = Core.sumElems(midROI).val[0];
+        rightGreenPixels = Core.sumElems(rightROI).val[0];
+
+        //Check if ROI has enough green (left)
+        if(leftGreenPixels > PIXEL_THRESH){
+            randomization = 1;
+        }
+        //check right, else: mid
+        if(rightGreenPixels > leftGreenPixels && rightGreenPixels > PIXEL_THRESH){
+            randomization = 3;
+        } else {
+            randomization = 2;
+        }
+
+        return randomization;
+    }
+
 }
