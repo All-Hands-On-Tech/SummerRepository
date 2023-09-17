@@ -353,8 +353,9 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
         //create rect around bottom 2/3 of mat
         //store mat ROI in cropped mat
-        int croppedWidth = input.rows();
-        int croppedHeight = input.cols();
+
+        int croppedHeight = input.rows();
+        int croppedWidth = input.cols();
         Mat cropped = input.submat(0, croppedWidth, croppedHeight/3, croppedHeight);
 
         //Create rects around first, second, third sections of cropped mat
