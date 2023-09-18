@@ -356,22 +356,27 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
 
         int croppedHeight = input.rows();
         int croppedWidth = input.cols();
-        Mat cropped = input.submat(0, croppedWidth, croppedHeight/3, croppedHeight);
+        Mat cropped = input.submat(croppedHeight/3, croppedHeight, 0, croppedWidth);
 
-        //Create rects around first, second, third sections of cropped mat
+
 
         int ROIwidth = cropped.cols()/3;
         int ROIheight = cropped.rows();
 
         //Store mat ROI in left/mid/rightROI
-        Mat leftROI = input.submat(0, ROIwidth, 0, ROIheight);
-        Mat midROI = input.submat(ROIwidth * 1, ROIwidth * 2, 0, ROIheight);
-        Mat rightROI = input.submat(ROIwidth * 2, ROIwidth * 3, 0, ROIheight);
+        Mat leftROI = input.submat(0, ROIheight, 0, ROIwidth);
+        Mat midROI = input.submat(0, ROIheight, ROIwidth, ROIwidth*2);
+        Mat rightROI = input.submat(0, ROIheight, ROIwidth*2, ROIwidth*3);
 
         //pixels in greenthreshold now = 1, outside thresh = 0
 
+
         if(!leftROI.empty()){
             Core.inRange(leftROI, greenLower, greenHigher, leftROI);
+        }
+        else{
+            Point point = new Point(10,10);
+            Imgproc.putText(input, "empty", point, Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, green, 2);
         }
 
         if(!midROI.empty()){
