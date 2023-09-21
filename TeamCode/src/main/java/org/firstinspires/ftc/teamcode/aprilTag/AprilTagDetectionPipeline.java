@@ -339,7 +339,7 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
 
 
     public int CheckSpike(Mat input) {
-        int PIXEL_THRESH = 100;
+        int PIXEL_THRESH = 3;
         int randomization;
 
         Mat HSVimage = new Mat();

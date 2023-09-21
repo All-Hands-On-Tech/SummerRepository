@@ -23,7 +23,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous
 public class PurplePixelRandomization extends RoboMom {
 
-    int randomization, finalRandomization;
+    public int randomization, finalRandomization;
     int PIXEL_THRESH = 100;
 
     double fx = 578.272;
@@ -63,13 +63,12 @@ public class PurplePixelRandomization extends RoboMom {
             }
         });
 
+        aprilTagDetectionPipeline.CheckSpike();
 
         waitForStart();
 
-        finalRandomization = randomization;
 
 
-        telemetry.addData("Final Randomization: ", finalRandomization);
 
         telemetry.addData("Randomization: ", randomization);
         telemetry.update();
@@ -77,16 +76,16 @@ public class PurplePixelRandomization extends RoboMom {
         if (isStopRequested()) return;
 
         while (opModeIsActive() && !isStopRequested()) {
-            switch(finalRandomization){
+            switch(randomization){
                 case 1:
                     //LEFT
                     //We need to finish odometry and Roadrunner, for now we are using driveForTime
-                    driveForTime("LEFT", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("FORWARD", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("BACK", 0.3, 0.5);
-                    sleep(100);
+//                    driveForTime("LEFT", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("FORWARD", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("BACK", 0.3, 0.5);
+//                    sleep(100);
                     //driveForTime("ROTATE_RIGHT", 0.3, 0.5);
 
                     telemetry.addLine("left");
@@ -94,20 +93,20 @@ public class PurplePixelRandomization extends RoboMom {
                 case 2:
                     //MIDDLE
                     //replace with odometry and roadrunner
-                    driveForTime("FORWARD", 0.3, 1);
-                    sleep(100);
-                    driveForTime("BACK", 0.3, 0.5);
+//                    driveForTime("FORWARD", 0.3, 1);
+//                    sleep(100);
+//                    driveForTime("BACK", 0.3, 0.5);
 
                     telemetry.addLine("center");
                     break;
                 case 3:
                     //replace with odometry and roadrunner
                     //RIGHT
-                    driveForTime("RIGHT", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("FORWARD", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("BACK", 0.3, 0.5);
+//                    driveForTime("RIGHT", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("FORWARD", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("BACK", 0.3, 0.5);
 
                     telemetry.addLine("right");
                     break;
