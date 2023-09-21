@@ -126,6 +126,14 @@ public class PurplePixelRandomization extends RoboMom {
 
         @Override
         public void init(Mat firstFrame) {
+
+        }
+
+        @Override
+        public Mat processFrame(Mat firstFrame) {
+            // Because a submat is a persistent reference to a region of the parent buffer,
+            // (which in this case is `input`) any changes to `input` will be reflected in
+            // the submat (and vice versa).
             int rows = firstFrame.rows();
             int ROIHeight = rows * (2/3);
             int ROIWidth = firstFrame.cols()/3;
@@ -150,14 +158,7 @@ public class PurplePixelRandomization extends RoboMom {
             } else{
                 randomization = 3;
             }
-        }
-
-        @Override
-        public Mat processFrame(Mat input) {
-            // Because a submat is a persistent reference to a region of the parent buffer,
-            // (which in this case is `input`) any changes to `input` will be reflected in
-            // the submat (and vice versa).
-            return input;
+            return firstFrame;
         }
 
         public double PropPixelsInROI(Mat input, Rect rect) {
