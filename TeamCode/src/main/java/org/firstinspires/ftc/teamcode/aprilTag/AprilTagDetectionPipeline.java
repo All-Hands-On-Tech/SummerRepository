@@ -39,8 +39,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 import java.util.ArrayList;
 
-public class AprilTagDetectionPipeline extends OpenCvPipeline
-{
+public class AprilTagDetectionPipeline extends OpenCvPipeline {
     private long nativeApriltagPtr;
     private Mat grey = new Mat();
     private ArrayList<AprilTagDetection> detections = new ArrayList<>();
@@ -50,10 +49,10 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
 
     Mat cameraMatrix;
 
-    Scalar blue = new Scalar(7,197,235,255);
-    Scalar red = new Scalar(255,0,0,255);
-    Scalar green = new Scalar(0,255,0,255);
-    Scalar white = new Scalar(255,255,255,255);
+    Scalar blue = new Scalar(7, 197, 235, 255);
+    Scalar red = new Scalar(255, 0, 0, 255);
+    Scalar green = new Scalar(0, 255, 0, 255);
+    Scalar white = new Scalar(255, 255, 255, 255);
 
     double fx;
     double fy;
@@ -69,8 +68,7 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
     private boolean needToSetDecimation;
     private final Object decimationSync = new Object();
 
-    public AprilTagDetectionPipeline(double tagsize, double fx, double fy, double cx, double cy)
-    {
+    public AprilTagDetectionPipeline(double tagsize, double fx, double fy, double cx, double cy) {
         this.tagsize = tagsize;
         this.tagsizeX = tagsize;
         this.tagsizeY = tagsize;
@@ -86,31 +84,24 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
     }
 
     @Override
-    public void finalize()
-    {
+    public void finalize() {
         // Might be null if createApriltagDetector() threw an exception
-        if(nativeApriltagPtr != 0)
-        {
+        if (nativeApriltagPtr != 0) {
             // Delete the native context we created in the constructor
             AprilTagDetectorJNI.releaseApriltagDetector(nativeApriltagPtr);
             nativeApriltagPtr = 0;
-        }
-        else
-        {
+        } else {
             System.out.println("AprilTagDetectionPipeline.finalize(): nativeApriltagPtr was NULL");
         }
     }
 
     @Override
-    public Mat processFrame(Mat input)
-    {
+    public Mat processFrame(Mat input) {
         // Convert to greyscale
         Imgproc.cvtColor(input, grey, Imgproc.COLOR_RGBA2GRAY);
 
-        synchronized (decimationSync)
-        {
-            if(needToSetDecimation)
-            {
+        synchronized (decimationSync) {
+            if (needToSetDecimation) {
                 AprilTagDetectorJNI.setApriltagDetectorDecimation(nativeApriltagPtr, decimation);
                 needToSetDecimation = false;
             }
@@ -119,17 +110,15 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         // Run AprilTag
         detections = AprilTagDetectorJNI.runAprilTagDetectorSimple(nativeApriltagPtr, grey, tagsize, fx, fy, cx, cy);
 
-        synchronized (detectionsUpdateSync)
-        {
+        synchronized (detectionsUpdateSync) {
             detectionsUpdate = detections;
         }
 
         // For fun, use OpenCV to draw 6DOF markers on the image.
-        for(AprilTagDetection detection : detections)
-        {
+        for (AprilTagDetection detection : detections) {
             Pose pose = aprilTagPoseToOpenCvPose(detection.pose);
             //Pose pose = poseFromTrapezoid(detection.corners, cameraMatrix, tagsizeX, tagsizeY);
-            drawAxisMarker(input, tagsizeY/2.0, 6, pose.rvec, pose.tvec, cameraMatrix);
+            drawAxisMarker(input, tagsizeY / 2.0, 6, pose.rvec, pose.tvec, cameraMatrix);
             draw3dCubeMarker(input, tagsizeX, tagsizeX, tagsizeY, 5, pose.rvec, pose.tvec, cameraMatrix);
 
         }
@@ -137,32 +126,26 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         return input;
     }
 
-    public void setDecimation(float decimation)
-    {
-        synchronized (decimationSync)
-        {
+    public void setDecimation(float decimation) {
+        synchronized (decimationSync) {
             this.decimation = decimation;
             needToSetDecimation = true;
         }
     }
 
-    public ArrayList<AprilTagDetection> getLatestDetections()
-    {
+    public ArrayList<AprilTagDetection> getLatestDetections() {
         return detections;
     }
 
-    public ArrayList<AprilTagDetection> getDetectionsUpdate()
-    {
-        synchronized (detectionsUpdateSync)
-        {
+    public ArrayList<AprilTagDetection> getDetectionsUpdate() {
+        synchronized (detectionsUpdateSync) {
             ArrayList<AprilTagDetection> ret = detectionsUpdate;
             detectionsUpdate = null;
             return ret;
         }
     }
 
-    void constructMatrix()
-    {
+    void constructMatrix() {
         //     Construct the camera matrix.
         //
         //      --         --
@@ -172,39 +155,38 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         //      --         --
         //
 
-        cameraMatrix = new Mat(3,3, CvType.CV_32FC1);
+        cameraMatrix = new Mat(3, 3, CvType.CV_32FC1);
 
-        cameraMatrix.put(0,0, fx);
-        cameraMatrix.put(0,1,0);
-        cameraMatrix.put(0,2, cx);
+        cameraMatrix.put(0, 0, fx);
+        cameraMatrix.put(0, 1, 0);
+        cameraMatrix.put(0, 2, cx);
 
-        cameraMatrix.put(1,0,0);
-        cameraMatrix.put(1,1,fy);
-        cameraMatrix.put(1,2,cy);
+        cameraMatrix.put(1, 0, 0);
+        cameraMatrix.put(1, 1, fy);
+        cameraMatrix.put(1, 2, cy);
 
         cameraMatrix.put(2, 0, 0);
-        cameraMatrix.put(2,1,0);
-        cameraMatrix.put(2,2,1);
+        cameraMatrix.put(2, 1, 0);
+        cameraMatrix.put(2, 2, 1);
     }
 
     /**
      * Draw a 3D axis marker on a detection. (Similar to what Vuforia does)
      *
-     * @param buf the RGB buffer on which to draw the marker
-     * @param length the length of each of the marker 'poles'
-     * @param rvec the rotation vector of the detection
-     * @param tvec the translation vector of the detection
+     * @param buf          the RGB buffer on which to draw the marker
+     * @param length       the length of each of the marker 'poles'
+     * @param rvec         the rotation vector of the detection
+     * @param tvec         the translation vector of the detection
      * @param cameraMatrix the camera matrix used when finding the detection
      */
-    void drawAxisMarker(Mat buf, double length, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix)
-    {
+    void drawAxisMarker(Mat buf, double length, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix) {
         // The points in 3D space we wish to project onto the 2D image plane.
         // The origin of the coordinate space is assumed to be in the center of the detection.
         MatOfPoint3f axis = new MatOfPoint3f(
-                new Point3(0,0,0),
-                new Point3(length,0,0),
-                new Point3(0,length,0),
-                new Point3(0,0,-length)
+                new Point3(0, 0, 0),
+                new Point3(length, 0, 0),
+                new Point3(0, length, 0),
+                new Point3(0, 0, -length)
         );
 
         // Project those points
@@ -222,22 +204,21 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         Imgproc.circle(buf, projectedPoints[0], thickness, white, -1);
     }
 
-    void draw3dCubeMarker(Mat buf, double length, double tagWidth, double tagHeight, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix)
-    {
+    void draw3dCubeMarker(Mat buf, double length, double tagWidth, double tagHeight, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix) {
         //axis = np.float32([[0,0,0], [0,3,0], [3,3,0], [3,0,0],
         //       [0,0,-3],[0,3,-3],[3,3,-3],[3,0,-3] ])
 
         // The points in 3D space we wish to project onto the 2D image plane.
         // The origin of the coordinate space is assumed to be in the center of the detection.
         MatOfPoint3f axis = new MatOfPoint3f(
-                new Point3(-tagWidth/2, tagHeight/2,0),
-                new Point3( tagWidth/2, tagHeight/2,0),
-                new Point3( tagWidth/2,-tagHeight/2,0),
-                new Point3(-tagWidth/2,-tagHeight/2,0),
-                new Point3(-tagWidth/2, tagHeight/2,-length),
-                new Point3( tagWidth/2, tagHeight/2,-length),
-                new Point3( tagWidth/2,-tagHeight/2,-length),
-                new Point3(-tagWidth/2,-tagHeight/2,-length));
+                new Point3(-tagWidth / 2, tagHeight / 2, 0),
+                new Point3(tagWidth / 2, tagHeight / 2, 0),
+                new Point3(tagWidth / 2, -tagHeight / 2, 0),
+                new Point3(-tagWidth / 2, -tagHeight / 2, 0),
+                new Point3(-tagWidth / 2, tagHeight / 2, -length),
+                new Point3(tagWidth / 2, tagHeight / 2, -length),
+                new Point3(tagWidth / 2, -tagHeight / 2, -length),
+                new Point3(-tagWidth / 2, -tagHeight / 2, -length));
 
         // Project those points
         MatOfPoint2f matProjectedPoints = new MatOfPoint2f();
@@ -245,9 +226,8 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         Point[] projectedPoints = matProjectedPoints.toArray();
 
         // Pillars
-        for(int i = 0; i < 4; i++)
-        {
-            Imgproc.line(buf, projectedPoints[i], projectedPoints[i+4], blue, thickness);
+        for (int i = 0; i < 4; i++) {
+            Imgproc.line(buf, projectedPoints[i], projectedPoints[i + 4], blue, thickness);
         }
 
         // Base lines
@@ -263,20 +243,17 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
         Imgproc.line(buf, projectedPoints[4], projectedPoints[7], green, thickness);
     }
 
-    Pose aprilTagPoseToOpenCvPose(AprilTagPose aprilTagPose)
-    {
+    Pose aprilTagPoseToOpenCvPose(AprilTagPose aprilTagPose) {
         Pose pose = new Pose();
-        pose.tvec.put(0,0, aprilTagPose.x);
-        pose.tvec.put(1,0, aprilTagPose.y);
-        pose.tvec.put(2,0, aprilTagPose.z);
+        pose.tvec.put(0, 0, aprilTagPose.x);
+        pose.tvec.put(1, 0, aprilTagPose.y);
+        pose.tvec.put(2, 0, aprilTagPose.z);
 
         Mat R = new Mat(3, 3, CvType.CV_32F);
 
-        for (int i = 0; i < 3; i++)
-        {
-            for (int j = 0; j < 3; j++)
-            {
-                R.put(i,j, aprilTagPose.R.get(i,j));
+        for (int i = 0; i < 3; i++) {
+            for (int j = 0; j < 3; j++) {
+                R.put(i, j, aprilTagPose.R.get(i, j));
             }
         }
 
@@ -289,23 +266,22 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
      * Extracts 6DOF pose from a trapezoid, using a camera intrinsics matrix and the
      * original size of the tag.
      *
-     * @param points the points which form the trapezoid
+     * @param points       the points which form the trapezoid
      * @param cameraMatrix the camera intrinsics matrix
-     * @param tagsizeX the original width of the tag
-     * @param tagsizeY the original height of the tag
+     * @param tagsizeX     the original width of the tag
+     * @param tagsizeY     the original height of the tag
      * @return the 6DOF pose of the camera relative to the tag
      */
-    Pose poseFromTrapezoid(Point[] points, Mat cameraMatrix, double tagsizeX , double tagsizeY)
-    {
+    Pose poseFromTrapezoid(Point[] points, Mat cameraMatrix, double tagsizeX, double tagsizeY) {
         // The actual 2d points of the tag detected in the image
         MatOfPoint2f points2d = new MatOfPoint2f(points);
 
         // The 3d points of the tag in an 'ideal projection'
         Point3[] arrayPoints3d = new Point3[4];
-        arrayPoints3d[0] = new Point3(-tagsizeX/2, tagsizeY/2, 0);
-        arrayPoints3d[1] = new Point3(tagsizeX/2, tagsizeY/2, 0);
-        arrayPoints3d[2] = new Point3(tagsizeX/2, -tagsizeY/2, 0);
-        arrayPoints3d[3] = new Point3(-tagsizeX/2, -tagsizeY/2, 0);
+        arrayPoints3d[0] = new Point3(-tagsizeX / 2, tagsizeY / 2, 0);
+        arrayPoints3d[1] = new Point3(tagsizeX / 2, tagsizeY / 2, 0);
+        arrayPoints3d[2] = new Point3(tagsizeX / 2, -tagsizeY / 2, 0);
+        arrayPoints3d[3] = new Point3(-tagsizeX / 2, -tagsizeY / 2, 0);
         MatOfPoint3f points3d = new MatOfPoint3f(arrayPoints3d);
 
         // Using this information, actually solve for pose
@@ -319,92 +295,20 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline
      * A simple container to hold both rotation and translation
      * vectors, which together form a 6DOF pose.
      */
-    class Pose
-    {
+    class Pose {
         Mat rvec;
         Mat tvec;
 
-        public Pose()
-        {
+        public Pose() {
             rvec = new Mat(3, 1, CvType.CV_32F);
             tvec = new Mat(3, 1, CvType.CV_32F);
         }
 
-        public Pose(Mat rvec, Mat tvec)
-        {
+        public Pose(Mat rvec, Mat tvec) {
             this.rvec = rvec;
             this.tvec = tvec;
         }
+
+
     }
-
-
-    public int CheckSpike(Mat input) {
-        int PIXEL_THRESH = 3;
-        int randomization;
-
-        Mat HSVimage = new Mat();
-        double leftGreenPixels,midGreenPixels,rightGreenPixels;
-
-        boolean viewportPaused;
-        Scalar greenLower = new Scalar(30, 75, 75);
-        Scalar greenHigher = new Scalar(90, 255, 255);
-
-        //convert to hsv
-        Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
-        //create rect around bottom 2/3 of mat
-        //store mat ROI in cropped mat
-
-        int croppedHeight = input.rows();
-        int croppedWidth = input.cols();
-        Mat cropped = input.submat(croppedHeight/3, croppedHeight, 0, croppedWidth);
-
-
-
-        int ROIwidth = cropped.cols()/3;
-        int ROIheight = cropped.rows();
-
-        //Store mat ROI in left/mid/rightROI
-        Mat leftROI = input.submat(0, ROIheight, 0, ROIwidth);
-        Mat midROI = input.submat(0, ROIheight, ROIwidth, ROIwidth*2);
-        Mat rightROI = input.submat(0, ROIheight, ROIwidth*2, ROIwidth*3);
-
-        //pixels in greenthreshold now = 1, outside thresh = 0
-
-
-        if(!leftROI.empty()){
-            Core.inRange(leftROI, greenLower, greenHigher, leftROI);
-        }
-        else{
-            Point point = new Point(10,10);
-            Imgproc.putText(input, "empty", point, Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, green, 2);
-        }
-
-        if(!midROI.empty()){
-            Core.inRange(midROI, greenLower, greenHigher, midROI);
-        }
-
-        if(!rightROI.empty()){
-            Core.inRange(rightROI, greenLower, greenHigher, rightROI);
-        }
-
-
-        //count pixels in ROI's
-        leftGreenPixels = Core.sumElems(leftROI).val[0];
-        midGreenPixels = Core.sumElems(midROI).val[0];
-        rightGreenPixels = Core.sumElems(rightROI).val[0];
-
-        //Check if ROI has enough green (left)
-        if(leftGreenPixels > PIXEL_THRESH){
-            randomization = 1;
-        }
-        //check right, else: mid
-        if(rightGreenPixels > leftGreenPixels && rightGreenPixels > PIXEL_THRESH){
-            randomization = 3;
-        } else {
-            randomization = 2;
-        }
-
-        return randomization;
-    }
-
 }
