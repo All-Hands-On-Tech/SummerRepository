@@ -63,8 +63,6 @@ public class PurplePixelRandomization extends RoboMom {
             }
         });
 
-        aprilTagDetectionPipeline.CheckSpike();
-
         waitForStart();
 
 
