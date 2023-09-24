@@ -177,7 +177,7 @@ public class PurplePixelRandomization extends RoboMom {
             //store mat ROI in cropped mat
 
             //Store mat ROI in left/mid/rightROI
-            Mat ROI = input.submat(rect);
+            Mat ROI = new Mat(input, rect);
 
             //pixels in greenthreshold now = 1, outside thresh = 0
 
