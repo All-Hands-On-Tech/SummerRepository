@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -8,6 +10,8 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
+
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 
@@ -129,6 +133,81 @@ public abstract class RoboMom extends LinearOpMode {
         driveInDirection(power, direction);
         sleep((long)time);
         driveInDirection(0, "STOP");
+    }
+
+    //units are in inches!!!!!!!
+    public Pose2d AbsolutePositionFromAprilTag(AprilTagDetection aprilTag) {
+        //add stuff here based on tag number
+        double tagX = 0/0;
+        double tagY = 0/0;
+        double tagAngle = 0/0;
+
+        switch (aprilTag.id) {
+            case 1:
+                tagX = 29.15;
+                tagY = 132;
+                tagAngle = 0;
+                break;
+            case 2:
+                tagX = 35.15;
+                tagY = 132;
+                tagAngle = 0;
+                break;
+            case 3:
+                tagX = 41.15;
+                tagY = 132;
+                tagAngle = 0;
+                break;
+            case 4:
+                tagX = 100.05;
+                tagY = 132;
+                tagAngle = 0;
+                break;
+            case 5:
+                tagX = 106.00;
+                tagY = 132;
+                tagAngle = 0;
+                break;
+            case 6:
+                tagX = 112.00;
+                tagY = 132;
+                tagAngle = 0;
+                break;
+            case 7:
+                tagX = -111.34;
+                tagY = 0;
+                tagAngle = 180;
+                break;
+            case 8:
+                tagX = 105.86;
+                tagY = 0;
+                tagAngle = 180;
+                break;
+            case 9:
+                tagX = 35;
+                tagY = 0;
+                tagAngle = 180;
+                break;
+            case 10:
+                tagX = 29.5;
+                tagY = 0;
+                tagAngle = 180;
+                break;
+        }
+
+        double range = aprilTag.ftcPose.range;
+        double yaw = aprilTag.ftcPose.yaw;
+        double bearing = aprilTag.ftcPose.bearing;
+
+        double rightAngle = Math.PI/4;
+
+        double x = tagX + range * Math.cos(yaw + bearing - rightAngle);
+        double y = tagX + range * Math.sin( yaw + bearing - rightAngle);
+        double angle = tagAngle + rightAngle - yaw;
+
+        return new Pose2d(x, y, angle);
+
+
     }
 
 

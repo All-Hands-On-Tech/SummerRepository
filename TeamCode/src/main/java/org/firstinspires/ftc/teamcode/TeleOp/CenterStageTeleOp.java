@@ -30,11 +30,16 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.hardware.bosch.BNO055IMU;
+import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RoboMom;
+import com.qualcomm.robotcore.hardware.IMU;
+
 
 import java.util.Vector;
 
@@ -58,9 +63,20 @@ public class CenterStageTeleOp extends RoboMom {
     double rfPower = 0;
     double rbPower = 0;
 
+     IMU imu;
+
     @Override
     public void runOpMode() {
         super.runOpMode();
+
+        // Retrieve the IMU from the hardware map
+        imu = hardwareMap.get(IMU.class, "imu");
+// Adjust the orientation parameters to match your robot
+        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
+                RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
+// Without this, the REV Hub's orientation is assumed to be logo up / USB forward
+        imu.initialize(parameters);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -89,8 +105,31 @@ public class CenterStageTeleOp extends RoboMom {
             }else{
                 rotateVel = 0;
             }
-
+            if(gamepad1.dpad_down){
+                vel = new Vector2d(vel.getX(), -1)
+            }
+            if(gamepad1.dpad_up){
+                vel = new Vector2d(vel.getX(), 1)
+            }
+            if(gamepad1.dpad_left){
+                vel = new Vector2d(-1, vel.getY())
+            }
+            if(gamepad1.dpad_right){
+                vel = new Vector2d(1, vel.getY())
+            }
             applyVectorsToPower();
+            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
+                applyFieldOrientedVectorsToPower();
+            }
+
+            telemetry.addData("lf", lfPower);
+            telemetry.addData("lb", lbPower);
+            telemetry.addLine();
+            telemetry.addData("rf", rfPower);
+            telemetry.addData("rb", rbPower);
+            telemetry.update();
+
+
 
 
             //slow down power if bumper is pressed
@@ -136,7 +175,9 @@ public class CenterStageTeleOp extends RoboMom {
             rightFrontDrive.setPower(rfPower);
             rightBackDrive.setPower(rbPower);
 
-
+            if (gamepad1.options) {
+                imu.resetYaw();
+            }
 
 
         }
@@ -156,11 +197,34 @@ public class CenterStageTeleOp extends RoboMom {
         target = target.div(targetMag); //normalize
         return target;
     }
-    public void applyVectorsToPower(){
-        lfPower = (vel.getY() + vel.getX() + rotateVel / 3) * speedScalar;
-        lbPower = (vel.getY() - vel.getX() + rotateVel / 3) * speedScalar;
-        rfPower = (vel.getY() + vel.getX() - rotateVel / 3) * speedScalar;
-        rbPower = (vel.getY() - vel.getX() - rotateVel / 3) * speedScalar;
+    public void applyVectorsToPower() {
+
+
+            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+
+        
+//
+
+    }
+    public void applyFieldOrientedVectorsToPower (){
+        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
+
+        double rotX = vel.getX() * Math.cos(-botHeading) - vel.getY() * Math.sin(-botHeading);
+        double rotY = vel.getX() * Math.sin(-botHeading) + vel.getY() * Math.cos(-botHeading);
+
+        rotX = rotX * 1.1;  // Counteract imperfect strafing
+
+        // Denominator is the largest motor power (absolute value) or 1
+        // This ensures all the powers maintain the same ratio,
+        // but only if at least one is out of the range [-1, 1]
+        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rotateVel), 1);
+        lfPower = (rotY + rotX + rotateVel) / denominator * speedScalar;
+        lbPower = (rotY - rotX + rotateVel) / denominator * speedScalar;
+        rfPower = (rotY - rotX - rotateVel) / denominator * speedScalar;
+        rbPower = (rotY + rotX - rotateVel) / denominator * speedScalar;
     }
 
 
