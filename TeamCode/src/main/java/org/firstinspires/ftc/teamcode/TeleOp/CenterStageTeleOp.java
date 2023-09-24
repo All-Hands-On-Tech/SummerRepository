@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.RoboMom;
 import java.util.Vector;
 
 
-@TeleOp(name="PowerPlay Teleop", group="A")
+@TeleOp(name="CenterStage Teleop", group="A")
 
 
 public class CenterStageTeleOp extends RoboMom {
