@@ -165,27 +165,14 @@ public class CenterStageTeleOp extends RoboMom {
         return target;
     }
     public void applyVectorsToPower() {
-        boolean rotating;
-        boolean straight;
-        boolean strafe;
-        if(Math.abs(gamepad1.right_stick_x) > deadZone){
-            rotating = true;
-        }else{rotating = false;}
-        if(Math.abs(gamepad1.left_stick_y) > deadZone){
-            straight = true;
-        }else{straight = false;}
-        if(Math.abs(gamepad1.left_stick_x) > deadZone){
-            strafe = true;
-        }else{strafe = false;}
 
-        if(rotating && straight && strafe) {
 
             lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
             lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
             rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
             rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
 
-        }
+        
 //        if(rotating && !straight && !strafe){
 //            lfPower = rotateVel * speedScalar;
 //            lbPower = rotateVel * speedScalar;
