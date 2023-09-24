@@ -106,9 +106,20 @@ public class CenterStageTeleOp extends RoboMom {
             }else{
                 rotateVel = 0;
             }
-
+            if(gamepad1.dpad_down){
+                vel = new Vector2d(vel.getX(), -1)
+            }
+            if(gamepad1.dpad_up){
+                vel = new Vector2d(vel.getX(), 1)
+            }
+            if(gamepad1.dpad_left){
+                vel = new Vector2d(-1, vel.getY())
+            }
+            if(gamepad1.dpad_right){
+                vel = new Vector2d(1, vel.getY())
+            }
             applyVectorsToPower();
-            if(gamepad1.dpad_down || gamepad1.dpad_down || gamepad1.dpad_down) {
+            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
                 applyFieldOrientedVectorsToPower();
             }
 
@@ -196,56 +207,7 @@ public class CenterStageTeleOp extends RoboMom {
             rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
 
         
-//        if(rotating && !straight && !strafe){
-//            lfPower = rotateVel * speedScalar;
-//            lbPower = rotateVel * speedScalar;
-//            rfPower = -rotateVel * speedScalar;
-//            rbPower = -rotateVel * speedScalar;
-//        }
 //
-//        if(straight && !rotating && !strafe) {
-//
-//            lfPower = vel.getY() * speedScalar;
-//            lbPower = vel.getY() * speedScalar;
-//            rfPower = vel.getY() * speedScalar;
-//            rbPower = vel.getY() * speedScalar;
-//
-//        }
-//        if(strafe && !straight && ! rotating) {
-//
-//            lfPower = + vel.getX() * speedScalar;
-//            lbPower = - vel.getX() * speedScalar;
-//            rfPower = - vel.getX() * speedScalar;
-//            rbPower = + vel.getX() * speedScalar;
-//
-//        }
-//
-//        if(rotating && straight && !strafe) {
-//
-//            lfPower = (vel.getY() + rotateVel / 3) * speedScalar;
-//            lbPower = (vel.getY() + rotateVel / 3) * speedScalar;
-//            rfPower = (vel.getY() - rotateVel / 3) * speedScalar;
-//            rbPower = (vel.getY() - rotateVel / 3) * speedScalar;
-//
-//        }
-//
-//        if(rotating && !straight && strafe) {
-//
-//            lfPower = (+ vel.getX() + rotateVel / 2) * speedScalar;
-//            lbPower = (- vel.getX() + rotateVel / 2) * speedScalar;
-//            rfPower = (- vel.getX() - rotateVel / 2) * speedScalar;
-//            rbPower = (+ vel.getX() - rotateVel / 2) * speedScalar;
-//
-//        }
-//
-//        if(!rotating && straight && strafe) {
-//
-//            lfPower = (vel.getY() + vel.getX() / 2) * speedScalar;
-//            lbPower = (vel.getY() - vel.getX() / 2) * speedScalar;
-//            rfPower = (vel.getY() - vel.getX() / 2) * speedScalar;
-//            rbPower = (vel.getY() + vel.getX() / 2) * speedScalar;
-//
-//        }
 
     }
     public void applyFieldOrientedVectorsToPower (){
