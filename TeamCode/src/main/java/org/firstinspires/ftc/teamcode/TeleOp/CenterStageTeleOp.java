@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.RoboMom;
 import java.util.Vector;
 
 
+
 @TeleOp(name="CenterStage TeleOp", group="A")
 
 
@@ -164,10 +165,78 @@ public class CenterStageTeleOp extends RoboMom {
         return target;
     }
     public void applyVectorsToPower() {
-        lfPower = (vel.getY() + vel.getX() + rotateVel / 3) * speedScalar;
-        lbPower = (vel.getY() - vel.getX() + rotateVel / 3) * speedScalar;
-        rfPower = (vel.getY() - vel.getX() - rotateVel / 3) * speedScalar;
-        rbPower = (vel.getY() + vel.getX() - rotateVel / 3) * speedScalar;
+        boolean rotating;
+        boolean straight;
+        boolean strafe;
+        if(Math.abs(gamepad1.right_stick_x) > deadZone){
+            rotating = true;
+        }else{rotating = false;}
+        if(Math.abs(gamepad1.left_stick_y) > deadZone){
+            straight = true;
+        }else{straight = false;}
+        if(Math.abs(gamepad1.left_stick_x) > deadZone){
+            strafe = true;
+        }else{strafe = false;}
+
+        if(rotating && straight && strafe) {
+
+            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+
+        }
+//        if(rotating && !straight && !strafe){
+//            lfPower = rotateVel * speedScalar;
+//            lbPower = rotateVel * speedScalar;
+//            rfPower = -rotateVel * speedScalar;
+//            rbPower = -rotateVel * speedScalar;
+//        }
+//
+//        if(straight && !rotating && !strafe) {
+//
+//            lfPower = vel.getY() * speedScalar;
+//            lbPower = vel.getY() * speedScalar;
+//            rfPower = vel.getY() * speedScalar;
+//            rbPower = vel.getY() * speedScalar;
+//
+//        }
+//        if(strafe && !straight && ! rotating) {
+//
+//            lfPower = + vel.getX() * speedScalar;
+//            lbPower = - vel.getX() * speedScalar;
+//            rfPower = - vel.getX() * speedScalar;
+//            rbPower = + vel.getX() * speedScalar;
+//
+//        }
+//
+//        if(rotating && straight && !strafe) {
+//
+//            lfPower = (vel.getY() + rotateVel / 3) * speedScalar;
+//            lbPower = (vel.getY() + rotateVel / 3) * speedScalar;
+//            rfPower = (vel.getY() - rotateVel / 3) * speedScalar;
+//            rbPower = (vel.getY() - rotateVel / 3) * speedScalar;
+//
+//        }
+//
+//        if(rotating && !straight && strafe) {
+//
+//            lfPower = (+ vel.getX() + rotateVel / 2) * speedScalar;
+//            lbPower = (- vel.getX() + rotateVel / 2) * speedScalar;
+//            rfPower = (- vel.getX() - rotateVel / 2) * speedScalar;
+//            rbPower = (+ vel.getX() - rotateVel / 2) * speedScalar;
+//
+//        }
+//
+//        if(!rotating && straight && strafe) {
+//
+//            lfPower = (vel.getY() + vel.getX() / 2) * speedScalar;
+//            lbPower = (vel.getY() - vel.getX() / 2) * speedScalar;
+//            rfPower = (vel.getY() - vel.getX() / 2) * speedScalar;
+//            rbPower = (vel.getY() + vel.getX() / 2) * speedScalar;
+//
+//        }
+
     }
 
 
