@@ -5,12 +5,14 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.aprilTag.AprilTagDetectionPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
+import org.opencv.core.Point;
 import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.imgproc.Imgproc;
@@ -23,7 +25,7 @@ import org.openftc.easyopencv.OpenCvWebcam;
 @Autonomous
 public class PurplePixelRandomization extends RoboMom {
 
-    int randomization, finalRandomization;
+    public int randomization, finalRandomization;
     int PIXEL_THRESH = 100;
 
     double fx = 578.272;
@@ -35,16 +37,16 @@ public class PurplePixelRandomization extends RoboMom {
     double tagsize = 0.166;
     OpenCvCamera webcam;
 
-    AprilTagDetectionPipeline aprilTagDetectionPipeline;
+    SubmatPipeline submatPipeline;
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-        aprilTagDetectionPipeline = new AprilTagDetectionPipeline(tagsize, fx, fy, cx, cy);
+        submatPipeline = new SubmatPipeline(tagsize, fx, fy, cx, cy);
 
-        webcam.setPipeline(aprilTagDetectionPipeline);
+        webcam.setPipeline(submatPipeline);
 
 
 
@@ -63,13 +65,10 @@ public class PurplePixelRandomization extends RoboMom {
             }
         });
 
-
         waitForStart();
 
-        finalRandomization = randomization;
 
 
-        telemetry.addData("Final Randomization: ", finalRandomization);
 
         telemetry.addData("Randomization: ", randomization);
         telemetry.update();
@@ -77,16 +76,16 @@ public class PurplePixelRandomization extends RoboMom {
         if (isStopRequested()) return;
 
         while (opModeIsActive() && !isStopRequested()) {
-            switch(finalRandomization){
+            switch(randomization){
                 case 1:
                     //LEFT
                     //We need to finish odometry and Roadrunner, for now we are using driveForTime
-                    driveForTime("LEFT", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("FORWARD", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("BACK", 0.3, 0.5);
-                    sleep(100);
+//                    driveForTime("LEFT", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("FORWARD", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("BACK", 0.3, 0.5);
+//                    sleep(100);
                     //driveForTime("ROTATE_RIGHT", 0.3, 0.5);
 
                     telemetry.addLine("left");
@@ -94,20 +93,20 @@ public class PurplePixelRandomization extends RoboMom {
                 case 2:
                     //MIDDLE
                     //replace with odometry and roadrunner
-                    driveForTime("FORWARD", 0.3, 1);
-                    sleep(100);
-                    driveForTime("BACK", 0.3, 0.5);
+//                    driveForTime("FORWARD", 0.3, 1);
+//                    sleep(100);
+//                    driveForTime("BACK", 0.3, 0.5);
 
                     telemetry.addLine("center");
                     break;
                 case 3:
                     //replace with odometry and roadrunner
                     //RIGHT
-                    driveForTime("RIGHT", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("FORWARD", 0.3, 0.75);
-                    sleep(100);
-                    driveForTime("BACK", 0.3, 0.5);
+//                    driveForTime("RIGHT", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("FORWARD", 0.3, 0.75);
+//                    sleep(100);
+//                    driveForTime("BACK", 0.3, 0.5);
 
                     telemetry.addLine("right");
                     break;
@@ -117,61 +116,88 @@ public class PurplePixelRandomization extends RoboMom {
         }
     }
 
-//    class SamplePipeline extends OpenCvPipeline{
-//        Mat HSVimage = new Mat();
-//        double leftGreenPixels,midGreenPixels,rightGreenPixels;
+    class SubmatPipeline extends AprilTagDetectionPipeline {
+        // Notice this is declared as an instance variable (and re-used), not a local variable
+        Mat submat;
 
-//     class SamplePipeline extends OpenCvPipeline{
-//        Mat HSVimage = new Mat();
-//        double leftGreenPixels,midGreenPixels,rightGreenPixels;
-//
-//        boolean viewportPaused;
-//        Scalar greenLower = new Scalar(30, 75, 75);
-//        Scalar greenHigher = new Scalar(90, 255, 255);
+        public SubmatPipeline(double tagsize, double fx, double fy, double cx, double cy) {
+            super(tagsize, fx, fy, cx, cy);
+        }
+
+        @Override
+        public void init(Mat firstFrame) {
+
+        }
+
+        @Override
+        public Mat processFrame(Mat firstFrame) {
+            // Because a submat is a persistent reference to a region of the parent buffer,
+            // (which in this case is `input`) any changes to `input` will be reflected in
+            // the submat (and vice versa).
+            int rows = firstFrame.rows();
+            int ROIHeight = rows * (2/3);
+            int ROIWidth = firstFrame.cols()/3;
+
+            Rect leftROI = new Rect(0, rows/3, ROIWidth, ROIHeight);
+            Rect midROI = new Rect(ROIWidth, rows/3, ROIWidth, ROIHeight);
+            Rect rightROI = new Rect(ROIWidth * 2, rows/3, ROIWidth, ROIHeight);
+
+            double leftPropPixels = PropPixelsInROI(firstFrame, leftROI);
+            double midPropPixels = PropPixelsInROI(firstFrame, midROI);
+            double rightPropPixels = PropPixelsInROI(firstFrame, rightROI);
+
+            telemetry.addData("LeftPropPixels",leftPropPixels);
+            telemetry.addData("MidPropPixels",midPropPixels);
+            telemetry.addData("RightPropPixels",rightPropPixels);
+            telemetry.update();
+
+            if(leftPropPixels > midPropPixels && leftPropPixels > rightPropPixels){
+                randomization = 1;
+            } else if(midPropPixels > rightPropPixels){
+                randomization = 2;
+            } else{
+                randomization = 3;
+            }
+            return firstFrame;
+        }
+
+        public double PropPixelsInROI(Mat input, Rect rect) {
+            int PIXEL_THRESH = 100;
+
+            Mat HSVimage = new Mat();
+            double GreenPixels;
+
+            boolean viewportPaused;
+            Scalar greenLower = new Scalar(30, 75, 75);
+            Scalar greenHigher = new Scalar(90, 255, 255);
+
+            //convert to hsv
+            Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
+            //create rect around bottom 2/3 of mat
+            //store mat ROI in cropped mat
+
+            //Store mat ROI in left/mid/rightROI
+            Mat ROI = input.submat(rect);
+
+            //pixels in greenthreshold now = 1, outside thresh = 0
 
 
-      //  @Override
-//        public Mat processFrame(Mat input) {
-//            //convert to hsv
-//            Imgproc.cvtColor(input, HSVimage, Imgproc.COLOR_RGB2HSV);
-//            //create rect around bottom 2/3 of mat
-//            Rect rectCropTop = new Rect(0, input.height()/3, input.width(), input.height()*(2/3));
-//            //store mat ROI in cropped mat
-//            Mat cropped = input.submat(rectCropTop);
-//
-//            //Create rects around first, second, third sections of cropped mat
-//            Rect rectCropLeft = new Rect(0, 0, cropped.width()/3, cropped.height());
-//            Rect rectCropMid = new Rect(cropped.width()/3, 0, cropped.width()/3, cropped.height());
-//            Rect rectCropRight = new Rect(cropped.width()*(2/3), 0, cropped.width()/3, cropped.height());
-//
-//            //Store mat ROI in left/mid/rightROI
-//            Mat leftROI = input.submat(rectCropLeft);
-//            Mat midROI = input.submat(rectCropMid);
-//            Mat rightROI = input.submat(rectCropRight);
-//
-//            //pixels in greenthreshold now = 1, outside thresh = 0
-//            Core.inRange(leftROI, greenLower, greenHigher, leftROI);
-//            Core.inRange(midROI, greenLower, greenHigher, midROI);
-//            Core.inRange(rightROI, greenLower, greenHigher, rightROI);
-//
-//            //count pixels in ROI's
-//            leftGreenPixels = Core.sumElems(leftROI).val[0];
-//            midGreenPixels = Core.sumElems(midROI).val[0];
-//            rightGreenPixels = Core.sumElems(rightROI).val[0];
-//
-//            //Check if ROI has enough green (left)
-//            if(leftGreenPixels > PIXEL_THRESH){
-//                randomization = 1;
+            if (!ROI.empty()) {
+                Core.inRange(ROI, greenLower, greenHigher, ROI);
+            }
+//            else{
+//                Point point = new Point(10,10);
+//                Imgproc.putText(input, "empty", point, Imgproc.FONT_HERSHEY_SIMPLEX, 0.5, green, 2);
 //            }
-//            //check right, else: mid
-//            if(rightGreenPixels > leftGreenPixels && rightGreenPixels > PIXEL_THRESH){
-//                randomization = 3;
-//            } else {
-//                randomization = 2;
-//            }
-//
-//            return null;
-//        }
-//    }
 
-}
+
+            //count pixels in ROI's
+            GreenPixels = Core.sumElems(ROI).val[0];
+
+            //Check if ROI has enough green (left)
+
+            return GreenPixels;
+        }
+    }
+
+    }
