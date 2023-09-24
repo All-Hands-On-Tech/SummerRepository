@@ -34,6 +34,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
 import java.util.Vector;
@@ -91,6 +92,12 @@ public class CenterStageTeleOp extends RoboMom {
             }
 
             applyVectorsToPower();
+            telemetry.addData("lf", lfPower);
+            telemetry.addData("lb", lbPower);
+            telemetry.addLine();
+            telemetry.addData("rf", rfPower);
+            telemetry.addData("rb", rbPower);
+            telemetry.update();
 
 
             //slow down power if bumper is pressed
@@ -156,7 +163,7 @@ public class CenterStageTeleOp extends RoboMom {
         target = target.div(targetMag); //normalize
         return target;
     }
-    public void applyVectorsToPower(){
+    public void applyVectorsToPower() {
         lfPower = (vel.getY() + vel.getX() + rotateVel / 3) * speedScalar;
         lbPower = (vel.getY() - vel.getX() + rotateVel / 3) * speedScalar;
         rfPower = (vel.getY() - vel.getX() - rotateVel / 3) * speedScalar;
