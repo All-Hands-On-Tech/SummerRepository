@@ -159,8 +159,8 @@ public class CenterStageTeleOp extends RoboMom {
     public void applyVectorsToPower(){
         lfPower = (vel.getY() + vel.getX() + rotateVel / 3) * speedScalar;
         lbPower = (vel.getY() - vel.getX() + rotateVel / 3) * speedScalar;
-        rfPower = (vel.getY() + vel.getX() - rotateVel / 3) * speedScalar;
-        rbPower = (vel.getY() - vel.getX() - rotateVel / 3) * speedScalar;
+        rfPower = (vel.getY() - vel.getX() - rotateVel / 3) * speedScalar;
+        rbPower = (vel.getY() + vel.getX() - rotateVel / 3) * speedScalar;
     }
 
 
