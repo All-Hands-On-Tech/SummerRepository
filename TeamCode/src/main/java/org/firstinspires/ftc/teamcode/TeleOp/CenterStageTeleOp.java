@@ -44,8 +44,7 @@ import com.qualcomm.robotcore.hardware.IMU;
 import java.util.Vector;
 
 
-
-@TeleOp(name="CenterStage TeleOp", group="A")
+@TeleOp(name="CenterStage Teleop", group="A")
 
 
 public class CenterStageTeleOp extends RoboMom {
