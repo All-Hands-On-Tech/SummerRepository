@@ -107,16 +107,16 @@ public class CenterStageTeleOp extends RoboMom {
                 rotateVel = 0;
             }
             if(gamepad1.dpad_down){
-                vel = new Vector2d(vel.getX(), -1)
+                vel = new Vector2d(vel.getX(), -1);
             }
             if(gamepad1.dpad_up){
-                vel = new Vector2d(vel.getX(), 1)
+                vel = new Vector2d(vel.getX(), 1);
             }
             if(gamepad1.dpad_left){
-                vel = new Vector2d(-1, vel.getY())
+                vel = new Vector2d(-1, vel.getY());
             }
             if(gamepad1.dpad_right){
-                vel = new Vector2d(1, vel.getY())
+                vel = new Vector2d(1, vel.getY());
             }
             applyVectorsToPower();
             if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
