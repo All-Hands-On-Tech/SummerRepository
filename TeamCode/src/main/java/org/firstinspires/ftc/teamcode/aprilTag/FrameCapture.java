@@ -66,8 +66,8 @@ public class FrameCapture extends LinearOpMode
      */
     final boolean USING_WEBCAM = false;
     final BuiltinCameraDirection INTERNAL_CAM_DIR = BuiltinCameraDirection.BACK;
-    final int RESOLUTION_WIDTH = 640;
-    final int RESOLUTION_HEIGHT = 480;
+    final int RESOLUTION_WIDTH = 1920;
+    final int RESOLUTION_HEIGHT = 1080;
 
     // Internal state
     boolean lastX;
