@@ -13,6 +13,7 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 public class DetectionPipeline extends OpenCvPipeline {
 
     Telemetry telemetry;
+
     public Rect rectLeft = new Rect(20, 600, 600, 450);
     public Rect rectRight = new Rect(1150, 450, 600, 450);
     public Rect rectMid = new Rect(550, 450, 600, 450);
@@ -27,9 +28,10 @@ public class DetectionPipeline extends OpenCvPipeline {
     Mat ROIRight = new Mat();
     Mat ROIMid = new Mat();
 
-    String spikePosition;
+    String spikePosition = "MID";
 
     double pixLeft, pixRight, pixMid;
+
 
     public DetectionPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
@@ -79,15 +81,20 @@ public class DetectionPipeline extends OpenCvPipeline {
             spikePosition = "MID";
         }
 
-        telemetry.addData("Spike position: ", spikePosition);
+        telemetry.addData("Spike Position", spikePosition);
         telemetry.update();
 
-        return input;
+        return BinaryMatMid;
 
     }
 
     public String getSpikePosition(){
-        return spikePosition;
+        if(spikePosition != null){
+            return spikePosition;
+        } else {
+            return "RIGHT";
+        }
+
     }
 
 }
