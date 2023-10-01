@@ -4,6 +4,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Vision.CheckPipeline;
 import org.firstinspires.ftc.teamcode.Vision.SubmatPipeline;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
@@ -24,14 +25,14 @@ public class CameraCheckOpmode extends RoboMom {
     int RESHEIGHT = VisionConstants.RESHEIGHT;
     OpenCvCamera webcam;
 
-    SubmatPipeline submatPipeline = new SubmatPipeline();
+    CheckPipeline checkPipeline = new CheckPipeline();
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        webcam.setPipeline(submatPipeline);
+        webcam.setPipeline(checkPipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             public void onOpened()
