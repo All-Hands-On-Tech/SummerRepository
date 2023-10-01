@@ -138,9 +138,9 @@ public abstract class RoboMom extends LinearOpMode {
     //units are in inches!!!!!!!
     public Pose2d AbsolutePositionFromAprilTag(AprilTagDetection aprilTag) {
         //add stuff here based on tag number
-        double tagX = 0/0;
-        double tagY = 0/0;
-        double tagAngle = 0/0;
+        double tagX = 0;
+        double tagY = 0;
+        double tagAngle = 0;
 
         switch (aprilTag.id) {
             case 1:
@@ -202,10 +202,10 @@ public abstract class RoboMom extends LinearOpMode {
         double rightAngle = Math.PI/4;
 
         double x = tagX + range * Math.cos(yaw + bearing - rightAngle);
-        double y = tagX + range * Math.sin( yaw + bearing - rightAngle);
-        double angle = tagAngle + rightAngle - yaw;
+        double y = tagY + range * Math.sin( yaw + bearing - rightAngle);
+        double angle = tagAngle - yaw;
 
-        return new Pose2d(x, y, angle);
+        return new Pose2d(range, yaw, bearing);
 
 
     }
