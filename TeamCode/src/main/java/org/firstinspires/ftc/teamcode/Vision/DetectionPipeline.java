@@ -14,12 +14,12 @@ public class DetectionPipeline extends OpenCvPipeline {
 
     Telemetry telemetry;
 
-    public Rect rectLeft = new Rect(20, 600, 600, 450);
-    public Rect rectRight = new Rect(1150, 450, 600, 450);
-    public Rect rectMid = new Rect(550, 450, 600, 450);
+    public Rect rectLeft = VisionConstants.rectLeftROI;
+    public Rect rectRight = VisionConstants.rectRightROI;
+    public Rect rectMid = VisionConstants.rectMidROI;
 
-    public Scalar low = new Scalar(0, 100, 50);
-     public Scalar high = new Scalar(50, 255, 255);
+    public Scalar low = VisionConstants.lowColorThreshold;
+     public Scalar high = VisionConstants.highColorThreshold;
     Mat HSVimage = new Mat();
     Mat BinaryMatLeft = new Mat();
     Mat BinaryMatRight = new Mat();
