@@ -54,7 +54,7 @@ public class CameraTesting extends RoboMom {
         });
 
         waitForStart();
-//        webcam.pauseViewport();
+
         //webcam.resumeViewport();
 
 
@@ -67,7 +67,7 @@ public class CameraTesting extends RoboMom {
 
         while (opModeIsActive() && !isStopRequested()) {
 
-            randomization = detectionPipeline.getSpikePosition();
+            randomization = detectionPipeline.getLatestSpikePosition();
             if(randomization != null){
 
                 switch(randomization){

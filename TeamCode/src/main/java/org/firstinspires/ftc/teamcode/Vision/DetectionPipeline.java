@@ -88,7 +88,7 @@ public class DetectionPipeline extends OpenCvPipeline {
 
     }
 
-    public String getSpikePosition(){
+    public String getLatestSpikePosition(){
         if(spikePosition != null){
             return spikePosition;
         } else {

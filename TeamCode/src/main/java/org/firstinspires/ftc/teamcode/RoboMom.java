@@ -205,7 +205,7 @@ public abstract class RoboMom extends LinearOpMode {
         double y = tagY + range * Math.sin( yaw + bearing - rightAngle);
         double angle = tagAngle - yaw;
 
-        return new Pose2d(range, yaw, bearing);
+        return new Pose2d(x, y, angle);
 
 
     }
