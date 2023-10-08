@@ -57,16 +57,17 @@ import java.util.Locale;
  * In OnBot Java, use "Add File" to add this OpMode from the list of Samples.
  */
 
+
 @TeleOp(name = "Utility: Camera Frame Capture", group = "Utility")
 public class UtilityCameraFrameCapture extends LinearOpMode
 {
     /*
      * EDIT THESE PARAMETERS AS NEEDED
      */
-    final boolean USING_WEBCAM = false;
+    final boolean USING_WEBCAM = true;
     final BuiltinCameraDirection INTERNAL_CAM_DIR = BuiltinCameraDirection.BACK;
-    final int RESOLUTION_WIDTH = 640;
-    final int RESOLUTION_HEIGHT = 480;
+    final int RESOLUTION_WIDTH = 1920;
+    final int RESOLUTION_HEIGHT = 1080;
 
     // Internal state
     boolean lastX;
