@@ -1,6 +1,8 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -13,7 +15,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class CircleCheckPipeline extends OpenCvPipeline {
 
-    public Rect rect = new Rect(0,300, 1920, 780);
+    public Rect rect = VisionConstants.rectLowROI;
 
     Telemetry telemetry;
     Mat HSVImage = new Mat();
@@ -88,9 +90,12 @@ public class CircleCheckPipeline extends OpenCvPipeline {
             Imgproc.circle(Overlay, center, radius, new Scalar(0,0,255), 2, 8, 0 );
         }
 
+
         Overlay.copyTo(ROI);
 
+
         Imgproc.cvtColor(HSVImage, HSVImage, Imgproc.COLOR_HSV2RGB);
+        Imgproc.rectangle(HSVImage, rect,new Scalar(0,255,0), 5, 8);
 
         return HSVImage;
 

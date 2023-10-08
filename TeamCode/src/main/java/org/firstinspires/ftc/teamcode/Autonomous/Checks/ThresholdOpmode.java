@@ -1,20 +1,19 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Checks;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.Vision.CheckPipeline;
-import org.firstinspires.ftc.teamcode.Vision.SubmatPipeline;
 import org.firstinspires.ftc.teamcode.RoboMom;
+import org.firstinspires.ftc.teamcode.Vision.CheckPipeline;
+import org.firstinspires.ftc.teamcode.Vision.ThresholdPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
-public class CameraCheckOpmode extends RoboMom {
-    int PIXEL_THRESH = 100;
+@Autonomous(name="Check Threshold", group="B")
+public class ThresholdOpmode extends RoboMom {
 
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
@@ -25,14 +24,14 @@ public class CameraCheckOpmode extends RoboMom {
     int RESHEIGHT = VisionConstants.RESHEIGHT;
     OpenCvCamera webcam;
 
-    CheckPipeline checkPipeline = new CheckPipeline();
+    ThresholdPipeline thresholdPipeline = new ThresholdPipeline();
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        webcam.setPipeline(checkPipeline);
+        webcam.setPipeline(thresholdPipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             public void onOpened()

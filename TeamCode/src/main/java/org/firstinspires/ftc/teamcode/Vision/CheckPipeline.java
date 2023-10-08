@@ -60,11 +60,15 @@ public class CheckPipeline extends OpenCvPipeline {
         Core.bitwise_and(RightROI, RightROI, RightMaskedMat, RightBinaryMat);
         Core.bitwise_and(MidROI, MidROI, MidMaskedMat, MidBinaryMat);
 
-        LeftMaskedMat.copyTo(LeftROI);
-        RightMaskedMat.copyTo(RightROI);
-        MidMaskedMat.copyTo(MidROI);
+//        LeftMaskedMat.copyTo(LeftROI);
+//        RightMaskedMat.copyTo(RightROI);
+//        MidMaskedMat.copyTo(MidROI);
 
         Imgproc.cvtColor(HSVimage, HSVimage, Imgproc.COLOR_HSV2RGB);
+
+        Imgproc.rectangle(HSVimage, rectLeft,new Scalar(0,255,0), 10, 8);
+        Imgproc.rectangle(HSVimage, rectRight,new Scalar(0,255,0), 10, 8);
+        Imgproc.rectangle(HSVimage, rectMid,new Scalar(0,255,0), 10, 8);
 
         return HSVimage;
 

@@ -15,7 +15,7 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     public String spikePosition = "MID";
 
-    public Rect rect = new Rect(0,300, 1920, 780);
+    public Rect rect = VisionConstants.rectLowROI;
 
     Telemetry telemetry;
     Mat HSVImage = new Mat();
@@ -36,6 +36,9 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
     public double minDist = 150f;
     public double param1 = 130;
     public double param2 = 30;
+    public double x;
+
+    Point center;
 
     Scalar low = VisionConstants.lowColorThreshold;
     Scalar high = VisionConstants.highColorThreshold;
@@ -75,17 +78,21 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
         int numCircles = Circles.cols();
         ROI.copyTo(Overlay);
-        Point center;
 
         double[] data = Circles.get(0, 0);
         center = new Point(Math.round(data[0]), Math.round(data[1]));
+        x = center.x;
 
-        if(center.x < rect.width/3){
+        Overlay.copyTo(ROI);
+
+        if(x < rect.width/3){
             spikePosition = "LEFT";
-        } else if(center.x >= rect.width/3){
+        } else if(x >= rect.width/3){
             spikePosition = "MID";
-        } else if(center.x > rect.width*(2/3)){
+        } else if(x > rect.width*(2/3)){
             spikePosition = "RIGHT";
+        } else{
+            spikePosition ="MID";
         }
 
         return input;

@@ -9,6 +9,8 @@ public class VisionConstants {
     static public Rect rectRightROI = new Rect(1150, 550, 600, 450);
     static public Rect rectMidROI = new Rect(590, 450, 550, 450);
 
+    static public Rect rectLowROI = new Rect(0,300, 1920, 780);
+
     static public Scalar lowColorThreshold = new Scalar(0, 100, 50);
     static public Scalar highColorThreshold = new Scalar(50, 255, 255);
 
