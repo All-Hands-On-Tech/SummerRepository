@@ -25,7 +25,7 @@ public class CameraCheckCircleOpmode extends RoboMom {
     int RESHEIGHT = VisionConstants.RESHEIGHT;
     OpenCvCamera webcam;
 
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline();
+    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
     @Override
     public void runOpMode() {

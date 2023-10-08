@@ -11,9 +11,7 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class CircleDetectionPipeline extends OpenCvPipeline {
-
-    public String spikePosition = "MID";
+public class CircleCheckPipeline extends OpenCvPipeline {
 
     public Rect rect = new Rect(0,300, 1920, 780);
 
@@ -43,7 +41,7 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
     Size Kernel = new Size(7,7);
 
 
-    public CircleDetectionPipeline(Telemetry telemetry) {
+    public CircleCheckPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
 
@@ -78,22 +76,24 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
         MaskedMat.copyTo(Overlay);
         Point center;
 
-        double[] data = Circles.get(0, 0);
-        center = new Point(Math.round(data[0]), Math.round(data[1]));
 
-        if(center.x < rect.width/3){
-            spikePosition = "LEFT";
-        } else if(center.x >= rect.width/3){
-            spikePosition = "MID";
-        } else if(center.x > rect.width*(2/3)){
-            spikePosition = "RIGHT";
+        for(int i=0; i < numCircles; i++)
+        {
+            double[] data = Circles.get(0, i);
+            center = new Point(Math.round(data[0]), Math.round(data[1]));
+            // circle center
+            Imgproc.circle(Overlay, center, 1, new Scalar(0, 0, 255), 2, 8, 0 );
+            // circle outline
+            int radius = (int) Math.round(data[2]);
+            Imgproc.circle(Overlay, center, radius, new Scalar(0,0,255), 2, 8, 0 );
         }
 
-        return input;
+        Overlay.copyTo(ROI);
+
+        Imgproc.cvtColor(HSVImage, HSVImage, Imgproc.COLOR_HSV2RGB);
+
+        return HSVImage;
 
     }
 
-    public String getSpikePosition() {
-        return spikePosition;
-    }
 }
