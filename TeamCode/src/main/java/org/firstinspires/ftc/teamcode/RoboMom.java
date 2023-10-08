@@ -142,68 +142,13 @@ public abstract class RoboMom extends LinearOpMode {
         double tagY = 0;
         double tagAngle = 0;
 
-        switch (aprilTag.id) {
-            case 1:
-                tagX = 29.15;
-                tagY = 132;
-                tagAngle = 0;
-                break;
-            case 2:
-                tagX = 35.15;
-                tagY = 132;
-                tagAngle = 0;
-                break;
-            case 3:
-                tagX = 41.15;
-                tagY = 132;
-                tagAngle = 0;
-                break;
-            case 4:
-                tagX = 100.05;
-                tagY = 132;
-                tagAngle = 0;
-                break;
-            case 5:
-                tagX = 106.00;
-                tagY = 132;
-                tagAngle = 0;
-                break;
-            case 6:
-                tagX = 112.00;
-                tagY = 132;
-                tagAngle = 0;
-                break;
-            case 7:
-                tagX = -111.34;
-                tagY = 0;
-                tagAngle = 180;
-                break;
-            case 8:
-                tagX = 105.86;
-                tagY = 0;
-                tagAngle = 180;
-                break;
-            case 9:
-                tagX = 35;
-                tagY = 0;
-                tagAngle = 180;
-                break;
-            case 10:
-                tagX = 29.5;
-                tagY = 0;
-                tagAngle = 180;
-                break;
-        }
-
         double range = aprilTag.ftcPose.range;
-        double yaw = aprilTag.ftcPose.yaw;
-        double bearing = aprilTag.ftcPose.bearing;
+        double yaw = Math.toRadians(aprilTag.ftcPose.yaw);
+        double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
 
-        double rightAngle = Math.PI/4;
-
-        double x = tagX + range * Math.cos(yaw + bearing - rightAngle);
-        double y = tagY + range * Math.sin( yaw + bearing - rightAngle);
-        double angle = tagAngle - yaw;
+        double x = tagX - range * Math.sin(yaw + bearing);
+        double y = tagY - range * Math.cos(yaw + bearing);
+        double angle = Math.toDegrees(yaw) + 90;
 
         return new Pose2d(x, y, angle);
 
