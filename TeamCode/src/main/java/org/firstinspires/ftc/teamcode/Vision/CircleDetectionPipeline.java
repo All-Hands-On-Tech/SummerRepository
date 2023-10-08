@@ -74,8 +74,7 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
         Imgproc.HoughCircles(Blur, Circles,Imgproc.CV_HOUGH_GRADIENT,  1, minDist, param1, param2);
 
         int numCircles = Circles.cols();
-
-        MaskedMat.copyTo(Overlay);
+        ROI.copyTo(Overlay);
         Point center;
 
         double[] data = Circles.get(0, 0);
