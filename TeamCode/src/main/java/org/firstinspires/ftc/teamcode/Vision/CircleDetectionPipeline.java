@@ -5,20 +5,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
-import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
-public class CirclePipeline extends OpenCvPipeline {
+public class CircleDetectionPipeline extends OpenCvPipeline {
 
     Telemetry telemetry;
-
-    public Rect rectLeft = VisionConstants.rectLeftROI;
-    public Rect rectRight = VisionConstants.rectRightROI;
-    public Rect rectMid = VisionConstants.rectMidROI;
-
     Mat HSVImage = new Mat();
     Mat GrayImage = new Mat();
     Mat Blur = new Mat();
@@ -42,7 +36,7 @@ public class CirclePipeline extends OpenCvPipeline {
     Size Kernel = new Size(7,7);
 
 
-    public CirclePipeline(Telemetry telemetry) {
+    public CircleDetectionPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
     }
 
