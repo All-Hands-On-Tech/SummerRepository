@@ -73,7 +73,7 @@ public class CircleCheckPipeline extends OpenCvPipeline {
 
         int numCircles = Circles.cols();
 
-        MaskedMat.copyTo(Overlay);
+        ROI.copyTo(Overlay);
         Point center;
 
 
