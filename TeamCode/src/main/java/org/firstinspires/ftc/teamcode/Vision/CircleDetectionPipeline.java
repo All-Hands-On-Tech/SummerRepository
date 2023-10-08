@@ -5,12 +5,15 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Point;
+import org.opencv.core.Rect;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 import org.openftc.easyopencv.OpenCvPipeline;
 
 public class CircleDetectionPipeline extends OpenCvPipeline {
+
+    public Rect rect = new Rect(0,300, 1920, 780);
 
     Telemetry telemetry;
     Mat HSVImage = new Mat();
@@ -22,6 +25,8 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     Mat BinaryMat = new Mat();
     Mat Overlay = new Mat();
+
+    Mat ROI = new Mat();
 
     public float sigmaX = 1.5f;
     public float sigmaY = 1.5f;
@@ -42,17 +47,22 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     @Override
     public void init(Mat firstFrame) {
-
     }
 
     @Override
     public Mat processFrame(Mat input) {
 
+        ROI.release();
+        MaskedMat.release();
+        Overlay.release();
+
         Imgproc.cvtColor(input, HSVImage, Imgproc.COLOR_RGB2HSV);
 
-        Core.inRange(HSVImage, low, high, BinaryMat);
+        ROI = HSVImage.submat(rect);
 
-        Core.bitwise_and(input, input, MaskedMat, BinaryMat);
+        Core.inRange(ROI, low, high, BinaryMat);
+
+        Core.bitwise_and(ROI, ROI, MaskedMat, BinaryMat);
 
         Imgproc.cvtColor(MaskedMat, GrayImage, Imgproc.COLOR_RGB2GRAY);
 
@@ -64,7 +74,7 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
         int numCircles = Circles.cols();
 
         MaskedMat.copyTo(Overlay);
-        Point center = new Point(0, 0);
+        Point center;
 
 
         for(int i=0; i < numCircles; i++)
@@ -78,7 +88,11 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
             Imgproc.circle(Overlay, center, radius, new Scalar(0,0,255), 2, 8, 0 );
         }
 
-        return Overlay;
+        Overlay.copyTo(ROI);
+
+        Imgproc.cvtColor(HSVImage, HSVImage, Imgproc.COLOR_HSV2RGB);
+
+        return HSVImage;
 
     }
 

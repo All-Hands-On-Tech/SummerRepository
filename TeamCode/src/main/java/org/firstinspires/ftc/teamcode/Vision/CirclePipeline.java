@@ -15,9 +15,6 @@ public class CirclePipeline extends OpenCvPipeline {
 
     Telemetry telemetry;
 
-    public Rect rectLeft = VisionConstants.rectLeftROI;
-    public Rect rectRight = VisionConstants.rectRightROI;
-    public Rect rectMid = VisionConstants.rectMidROI;
 
     Mat HSVImage = new Mat();
     Mat GrayImage = new Mat();
