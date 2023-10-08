@@ -22,6 +22,11 @@ public class WheelTesting extends RoboMom {
         double targetClicks = 1000;
         double currentClicks = 0;
 
+    rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+    leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
 
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
