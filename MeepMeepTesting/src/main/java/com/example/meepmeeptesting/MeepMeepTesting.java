@@ -6,6 +6,12 @@ import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
 
+import java.awt.Image;
+import java.io.File;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
+
 public class MeepMeepTesting {
     public static void main(String[] args) {
         double trackWidth = 15.0;
@@ -35,11 +41,17 @@ public class MeepMeepTesting {
                 );
 
 
+        Image img = null;
+        try { img = ImageIO.read(new File("MeepMeepTesting/src/main/java/com/example/meepmeeptesting/centerstageField.png")); }
+        catch (IOException e) {}
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
-                .setDarkMode(true)
-                .setBackgroundAlpha(0.95f)
-                .addEntity(centerStageBot)
-                .start();
+        meepMeep.setBackground(img).addEntity(centerStageBot).start();;
+
+                //official background
+//        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
+//                .setDarkMode(true)
+//                .setBackgroundAlpha(0.95f)
+//                .addEntity(centerStageBot)
+//                .start();
     }
 }
