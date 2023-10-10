@@ -145,7 +145,7 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
         }
     }
 
-    void constructMatrix() {
+    public void constructMatrix() {
         //     Construct the camera matrix.
         //
         //      --         --
@@ -179,7 +179,7 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
      * @param tvec         the translation vector of the detection
      * @param cameraMatrix the camera matrix used when finding the detection
      */
-    void drawAxisMarker(Mat buf, double length, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix) {
+    public void drawAxisMarker(Mat buf, double length, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix) {
         // The points in 3D space we wish to project onto the 2D image plane.
         // The origin of the coordinate space is assumed to be in the center of the detection.
         MatOfPoint3f axis = new MatOfPoint3f(
@@ -204,7 +204,7 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
         Imgproc.circle(buf, projectedPoints[0], thickness, white, -1);
     }
 
-    void draw3dCubeMarker(Mat buf, double length, double tagWidth, double tagHeight, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix) {
+    public void draw3dCubeMarker(Mat buf, double length, double tagWidth, double tagHeight, int thickness, Mat rvec, Mat tvec, Mat cameraMatrix) {
         //axis = np.float32([[0,0,0], [0,3,0], [3,3,0], [3,0,0],
         //       [0,0,-3],[0,3,-3],[3,3,-3],[3,0,-3] ])
 
@@ -243,7 +243,7 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
         Imgproc.line(buf, projectedPoints[4], projectedPoints[7], green, thickness);
     }
 
-    Pose aprilTagPoseToOpenCvPose(AprilTagPose aprilTagPose) {
+    public Pose aprilTagPoseToOpenCvPose(AprilTagPose aprilTagPose) {
         Pose pose = new Pose();
         pose.tvec.put(0, 0, aprilTagPose.x);
         pose.tvec.put(1, 0, aprilTagPose.y);
@@ -295,9 +295,9 @@ public class AprilTagDetectionPipeline extends OpenCvPipeline {
      * A simple container to hold both rotation and translation
      * vectors, which together form a 6DOF pose.
      */
-    class Pose {
-        Mat rvec;
-        Mat tvec;
+    public class Pose {
+        public Mat rvec;
+        public Mat tvec;
 
         public Pose() {
             rvec = new Mat(3, 1, CvType.CV_32F);
