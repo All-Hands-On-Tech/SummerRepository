@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -10,6 +11,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
 import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
+import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
@@ -23,7 +25,10 @@ public abstract class RoboMom extends LinearOpMode {
     public DcMotor rightBackDrive = null;
     public DcMotor leftBackDrive = null;
 
+    SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+
     public void runOpMode() {
+
         //Defining hardware variables
         telemetry.addData("Status", "Initialized");
         telemetry.update();
@@ -102,6 +107,8 @@ public abstract class RoboMom extends LinearOpMode {
         double rightBackClicks;
         double leftBackClicks;
 
+        double error;
+
         rightFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         leftFrontDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         rightBackDrive.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -115,13 +122,21 @@ public abstract class RoboMom extends LinearOpMode {
         driveInDirection(power, direction);
 
         while(currentClicks < targetClicks){
-
             rightFrontClicks = Math.abs(rightFrontDrive.getCurrentPosition());
             leftFrontClicks = Math.abs(leftFrontDrive.getCurrentPosition());
             rightBackClicks = Math.abs(rightBackDrive.getCurrentPosition());
             leftBackClicks = Math.abs(leftBackDrive.getCurrentPosition());
 
             currentClicks = (rightFrontClicks+leftFrontClicks+rightBackClicks+leftBackClicks)/4;
+
+            error = currentClicks - targetClicks;
+
+            power = error/500;
+
+            if(power > 0.2){
+                driveInDirection(power, direction);
+            }
+
         }
         driveInDirection(0, "FORWARD");
     }
@@ -154,6 +169,5 @@ public abstract class RoboMom extends LinearOpMode {
 
 
     }
-
 
 }

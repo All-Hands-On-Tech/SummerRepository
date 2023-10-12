@@ -1,7 +1,8 @@
-package org.firstinspires.ftc.teamcode.Vision;
+package org.firstinspires.ftc.teamcode.aprilTag;
 
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
+import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.firstinspires.ftc.teamcode.aprilTag.AprilTagDetectionPipeline;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;

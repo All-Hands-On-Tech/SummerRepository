@@ -20,23 +20,33 @@ public class MeepMeepTesting {
         System.setProperty("sun.java2d.opengl", "true");
         MeepMeep meepMeep = new MeepMeep(800);
 
-        RoadRunnerBotEntity myBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity myBot1 = new DefaultBotBuilder(meepMeep)
                 .setConstraints(20, 60, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(0, 0, Math.toRadians(90)))
-                                .lineTo(new Vector2d(24, 0))
-                                .splineToSplineHeading(new Pose2d(0, -24, Math.toRadians(0)), Math.toRadians(180))
+                        drive.trajectorySequenceBuilder(new Pose2d(60, 11, Math.toRadians(180)))
+                                .splineTo(new Vector2d(35, 11), Math.toRadians(180))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(60, 50, Math.toRadians(270)), Math.toRadians(-90))
                                 .build()
                 );
 
-        RoadRunnerBotEntity centerStageBot = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity myBot2 = new DefaultBotBuilder(meepMeep)
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(fieldWidth/2 - trackWidth/2, fieldWidth/2 - trackWidth/2, Math.toRadians(90)))
-                                .lineTo(new Vector2d(fieldWidth/2 - trackWidth/2, -(fieldWidth/2 - trackWidth/2) ))
-                                .lineTo(new Vector2d(fieldWidth/2 - trackWidth/2 - tileWidth, -(fieldWidth/2 - trackWidth/2) ))
-                                .lineTo(new Vector2d(fieldWidth/2 - trackWidth/2, -(fieldWidth/2 - trackWidth/2) ))
-                                .lineTo(new Vector2d(fieldWidth/2 - trackWidth/2, fieldWidth/2 - trackWidth/2))
+                        drive.trajectorySequenceBuilder(new Pose2d(60, 11, Math.toRadians(180)))
+                                .splineTo(new Vector2d(35, 22), Math.toRadians(180))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(60, 50, Math.toRadians(-90)), Math.toRadians(-90))
+                                .build()
+                );
+
+        RoadRunnerBotEntity myBot3 = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(60, 11, Math.toRadians(180)))
+                                .splineToLinearHeading(new Pose2d(35, 9, Math.toRadians(-90)), Math.toRadians(-90))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(60, 45, Math.toRadians(-90)), Math.toRadians(-90))
                                 .build()
                 );
 
@@ -45,7 +55,7 @@ public class MeepMeepTesting {
         try { img = ImageIO.read(new File("MeepMeepTesting/src/main/java/com/example/meepmeeptesting/centerstageField.png")); }
         catch (IOException e) {}
 
-        meepMeep.setBackground(img).addEntity(centerStageBot).start();;
+        meepMeep.setBackground(img).addEntity(myBot1).addEntity(myBot2).addEntity(myBot3).start();;
 
                 //official background
 //        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)
