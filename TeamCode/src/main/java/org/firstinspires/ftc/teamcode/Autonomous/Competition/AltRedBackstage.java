@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-@Autonomous(name="Red Backstage", group="A")
+@Autonomous(name="Alt Red Backstage", group="C")
 public class AltRedBackstage extends RoboMom {
 //logan was here
     double fx = VisionConstants.fx;
