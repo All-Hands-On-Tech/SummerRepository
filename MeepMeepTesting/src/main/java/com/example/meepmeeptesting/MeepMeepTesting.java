@@ -28,10 +28,10 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
+                                .waitSeconds(5)
                                 .setReversed(true)
                                 .splineToLinearHeading(new Pose2d(59, -35, Math.toRadians(90)), Math.toRadians(90))
-                                .strafeTo(new Vector2d(59, 12))
-                                .splineTo(new Vector2d(35,47), Math.toRadians(90))
+                                .strafeTo(new Vector2d(59, 47))
                                 .build()
                 );
 
@@ -40,9 +40,10 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .splineTo(new Vector2d(33, -35), Math.toRadians(180))
-                                .strafeTo(new Vector2d(35, -35))
+                                .waitSeconds(5)
+                                .strafeTo(new Vector2d(59, -35))
                                 .setReversed(true)
-                                .strafeTo(new Vector2d(35, 47))
+                                .strafeTo(new Vector2d(59, 47))
                                 .build()
                 );
 
@@ -51,8 +52,10 @@ public class MeepMeepTesting {
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
                                 .lineToLinearHeading(new Pose2d(35, -37, Math.toRadians(-90)))
+                                .waitSeconds(5)
+                                .strafeTo(new Vector2d(59, -37))
                                 .setReversed(true)
-                                .strafeTo(new Vector2d(35, 47))
+                                .strafeTo(new Vector2d(59, 47))
                                 .build()
                 );
 
