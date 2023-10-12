@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous.Competition;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
@@ -12,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-
+@Autonomous(name="Blue Landing Zone", group="A")
 public class BlueLandingZone extends RoboMom {
 //logan was here
     double fx = VisionConstants.fx;
@@ -43,6 +44,7 @@ public class BlueLandingZone extends RoboMom {
         //left
         TrajectorySequence leftTraj = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(-35, -33, Math.toRadians(90)), Math.toRadians(90))
+                .waitSeconds(5)
                 .setReversed(true)
                 .splineToLinearHeading(new Pose2d(-59, -35, Math.toRadians(90)), Math.toRadians(90))
                 .strafeTo(new Vector2d(-59, 12))
@@ -52,6 +54,7 @@ public class BlueLandingZone extends RoboMom {
         //mid
         TrajectorySequence midTraj = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-33, -35), Math.toRadians(0))
+                .waitSeconds(5)
                 .strafeTo(new Vector2d(-35, -35))
                 .setReversed(true)
                 .strafeTo(new Vector2d(-35, 47))
@@ -60,6 +63,7 @@ public class BlueLandingZone extends RoboMom {
         //right
         TrajectorySequence rightTraj = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(-35, -37, Math.toRadians(-90)))
+                .waitSeconds(5)
                 .setReversed(true)
                 .strafeTo(new Vector2d(-35, 47))
                 .build();
