@@ -2,20 +2,18 @@ package org.firstinspires.ftc.teamcode.Autonomous.Competition;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.Vision.CircleCheckPipeline;
 import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
 
-public class RedBackstage extends RoboMom {
+public class BlueBackstage extends RoboMom {
 //logan was here
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
@@ -44,23 +42,23 @@ public class RedBackstage extends RoboMom {
 
         //left
         TrajectorySequence leftTraj = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(35, 9, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineTo(new Vector2d(-35, 11), Math.toRadians(0))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(60, 45, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-60, 50, Math.toRadians(270)), Math.toRadians(-90))
                 .build();
 
         //mid
         TrajectorySequence midTraj = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(35, 11), Math.toRadians(180))
+                .splineTo(new Vector2d(-35, 22), Math.toRadians(0))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(60, 50, Math.toRadians(270)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-60, 50, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
 
         //right
         TrajectorySequence rightTraj = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(35, 22), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-35, 9, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(60, 50, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-61, 45, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
 
         waitForStart();
