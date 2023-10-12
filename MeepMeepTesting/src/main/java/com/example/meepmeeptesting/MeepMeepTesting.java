@@ -18,20 +18,20 @@ public class MeepMeepTesting {
         double fieldWidth = 140; //field is 144 inches wide
         double tileWidth = 24.0;
 
-        Pose2d startPose = new Pose2d(60, -35, Math.toRadians(180));
+        Pose2d startPose = new Pose2d(-60, -35, Math.toRadians(0));
 
         System.setProperty("sun.java2d.opengl", "true");
         MeepMeep meepMeep = new MeepMeep(800);
 
-        RoadRunnerBotEntity right = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity left = new DefaultBotBuilder(meepMeep)
                 .setConstraints(39.2, 60, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
+                                .splineToLinearHeading(new Pose2d(-35, -33, Math.toRadians(90)), Math.toRadians(90))
                                 .waitSeconds(5)
                                 .setReversed(true)
-                                .splineToLinearHeading(new Pose2d(59, -35, Math.toRadians(90)), Math.toRadians(90))
-                                .strafeTo(new Vector2d(59, 47))
+                                .splineToLinearHeading(new Pose2d(-59, -35, Math.toRadians(90)), Math.toRadians(90))
+                                .strafeTo(new Vector2d(-59, 47))
                                 .build()
                 );
 
@@ -39,23 +39,24 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
+                                .splineTo(new Vector2d(-33, -35), Math.toRadians(0))
                                 .waitSeconds(5)
-                                .strafeTo(new Vector2d(59, -35))
+                                .strafeTo(new Vector2d(-59, -35))
                                 .setReversed(true)
-                                .strafeTo(new Vector2d(59, 47))
+                                .strafeTo(new Vector2d(-59, 47))
                                 .build()
                 );
 
-        RoadRunnerBotEntity left = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity right = new DefaultBotBuilder(meepMeep)
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(startPose)
-                                .lineToLinearHeading(new Pose2d(35, -37, Math.toRadians(-90)))
+                                .lineToLinearHeading(new Pose2d(-35, -37, Math.toRadians(-90)))
                                 .waitSeconds(5)
-                                .strafeTo(new Vector2d(59, -37))
+                                .strafeTo(new Vector2d(-35, -35))
+                                .strafeTo(new Vector2d(-59, -35))
                                 .setReversed(true)
-                                .strafeTo(new Vector2d(59, 47))
+                                .strafeTo(new Vector2d(-59, 47))
                                 .build()
                 );
 
