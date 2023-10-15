@@ -152,10 +152,56 @@ public abstract class RoboMom extends LinearOpMode {
 
     //units are in inches!!!!!!!
     public Pose2d AbsolutePositionFromAprilTag(AprilTagDetection aprilTag) {
-        //add stuff here based on tag number
         double tagX = 0;
         double tagY = 0;
         double tagAngle = 0;
+
+        //add stuff here based on tag number
+        //Needs to be checked
+        switch (aprilTag.id) {
+            case 1:
+                tagX = -41.40;
+                tagY = 62.01;
+                tagAngle = -90;
+            case 2:
+                tagX = -35.40;
+                tagY = 62.01;
+                tagAngle = -90;
+            case 3:
+                tagX = -29.40;
+                tagY = 62.01;
+                tagAngle = -90;
+            case 4:
+                tagX = 29.48;
+                tagY = 62.01;
+                tagAngle = -90;
+            case 5:
+                tagX = 35.48;
+                tagY = 62.01;
+                tagAngle = -90;
+            case 6:
+                tagX = 41.48;
+                tagY = 62.01;
+                tagAngle = -90;
+            case 7:
+                tagX = 40.93;
+                tagY = -70.58;
+                tagAngle = -90;
+            case 8:
+                tagX = 35.43;
+                tagY = -70.58;
+                tagAngle = -90;
+            case 9:
+                tagX = -35.51;
+                tagY = -70.58;
+                tagAngle = -90;
+            case 10:
+                tagX = -41.01;
+                tagY = -70.58;
+                tagAngle = -90;
+        }
+
+        //add stuff here based on camera position relative to center of robot
 
         double range = aprilTag.ftcPose.range;
         double yaw = Math.toRadians(aprilTag.ftcPose.yaw);
@@ -166,8 +212,6 @@ public abstract class RoboMom extends LinearOpMode {
         double angle = Math.toDegrees(yaw) + 90;
 
         return new Pose2d(x, y, angle);
-
-
     }
 
 }
