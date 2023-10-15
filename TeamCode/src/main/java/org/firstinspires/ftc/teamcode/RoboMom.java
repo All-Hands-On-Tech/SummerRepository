@@ -25,8 +25,6 @@ public abstract class RoboMom extends LinearOpMode {
     public DcMotor rightBackDrive = null;
     public DcMotor leftBackDrive = null;
 
-    SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
-
     public void runOpMode() {
 
         //Defining hardware variables
