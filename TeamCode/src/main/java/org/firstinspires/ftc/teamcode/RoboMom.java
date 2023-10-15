@@ -161,34 +161,42 @@ public abstract class RoboMom extends LinearOpMode {
                 tagX = -41.40;
                 tagY = 62.01;
                 tagAngle = -90;
+                break;
             case 2:
                 tagX = -35.40;
                 tagY = 62.01;
                 tagAngle = -90;
+                break;
             case 3:
                 tagX = -29.40;
                 tagY = 62.01;
                 tagAngle = -90;
+                break;
             case 4:
                 tagX = 29.48;
                 tagY = 62.01;
                 tagAngle = -90;
+                break;
             case 5:
                 tagX = 35.48;
                 tagY = 62.01;
                 tagAngle = -90;
+                break;
             case 6:
                 tagX = 41.48;
                 tagY = 62.01;
                 tagAngle = -90;
+                break;
             case 7:
                 tagX = 40.93;
                 tagY = -70.58;
                 tagAngle = -90;
+                break;
             case 8:
                 tagX = 35.43;
                 tagY = -70.58;
                 tagAngle = -90;
+                break;
             case 9:
                 tagX = -35.51;
                 tagY = -70.58;
@@ -197,15 +205,19 @@ public abstract class RoboMom extends LinearOpMode {
                 tagX = -41.01;
                 tagY = -70.58;
                 tagAngle = -90;
+                break;
         }
 
         //add stuff here based on camera position relative to center of robot
+        //tagX = 0;
+        //tagY = 0;
+        //tagAngle = 0;
 
         double range = aprilTag.ftcPose.range;
-        double yaw = Math.toRadians(aprilTag.ftcPose.yaw);
+        double yaw = -Math.toRadians(aprilTag.ftcPose.yaw);
         double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
 
-        double x = tagX - range * Math.sin(yaw + bearing);
+        double x = tagX + range * Math.sin(yaw + bearing);
         double y = tagY - range * Math.cos(yaw + bearing);
         double angle = Math.toDegrees(yaw) + 90;
 
