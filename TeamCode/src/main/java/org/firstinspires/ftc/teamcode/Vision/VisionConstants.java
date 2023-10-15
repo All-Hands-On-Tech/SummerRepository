@@ -17,8 +17,8 @@ public class VisionConstants {
     static public int RESWIDTH = 1920;
     static public int RESHEIGHT = 1080;
 
-    static public double fx = 578.272;
-    static public double fy = 578.272;
-    static public double cx = 402.145;
-    static public double cy = 221.506;
+    static public double fx = 1473.69;
+    static public double fy = 1473.69;
+    static public double cx = 845.856;
+    static public double cy = 514.97;
 }

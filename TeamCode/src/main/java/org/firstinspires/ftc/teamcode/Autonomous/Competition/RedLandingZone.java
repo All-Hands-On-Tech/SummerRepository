@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-@Autonomous(name="Blue Landing Zone", group="A")
+@Autonomous(name="Red Landing Zone", group="A")
 public class RedLandingZone extends RoboMom {
 //logan was here
     double fx = VisionConstants.fx;
