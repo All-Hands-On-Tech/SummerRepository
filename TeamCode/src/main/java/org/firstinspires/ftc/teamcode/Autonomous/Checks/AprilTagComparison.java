@@ -30,7 +30,6 @@ public class AprilTagComparison extends RoboMom {
     private VisionPortal visionPortal;
     enum State {
         TRAJECTORY_1,
-        TRAJECTORY_2,
         IDLE
     }
 
@@ -83,11 +82,6 @@ public class AprilTagComparison extends RoboMom {
 
             switch (currentState) {
                 case TRAJECTORY_1:
-                    if (!drive.isBusy()) {
-                        currentState = State.TRAJECTORY_2;
-                    }
-                    break;
-                case TRAJECTORY_2:
                     drive.setPoseEstimate(poseEstimateAprilTag);
                     traj1 = drive.trajectoryBuilder(startPose)
                             .lineToSplineHeading(targetPose)

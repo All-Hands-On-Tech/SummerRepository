@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Autonomous.newThing;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -13,9 +14,10 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-@Autonomous(name="Red Landing Zone", group="A")
+@Autonomous(name="Red LandingZone", group="Red")
 public class RedLandingZone extends RoboMom {
-//logan was here
+
+    //logan was here
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
     double cx = VisionConstants.cx;
@@ -26,9 +28,10 @@ public class RedLandingZone extends RoboMom {
     OpenCvCamera webcam;
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
-    Pose2d startPose = new Pose2d(-60, -35, Math.toRadians(0));
 
-    String spikePosition = "MID";
+    Pose2d startPose = new Pose2d(-60, -23, Math.toRadians(180));
+
+    String spikePosition = "center";
 
     @Override
     public void runOpMode() {
@@ -41,63 +44,51 @@ public class RedLandingZone extends RoboMom {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
-        //left
-        TrajectorySequence leftTraj = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(35, -37, Math.toRadians(-90)))
-                .waitSeconds(5)
-                .setReversed(true)
-                .strafeTo(new Vector2d(35, 47))
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+                .splineTo(new Vector2d(036, -11), Math.toRadians(180))
                 .build();
 
-        //mid
-        TrajectorySequence midTraj = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
-                .waitSeconds(5)
-                .strafeTo(new Vector2d(35, -35))
-                .setReversed(true)
-                .strafeTo(new Vector2d(35, 47))
+        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
+                .splineTo(new Vector2d(-30, -23), Math.toRadians(180))
                 .build();
 
-        //right
-        TrajectorySequence rightTraj = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
-                .waitSeconds(5)
+        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+                .splineTo(new Vector2d(-36, -35), Math.toRadians(180))
+                .build();
+
+        TrajectorySequence goHome = drive.trajectorySequenceBuilder(center.end())
+                .waitSeconds(1)
+                .lineToLinearHeading(new Pose2d(-50, 11, Math.toRadians(0)))
+                .waitSeconds(1)
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(59, -35, Math.toRadians(90)), Math.toRadians(90))
-                .strafeTo(new Vector2d(59, 12))
-                .splineTo(new Vector2d(35,47), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-55, -18, Math.toRadians(90)), Math.toRadians(-90))
                 .build();
 
         waitForStart();
         if (isStopRequested()) return;
 
-        while (opModeIsActive() && !isStopRequested()) {
-
-            spikePosition = circleDetectionPipeline.getSpikePosition();
-
-            switch (spikePosition) {
-                case "LEFT":
-                    drive.followTrajectorySequence(leftTraj);
-                    break;
-                case "MID":
-                    drive.followTrajectorySequence(midTraj);
-                    telemetry.addLine("center");
-                    break;
-                case "RIGHT":
-                    drive.followTrajectorySequence(rightTraj);
-                    telemetry.addLine("Right");
-                    break;
-            }
-
-            drive.update();
-
-            Pose2d poseEstimate = drive.getPoseEstimate();
-
-            // Print pose to telemetry
-            telemetry.addData("x", poseEstimate.getX());
-            telemetry.addData("y", poseEstimate.getY());
-            telemetry.addData("heading", poseEstimate.getHeading());
-            telemetry.update();
+        spikePosition = "CENTER"; //circleDetectionPipeline.getSpikePosition();
+        switch (spikePosition) {
+            case "LEFT":
+                telemetry.addLine("left");
+                telemetry.update();
+                drive.followTrajectorySequence(left);
+                break;
+            case "CENTER":
+                telemetry.addLine("center");
+                telemetry.update();
+                drive.followTrajectorySequence(center);
+                break;
+            case "RIGHT":
+                telemetry.addLine("right");
+                telemetry.update();
+                drive.followTrajectorySequence(right);
+                break;
         }
+
+        telemetry.addLine("Going Home");
+        telemetry.update();
+        drive.followTrajectorySequence(goHome);
+
     }
 }
