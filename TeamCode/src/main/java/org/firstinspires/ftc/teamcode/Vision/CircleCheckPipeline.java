@@ -30,6 +30,8 @@ public class CircleCheckPipeline extends OpenCvPipeline {
 
     Mat ROI = new Mat();
 
+    Boolean isRed;
+
     public float sigmaX = 1.5f;
     public float sigmaY = 1.5f;
 
@@ -37,14 +39,16 @@ public class CircleCheckPipeline extends OpenCvPipeline {
     public double param1 = 130;
     public double param2 = 30;
 
-    Scalar low = VisionConstants.lowColorThreshold;
-    Scalar high = VisionConstants.highColorThreshold;
-
+    Scalar lowRed = VisionConstants.lowRedThreshold;
+    Scalar highRed = VisionConstants.highRedThreshold;
+    Scalar lowBlue = VisionConstants.lowBlueThreshold;
+    Scalar highBlue = VisionConstants.highBlueThreshold;
     Size Kernel = new Size(7,7);
 
 
-    public CircleCheckPipeline(Telemetry telemetry) {
+    public CircleCheckPipeline(Telemetry telemetry, Boolean isRed) {
         this.telemetry = telemetry;
+        this.isRed = isRed;
     }
 
     @Override
@@ -62,7 +66,12 @@ public class CircleCheckPipeline extends OpenCvPipeline {
 
         ROI = HSVImage.submat(rect);
 
-        Core.inRange(ROI, low, high, BinaryMat);
+        if(isRed){
+            Core.inRange(ROI, lowRed, highRed, BinaryMat);
+        } else{
+            Core.inRange(ROI, lowBlue, highBlue, BinaryMat);
+        }
+
 
         Core.bitwise_and(ROI, ROI, MaskedMat, BinaryMat);
 
