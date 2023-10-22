@@ -28,12 +28,7 @@ import java.util.List;
 public class AprilTagComparison extends RoboMom {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
-    enum State {
-        TRAJECTORY_1,
-        IDLE
-    }
 
-    State currentState = State.IDLE;
     Pose2d startPose = new Pose2d(24, 120, Math.toRadians(90));
     Pose2d targetPose = new Pose2d(36, 120, Math.toRadians(90));
 
@@ -46,13 +41,12 @@ public class AprilTagComparison extends RoboMom {
         drive.setPoseEstimate(startPose);
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .lineToSplineHeading(targetPose)
+                .lineToLinearHeading(targetPose)
                 .build();
 
         waitForStart();
         if (isStopRequested()) return;
 
-        currentState = State.TRAJECTORY_1;
         drive.followTrajectoryAsync(traj1);
 
         while (opModeIsActive() && !isStopRequested()) {
@@ -80,20 +74,12 @@ public class AprilTagComparison extends RoboMom {
             Pose2d poseEstimateAprilTag = new Pose2d(AprilTagX,AprilTagY, AprilTagAngle);
             Pose2d poseEstimateRoadRunner = drive.getPoseEstimate();
 
-            switch (currentState) {
-                case TRAJECTORY_1:
-                    drive.setPoseEstimate(poseEstimateAprilTag);
-                    traj1 = drive.trajectoryBuilder(startPose)
-                            .lineToSplineHeading(targetPose)
-                            .build();
+            drive.setPoseEstimate(poseEstimateAprilTag);
+            traj1 = drive.trajectoryBuilder(startPose)
+                    .lineToSplineHeading(targetPose)
+                    .build();
 
-                    currentState = State.TRAJECTORY_1;
-                    drive.followTrajectoryAsync(traj1);
-                    break;
-                case IDLE:
-                    //stops here
-                    break;
-            }
+            drive.followTrajectoryAsync(traj1);
 
             drive.update();
 
