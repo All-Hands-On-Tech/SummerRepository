@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="Check Blue Threshold", group="B")
+@Autonomous(name="Check Blue Threshold", group="Check")
 public class BlueThresholdOpmode extends RoboMom {
 
     double fx = VisionConstants.fx;

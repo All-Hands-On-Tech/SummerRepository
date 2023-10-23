@@ -1,20 +1,18 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Other;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-
-
 import org.firstinspires.ftc.teamcode.RoboMom;
-
+import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.DetectionPipeline;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous
-public class CameraTesting extends RoboMom {
+public class CameraCircleTesting extends RoboMom {
 
     public String randomization;
     int PIXEL_THRESH = 100;
@@ -31,14 +29,14 @@ public class CameraTesting extends RoboMom {
     double tagsize = 0.166;
     OpenCvCamera webcam;
 
-    DetectionPipeline detectionPipeline = new DetectionPipeline(telemetry);
+    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        //webcam.setPipeline(detectionPipeline);
+        webcam.setPipeline(circleDetectionPipeline);
 
 
 
@@ -67,7 +65,7 @@ public class CameraTesting extends RoboMom {
 
         while (opModeIsActive() && !isStopRequested()) {
 
-            randomization = detectionPipeline.getLatestSpikePosition();
+            randomization = circleDetectionPipeline.getSpikePosition();
             if(randomization != null){
 
                 switch(randomization){
