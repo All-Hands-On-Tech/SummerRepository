@@ -29,7 +29,7 @@ public class BlueBackstage extends RoboMom {
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
-    Pose2d startPose = new Pose2d(60, 11, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-60, 14, Math.toRadians(0));
 
     String spikePosition = "center";
 
@@ -44,30 +44,33 @@ public class BlueBackstage extends RoboMom {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
-        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(36, 23), Math.toRadians(0))
+        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+                .splineTo(new Vector2d(-36, 23), Math.toRadians(0))
+                .back(10)
+                .waitSeconds(1)
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(30, 11), Math.toRadians(0))
-                .build();
-
-        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(36, -1), Math.toRadians(0))
-                .build();
-
-        TrajectorySequence goHome = drive.trajectorySequenceBuilder(center.end())
-                .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(40, 11, Math.toRadians(0)))
+                .splineTo(new Vector2d(-30, 11), Math.toRadians(0))
+                .back(10)
                 .waitSeconds(1)
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(55, -18, Math.toRadians(90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
+                .build();
+
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(-32, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                .waitSeconds(1)
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
                 .build();
 
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = "CENTER"; //circleDetectionPipeline.getSpikePosition();
+        spikePosition = "RIGHT"; //circleDetectionPipeline.getSpikePosition();
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
@@ -85,10 +88,6 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(right);
                 break;
         }
-
-        telemetry.addLine("Going Home");
-        telemetry.update();
-        drive.followTrajectorySequence(goHome);
 
     }
 }

@@ -209,8 +209,8 @@ public abstract class RoboMom extends LinearOpMode {
         }
 
         //add stuff here based on camera position relative to center of robot
-        //tagX = 0;
-        //tagY = 0;
+        //tagX = 6.5;
+        //tagY = -9;
         //tagAngle = 0;
 
         double range = aprilTag.ftcPose.range;

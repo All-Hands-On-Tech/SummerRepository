@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-@Autonomous(name="Red LandingZone", group="Red")
+@Autonomous(name="Red Landing Zone", group="Red")
 public class RedLandingZone extends RoboMom {
 
     //logan was here
@@ -29,7 +29,7 @@ public class RedLandingZone extends RoboMom {
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
-    Pose2d startPose = new Pose2d(-60, -23, Math.toRadians(180));
+    Pose2d startPose = new Pose2d(60, -38, Math.toRadians(180));
 
     String spikePosition = "center";
 
@@ -44,30 +44,34 @@ public class RedLandingZone extends RoboMom {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
-        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(036, -11), Math.toRadians(180))
+        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+                .splineToConstantHeading(new Vector2d(38, -47), Math.toRadians(180))
+                .back(7)
+                .strafeRight(12.5)
+                .forward(33)
+                .lineToLinearHeading(new Pose2d(8, 55, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-30, -23), Math.toRadians(180))
+                .splineTo(new Vector2d(31, -35), Math.toRadians(180))
+                .back(5)
+                .strafeLeft(15)
+                .forward(27)
+                .turn(Math.toRadians(90))
+                .back(100)
                 .build();
 
-        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-36, -35), Math.toRadians(180))
-                .build();
-
-        TrajectorySequence goHome = drive.trajectorySequenceBuilder(center.end())
-                .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(-50, 11, Math.toRadians(0)))
-                .waitSeconds(1)
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(-55, -18, Math.toRadians(90)), Math.toRadians(-90))
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(30, -34, Math.toRadians(90)), Math.toRadians(90))
+                .back(5)
+                .strafeLeft(18)
+                .lineToLinearHeading(new Pose2d(12, 55, Math.toRadians(90)))
                 .build();
 
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = "CENTER"; //circleDetectionPipeline.getSpikePosition();
+        spikePosition = "RIGHT"; //circleDetectionPipeline.getSpikePosition();
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
@@ -85,10 +89,6 @@ public class RedLandingZone extends RoboMom {
                 drive.followTrajectorySequence(right);
                 break;
         }
-
-        telemetry.addLine("Going Home");
-        telemetry.update();
-        drive.followTrajectorySequence(goHome);
 
     }
 }

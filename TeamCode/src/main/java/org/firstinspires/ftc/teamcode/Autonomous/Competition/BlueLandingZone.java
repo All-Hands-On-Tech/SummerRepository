@@ -14,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-@Autonomous(name="Blue LandingZone", group="Blue")
+@Autonomous(name="Blue Landing Zone", group="Blue")
 public class BlueLandingZone extends RoboMom {
 
     //logan was here
@@ -29,7 +29,7 @@ public class BlueLandingZone extends RoboMom {
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
-    Pose2d startPose = new Pose2d(60, -23, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-60, -38, Math.toRadians(0));
 
     String spikePosition = "center";
 
@@ -45,23 +45,26 @@ public class BlueLandingZone extends RoboMom {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(36, -11), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(-38, -47), Math.toRadians(0))
+                .back(7)
+                .strafeLeft(12.5)
+                .forward(33)
+                .lineToLinearHeading(new Pose2d(-8, 55, Math.toRadians(0)))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(30, -23), Math.toRadians(0))
+                .splineTo(new Vector2d(-31, -35), Math.toRadians(0))
+                .back(5)
+                .strafeRight(15)
+                .forward(25)
+                .lineToLinearHeading(new Pose2d(-10, 55, Math.toRadians(0)))
                 .build();
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(36, -35), Math.toRadians(0))
-                .build();
-
-        TrajectorySequence goHome = drive.trajectorySequenceBuilder(center.end())
-                .waitSeconds(1)
-                .lineToLinearHeading(new Pose2d(50, 11, Math.toRadians(0)))
-                .waitSeconds(1)
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(55, -18, Math.toRadians(90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-30, -34, Math.toRadians(90)), Math.toRadians(90))
+                .back(5)
+                .strafeRight(18)
+                .lineToLinearHeading(new Pose2d(-12, 55, Math.toRadians(90)))
                 .build();
 
         waitForStart();
@@ -85,10 +88,6 @@ public class BlueLandingZone extends RoboMom {
                 drive.followTrajectorySequence(right);
                 break;
         }
-
-        telemetry.addLine("Going Home");
-        telemetry.update();
-        drive.followTrajectorySequence(goHome);
 
     }
 }
