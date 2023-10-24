@@ -13,9 +13,10 @@ import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Disabled
-@Autonomous(name="Alt Red Backstage", group="Red")
+@Autonomous(name="Alt Red Backstage", group="A")
 public class AltRedBackstage extends RoboMom {
 //logan was here
     double fx = VisionConstants.fx;
@@ -69,6 +70,16 @@ public class AltRedBackstage extends RoboMom {
                 .splineToLinearHeading(new Pose2d(59, -35, Math.toRadians(90)), Math.toRadians(90))
                 .strafeTo(new Vector2d(59, 47))
                 .build();
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
+            public void onOpened()
+            {
+                webcam.startStreaming(RESWIDTH, RESHEIGHT, OpenCvCameraRotation.UPRIGHT);
+            }
+            public void onError(int errorCode){
+
+            }
+        });
 
         waitForStart();
         if (isStopRequested()) return;

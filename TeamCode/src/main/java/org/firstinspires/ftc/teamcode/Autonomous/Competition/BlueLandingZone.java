@@ -13,8 +13,9 @@ import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
+import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="Blue Landing Zone", group="Blue")
+@Autonomous(name="Blue Landing Zone", group="B")
 public class BlueLandingZone extends RoboMom {
 
     //logan was here
@@ -66,6 +67,16 @@ public class BlueLandingZone extends RoboMom {
                 .strafeRight(18)
                 .lineToLinearHeading(new Pose2d(-12, 55, Math.toRadians(90)))
                 .build();
+
+        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
+            public void onOpened()
+            {
+                webcam.startStreaming(RESWIDTH, RESHEIGHT, OpenCvCameraRotation.UPRIGHT);
+            }
+            public void onError(int errorCode){
+
+            }
+        });
 
         waitForStart();
         if (isStopRequested()) return;
