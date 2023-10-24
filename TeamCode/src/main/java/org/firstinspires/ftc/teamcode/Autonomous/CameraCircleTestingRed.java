@@ -57,11 +57,12 @@ public class CameraCircleTestingRed extends RoboMom {
 
 
 
-
-        telemetry.addData("Randomization: ", randomization);
-        telemetry.update();
-
         if (isStopRequested()) return;
+
+        String initialRandomization = circleDetectionPipeline.getSpikePosition();
+
+        telemetry.addData("Randomization: ", initialRandomization);
+        telemetry.update();
 
         while (opModeIsActive() && !isStopRequested()) {
 
@@ -106,7 +107,7 @@ public class CameraCircleTestingRed extends RoboMom {
 
             }
 
-
+            telemetry.addData("Randomization: ", initialRandomization);
             telemetry.update();
         }
     }
