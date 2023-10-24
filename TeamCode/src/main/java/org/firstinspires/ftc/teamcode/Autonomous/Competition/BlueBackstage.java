@@ -81,7 +81,7 @@ public class BlueBackstage extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = "RIGHT"; //circleDetectionPipeline.getSpikePosition();
+        spikePosition = circleDetectionPipeline.getSpikePosition();
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");

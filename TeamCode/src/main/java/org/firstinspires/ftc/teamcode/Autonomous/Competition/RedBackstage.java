@@ -81,7 +81,7 @@ public class RedBackstage extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = "LEFT"; //circleDetectionPipeline.getSpikePosition();
+        spikePosition = circleDetectionPipeline.getSpikePosition();
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");

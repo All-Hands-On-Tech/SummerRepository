@@ -81,7 +81,7 @@ public class BlueLandingZone extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = "CENTER"; //circleDetectionPipeline.getSpikePosition();
+        spikePosition = circleDetectionPipeline.getSpikePosition();
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
