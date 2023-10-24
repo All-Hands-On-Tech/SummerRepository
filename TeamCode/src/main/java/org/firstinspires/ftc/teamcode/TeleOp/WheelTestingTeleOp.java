@@ -5,7 +5,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.RoboMom;
 
-@TeleOp
+@TeleOp(group="B")
 public class WheelTestingTeleOp extends RoboMom {
 
 @Override

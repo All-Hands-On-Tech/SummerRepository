@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous
+@Autonomous(name = "Test ROI randomization", group = "T")
 public class CameraTesting extends RoboMom {
 
     public String randomization;
