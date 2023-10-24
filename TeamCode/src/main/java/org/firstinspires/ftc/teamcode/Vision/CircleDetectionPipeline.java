@@ -13,7 +13,7 @@ import org.openftc.easyopencv.OpenCvPipeline;
 
 public class CircleDetectionPipeline extends OpenCvPipeline {
 
-    public String spikePosition = "CENTER";
+    public String spikePosition = "MID";
 
     public Rect rect = VisionConstants.rectLowROI;
 
@@ -98,11 +98,11 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
         if(x < rect.width/3){
             spikePosition = "LEFT";
         } else if(x >= rect.width/3 && x <= (rect.width*2)/3){
-            spikePosition = "CENTER";
+            spikePosition = "MID";
         } else if(x > (rect.width*2)/3){
             spikePosition = "RIGHT";
         } else{
-            spikePosition ="CENTER";
+            spikePosition ="MID";
         }
 
         return input;

@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Autonomous.newThing;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -13,7 +14,7 @@ import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 
-@Autonomous(name="Red Backstage", group="B")
+@Autonomous(name="Red Backstage", group="Red")
 public class RedBackstage extends RoboMom {
 
     //logan was here
@@ -69,7 +70,7 @@ public class RedBackstage extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = circleDetectionPipeline.getSpikePosition();
+        spikePosition = "LEFT"; //circleDetectionPipeline.getSpikePosition();
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
