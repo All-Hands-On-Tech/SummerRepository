@@ -12,8 +12,8 @@ public class ThresholdPipeline extends OpenCvPipeline {
 
     public Rect rect = VisionConstants.rectLowROI;
 
-    public Scalar low = VisionConstants.lowColorThreshold;
-     public Scalar high = VisionConstants.highColorThreshold;
+    public Scalar low = VisionConstants.lowRedThreshold;
+     public Scalar high = VisionConstants.highRedThreshold;
     Mat HSVimage = new Mat();
     Mat BinaryMat = new Mat();
 

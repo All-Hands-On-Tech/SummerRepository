@@ -37,8 +37,8 @@ public class CircleCheckPipeline extends OpenCvPipeline {
     public double param1 = 130;
     public double param2 = 30;
 
-    Scalar low = VisionConstants.lowColorThreshold;
-    Scalar high = VisionConstants.highColorThreshold;
+    Scalar low = VisionConstants.lowRedThreshold;
+    Scalar high = VisionConstants.highRedThreshold;
 
     Size Kernel = new Size(7,7);
 

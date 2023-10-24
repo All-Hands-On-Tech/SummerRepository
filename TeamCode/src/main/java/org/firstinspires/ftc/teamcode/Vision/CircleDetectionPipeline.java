@@ -30,6 +30,8 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     Mat ROI = new Mat();
 
+    boolean isRed;
+
     public float sigmaX = 1.5f;
     public float sigmaY = 1.5f;
 
@@ -40,14 +42,18 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     Point center;
 
-    Scalar low = VisionConstants.lowColorThreshold;
-    Scalar high = VisionConstants.highColorThreshold;
+    Scalar lowRed = VisionConstants.lowRedThreshold;
+    Scalar highRed = VisionConstants.highRedThreshold;
+
+    Scalar lowBlue = VisionConstants.lowBlueThreshold;
+    Scalar highBlue = VisionConstants.highBlueThreshold;
 
     Size Kernel = new Size(7,7);
 
 
-    public CircleDetectionPipeline(Telemetry telemetry) {
+    public CircleDetectionPipeline(Telemetry telemetry, boolean isRed) {
         this.telemetry = telemetry;
+        this.isRed = isRed;
     }
 
     @Override
@@ -65,7 +71,12 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
         ROI = HSVImage.submat(rect);
 
-        Core.inRange(ROI, low, high, BinaryMat);
+        if(isRed){
+            Core.inRange(ROI, lowRed, highRed, BinaryMat);
+        } else{
+            Core.inRange(ROI, lowBlue, highBlue, BinaryMat);
+        }
+
 
         Core.bitwise_and(ROI, ROI, MaskedMat, BinaryMat);
 
@@ -79,17 +90,21 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
         int numCircles = Circles.cols();
         ROI.copyTo(Overlay);
 
-        double[] data = Circles.get(0, 0);
-        center = new Point(Math.round(data[0]), Math.round(data[1]));
-        x = center.x;
+        if(numCircles > 0){
+            double[] data = Circles.get(0, 0);
+            center = new Point(Math.round(data[0]), Math.round(data[1]));
+            x = center.x;
+        }
+
 
         Overlay.copyTo(ROI);
 
+
         if(x < rect.width/3){
             spikePosition = "LEFT";
-        } else if(x >= rect.width/3){
+        } else if(x >= rect.width/3 && x <= (rect.width*2)/3){
             spikePosition = "MID";
-        } else if(x > rect.width*(2/3)){
+        } else if(x > (rect.width*2)/3){
             spikePosition = "RIGHT";
         } else{
             spikePosition ="MID";
