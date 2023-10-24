@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode.Autonomous.Checks;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Vision.CheckPipeline;
@@ -12,7 +13,8 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="Check ROI's", group="B")
+@Disabled
+@Autonomous(name="Check ROI's", group="CC")
 public class CameraCheckOpmode extends RoboMom {
     int PIXEL_THRESH = 100;
 

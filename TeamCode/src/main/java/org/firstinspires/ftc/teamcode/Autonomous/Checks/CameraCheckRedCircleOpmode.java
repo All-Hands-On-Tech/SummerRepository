@@ -11,7 +11,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="Check Red Circles", group="B")
+@Autonomous(name="Check Red Circles", group="CA")
 public class CameraCheckRedCircleOpmode extends RoboMom {
     int PIXEL_THRESH = 100;
 
