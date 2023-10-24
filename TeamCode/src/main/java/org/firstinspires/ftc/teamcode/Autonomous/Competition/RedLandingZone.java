@@ -27,7 +27,7 @@ public class RedLandingZone extends RoboMom {
     int RESHEIGHT = VisionConstants.RESHEIGHT;
     OpenCvCamera webcam;
 
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, true);
+    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
     Pose2d startPose = new Pose2d(60, -38, Math.toRadians(180));
 

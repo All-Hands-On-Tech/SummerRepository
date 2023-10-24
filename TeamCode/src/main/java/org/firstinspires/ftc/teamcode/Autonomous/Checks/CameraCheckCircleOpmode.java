@@ -5,14 +5,17 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.Vision.ThresholdPipeline;
+import org.firstinspires.ftc.teamcode.Vision.CheckPipeline;
+import org.firstinspires.ftc.teamcode.Vision.CircleCheckPipeline;
+import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="Check Red Threshold", group="B")
-public class RedThresholdOpmode extends RoboMom {
+@Autonomous(name="Check Circles", group="B")
+public class CameraCheckCircleOpmode extends RoboMom {
+    int PIXEL_THRESH = 100;
 
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
@@ -23,14 +26,14 @@ public class RedThresholdOpmode extends RoboMom {
     int RESHEIGHT = VisionConstants.RESHEIGHT;
     OpenCvCamera webcam;
 
-    ThresholdPipeline thresholdPipeline = new ThresholdPipeline(true);
+    CircleCheckPipeline circleCheckPipeline = new CircleCheckPipeline(telemetry);
 
     @Override
     public void runOpMode() {
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
-        webcam.setPipeline(thresholdPipeline);
+        webcam.setPipeline(circleCheckPipeline);
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
             public void onOpened()

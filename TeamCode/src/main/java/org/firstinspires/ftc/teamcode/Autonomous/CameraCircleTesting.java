@@ -29,7 +29,7 @@ public class CameraCircleTesting extends RoboMom {
     double tagsize = 0.166;
     OpenCvCamera webcam;
 
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
+    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
     @Override
     public void runOpMode() {

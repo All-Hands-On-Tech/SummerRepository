@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 
-import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
 import org.opencv.core.Rect;
@@ -13,21 +12,13 @@ public class ThresholdPipeline extends OpenCvPipeline {
 
     public Rect rect = VisionConstants.rectLowROI;
 
-    public Scalar lowRed = VisionConstants.lowRedThreshold;
-     public Scalar highRed = VisionConstants.highRedThreshold;
-    public Scalar lowBlue = VisionConstants.lowBlueThreshold;
-    public Scalar highBlue = VisionConstants.highBlueThreshold;
-
-    boolean isRed;
+    public Scalar low = VisionConstants.lowColorThreshold;
+     public Scalar high = VisionConstants.highColorThreshold;
     Mat HSVimage = new Mat();
     Mat BinaryMat = new Mat();
 
     Mat maskedMat = new Mat();
     Mat ROI = new Mat();
-
-    public ThresholdPipeline(Boolean isRed) {
-        this.isRed = isRed;
-    }
 
     @Override
     public void init(Mat firstFrame) {
@@ -49,12 +40,7 @@ public class ThresholdPipeline extends OpenCvPipeline {
         //Mat submat = input.submat(rect);
 
         //threshold the ROI and put in BinaryMat matrix
-        if(isRed){
-            Core.inRange(ROI, lowRed, highRed, BinaryMat);
-        } else{
-            Core.inRange(ROI, lowBlue, highBlue, BinaryMat);
-        }
-
+        Core.inRange(ROI, low, high, BinaryMat);
 
         //Put pixels from ROI into maskedmat based on binaryMat mask
         Core.bitwise_and(ROI, ROI, maskedMat, BinaryMat);

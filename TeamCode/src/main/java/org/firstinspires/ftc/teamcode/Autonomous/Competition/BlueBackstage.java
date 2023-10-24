@@ -27,7 +27,7 @@ public class BlueBackstage extends RoboMom {
     int RESHEIGHT = VisionConstants.RESHEIGHT;
     OpenCvCamera webcam;
 
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
+    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry);
 
     Pose2d startPose = new Pose2d(-60, 14, Math.toRadians(0));
 

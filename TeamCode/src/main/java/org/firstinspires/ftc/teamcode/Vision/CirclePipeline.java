@@ -1,8 +1,6 @@
 package org.firstinspires.ftc.teamcode.Vision;
 
 
-import android.text.BoringLayout;
-
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.opencv.core.Core;
 import org.opencv.core.Mat;
@@ -35,19 +33,14 @@ public class CirclePipeline extends OpenCvPipeline {
     public double param1 = 130;
     public double param2 = 30;
 
-    Boolean isRed;
+    Scalar low = VisionConstants.lowColorThreshold;
+    Scalar high = VisionConstants.highColorThreshold;
 
-    Scalar lowRed = VisionConstants.lowRedThreshold;
-    Scalar highRed = VisionConstants.highRedThreshold;
-
-    Scalar lowBlue = VisionConstants.lowBlueThreshold;
-    Scalar highBlue = VisionConstants.highBlueThreshold;
     Size Kernel = new Size(7,7);
 
 
-    public CirclePipeline(Telemetry telemetry, Boolean isRed) {
+    public CirclePipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
-        this.isRed = isRed;
     }
 
     @Override
@@ -60,12 +53,7 @@ public class CirclePipeline extends OpenCvPipeline {
 
         Imgproc.cvtColor(input, HSVImage, Imgproc.COLOR_RGB2HSV);
 
-        if(isRed){
-            Core.inRange(HSVImage, lowRed, highRed, BinaryMat);
-        } else{
-            Core.inRange(HSVImage, lowBlue, highBlue, BinaryMat);
-        }
-
+        Core.inRange(HSVImage, low, high, BinaryMat);
 
         Core.bitwise_and(input, input, MaskedMat, BinaryMat);
 

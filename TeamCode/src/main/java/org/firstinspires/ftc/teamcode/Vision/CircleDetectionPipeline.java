@@ -38,21 +38,16 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
     public double param2 = 30;
     public double x;
 
-    boolean isRed;
-
     Point center;
 
-    Scalar lowRed = VisionConstants.lowRedThreshold;
-    Scalar highRed = VisionConstants.highRedThreshold;
-    Scalar lowBlue = VisionConstants.lowBlueThreshold;
-    Scalar highBlue = VisionConstants.highBlueThreshold;
+    Scalar low = VisionConstants.lowColorThreshold;
+    Scalar high = VisionConstants.highColorThreshold;
 
     Size Kernel = new Size(7,7);
 
 
-    public CircleDetectionPipeline(Telemetry telemetry, boolean isRed) {
+    public CircleDetectionPipeline(Telemetry telemetry) {
         this.telemetry = telemetry;
-        this.isRed = isRed;
     }
 
     @Override
@@ -70,12 +65,7 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
         ROI = HSVImage.submat(rect);
 
-        if(isRed){
-            Core.inRange(ROI, lowRed, highRed, BinaryMat);
-        } else{
-            Core.inRange(ROI, lowBlue, highBlue, BinaryMat);
-        }
-
+        Core.inRange(ROI, low, high, BinaryMat);
 
         Core.bitwise_and(ROI, ROI, MaskedMat, BinaryMat);
 
@@ -97,9 +87,9 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
         if(x < rect.width/3){
             spikePosition = "LEFT";
-        } else if(x >= rect.width/3 && x <= (rect.width*2)/3){
+        } else if(x >= rect.width/3){
             spikePosition = "MID";
-        } else if(x > (rect.width*2)/3){
+        } else if(x > rect.width*(2/3)){
             spikePosition = "RIGHT";
         } else{
             spikePosition ="MID";

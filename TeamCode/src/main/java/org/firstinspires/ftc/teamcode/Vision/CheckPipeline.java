@@ -14,8 +14,8 @@ public class CheckPipeline extends OpenCvPipeline {
     public Rect rectRight = VisionConstants.rectRightROI;
     public Rect rectMid = VisionConstants.rectMidROI;
 
-    public Scalar low = VisionConstants.lowRedThreshold;
-     public Scalar high = VisionConstants.highRedThreshold;
+    public Scalar low = VisionConstants.lowColorThreshold;
+     public Scalar high = VisionConstants.highColorThreshold;
     Mat HSVimage = new Mat();
     Mat LeftBinaryMat = new Mat();
     Mat RightBinaryMat = new Mat();
