@@ -63,6 +63,7 @@ public class CircleCheckPipeline extends OpenCvPipeline {
         ROI.release();
         MaskedMat.release();
         Overlay.release();
+        Circles.release();
 
         Imgproc.cvtColor(input, HSVImage, Imgproc.COLOR_RGB2HSV);
 

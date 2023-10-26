@@ -88,7 +88,7 @@ public class BlueBackstage extends RoboMom {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 break;
-            case "CENTER":
+            case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);

@@ -15,7 +15,7 @@ import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name="Red Backstage", group="A")
+@Autonomous(name="Red Backstage", group="ARed")
 public class RedBackstage extends RoboMom {
 
     //logan was here
@@ -88,7 +88,7 @@ public class RedBackstage extends RoboMom {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 break;
-            case "CENTER":
+            case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
