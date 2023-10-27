@@ -37,6 +37,9 @@ public class CircleCheckPipeline extends OpenCvPipeline {
     public double param1 = 130;
     public double param2 = 30;
 
+    public int minRadius = 30;
+    public int maxRadius = 300;
+
     Scalar lowRed = VisionConstants.lowRedThreshold;
     Scalar highRed = VisionConstants.highRedThreshold;
 
@@ -83,7 +86,7 @@ public class CircleCheckPipeline extends OpenCvPipeline {
         Imgproc.GaussianBlur(GrayImage, Blur, Kernel, sigmaX, sigmaY);
 
 
-        Imgproc.HoughCircles(Blur, Circles,Imgproc.CV_HOUGH_GRADIENT,  1, minDist, param1, param2);
+        Imgproc.HoughCircles(Blur, Circles,Imgproc.CV_HOUGH_GRADIENT,  1, minDist, param1, param2, minRadius, maxRadius);
 
         int numCircles = Circles.cols();
 

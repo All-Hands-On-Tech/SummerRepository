@@ -16,8 +16,8 @@ public class VisionConstants {
     static public Scalar highBlueThreshold = new Scalar(130, 255, 255);
 
 
-    static public int RESWIDTH = 1920;
-    static public int RESHEIGHT = 1080;
+    static public int RESWIDTH = 960;
+    static public int RESHEIGHT = 540;
 
     static public double fx = 1473.69;
     static public double fy = 1473.69;

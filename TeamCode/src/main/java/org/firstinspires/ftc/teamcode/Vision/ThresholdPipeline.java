@@ -29,6 +29,7 @@ public class ThresholdPipeline extends OpenCvPipeline {
 
 
     public ThresholdPipeline(boolean isRed) {
+
         this.isRed = isRed;
     }
 
