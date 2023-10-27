@@ -63,15 +63,19 @@ public class CircleCheckPipeline extends OpenCvPipeline {
     @Override
     public Mat processFrame(Mat input) {
 
+        //releases matrices
         ROI.release();
         MaskedMat.release();
         Overlay.release();
         Circles.release();
 
+        //convert to HSV
         Imgproc.cvtColor(input, HSVImage, Imgproc.COLOR_RGB2HSV);
 
+        //make sumat of HSV image
         ROI = HSVImage.submat(rect);
 
+        //Threshold based off of isRed
         if(isRed){
             Core.inRange(ROI, lowRed, highRed, BinaryMat);
         } else{
@@ -79,21 +83,26 @@ public class CircleCheckPipeline extends OpenCvPipeline {
         }
 
 
+        //add matrix values back to MaskedMat with the mask of BinaryMat
         Core.bitwise_and(ROI, ROI, MaskedMat, BinaryMat);
 
+        //Convert to gray
         Imgproc.cvtColor(MaskedMat, GrayImage, Imgproc.COLOR_RGB2GRAY);
 
+        //blur
         Imgproc.GaussianBlur(GrayImage, Blur, Kernel, sigmaX, sigmaY);
 
 
+        //feature extraction
         Imgproc.HoughCircles(Blur, Circles,Imgproc.CV_HOUGH_GRADIENT,  1, minDist, param1, param2, minRadius, maxRadius);
 
+        //find number of circles
         int numCircles = Circles.cols();
 
         ROI.copyTo(Overlay);
         Point center;
 
-
+        //draw every circle's center and outline
         for(int i=0; i < numCircles; i++)
         {
             double[] data = Circles.get(0, i);
@@ -103,6 +112,8 @@ public class CircleCheckPipeline extends OpenCvPipeline {
 
             // circle outline
             int radius = (int) Math.round(data[2]);
+
+            //The first circle has the most votes, highlight it
             if(i<1){
                 Imgproc.circle(Overlay, center, radius, new Scalar(30,255,255), 8, 8, 0 );
             }else{
@@ -114,8 +125,9 @@ public class CircleCheckPipeline extends OpenCvPipeline {
 
         Overlay.copyTo(ROI);
 
-
+        //convert back to rgb
         Imgproc.cvtColor(HSVImage, HSVImage, Imgproc.COLOR_HSV2RGB);
+        //draw ROI
         Imgproc.rectangle(HSVImage, rect,new Scalar(0,255,0), 5, 8);
 
         return HSVImage;
