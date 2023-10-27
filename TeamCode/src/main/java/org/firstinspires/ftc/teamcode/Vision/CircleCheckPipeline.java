@@ -99,10 +99,16 @@ public class CircleCheckPipeline extends OpenCvPipeline {
             double[] data = Circles.get(0, i);
             center = new Point(Math.round(data[0]), Math.round(data[1]));
             // circle center
-            Imgproc.circle(Overlay, center, 1, new Scalar(0, 0, 255), 2, 8, 0 );
+            Imgproc.circle(Overlay, center, 1, new Scalar(255, 0, 0), 2, 8, 0 );
+
             // circle outline
             int radius = (int) Math.round(data[2]);
-            Imgproc.circle(Overlay, center, radius, new Scalar(0,0,255), 2, 8, 0 );
+            if(i<1){
+                Imgproc.circle(Overlay, center, radius, new Scalar(30,255,255), 8, 8, 0 );
+            }else{
+                Imgproc.circle(Overlay, center, radius, new Scalar(0,0,255), 2, 8, 0 );
+            }
+
         }
 
 
