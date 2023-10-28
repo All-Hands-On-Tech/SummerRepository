@@ -37,8 +37,8 @@ public class CircleCheckPipeline extends OpenCvPipeline {
     public double param1 = 130;
     public double param2 = 30;
 
-    public int minRadius = 30;
-    public int maxRadius = 300;
+    public int minRadius = 15;
+    public int maxRadius = 1000;
 
     Scalar lowRed = VisionConstants.lowRedThreshold;
     Scalar highRed = VisionConstants.highRedThreshold;

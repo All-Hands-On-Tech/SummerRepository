@@ -50,7 +50,7 @@ public class RedLandingZone extends RoboMom {
                 .back(7)
                 .strafeRight(12.5)
                 .forward(33)
-                .lineToLinearHeading(new Pose2d(8, 55, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(8, 50, Math.toRadians(180)))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
@@ -59,14 +59,14 @@ public class RedLandingZone extends RoboMom {
                 .strafeLeft(15)
                 .forward(27)
                 .turn(Math.toRadians(90))
-                .back(100)
+                .back(95)
                 .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(30, -34, Math.toRadians(90)), Math.toRadians(90))
                 .back(5)
                 .strafeLeft(18)
-                .lineToLinearHeading(new Pose2d(12, 55, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(12, 50, Math.toRadians(90)))
                 .build();
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){

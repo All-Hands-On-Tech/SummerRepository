@@ -50,7 +50,7 @@ public class BlueLandingZone extends RoboMom {
                 .back(7)
                 .strafeLeft(12.5)
                 .forward(33)
-                .lineToLinearHeading(new Pose2d(-8, 55, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-8, 50, Math.toRadians(0)))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
@@ -58,14 +58,14 @@ public class BlueLandingZone extends RoboMom {
                 .back(5)
                 .strafeRight(15)
                 .forward(25)
-                .lineToLinearHeading(new Pose2d(-10, 55, Math.toRadians(0)))
+                .lineToLinearHeading(new Pose2d(-10, 50, Math.toRadians(0)))
                 .build();
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .splineToLinearHeading(new Pose2d(-30, -34, Math.toRadians(90)), Math.toRadians(90))
                 .back(5)
                 .strafeRight(18)
-                .lineToLinearHeading(new Pose2d(-12, 55, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-12, 50, Math.toRadians(90)))
                 .build();
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
