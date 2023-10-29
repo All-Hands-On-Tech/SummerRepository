@@ -59,7 +59,6 @@ public class CameraCircleTestingRed extends RoboMom {
 
         if (isStopRequested()) return;
 
-        sleep(5000);
 
         String initialRandomization = circleDetectionPipeline.getSpikePosition();
 

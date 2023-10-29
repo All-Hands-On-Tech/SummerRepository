@@ -10,7 +10,7 @@ public class VisionConstants {
     static public Rect rectMidROI = new Rect(590, 450, 550, 450);
 
     static public Rect rectLowROI = new Rect(0,300, 1920, 780);
-    static public Scalar lowRedThreshold = new Scalar(0, 150, 100);
+    static public Scalar lowRedThreshold = new Scalar(0, 175, 150);
     static public Scalar highRedThreshold = new Scalar(50, 255, 255);
     static public Scalar lowBlueThreshold = new Scalar(85, 100, 50);
     static public Scalar highBlueThreshold = new Scalar(130, 255, 255);
