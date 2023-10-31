@@ -36,8 +36,11 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.RoboMom;
+import org.firstinspires.ftc.teamcode.Vision.AprilTagsFunctions;
+
 import com.qualcomm.robotcore.hardware.IMU;
 
 
@@ -58,16 +61,29 @@ public class CenterStageTeleOp extends RoboMom {
 
     public double rotateVel = 0;
 
+    private float TARGET_DISTANCE_TO_TAG = 12;
+
     double lfPower = 0;
     double lbPower = 0;
     double rfPower = 0;
     double rbPower = 0;
+
+    double strafeGain = 0;
+    double forwardGain = 0;
+
+    double rotationGain = 0;
+
+    double rightTriggerPull;
+
+    private AprilTagsFunctions aprilTagsFunctions;
 
      IMU imu;
 
     @Override
     public void runOpMode() {
         super.runOpMode();
+
+        aprilTagsFunctions = new AprilTagsFunctions(this);
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -117,7 +133,41 @@ public class CenterStageTeleOp extends RoboMom {
             if(gamepad1.dpad_right){
                 vel = new Vector2d(1, vel.getY());
             }
+
+            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.RED_1_TAG)){
+                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
+                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
+                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
+                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
+                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
+
+                if(gamepad1.right_trigger > 0.025f){
+
+                    rightTriggerPull = gamepad1.right_trigger;
+
+                    strafeGain = rightTriggerPull;
+                    forwardGain = rightTriggerPull;
+                    rotationGain = rightTriggerPull;
+
+                    double x = strafeGain * aprilTagsFunctions.detectedTag.ftcPose.x - TARGET_DISTANCE_TO_TAG;
+                    double y = forwardGain * aprilTagsFunctions.detectedTag.ftcPose.range;
+                    double yaw = -rotationGain * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    inputVel(new Vector2d(x,y));
+                    rotateVel = yaw;
+                }
+
+                /*
+                if (currentGamepad1.right_trigger > 0.5) {
+                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
+                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
+                    isAutoDrivingToAprilTag = true;
+                }
+                 */
+            }
+
             applyVectorsToPower();
+
             if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
                 applyFieldOrientedVectorsToPower();
             }
