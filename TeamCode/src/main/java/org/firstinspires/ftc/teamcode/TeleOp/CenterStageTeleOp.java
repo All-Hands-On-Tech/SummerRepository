@@ -68,10 +68,10 @@ public class CenterStageTeleOp extends RoboMom {
     double rfPower = 0;
     double rbPower = 0;
 
-    double strafeGain = 0;
-    double forwardGain = 0;
+    double strafeGain = 0.05;
+    double forwardGain = 0.06;
 
-    double rotationGain = 0;
+    double rotationGain = 0.035;
 
     double rightTriggerPull;
 
@@ -145,9 +145,9 @@ public class CenterStageTeleOp extends RoboMom {
 
                     rightTriggerPull = gamepad1.right_trigger;
 
-                    strafeGain = rightTriggerPull;
-                    forwardGain = rightTriggerPull;
-                    rotationGain = rightTriggerPull;
+                    strafeGain *= rightTriggerPull;
+                    forwardGain *= rightTriggerPull;
+                    rotationGain *= rightTriggerPull;
 
                     double x = strafeGain * aprilTagsFunctions.detectedTag.ftcPose.x - TARGET_DISTANCE_TO_TAG;
                     double y = forwardGain * aprilTagsFunctions.detectedTag.ftcPose.range;
