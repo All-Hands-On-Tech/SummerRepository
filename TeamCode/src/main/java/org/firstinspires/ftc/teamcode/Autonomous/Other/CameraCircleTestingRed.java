@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Other;
 
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -6,14 +6,13 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
-import org.firstinspires.ftc.teamcode.Vision.DetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
 import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
-@Autonomous(name = "Test Blue Randomization", group = "T")
-public class CameraCircleTesting extends RoboMom {
+@Autonomous(name = "Test Red Randomization", group = "T")
+public class CameraCircleTestingRed extends RoboMom {
 
     public String randomization;
     int PIXEL_THRESH = 100;
@@ -30,7 +29,7 @@ public class CameraCircleTesting extends RoboMom {
     double tagsize = 0.166;
     OpenCvCamera webcam;
 
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
+    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, true);
 
     @Override
     public void runOpMode() {
@@ -58,10 +57,8 @@ public class CameraCircleTesting extends RoboMom {
 
 
 
-
-
-
         if (isStopRequested()) return;
+
 
         String initialRandomization = circleDetectionPipeline.getSpikePosition();
 

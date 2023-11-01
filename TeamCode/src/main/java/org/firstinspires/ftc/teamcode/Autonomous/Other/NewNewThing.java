@@ -1,18 +1,15 @@
-package org.firstinspires.ftc.teamcode.Autonomous;
+package org.firstinspires.ftc.teamcode.Autonomous.Other;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
-
 @Disabled
-public class newThing extends RoboMom {
+public class NewNewThing extends RoboMom{
+
     enum State {
         TRAJECTORY_1,
         TRAJECTORY_2,
@@ -20,7 +17,7 @@ public class newThing extends RoboMom {
         IDLE
     }
 
-    State currentState = State.IDLE;
+    NewNewThing.State currentState = NewNewThing.State.IDLE;
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
 
     @Override
@@ -29,7 +26,11 @@ public class newThing extends RoboMom {
         drive.setPoseEstimate(startPose);
 
         Trajectory traj1 = drive.trajectoryBuilder(startPose)
-                .lineTo(new Vector2d(24, 0))
+                .lineTo(new Vector2d(0, 24))
+                .addDisplacementMarker(0.5, 0, () -> {
+                    telemetry.addLine("halfway through traj1");
+                    telemetry.update();
+                })
                 .build();
 
         Trajectory traj2 = drive.trajectoryBuilder(traj1.end())
@@ -39,25 +40,22 @@ public class newThing extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        currentState = State.TRAJECTORY_1;
+        currentState = NewNewThing.State.TRAJECTORY_1;
         drive.followTrajectoryAsync(traj1);
 
         while (opModeIsActive() && !isStopRequested()) {
             switch (currentState) {
                 case TRAJECTORY_1:
                     if (!drive.isBusy()) {
-                        currentState = State.TRAJECTORY_2;
+                        currentState = NewNewThing.State.TRAJECTORY_2;
                         drive.followTrajectoryAsync(traj2);
                     }
                     break;
                 case TRAJECTORY_2:
                     if (!drive.isBusy()) {
-                        currentState = State.IDLE;
+                        currentState = NewNewThing.State.IDLE;
                     }
                     break;
-                case ROTATION:
-                    //robot rotates
-                    //update trajectory
                 case IDLE:
                     //stops here
                     break;
@@ -74,4 +72,5 @@ public class newThing extends RoboMom {
             telemetry.update();
         }
     }
+
 }
