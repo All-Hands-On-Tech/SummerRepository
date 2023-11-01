@@ -17,6 +17,14 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     public Rect rect = VisionConstants.rectLowROI;
 
+    public enum DetectionState{
+        OPEN,
+        DETECT,
+        DONE
+    }
+
+    public DetectionState state = DetectionState.OPEN;
+
     Telemetry telemetry;
     Mat HSVImage = new Mat();
     Mat GrayImage = new Mat();
@@ -43,6 +51,8 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
     public int minRadius = 15;
     public int maxRadius = -1;
 
+    private boolean isDetected = false;
+
     Point center;
 
     Scalar lowRed = VisionConstants.lowRedThreshold;
@@ -56,6 +66,10 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     public CircleDetectionPipeline(Telemetry telemetry, boolean isRed) {
         this.telemetry = telemetry;
+        this.isRed = isRed;
+    }
+
+    public CircleDetectionPipeline(boolean isRed) {
         this.isRed = isRed;
     }
 
@@ -88,30 +102,38 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
         Imgproc.GaussianBlur(GrayImage, Blur, Kernel, sigmaX, sigmaY);
 
+        if(state == DetectionState.DETECT){
+            Imgproc.HoughCircles(Blur, Circles,Imgproc.CV_HOUGH_GRADIENT,  1, minDist, param1, param2, minRadius);
 
-        Imgproc.HoughCircles(Blur, Circles,Imgproc.CV_HOUGH_GRADIENT,  1, minDist, param1, param2, minRadius);
+            int numCircles = Circles.cols();
+            ROI.copyTo(Overlay);
 
-        int numCircles = Circles.cols();
-        ROI.copyTo(Overlay);
-
-        if(numCircles > 0){
-            double[] data = Circles.get(0, 0);
-            center = new Point(Math.round(data[0]), Math.round(data[1]));
-            x = center.x;
-        }
-
-
-        Overlay.copyTo(ROI);
+            if(numCircles > 0){
+                double[] data = Circles.get(0, 0);
+                center = new Point(Math.round(data[0]), Math.round(data[1]));
+                x = center.x;
+            }
 
 
-        if(x < rect.width/3){
-            spikePosition = "LEFT";
-        } else if(x >= rect.width/3 && x <= (rect.width*2)/3){
-            spikePosition = "MID";
-        } else if(x > (rect.width*2)/3){
-            spikePosition = "RIGHT";
-        } else{
-            spikePosition ="MID";
+            Overlay.copyTo(ROI);
+
+
+            if(x < rect.width/3){
+                spikePosition = "LEFT";
+                isDetected = true;
+
+            } else if(x >= rect.width/3 && x <= (rect.width*2)/3){
+                spikePosition = "MID";
+                isDetected = true;
+
+            } else if(x > (rect.width*2)/3){
+                spikePosition = "RIGHT";
+                isDetected = true;
+
+            } else{
+                spikePosition ="MID";
+            }
+
         }
 
         return input;
@@ -120,5 +142,13 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     public String getSpikePosition() {
         return spikePosition;
+    }
+
+    public void setState(DetectionState state){
+        state = state;
+    }
+
+    public boolean isDetected(){
+        return isDetected;
     }
 }
