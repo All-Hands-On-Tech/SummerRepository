@@ -2,10 +2,12 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Autonomous.Competition.BlueLandingZone;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
@@ -25,6 +27,12 @@ public class AutonomousOpmode extends LinearOpMode {
     protected boolean isBackstage;
     protected String spikePosition;
 
+    protected TrajectorySequence left;
+    protected TrajectorySequence center;
+    protected TrajectorySequence right;
+
+    protected AutonomousTrajectories trajectories;
+
 
     private void Initialize() {
 
@@ -43,19 +51,7 @@ public class AutonomousOpmode extends LinearOpMode {
             }
         });
 
-        if(isRed){
-            if(isBackstage){
-                startPose = RED_BACKSTAGE_START_POSE;
-            } else{
-                startPose = RED_LANDING_ZONE_START_POSE;
-            }
-        } else{
-            if(isBackstage){
-                startPose = BLUE_BACKSTAGE_START_POSE;
-            } else{
-                startPose = BLUE_LANDING_ZONE_START_POSE;
-            }
-        }
+        SetAppropriateTrajectories();
 
     }
 
@@ -71,6 +67,23 @@ public class AutonomousOpmode extends LinearOpMode {
         MakeDetection(5);
 
 
+        switch (spikePosition) {
+            case "LEFT":
+                telemetry.addLine("left");
+                telemetry.update();
+                drive.followTrajectorySequence(left);
+                break;
+            case "MID":
+                telemetry.addLine("center");
+                telemetry.update();
+                drive.followTrajectorySequence(center);
+                break;
+            case "RIGHT":
+                telemetry.addLine("right");
+                telemetry.update();
+                drive.followTrajectorySequence(right);
+                break;
+        }
 
     }
 
@@ -92,32 +105,30 @@ public class AutonomousOpmode extends LinearOpMode {
         circleDetection.setState(CircleDetectionPipeline.DetectionState.DETECT);
     }
 
-    private Pose2d RED_BACKSTAGE_START_POSE = new Pose2d(60, 14, Math.toRadians(180));
-    private Pose2d RED_LANDING_ZONE_START_POSE = new Pose2d(60, -38, Math.toRadians(180));
-    private Pose2d BLUE_BACKSTAGE_START_POSE = new Pose2d(-60, 14, Math.toRadians(0));
-    private Pose2d BLUE_LANDING_ZONE_START_POSE = new Pose2d(-60, -38, Math.toRadians(0));
+    private void SetAppropriateTrajectories(){
+        if(isRed){
+            if(isBackstage){
+                left = trajectories.RedBackstageLeftTrajectory;
+                center = trajectories.RedBackstageCenterTrajectory;
+                right = trajectories.RedBackstageRightTrajectory;
+            }else{
+                left = trajectories.RedLandingZoneLeftTrajectory;
+                center = trajectories.RedLandingZoneCenterTrajectory;
+                right = trajectories.RedLandingZoneRightTrajectory;
 
-    public TrajectorySequence BlueBackstageLeftTrajectory = drive.trajectorySequenceBuilder(startPose)
-            .splineTo(new Vector2d(-36, 23), Math.toRadians(0))
-            .back(10)
-            .waitSeconds(1)
-            .setReversed(true)
-            .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
-            .build();
+            }
+        } else{
+            if(isBackstage){
+                left = trajectories.BlueBackstageLeftTrajectory;
+                center = trajectories.BlueBackstageCenterTrajectory;
+                right = trajectories.BlueBackstageRightTrajectory;
+            } else{
+                left = trajectories.BlueLandingZoneLeftTrajectory;
+                center = trajectories.BlueLandingZoneCenterTrajectory;
+                right = trajectories.BlueLandingZoneRightTrajectory;
+            }
 
-    public TrajectorySequence BlueBackstageCenterTrajectory = drive.trajectorySequenceBuilder(startPose)
-            .splineTo(new Vector2d(-30, 11), Math.toRadians(0))
-            .back(10)
-            .waitSeconds(1)
-            .setReversed(true)
-            .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
-            .build();
-
-    public TrajectorySequence BlueBackstageRightTrajectory = drive.trajectorySequenceBuilder(startPose)
-            .splineToLinearHeading(new Pose2d(-32, 10, Math.toRadians(-90)), Math.toRadians(-90))
-            .waitSeconds(1)
-            .setReversed(true)
-            .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
-            .build();
+        }
+    }
 
 }
