@@ -29,6 +29,8 @@ public class AprilTagComparison extends RoboMom {
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
 
+    private ElapsedTime runtime = new ElapsedTime();
+
     Pose2d startPose = new Pose2d(24, 120, Math.toRadians(90));
     Pose2d targetPose = new Pose2d(36, 120, Math.toRadians(90));
 
@@ -45,11 +47,12 @@ public class AprilTagComparison extends RoboMom {
                 .build();
 
         waitForStart();
-        if (isStopRequested()) return;
+        runtime.reset();
 
         drive.followTrajectoryAsync(traj1);
 
         while (opModeIsActive() && !isStopRequested()) {
+
             List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
             int numberOfDetections = currentDetections.size();
@@ -71,15 +74,13 @@ public class AprilTagComparison extends RoboMom {
             AprilTagY /= numberOfDetections;
             AprilTagAngle /= numberOfDetections;
 
-            Pose2d poseEstimateAprilTag = new Pose2d(AprilTagX,AprilTagY, AprilTagAngle);
+            Pose2d poseEstimateAprilTag = new Pose2d(AprilTagX, AprilTagY, AprilTagAngle);
             Pose2d poseEstimateRoadRunner = drive.getPoseEstimate();
 
-            drive.setPoseEstimate(poseEstimateAprilTag);
-            traj1 = drive.trajectoryBuilder(startPose)
-                    .lineToSplineHeading(targetPose)
-                    .build();
-
-            drive.followTrajectoryAsync(traj1);
+            if (1<runtime.milliseconds()) {
+                drive.setPoseEstimate(poseEstimateAprilTag);
+                runtime.reset();
+            }
 
             drive.update();
 
@@ -107,7 +108,6 @@ public class AprilTagComparison extends RoboMom {
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
                 //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                .setLensIntrinsics(1473.69, 1473.69, 845.856, 514.97)
 
                 // ... these parameters are fx, fy, cx, cy.
 

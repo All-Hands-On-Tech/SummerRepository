@@ -1,7 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous.Other;
 
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
+import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
+import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
+@Autonomous(name = "TEST AUTO")
 public class BlueBackstageTest extends AutonomousOpmode {
     @Override
     public void runOpMode() {
