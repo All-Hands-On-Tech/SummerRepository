@@ -68,14 +68,16 @@ public class CenterStageTeleOp extends RoboMom {
     double rfPower = 0;
     double rbPower = 0;
 
-    double strafeGain = 0.05;
-    double forwardGain = 0.06;
+    final double STRAFE_GAIN = 0.015;
+    final double FORWARD_GAIN = 0.012;
 
-    double rotationGain = 0.035;
+    final double ROTATION_GAIN = 0.017;
 
     double rightTriggerPull;
 
     private AprilTagsFunctions aprilTagsFunctions;
+
+    private boolean controlsRelinquished = false;
 
      IMU imu;
 
@@ -107,34 +109,41 @@ public class CenterStageTeleOp extends RoboMom {
         waitForStart();
 
         while (opModeIsActive()) {
+
+            inputVel(new Vector2d(0, 0));
             /**GAMEPAD 1**/
 
             //Store inputted desired velocity (left_stick_x, left_stick_y)
-            if(Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone){
-                inputVel(new Vector2d(gamepad1.left_stick_x, -gamepad1.left_stick_y));
-            } else{
-                inputVel(new Vector2d(0, 0));
-            }
-            //Store inputted desired rotational velocity (right_stick_x)
-            if(Math.abs(gamepad1.right_stick_x) > deadZone){
-                rotateVel = gamepad1.right_stick_x;
-            }else{
-                rotateVel = 0;
-            }
-            if(gamepad1.dpad_down){
-                vel = new Vector2d(vel.getX(), -1);
-            }
-            if(gamepad1.dpad_up){
-                vel = new Vector2d(vel.getX(), 1);
-            }
-            if(gamepad1.dpad_left){
-                vel = new Vector2d(-1, vel.getY());
-            }
-            if(gamepad1.dpad_right){
-                vel = new Vector2d(1, vel.getY());
+            if(!controlsRelinquished){
+
+                if(Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone){
+                    inputVel(new Vector2d(gamepad1.left_stick_x, -gamepad1.left_stick_y));
+                } else{
+                    inputVel(new Vector2d(0, 0));
+                }
+                //Store inputted desired rotational velocity (right_stick_x)
+                if(Math.abs(gamepad1.right_stick_x) > deadZone){
+                    rotateVel = gamepad1.right_stick_x;
+                }else{
+                    rotateVel = 0;
+                }
+
             }
 
-            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.RED_1_TAG)){
+//            if(gamepad1.dpad_down){
+//                vel = new Vector2d(vel.getX(), -1);
+//            }
+//            if(gamepad1.dpad_up){
+//                vel = new Vector2d(vel.getX(), 1);
+//            }
+//            if(gamepad1.dpad_left){
+//                vel = new Vector2d(-1, vel.getY());
+//            }
+//            if(gamepad1.dpad_right){
+//                vel = new Vector2d(1, vel.getY());
+//            }
+
+            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
                 telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
                 telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
                 telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
@@ -142,18 +151,25 @@ public class CenterStageTeleOp extends RoboMom {
                 telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
 
                 if(gamepad1.right_trigger > 0.025f){
-
                     rightTriggerPull = gamepad1.right_trigger;
 
-                    strafeGain *= rightTriggerPull;
-                    forwardGain *= rightTriggerPull;
-                    rotationGain *= rightTriggerPull;
+//                    strafeGain *= rightTriggerPull;
+//                    forwardGain *= rightTriggerPull;
+//                    rotationGain *= rightTriggerPull;
 
-                    double x = -strafeGain * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                    double y = forwardGain * aprilTagsFunctions.detectedTag.ftcPose.range;
-                    double bearing = rotationGain * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    double y = FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
+
+                    telemetry.addData("x: ", x);
+                    telemetry.addData("y: ", y);
+
+//                    double x = 0.5;
+//                    double y = 0.7;
+                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
                     inputVel(new Vector2d(x,y));
                     rotateVel = bearing;
+                } else {
+                    controlsRelinquished = false;
                 }
 
                 /*
@@ -168,15 +184,15 @@ public class CenterStageTeleOp extends RoboMom {
 
             applyVectorsToPower();
 
-            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
-                applyFieldOrientedVectorsToPower();
-            }
+//            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
+//                applyFieldOrientedVectorsToPower();
+//            }
 
-            telemetry.addData("lf", lfPower);
-            telemetry.addData("lb", lbPower);
-            telemetry.addLine();
-            telemetry.addData("rf", rfPower);
-            telemetry.addData("rb", rbPower);
+//            telemetry.addData("lf", lfPower);
+//            telemetry.addData("lb", lbPower);
+//            telemetry.addLine();
+//            telemetry.addData("rf", rfPower);
+//            telemetry.addData("rb", rbPower);
             telemetry.update();
 
 
@@ -250,14 +266,14 @@ public class CenterStageTeleOp extends RoboMom {
     public void applyVectorsToPower() {
 
 
-            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-
-        
-//
-
+//            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+//            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+//            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+//            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            lfPower = vel.getY() + vel.getX() + rotateVel;
+            lbPower = vel.getY() - vel.getX() + rotateVel;
+            rfPower = vel.getY() - vel.getX() - rotateVel;
+            rbPower = vel.getY() + vel.getX() - rotateVel;
     }
     public void applyFieldOrientedVectorsToPower (){
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
