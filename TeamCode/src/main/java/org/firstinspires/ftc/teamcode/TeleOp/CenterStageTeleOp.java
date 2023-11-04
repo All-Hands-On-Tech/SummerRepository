@@ -38,10 +38,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.Vision.AprilTagsFunctions;
 
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 
 import java.util.Vector;
@@ -79,6 +81,30 @@ public class CenterStageTeleOp extends RoboMom {
 
     private boolean controlsRelinquished = false;
 
+    public enum DeliveryState{
+        DELIVERY_START,
+        DELIVERY_LIFT,
+        DELIVERY_DUMP,
+        DELIVERY_RETRACT
+    }
+
+    private DeliveryFunctions deliveryFunctions;
+
+    private DeliveryState deliveryState;
+
+    private final int LIFT_HIGH = 500;
+
+    private final int LIFT_LOW = 0;
+
+    private final double DUMP_TIME = 1;
+
+    private int leftMotorPosition;
+    private int rightMotorPosition;
+
+    private boolean dumped = false;
+
+    ElapsedTime deliveryTimer = new ElapsedTime();
+
      IMU imu;
 
     @Override
@@ -86,6 +112,7 @@ public class CenterStageTeleOp extends RoboMom {
         super.runOpMode();
 
         aprilTagsFunctions = new AprilTagsFunctions(this);
+        deliveryFunctions = new DeliveryFunctions(this);
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -245,6 +272,60 @@ public class CenterStageTeleOp extends RoboMom {
                 imu.resetYaw();
             }
 
+    //Gamepad 2
+
+            deliveryFunctions.setSlidesPower(1);
+            switch (deliveryState){
+                case DELIVERY_START:
+                    if(gamepad2.a){
+                        deliveryState = DeliveryState.DELIVERY_LIFT;
+                        deliveryFunctions.setSlidesTargetPosition(LIFT_HIGH);
+                    }
+                    break;
+
+                case DELIVERY_LIFT:
+                    leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
+                    rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
+
+                    //if both motors are within stop threshold
+                    if
+                    (LIFT_HIGH - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
+                    &&
+                    LIFT_HIGH - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
+                    {
+                        deliveryState = DeliveryState.DELIVERY_DUMP;
+                    } else{
+                        deliveryFunctions.PControlPower();
+                    }
+                    break;
+                case DELIVERY_DUMP:
+                    if(gamepad2.right_bumper != dumped){
+                        dumped = true;
+                        deliveryTimer.reset();
+                        deliveryFunctions.Dump();
+                    }
+
+                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME){
+                        deliveryState = DeliveryState.DELIVERY_RETRACT;
+                        deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
+                    }
+                    break;
+                case DELIVERY_RETRACT:
+                    leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
+                    rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
+
+                    //if both motors are within stop threshold
+                    if
+                    (LIFT_LOW - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
+                            &&
+                    LIFT_LOW - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
+                    {
+                        deliveryState = DeliveryState.DELIVERY_START;
+                    } else{
+                        deliveryFunctions.PControlPower();
+                    }
+                    break;
+            }
 
         }
 
@@ -266,10 +347,10 @@ public class CenterStageTeleOp extends RoboMom {
     public void applyVectorsToPower() {
 
 
-//            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-//            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-//            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-//            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
+            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
             lfPower = vel.getY() + vel.getX() + rotateVel;
             lbPower = vel.getY() - vel.getX() + rotateVel;
             rfPower = vel.getY() - vel.getX() - rotateVel;

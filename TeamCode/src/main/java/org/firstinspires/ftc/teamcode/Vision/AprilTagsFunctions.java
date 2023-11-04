@@ -34,10 +34,6 @@ public class AprilTagsFunctions {
         Initialize();
     }
 
-    public void SetManualExposure(float exposure){
-
-    }
-
     private void Initialize()
     {
         // Create the AprilTag processor by using a builder.
