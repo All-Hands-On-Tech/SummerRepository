@@ -3,11 +3,12 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import android.util.Size;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDriveCancelable;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
@@ -37,36 +38,107 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
      */
     private VisionPortal visionPortal;
 
+    Boolean isRed = null;
+    boolean isCameraOn = true;
+
     @Override
     public void runOpMode() {
 
         initAprilTag();
 
+        SampleMecanumDriveCancelable drive = new SampleMecanumDriveCancelable(hardwareMap);
+        drive.setPoseEstimate(new Pose2d());
+
         // Wait for the DS start button to be touched.
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
+
         waitForStart();
 
-        if (opModeIsActive()) {
-            while (opModeIsActive()) {
+        while (opModeIsActive()) {
+            //teemetry
+            telemetry.addLine("Are the motors on: "+String.valueOf(areMotorsOn()));
+            telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f (in, in, deg)", drive.getPoseEstimate().getX(), drive.getPoseEstimate().getY(), Math.toDegrees(drive.getPoseEstimate().getHeading())));
+            telemetry.update();
 
-                telemetryAprilTag();
+            //Only streams when the robot isn't moving and dpad up is pressed
+            if (areMotorsOn()) {
+                visionPortal.stopStreaming();
+                isCameraOn = false;
+            } else if (gamepad1.dpad_up) {
+                visionPortal.resumeStreaming();
+                isCameraOn = true;
+            }
 
-                // Push telemetry to the Driver Station.
-                telemetry.update();
+            //when the camera is streaming the roadrunner pose is set to the apriltag pose
+            //also checks which side of the field the robot is on
+            if (isCameraOn) {
+                    List<AprilTagDetection> currentDetections = aprilTag.getDetections();
 
-                // Save CPU resources; can resume streaming when needed.
-                if (gamepad1.dpad_down) {
-                    visionPortal.stopStreaming();
-                } else if (gamepad1.dpad_up) {
-                    visionPortal.resumeStreaming();
+                    int numberOfDetections = currentDetections.size();
+                    double AprilTagX = 0;
+                    double AprilTagY = 0;
+                    double AprilTagAngle = 0;
+
+                    telemetry.addData("# AprilTags Detected", numberOfDetections);
+
+                    // Step through the list of detections and display info for each one.
+                    for (AprilTagDetection detection : currentDetections) {
+                        Pose2d location = absolutePositionFromAprilTag(detection);
+                        AprilTagX += location.getX();
+                        AprilTagY += location.getY();
+                        AprilTagAngle += location.getHeading();
+                        if (detection.id==1 || detection.id==2 || detection.id==3) {
+                            isRed = false;
+                        } else if (detection.id==4 || detection.id==5 || detection.id==6) {
+                            isRed = true;
+                        }
+                    }
+
+                    AprilTagX /= numberOfDetections;
+                    AprilTagY /= numberOfDetections;
+                    AprilTagAngle /= numberOfDetections;
+
+                    drive.setPoseEstimate(new Pose2d(AprilTagX, AprilTagY, AprilTagAngle));
                 }
 
-                // Share the CPU.
-                sleep(20);
+            // runs if robot is not currently following a trajectory
+            //a is the tag on the left
+            //b is the tag in the center
+            //c is the tag on the right
+            if (!drive.isBusy()) {
+                double tagX = -41.40;
+                double tagY = 48;
+                double tagHeading = Math.toRadians(90);
+
+                if (gamepad1.a) {
+                    //this is the default
+                } else if (gamepad1.b) {
+                    tagX += 6;
+                } else if (gamepad1.x) {
+                    tagX += 12;
+                }
+
+                if (isRed) {
+                    tagX += 70.88;
+                }
+
+                drive.followTrajectoryAsync(drive.trajectoryBuilder(drive.getPoseEstimate())
+                        .lineToLinearHeading(new Pose2d(tagX, tagY, tagHeading))
+                        .build()
+                );
             }
-        }
+            //runs if robots is following a trajectory a button is pressed to continue it
+            else if(gamepad1.a || gamepad1.b || gamepad1.x) {
+                drive.update();
+            }
+            //ends trajectory if no buttons are pressed
+            else {
+                drive.breakFollowing();
+            }
+
+            }
 
         // Save more CPU resources when camera is no longer needed.
         visionPortal.close();
@@ -91,7 +163,7 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
                 //.setLensIntrinsics(578.272, 578.272, 402.145, 221.506)
-                .setLensIntrinsics(1473.69, 1473.69, 845.856, 514.97)
+                //.setLensIntrinsics(1473.69, 1473.69, 845.856, 514.97)
                 //.setLensIntrinsics(1529.40, 1529.40,1155.22, 576.677)
 
                 // ... these parameters are fx, fy, cx, cy.
@@ -132,36 +204,5 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
         //visionPortal.setProcessorEnabled(aprilTag, true);
 
     }   // end method initAprilTag()
-
-
-    /**
-     * Function to add telemetry about AprilTag detections.
-     */
-    private void telemetryAprilTag() {
-
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
-        telemetry.addData("# AprilTags Detected", currentDetections.size());
-
-        // Step through the list of detections and display info for each one.
-        for (AprilTagDetection detection : currentDetections) {
-            Pose2d location = AbsolutePositionFromAprilTag(detection);
-            if (detection.metadata != null) {
-                telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
-                telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", location.getX(), location.getY(), location.getHeading()));
-            } else {
-                telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
-                telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
-            }
-        }   // end for() loop
-
-        // Add "key" information to telemetry
-        telemetry.addLine("\nkey:\nXYZ = X (Right), Y (Forward), Z (Up) dist.");
-        telemetry.addLine("PRY = Pitch, Roll & Yaw (XYZ Rotation)");
-        telemetry.addLine("RBE = Range, Bearing & Elevation");
-
-    }   // end method telemetryAprilTag()
 
 }   // end class
