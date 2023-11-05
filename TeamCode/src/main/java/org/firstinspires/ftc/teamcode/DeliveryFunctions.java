@@ -68,4 +68,8 @@ public class DeliveryFunctions {
         linearOpMode.telemetry.addLine("WIP");
     }
 
+    public void WristMovementByLiftPosition(){
+        //move wrist if outside of transfer area
+    }
+
 }

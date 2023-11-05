@@ -88,6 +88,8 @@ public class CenterStageTeleOp extends RoboMom {
         DELIVERY_RETRACT
     }
 
+    private final double DEADZONE = 0.1;
+
     private DeliveryFunctions deliveryFunctions;
 
     private DeliveryState deliveryState;
@@ -98,8 +100,13 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final double DUMP_TIME = 1;
 
+    private final int LIFT_MAX = 700;
+    private final int LIFT_MIN = 0;
+
     private int leftMotorPosition;
     private int rightMotorPosition;
+
+    private int targetPosition;
 
     private boolean dumped = false;
 
@@ -274,6 +281,9 @@ public class CenterStageTeleOp extends RoboMom {
 
     //Gamepad 2
 
+            leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
+            rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
+
             deliveryFunctions.setSlidesPower(1);
             switch (deliveryState){
                 case DELIVERY_START:
@@ -284,8 +294,6 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
 
                 case DELIVERY_LIFT:
-                    leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
-                    rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
                     //if both motors are within stop threshold
                     if
@@ -311,8 +319,6 @@ public class CenterStageTeleOp extends RoboMom {
                     }
                     break;
                 case DELIVERY_RETRACT:
-                    leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
-                    rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
                     //if both motors are within stop threshold
                     if
@@ -326,6 +332,34 @@ public class CenterStageTeleOp extends RoboMom {
                     }
                     break;
             }
+
+            if(gamepad2.left_stick_y >= DEADZONE){
+                deliveryState = DeliveryState.DELIVERY_START;
+
+                //if position within max and min, allow manual control
+                if
+                (leftMotorPosition <= LIFT_MAX
+                    &&
+                rightMotorPosition <= LIFT_MAX
+                    &&
+                leftMotorPosition > LIFT_MIN
+                    &&
+                rightMotorPosition > LIFT_MIN)
+                {
+                    targetPosition += gamepad2.left_stick_y;
+                }
+
+                //if position is greater allow downwards manual control
+                if(leftMotorPosition > LIFT_MAX && rightMotorPosition > LIFT_MAX && gamepad2.left_stick_y <= 0){
+                    targetPosition += gamepad2.left_stick_y;
+                }
+                //if position is less allow upwards manual control
+                if(leftMotorPosition < LIFT_MIN && rightMotorPosition < LIFT_MIN && gamepad2.left_stick_y >= 0){
+                    targetPosition += gamepad2.left_stick_y;
+                }
+
+            }
+
 
         }
 
