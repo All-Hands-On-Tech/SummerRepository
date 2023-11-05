@@ -52,17 +52,22 @@ public class PixelColorDetection extends RoboMom {
             NormalizedRGBA colors = colorSensor.getNormalizedColors();
             Color.colorToHSV(colors.toColor(), hsvValues);
 
+            //all of the always false if statements will be replaced by the hsv for the pixels
             if (false) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+                telemetry.addLine("The pixel is white");
             } else if (false) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GOLD;
+                telemetry.addLine("The pixel is yellow");
             } else if (false) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
+                telemetry.addLine("The pixel is green");
             } else if (false) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.VIOLET;
+                telemetry.addLine("The pixel is purple");
             }
 
-                blinkinLedDriver.setPattern(pattern);
+            blinkinLedDriver.setPattern(pattern);
 
             telemetry.addData("Pattern: ", pattern.toString());
             telemetry.addLine()
