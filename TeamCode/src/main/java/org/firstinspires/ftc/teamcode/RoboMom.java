@@ -1,21 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
-import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
-import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesOrder;
-import org.firstinspires.ftc.robotcore.external.navigation.AxesReference;
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.robotcore.external.navigation.Orientation;
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-
-import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
-import com.qualcomm.hardware.kauailabs.NavxMicroNavigationSensor;
 
 public abstract class RoboMom extends LinearOpMode {
 
@@ -149,7 +138,7 @@ public abstract class RoboMom extends LinearOpMode {
     }
 
     //units are in inches!!!!!!!
-    public Pose2d AbsolutePositionFromAprilTag(AprilTagDetection aprilTag) {
+    public Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {
         double tagX = 0;
         double tagY = 0;
         double tagAngle = 0;
@@ -222,7 +211,14 @@ public abstract class RoboMom extends LinearOpMode {
         double y = tagY - range * Math.cos(yaw + bearing);
         double angle = Math.toDegrees(yaw) + 90;
 
-        return new Pose2d(x, y, angle);
+        return new Pose2d(x, y, Math.toRadians(angle));
+    }
+
+    public boolean areMotorsOn() {
+        return rightFrontDrive.getPower()!=0
+                || leftFrontDrive.getPower()!=0
+                || rightBackDrive.getPower()!=0
+                || leftBackDrive.getPower()!=0;
     }
 
 }

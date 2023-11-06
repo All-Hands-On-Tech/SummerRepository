@@ -3,24 +3,16 @@ package org.firstinspires.ftc.teamcode.Autonomous.Checks;
 import android.util.Size;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
-import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.acmerobotics.roadrunner.trajectory.Trajectory;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
-import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
-import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 
 import java.util.List;
 
@@ -64,7 +56,7 @@ public class AprilTagComparison extends RoboMom {
 
             // Step through the list of detections and display info for each one.
             for (AprilTagDetection detection : currentDetections) {
-                Pose2d location = AbsolutePositionFromAprilTag(detection);
+                Pose2d location = absolutePositionFromAprilTag(detection);
                 AprilTagX += location.getX();
                 AprilTagY += location.getY();
                 AprilTagAngle += location.getHeading();
