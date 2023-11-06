@@ -3,11 +3,14 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
 public class DeliveryFunctions {
     private DcMotor leftSlide = null;
     private DcMotor rightSlide = null;
+
+    private Servo wrist = null;
     private LinearOpMode linearOpMode;
     private double CLICKS_PER_METER = 2492.788;
 
@@ -18,6 +21,7 @@ public class DeliveryFunctions {
 
     public final double TICK_STOP_THRESHOLD = 20;
     public final double TICK_SLOW_THRESHOLD = 250;
+    public final double CARRIAGE_OUTSIDE_CHASSIS = 250;
 
 
     public DeliveryFunctions(LinearOpMode l)
@@ -30,6 +34,7 @@ public class DeliveryFunctions {
     private void Initialize(){
         leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
         rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
+        wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -69,7 +74,12 @@ public class DeliveryFunctions {
     }
 
     public void WristMovementByLiftPosition(){
-        //move wrist if outside of transfer area
+        currentPosition = leftSlide.getCurrentPosition();
+        if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS){
+            wrist.setPosition(0.4);
+        } else{
+            wrist.setPosition(0);
+        }
     }
 
 }
