@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -20,9 +21,16 @@ public abstract class RoboMom extends LinearOpMode {
         telemetry.addData("Status", "Initialized");
         telemetry.update();
 
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
-        leftBackDrive = hardwareMap.get(DcMotor.class, "leftRear");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
+        //SAUCY BOI CONFIG
+//        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
+//        leftBackDrive = hardwareMap.get(DcMotor.class, "leftRear");
+//        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
+//        rightBackDrive = hardwareMap.get(DcMotor.class, "rightRear");
+        //SAUCY BOI CONFIG
+
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFrontAndRightEncoder");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
         rightBackDrive = hardwareMap.get(DcMotor.class, "rightRear");
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
