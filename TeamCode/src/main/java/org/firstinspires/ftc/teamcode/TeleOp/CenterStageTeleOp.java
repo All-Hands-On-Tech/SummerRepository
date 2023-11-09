@@ -39,6 +39,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
+import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.Vision.AprilTagsFunctions;
 
@@ -91,6 +92,7 @@ public class CenterStageTeleOp extends RoboMom {
     private final double DEADZONE = 0.1;
 
     private DeliveryFunctions deliveryFunctions;
+    private IntakeFunctions intakeFunctions;
 
     private DeliveryState deliveryState;
 
@@ -120,6 +122,7 @@ public class CenterStageTeleOp extends RoboMom {
 
         aprilTagsFunctions = new AprilTagsFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this);
+        intakeFunctions = new IntakeFunctions(this);
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -335,6 +338,11 @@ public class CenterStageTeleOp extends RoboMom {
 
             deliveryFunctions.WristMovementByLiftPosition();
 
+            if(gamepad2.left_bumper){
+                intakeFunctions.RunIntakeMotor(0.3f);
+            } else{
+                intakeFunctions.StopIntakeMotor();
+            }
 
         }
 
