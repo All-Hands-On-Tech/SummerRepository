@@ -121,7 +121,7 @@ public class CenterStageTeleOp extends RoboMom {
         super.runOpMode();
 
         aprilTagsFunctions = new AprilTagsFunctions(this);
-        deliveryFunctions = new DeliveryFunctions(this);
+        deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
 
         // Retrieve the IMU from the hardware map
@@ -144,6 +144,8 @@ public class CenterStageTeleOp extends RoboMom {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
         waitForStart();
+
+        deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
 
         while (opModeIsActive()) {
 

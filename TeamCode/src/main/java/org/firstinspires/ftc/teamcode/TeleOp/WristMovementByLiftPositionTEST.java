@@ -10,25 +10,26 @@ import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 @Autonomous(name="AutomaticWristMovementTest", group="Z")
 public class WristMovementByLiftPositionTEST extends LinearOpMode{
 
-    DeliveryFunctions DeliveryFunctions;
+    DeliveryFunctions deliveryFunctions;
 
-    DcMotor leftMotorPosition;
-    DcMotor rightMotorPosition;
+    int leftMotorPosition;
+    int rightMotorPosition;
 
     @Override
     public void runOpMode() {
-        DeliveryFunctions = new DeliveryFunctions(this);
+        deliveryFunctions = new DeliveryFunctions(this, false);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            DeliveryFunctions.WristMovementByLiftPosition();
+            deliveryFunctions.WristMovementByLiftPosition();
 
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
             telemetry.addData("Left Ticks:", leftMotorPosition);
             telemetry.addData("Right Ticks:", rightMotorPosition);
+            telemetry.update();
         }
     }
 }

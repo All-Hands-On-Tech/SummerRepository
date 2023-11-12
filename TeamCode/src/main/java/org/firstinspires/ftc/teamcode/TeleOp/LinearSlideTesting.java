@@ -55,7 +55,7 @@ public class LinearSlideTesting extends RoboMom {
     @Override
     public void runOpMode() {
         super.runOpMode();
-        deliveryFunctions = new DeliveryFunctions(this);
+        deliveryFunctions = new DeliveryFunctions(this, false);
 
         waitForStart();
 
@@ -65,6 +65,8 @@ public class LinearSlideTesting extends RoboMom {
 
             telemetry.addData("Left Ticks:", leftMotorPosition);
             telemetry.addData("Right Ticks:", rightMotorPosition);
+            telemetry.addData("Servo Position: ", deliveryFunctions.getWristPosition());
+            telemetry.update();
         }
 
 

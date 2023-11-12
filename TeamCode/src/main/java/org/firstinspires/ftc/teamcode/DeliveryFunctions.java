@@ -23,10 +23,13 @@ public class DeliveryFunctions {
     public final double TICK_SLOW_THRESHOLD = 250;
     public final double CARRIAGE_OUTSIDE_CHASSIS = 250;
 
+    private boolean slidesRunToPosition;
 
-    public DeliveryFunctions(LinearOpMode l)
+
+    public DeliveryFunctions(LinearOpMode l, Boolean slidesRunToPosition)
     {
         linearOpMode = l;
+        slidesRunToPosition = slidesRunToPosition;
         Initialize();
     }
 
@@ -37,8 +40,17 @@ public class DeliveryFunctions {
         wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+        leftSlide.setTargetPosition(leftSlide.getCurrentPosition());
+        rightSlide.setTargetPosition(rightSlide.getCurrentPosition());
+
+        if(slidesRunToPosition){
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        } else{
+            leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
     }
 
     public void setSlidesTargetPosition(int clicks){
@@ -59,6 +71,10 @@ public class DeliveryFunctions {
             return rightSlide.getCurrentPosition();
         }
 
+    }
+
+    public double getWristPosition(){
+        return wrist.getPosition();
     }
 
     public void PControlPower(){
