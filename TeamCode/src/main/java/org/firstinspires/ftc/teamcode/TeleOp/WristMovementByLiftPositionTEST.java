@@ -29,6 +29,7 @@ public class WristMovementByLiftPositionTEST extends LinearOpMode{
 
             telemetry.addData("Left Ticks:", leftMotorPosition);
             telemetry.addData("Right Ticks:", rightMotorPosition);
+            telemetry.addData("Servo Position: ", deliveryFunctions.getWristPosition());
             telemetry.update();
         }
     }

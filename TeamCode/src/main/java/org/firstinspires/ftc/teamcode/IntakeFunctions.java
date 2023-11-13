@@ -20,6 +20,8 @@ public class IntakeFunctions {
 
     private void Initialize(){
         intakeMotor  = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
+        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
 
     public void RunIntakeMotor(float power){

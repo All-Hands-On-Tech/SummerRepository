@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
@@ -41,26 +42,32 @@ public class DeliveryFunctions {
         leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
         leftSlide.setTargetPosition(leftSlide.getCurrentPosition());
         rightSlide.setTargetPosition(rightSlide.getCurrentPosition());
 
         if(slidesRunToPosition){
-            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            //leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else{
             leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
+
+//        leftSlide.setDirection(DcMotor.Direction.REVERSE);
+        rightSlide.setDirection(DcMotor.Direction.REVERSE);
     }
 
     public void setSlidesTargetPosition(int clicks){
         targetPosition = clicks;
-        leftSlide.setTargetPosition(targetPosition);
+        //leftSlide.setTargetPosition(targetPosition);
         rightSlide.setTargetPosition(targetPosition);
     }
 
     public void setSlidesPower(double power){
-        leftSlide.setPower(power);
+        //leftSlide.setPower(power);
         rightSlide.setPower(power);
     }
 
@@ -90,12 +97,15 @@ public class DeliveryFunctions {
     }
 
     public void WristMovementByLiftPosition(){
-        currentPosition = leftSlide.getCurrentPosition();
+        currentPosition = rightSlide.getCurrentPosition();
         if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS){
-            wrist.setPosition(0.4);
+            wrist.setPosition(Math.toRadians(100));
         } else{
-            wrist.setPosition(0);
+            wrist.setPosition(Math.toRadians(10));
         }
+        //.35
+        //.08
+
     }
 
 }

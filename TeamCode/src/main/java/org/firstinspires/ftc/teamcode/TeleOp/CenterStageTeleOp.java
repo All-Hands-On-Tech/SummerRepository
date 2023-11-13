@@ -94,7 +94,7 @@ public class CenterStageTeleOp extends RoboMom {
     private DeliveryFunctions deliveryFunctions;
     private IntakeFunctions intakeFunctions;
 
-    private DeliveryState deliveryState;
+    private DeliveryState deliveryState = DeliveryState.DELIVERY_START;
 
     private final int LIFT_HIGH = 500;
 
@@ -262,13 +262,13 @@ public class CenterStageTeleOp extends RoboMom {
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
-            deliveryFunctions.setSlidesPower(1);
+            deliveryFunctions.setSlidesPower(0.05);
             switch (deliveryState){
                 case DELIVERY_START:
-                    if(gamepad2.a){
-                        deliveryState = DeliveryState.DELIVERY_LIFT;
-                        deliveryFunctions.setSlidesTargetPosition(LIFT_HIGH);
-                    }
+//                    if(gamepad2.a){
+//                        deliveryState = DeliveryState.DELIVERY_LIFT;
+//                        deliveryFunctions.setSlidesTargetPosition(LIFT_HIGH);
+//                    }
                     break;
 
                 case DELIVERY_LIFT:
@@ -341,8 +341,10 @@ public class CenterStageTeleOp extends RoboMom {
             deliveryFunctions.WristMovementByLiftPosition();
 
             if(gamepad2.left_bumper){
-                intakeFunctions.RunIntakeMotor(0.3f);
-            } else{
+                intakeFunctions.RunIntakeMotor(0.75f);
+            } else if(gamepad2.left_trigger >= 0.05) {
+                intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
+            }else{
                 intakeFunctions.StopIntakeMotor();
             }
 
