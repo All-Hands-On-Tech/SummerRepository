@@ -38,18 +38,20 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
      */
     private VisionPortal visionPortal;
 
-    Boolean isRed = null;
-    boolean isCameraOn = true;
+    double isRed = 0;
+    boolean isCameraOn = false;
 
     @Override
     public void runOpMode() {
 
         initAprilTag();
+        super.runOpMode();
 
         SampleMecanumDriveCancelable drive = new SampleMecanumDriveCancelable(hardwareMap);
         drive.setPoseEstimate(new Pose2d());
 
         // Wait for the DS start button to be touched.
+
         telemetry.addData("DS preview on/off", "3 dots, Camera Stream");
         telemetry.addData(">", "Touch Play to start OpMode");
         telemetry.update();
@@ -57,13 +59,16 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
         waitForStart();
 
         while (opModeIsActive()) {
-            //teemetry
-            telemetry.addLine("Are the motors on: "+String.valueOf(areMotorsOn()));
+            //telemetry
+            telemetry.addLine("Are the motors on: "+String.valueOf(areMotorsOn())+" "+String.valueOf(drive.isBusy()));
+            telemetry.addLine("Is the camera on: "+String.valueOf(isCameraOn));
+            telemetry.addLine("Team color: "+String.valueOf(isRed));
             telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f (in, in, deg)", drive.getPoseEstimate().getX(), drive.getPoseEstimate().getY(), Math.toDegrees(drive.getPoseEstimate().getHeading())));
             telemetry.update();
 
+
             //Only streams when the robot isn't moving and dpad up is pressed
-            if (areMotorsOn()) {
+            if (areMotorsOn() || !gamepad1.dpad_up) {
                 visionPortal.stopStreaming();
                 isCameraOn = false;
             } else if (gamepad1.dpad_up) {
@@ -83,16 +88,17 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
 
                     telemetry.addData("# AprilTags Detected", numberOfDetections);
 
-                    // Step through the list of detections and display info for each one.
+                // Finds the average position of the robot relative to the april tags
                     for (AprilTagDetection detection : currentDetections) {
                         Pose2d location = absolutePositionFromAprilTag(detection);
+                        telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f (in, in, deg)", location.getX(), location.getY(), location.getHeading()));
                         AprilTagX += location.getX();
                         AprilTagY += location.getY();
                         AprilTagAngle += location.getHeading();
                         if (detection.id==1 || detection.id==2 || detection.id==3) {
-                            isRed = false;
+                            isRed = 0;
                         } else if (detection.id==4 || detection.id==5 || detection.id==6) {
-                            isRed = true;
+                            isRed = 70.88;
                         }
                     }
 
@@ -104,44 +110,52 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
                 }
 
             // runs if robot is not currently following a trajectory
-            //a is the tag on the left
-            //b is the tag in the center
-            //c is the tag on the right
-            if (!drive.isBusy()) {
-                double tagX = -41.40;
-                double tagY = 48;
-                double tagHeading = Math.toRadians(90);
+            //ab is the tag on the left
+            //ba is the tag in the center
+            //cx is the tag on the right
 
-                if (gamepad1.a) {
-                    //this is the default
-                } else if (gamepad1.b) {
-                    tagX += 6;
-                } else if (gamepad1.x) {
-                    tagX += 12;
+            if (gamepad1.b) {
+                if (!drive.isBusy()) {
+                    drive.followTrajectoryAsync(drive.trajectoryBuilder(drive.getPoseEstimate())
+                            .lineToLinearHeading(new Pose2d(-29.40+isRed, 36, Math.toRadians(90)))
+                            .build()
+                    );
+                    sleep(1000);
+                } else {
+                    drive.update();
                 }
+            }
 
-                if (isRed) {
-                    tagX += 70.88;
+            if (gamepad1.a) {
+                if (!drive.isBusy()) {
+                    drive.followTrajectoryAsync(drive.trajectoryBuilder(drive.getPoseEstimate())
+                            .lineToLinearHeading(new Pose2d(-35.40+isRed, 36, Math.toRadians(90)))
+                            .build()
+                    );
+                    sleep(1000);
+                } else {
+                    drive.update();
                 }
+            }
 
-                drive.followTrajectoryAsync(drive.trajectoryBuilder(drive.getPoseEstimate())
-                        .lineToLinearHeading(new Pose2d(tagX, tagY, tagHeading))
-                        .build()
-                );
+            if (gamepad1.x) {
+                if (!drive.isBusy()) {
+                    drive.followTrajectoryAsync(drive.trajectoryBuilder(drive.getPoseEstimate())
+                            .lineToLinearHeading(new Pose2d(-41.40+isRed, 36, Math.toRadians(90)))
+                            .build()
+                    );
+                    sleep(1000);
+                } else {
+                    drive.update();
+                }
             }
-            //runs if robots is following a trajectory a button is pressed to continue it
-            else if(gamepad1.a || gamepad1.b || gamepad1.x) {
-                drive.update();
-            }
-            //ends trajectory if no buttons are pressed
-            else {
+
+            if (!(gamepad1.a || gamepad1.b || gamepad1.x)) {
                 drive.breakFollowing();
+                driveInDirection(0,"STOP");
             }
 
             }
-
-        // Save more CPU resources when camera is no longer needed.
-        visionPortal.close();
 
     }   // end method runOpMode()
 

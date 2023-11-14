@@ -40,11 +40,9 @@ public class PixelColorDetection extends RoboMom {
     @Override
     public void runOpMode() {
         colorSensor = hardwareMap.get(NormalizedColorSensor.class, "sensor_color");
-        colorSensor.setGain(2);
+        colorSensor.setGain(10);
 
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-        pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
-        blinkinLedDriver.setPattern(pattern);
 
         waitForStart();
 
@@ -53,16 +51,19 @@ public class PixelColorDetection extends RoboMom {
             Color.colorToHSV(colors.toColor(), hsvValues);
 
             //all of the always false if statements will be replaced by the hsv for the pixels
-            if (false) {
-                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-                telemetry.addLine("The pixel is white");
-            } else if (false) {
+            if (hsvValues[2]<0.01) {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
+                telemetry.addLine("There is no pixel");
+            } else if (hsvValues[0] > 80 && hsvValues[0] < 110) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GOLD;
                 telemetry.addLine("The pixel is yellow");
-            } else if (false) {
+            } else if (hsvValues[0] > 110 && hsvValues[0] < 130) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
                 telemetry.addLine("The pixel is green");
-            } else if (false) {
+            } else if (hsvValues[0] > 140 && hsvValues[0] < 165) {
+                pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
+                telemetry.addLine("The pixel is white");
+            } else if (hsvValues[0] > 170 && hsvValues[0] < 200) {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.VIOLET;
                 telemetry.addLine("The pixel is purple");
             }
@@ -79,6 +80,8 @@ public class PixelColorDetection extends RoboMom {
                     .addData("Saturation", "%.3f", hsvValues[1])
                     .addData("Value", "%.3f", hsvValues[2]);
             telemetry.update();
+
+            telemetry.addData("Connection info", blinkinLedDriver.getConnectionInfo());
 
         }
 

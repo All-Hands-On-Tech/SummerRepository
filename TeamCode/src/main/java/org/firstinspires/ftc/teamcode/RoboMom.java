@@ -205,15 +205,15 @@ public abstract class RoboMom extends LinearOpMode {
                 break;
         }
 
-        //add stuff here based on camera position relative to center of robot
-        double x1= 0;
-        double y1 = -9.0;
-        //x=x1cos(yaw)-y1sin(yaw)
-        //y=x1sin(yaw)+y1cos(yaw)
-
         double range = aprilTag.ftcPose.range;
         double yaw = -Math.toRadians(aprilTag.ftcPose.yaw);
         double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
+
+        //add stuff here based on camera position relative to center of robot
+        double x1 = 2;
+        double y1 = 7.5;
+        tagX-=x1*Math.cos(yaw)-y1*Math.sin(yaw);
+        tagY-=x1*Math.sin(yaw)+y1*Math.cos(yaw);
 
         double x = tagX + range * Math.sin(yaw + bearing);
         double y = tagY - range * Math.cos(yaw + bearing);
