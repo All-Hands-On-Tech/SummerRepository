@@ -33,6 +33,8 @@ public class RedLandingZone extends RoboMom {
 
     String spikePosition = "center";
 
+    private int TIMEOUT = 5;
+
     @Override
     public void runOpMode() {
 
@@ -81,7 +83,7 @@ public class RedLandingZone extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = circleDetectionPipeline.getSpikePosition();
+        spikePosition = MakeDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
@@ -100,5 +102,21 @@ public class RedLandingZone extends RoboMom {
                 break;
         }
 
+    }
+
+    public String MakeDetection(int timeoutInSeconds) {
+        int tries = 0;
+        while (opModeIsActive() && !circleDetectionPipeline.isDetected() && tries < timeoutInSeconds * 10) {
+            sleep(50);
+            tries++;
+            telemetry.addData("Detection tries:", tries);
+        }
+        if (!circleDetectionPipeline.isDetected()){
+            telemetry.addLine("Defaulted");
+
+            return "MID";
+        } else{
+            return circleDetectionPipeline.spikePosition;
+        }
     }
 }

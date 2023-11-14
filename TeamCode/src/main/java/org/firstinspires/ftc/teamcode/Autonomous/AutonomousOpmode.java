@@ -85,7 +85,7 @@ public class AutonomousOpmode extends LinearOpMode {
 
     }
 
-    private void MakeDetection(int timeoutInSeconds) {
+    public String MakeDetection(int timeoutInSeconds) {
         int tries = 0;
         while (opModeIsActive() && !circleDetection.isDetected() && tries < timeoutInSeconds * 10) {
             sleep(100);
@@ -93,9 +93,9 @@ public class AutonomousOpmode extends LinearOpMode {
             telemetry.addData("Detection tries:", tries);
         }
         if (!circleDetection.isDetected()){
-            spikePosition = "MID";
+            return "MID";
         } else{
-            spikePosition = circleDetection.spikePosition;
+            return circleDetection.spikePosition;
         }
     }
 

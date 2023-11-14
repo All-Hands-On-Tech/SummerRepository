@@ -23,7 +23,7 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
         DONE
     }
 
-    public DetectionState state = DetectionState.OPEN;
+    public DetectionState state = DetectionState.DETECT;
 
     Telemetry telemetry;
     Mat HSVImage = new Mat();
@@ -142,6 +142,9 @@ public class CircleDetectionPipeline extends OpenCvPipeline {
 
     public String getSpikePosition() {
         return spikePosition;
+    }
+    public double getX(){
+        return x;
     }
 
     public void setState(DetectionState state){
