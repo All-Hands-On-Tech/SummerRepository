@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -32,6 +33,7 @@ public class BlueLandingZone extends RoboMom {
     Pose2d startPose = new Pose2d(-60, -38, Math.toRadians(0));
 
     String spikePosition = "center";
+    int TIMEOUT = 5;
 
     @Override
     public void runOpMode() {
@@ -80,7 +82,8 @@ public class BlueLandingZone extends RoboMom {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = circleDetectionPipeline.getSpikePosition();
+        sleep(1000);
+        spikePosition = MakeDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
@@ -100,4 +103,20 @@ public class BlueLandingZone extends RoboMom {
         }
 
     }
+
+    public String MakeDetection(int timeoutInSeconds) {
+        int tries = 0;
+        while (opModeIsActive() && !circleDetectionPipeline.isDetected() && tries < timeoutInSeconds * 10) {
+            sleep(50);
+            tries++;
+            telemetry.addData("Detection tries:", tries);
+        }
+        if (!circleDetectionPipeline.isDetected()){
+            return "MID";
+        } else{
+            return circleDetectionPipeline.spikePosition;
+        }
+    }
+
+
 }
