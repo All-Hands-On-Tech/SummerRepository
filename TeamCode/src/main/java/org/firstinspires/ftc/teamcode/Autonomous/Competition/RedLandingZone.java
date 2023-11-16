@@ -5,6 +5,8 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
+import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -18,6 +20,10 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class RedLandingZone extends RoboMom {
 
     //logan was here
+
+    AutonomousTrajectories autoTraj = new AutonomousTrajectories();
+
+    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
     double cx = VisionConstants.cx;
@@ -88,17 +94,32 @@ public class RedLandingZone extends RoboMom {
             case "LEFT":
                 telemetry.addLine("left");
                 telemetry.update();
-                drive.followTrajectorySequence(left);
+//                drive.followTrajectorySequence(left);
+                drive.followTrajectorySequence(autoTraj.RedLandingZoneLeftTrajectoryChopperPush0);
+                intakeFuncts.OutakeFromIntake(0.1f);
+                sleep(750);
+                intakeFuncts.StopIntakeMotor();
+                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush1);
                 break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
-                drive.followTrajectorySequence(center);
+//                drive.followTrajectorySequence(center);
+                drive.followTrajectorySequence(autoTraj.RedLandingZoneCenterTrajectoryChopperPush0);
+                intakeFuncts.OutakeFromIntake(0.1f);
+                sleep(750);
+                intakeFuncts.StopIntakeMotor();
+                drive.followTrajectorySequence(autoTraj.RedLandingZoneCenterTrajectoryChopperPush1);
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
                 telemetry.update();
-                drive.followTrajectorySequence(right);
+//                drive.followTrajectorySequence(right);
+                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush0);
+                intakeFuncts.OutakeFromIntake(0.1f);
+                sleep(750);
+                intakeFuncts.StopIntakeMotor();
+                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush1);
                 break;
         }
 

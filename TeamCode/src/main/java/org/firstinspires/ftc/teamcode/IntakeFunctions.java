@@ -32,4 +32,6 @@ public class IntakeFunctions {
         intakeMotor.setPower(0);
     }
 
+    public void OutakeFromIntake(float power){ intakeMotor.setPower(power);}
+
 }

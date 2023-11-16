@@ -6,6 +6,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
+import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
+import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -21,6 +23,10 @@ import java.sql.Time;
 public class BlueBackstage extends RoboMom {
 
     //logan was here
+
+    AutonomousTrajectories autoTraj = new AutonomousTrajectories();
+
+    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
     double cx = VisionConstants.cx;
@@ -93,17 +99,42 @@ public class BlueBackstage extends RoboMom {
             case "LEFT":
                 telemetry.addLine("left");
                 telemetry.update();
-                drive.followTrajectorySequence(left);
+//                drive.followTrajectorySequence(left);
+
+                //CHOPPER PUSHBOT
+                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush0);
+                intakeFuncts.OutakeFromIntake(0.1f);
+                sleep(750);
+                intakeFuncts.StopIntakeMotor();
+                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush1);
+
+
                 break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
-                drive.followTrajectorySequence(center);
+//                drive.followTrajectorySequence(center);
+
+                //CHOPPER PUSHBOT
+                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush0);
+                intakeFuncts.OutakeFromIntake(0.1f);
+                sleep(750);
+                intakeFuncts.StopIntakeMotor();
+                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush1);
+
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
                 telemetry.update();
-                drive.followTrajectorySequence(right);
+//                drive.followTrajectorySequence(right);
+
+                //CHOPPER PUSHBOT
+                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush0);
+                intakeFuncts.OutakeFromIntake(0.1f);
+                sleep(750);
+                intakeFuncts.StopIntakeMotor();
+                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush1);
+
                 break;
         }
 
