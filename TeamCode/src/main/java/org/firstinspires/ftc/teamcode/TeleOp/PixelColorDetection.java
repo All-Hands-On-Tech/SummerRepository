@@ -4,15 +4,20 @@ import android.graphics.Color;
 
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.ColorSensor;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
 @TeleOp(name = "PixelColorDetection", group = "Z")
 public class PixelColorDetection extends RoboMom {
     NormalizedColorSensor backColorSensor;
+    String backColor = "no pixel";
     NormalizedColorSensor frontColorSensor;
+    String frontColor = "no pixel";
     final float[] backHSVValues = new float[3];
     final float[] frontHSVValues = new float[3];
 
@@ -27,6 +32,7 @@ public class PixelColorDetection extends RoboMom {
         frontColorSensor.setGain(10);
 
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
+        pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
 
         waitForStart();
 
@@ -34,51 +40,50 @@ public class PixelColorDetection extends RoboMom {
             NormalizedRGBA backColors = backColorSensor.getNormalizedColors();
             Color.colorToHSV(backColors.toColor(), backHSVValues);
 
-            NormalizedRGBA frontColors = backColorSensor.getNormalizedColors();
-            Color.colorToHSV(backColors.toColor(), frontHSVValues);
+            NormalizedRGBA frontColors = frontColorSensor.getNormalizedColors();
+            Color.colorToHSV(frontColors.toColor(), frontHSVValues);
 
-            //Checks if there is a pixel in the front slot
-            if (frontHSVValues[2]>0.01) {
-                //Sets LEDs to the color of the pixel
+            if (((DistanceSensor) frontColorSensor).getDistance(DistanceUnit.CM) < 3) {
+                //Checks if there is a pixel in the front slot
                 if (frontHSVValues[0] > 80 && frontHSVValues[0] < 110) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.GOLD;
-                    telemetry.addLine("The pixel is yellow");
-                } else if (frontHSVValues[0] > 110 && frontHSVValues[0] < 130) {
+                    frontColor = "YELLOW";
+                } else if (frontHSVValues[0] > 110 && frontHSVValues[0] < 140) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-                    telemetry.addLine("The pixel is green");
-                } else if (frontHSVValues[0] > 140 && frontHSVValues[0] < 165) {
+                    frontColor = "GREEN";
+                } else if (frontHSVValues[0] > 150 && frontHSVValues[0] < 180) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-                    telemetry.addLine("The pixel is white");
-                } else if (frontHSVValues[0] > 170 && frontHSVValues[0] < 200) {
+                    frontColor = "WHITE";
+                } else if (frontHSVValues[0] > 200 && frontHSVValues[0] < 220) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.VIOLET;
-                    telemetry.addLine("The is purple");
+                    frontColor = "PURPLE";
+                } else {
+                    frontColor = "no pixel";
                 }
-
-            //Checks if there is a pixel in the back slot
-            } else if (backHSVValues[2]>0.01) {
-                //Sets LEDs to the color of the pixel
+            } else if (((DistanceSensor) backColorSensor).getDistance(DistanceUnit.CM) < 3) {
                 if (backHSVValues[0] > 80 && backHSVValues[0] < 110) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.GOLD;
-                    telemetry.addLine("The pixel is yellow");
-                } else if (backHSVValues[0] > 110 && backHSVValues[0] < 130) {
+                    backColor = "YELLOW";
+                } else if (backHSVValues[0] > 110 && backHSVValues[0] < 140) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;
-                    telemetry.addLine("The pixel is green");
-                } else if (backHSVValues[0] > 140 && backHSVValues[0] < 165) {
+                    backColor = "GREEN";
+                } else if (backHSVValues[0] > 150 && backHSVValues[0] < 180) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.WHITE;
-                    telemetry.addLine("The pixel is white");
-                } else if (backHSVValues[0] > 170 && backHSVValues[0] < 200) {
+                    backColor = "WHITE";
+                } else if (backHSVValues[0] > 200 && backHSVValues[0] < 220) {
                     pattern = RevBlinkinLedDriver.BlinkinPattern.VIOLET;
-                    telemetry.addLine("The pixel is purple");
+                    backColor = "PURPLE";
+                } else {
+                    backColor = "no pixel";
                 }
-            //Turns LEDs off if there is no pixel detected
             } else {
                 pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
-                telemetry.addLine("There is no pixel");
             }
 
             blinkinLedDriver.setPattern(pattern);
 
             telemetry.addData("Pattern: ", pattern.toString());
+            telemetry.addLine("Back sensor");
             telemetry.addLine()
                     .addData("Red", "%.3f", backColors.red)
                     .addData("Green", "%.3f", backColors.green)
@@ -87,6 +92,17 @@ public class PixelColorDetection extends RoboMom {
                     .addData("Hue", "%.3f", backHSVValues[0])
                     .addData("Saturation", "%.3f", backHSVValues[1])
                     .addData("Value", "%.3f", backHSVValues[2]);
+            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) backColorSensor).getDistance(DistanceUnit.CM));
+            telemetry.addLine("Front sensor");
+            telemetry.addLine()
+                    .addData("Red", "%.3f", frontColors.red)
+                    .addData("Green", "%.3f", frontColors.green)
+                    .addData("Blue", "%.3f", frontColors.blue);
+            telemetry.addLine()
+                    .addData("Hue", "%.3f", frontHSVValues[0])
+                    .addData("Saturation", "%.3f", frontHSVValues[1])
+                    .addData("Value", "%.3f", frontHSVValues[2]);
+            telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) frontColorSensor).getDistance(DistanceUnit.CM));
             telemetry.update();
 
         }

@@ -1,6 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
@@ -227,6 +228,25 @@ public abstract class RoboMom extends LinearOpMode {
                 || leftFrontDrive.getPower()!=0
                 || rightBackDrive.getPower()!=0
                 || leftBackDrive.getPower()!=0;
+    }
+
+    public RevBlinkinLedDriver.BlinkinPattern setLEDColor (String color) {
+        switch (color) {
+            case "BLACK":
+                return RevBlinkinLedDriver.BlinkinPattern.BLACK;
+            case "WHITE":
+                return RevBlinkinLedDriver.BlinkinPattern.WHITE;
+            case "YELLOW":
+                return RevBlinkinLedDriver.BlinkinPattern.YELLOW;
+            case "GREEN":
+                return RevBlinkinLedDriver.BlinkinPattern.GREEN;
+            case "PURPLE":
+                return RevBlinkinLedDriver.BlinkinPattern.VIOLET;
+            case "RAINBOW":
+                return RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
+            default:
+                return RevBlinkinLedDriver.BlinkinPattern.BLACK;
+        }
     }
 
 }
