@@ -49,7 +49,7 @@ public class DeliveryFunctions {
         rightSlide.setTargetPosition(rightSlide.getCurrentPosition());
 
         if(slidesRunToPosition){
-            //leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
         } else{
             leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -62,12 +62,12 @@ public class DeliveryFunctions {
 
     public void setSlidesTargetPosition(int clicks){
         targetPosition = clicks;
-        //leftSlide.setTargetPosition(targetPosition);
+        leftSlide.setTargetPosition(targetPosition);
         rightSlide.setTargetPosition(targetPosition);
     }
 
     public void setSlidesPower(double power){
-        //leftSlide.setPower(power);
+        leftSlide.setPower(power);
         rightSlide.setPower(power);
     }
 

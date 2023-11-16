@@ -105,7 +105,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final double DUMP_TIME = 1;
 
-    private final int LIFT_MAX = 700;
+    private final int LIFT_MAX = 2000;
     private final int LIFT_MIN = 0;
 
     private int leftMotorPosition;
@@ -273,13 +273,12 @@ public class CenterStageTeleOp extends RoboMom {
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
-            deliveryFunctions.setSlidesPower(0.05);
             switch (deliveryState){
                 case DELIVERY_START:
-//                    if(gamepad2.a){
-//                        deliveryState = DeliveryState.DELIVERY_LIFT;
-//                        deliveryFunctions.setSlidesTargetPosition(LIFT_HIGH);
-//                    }
+                    if(gamepad2.a){
+                        deliveryState = DeliveryState.DELIVERY_LIFT;
+                        deliveryFunctions.setSlidesTargetPosition(LIFT_HIGH);
+                    }
                     break;
 
                 case DELIVERY_LIFT:
@@ -322,8 +321,12 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
             }
 
-            if(gamepad2.left_stick_y >= DEADZONE){
+            if(Math.abs(gamepad2.left_stick_y) >= DEADZONE){
                 deliveryState = DeliveryState.DELIVERY_START;
+
+                telemetry.addLine("manual control");
+                targetPosition += gamepad2.left_stick_y;
+                deliveryFunctions.setSlidesPower(1);
 
                 //if position within max and min, allow manual control
                 if
@@ -335,7 +338,9 @@ public class CenterStageTeleOp extends RoboMom {
                     &&
                 rightMotorPosition > LIFT_MIN)
                 {
+                    deliveryFunctions.setSlidesPower(gamepad2.left_stick_y / 2);
                     targetPosition += gamepad2.left_stick_y;
+                    telemetry.addLine("within");
                 }
 
                 //if position is greater, allow downwards manual control
@@ -350,6 +355,10 @@ public class CenterStageTeleOp extends RoboMom {
             }
 
             deliveryFunctions.WristMovementByLiftPosition();
+
+            telemetry.addData("Target Position: ", targetPosition);
+            telemetry.addData("Left Motor Position: ", leftMotorPosition);
+            telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
             if(gamepad2.left_bumper){
                 intakeFunctions.RunIntakeMotor(0.75f);
