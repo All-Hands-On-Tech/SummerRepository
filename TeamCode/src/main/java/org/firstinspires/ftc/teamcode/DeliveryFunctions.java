@@ -52,6 +52,7 @@ public class DeliveryFunctions {
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             linearOpMode.telemetry.addLine("RunMode: RUN_TO_POSITION");
+            linearOpMode.telemetry.update();
         } else{
             leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
             rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -83,6 +84,10 @@ public class DeliveryFunctions {
 
     public int getMotorTargetPosition(){
         return targetPosition;
+    }
+
+    public DcMotor.RunMode getRunMode(){
+        return leftSlide.getMode();
     }
 
     public double getWristPosition(){

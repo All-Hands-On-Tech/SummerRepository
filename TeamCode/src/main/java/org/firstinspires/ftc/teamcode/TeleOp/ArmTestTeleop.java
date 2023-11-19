@@ -23,7 +23,7 @@ public class ArmTestTeleop extends LinearOpMode {
         while(opModeIsActive()){
             if(Math.abs(gamepad2.left_stick_y) > DEADZONE){
 
-                deliveryFunctions.setSlidesPower(gamepad2.left_stick_y);
+                deliveryFunctions.setSlidesPower(gamepad2.left_stick_y * 0.9);
 
             }
 
@@ -33,7 +33,11 @@ public class ArmTestTeleop extends LinearOpMode {
 
             }
 
-            deliveryFunctions.WristMovementByLiftPosition();
+            if(Math.abs(gamepad2.left_stick_y) < DEADZONE && Math.abs(gamepad2.right_stick_y) < DEADZONE){
+                deliveryFunctions.setSlidesPower(0);
+            }
+
+
 
             if(gamepad2.right_trigger > DEADZONE){
                 intakeFunctions.RunIntakeMotor(gamepad2.right_trigger);

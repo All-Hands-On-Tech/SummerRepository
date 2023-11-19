@@ -38,6 +38,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 import org.checkerframework.checker.units.qual.A;
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
@@ -270,16 +271,19 @@ public class CenterStageTeleOp extends RoboMom {
 
     //Gamepad 2
 
+            telemetry.addData("RunMode: ", deliveryFunctions.getRunMode());
+            targetPosition = deliveryFunctions.getMotorTargetPosition();
+
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
-            deliveryFunctions.setSlidesPower(0.5);
+            deliveryFunctions.setSlidesPower(0.2);
 
             switch (deliveryState){
                 case DELIVERY_START:
                     if(gamepad2.a){
                         deliveryState = DeliveryState.DELIVERY_LIFT;
-                        deliveryFunctions.setSlidesTargetPosition(LIFT_HIGH);
+                        targetPosition = LIFT_HIGH;
                     }
                     break;
 
@@ -305,7 +309,7 @@ public class CenterStageTeleOp extends RoboMom {
 
                     if(dumped && deliveryTimer.seconds() >= DUMP_TIME){
                         deliveryState = DeliveryState.DELIVERY_RETRACT;
-                        deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
+                        targetPosition = LIFT_LOW;
                     }
                     break;
                 case DELIVERY_RETRACT:
@@ -354,6 +358,8 @@ public class CenterStageTeleOp extends RoboMom {
                 }
 
             }
+
+            deliveryFunctions.setSlidesTargetPosition(targetPosition);
 
             deliveryFunctions.WristMovementByLiftPosition();
 
