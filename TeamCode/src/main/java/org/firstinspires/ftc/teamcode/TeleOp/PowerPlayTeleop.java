@@ -64,7 +64,12 @@ public class PowerPlayTeleop extends RoboMom {
 
     @Override
     public void runOpMode() {
-        super.runOpMode();
+        //super.runOpMode();
+
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "leftFront");
+        leftBackDrive = hardwareMap.get(DcMotor.class, "leftRear");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightFront");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "rightRear");
 
 
 
@@ -195,28 +200,28 @@ public class PowerPlayTeleop extends RoboMom {
                 driveInDirection(0, "FORWARD");
             }
 
-            if(gamepad1.y){
-                resetZero(0);
-            }
-            if(gamepad1.a){
-                resetZero(180);
-            }
-            if(gamepad1.x){
-                resetZero(90);
-            }
-            if(gamepad1.b){
-                resetZero(-90);
-            }
+//            if(gamepad1.y){
+//                resetZero(0);
+//            }
+//            if(gamepad1.a){
+//                resetZero(180);
+//            }
+//            if(gamepad1.x){
+//                resetZero(90);
+//            }
+//            if(gamepad1.b){
+//                resetZero(-90);
+//            }
 
-            if(gamepad1.dpad_up){
-                rotateToZAbs(0, zero);
-            } else if(gamepad1.dpad_left){
-                rotateToZAbs(90, zero);
-            } else if(gamepad1.dpad_right){
-                rotateToZAbs(-90, zero);
-            } else if(gamepad1.dpad_down){
-                rotateToZAbs(180, zero);
-            }
+//            if(gamepad1.dpad_up){
+//                rotateToZAbs(0, zero);
+//            } else if(gamepad1.dpad_left){
+//                rotateToZAbs(90, zero);
+//            } else if(gamepad1.dpad_right){
+//                rotateToZAbs(-90, zero);
+//            } else if(gamepad1.dpad_down){
+//                rotateToZAbs(180, zero);
+//            }
 
             /**GAMEPAD 2**/
 
@@ -285,10 +290,10 @@ public class PowerPlayTeleop extends RoboMom {
 
 
     }
-    void resetZero(double degreeOffZero){
-        zero = getCurrentZ() - degreeOffZero;
-    }
-
+//    void resetZero(double degreeOffZero){
+//        zero = getCurrentZ() - degreeOffZero;
+//    }
+//
     public void initArm() {
         armMotor = hardwareMap.get(DcMotor.class, "arm");
         armMotor.setDirection(DcMotor.Direction.FORWARD);
@@ -299,90 +304,90 @@ public class PowerPlayTeleop extends RoboMom {
 
     }
 
-    public void rotateToZAbs(double absTargetAngle, double zero){
-        double dividend = 50;
-        sleep(20);
-        integratedHeading = 0;
-        double startAngle = getCurrentZ();
-        double error = zero + absTargetAngle - getCurrentZ();
+//    public void rotateToZAbs(double absTargetAngle, double zero){
+//        double dividend = 50;
+//        sleep(20);
+//        integratedHeading = 0;
+//        double startAngle = getCurrentZ();
+//        double error = zero + absTargetAngle - getCurrentZ();
+//
+//        if(error > 180){
+//            error -= 360;
+//        }
+//        if(error < -180){
+//            error += 360;
+//        }
+//
+//        while(Math.abs(error) > 0.1){
+//            while (error > 0.1) {
+//                error = zero + absTargetAngle - getCurrentZ();
+//                if(error > 180){
+//                    error -= 360;
+//                }
+//                if(error < -180){
+//                    error += 360;
+//                }
+//                double proportionalPower = error / dividend;
+//                proportionalPower = Math.abs(proportionalPower);
+//
+//                if(proportionalPower < 0.1){
+//                    proportionalPower = 0.1;
+//                }
+//
+//                //rotate left
+//                driveInDirection(proportionalPower, "ROTATE_LEFT");
+//
+//
+//                telemetry.addLine("StartAngle: " + startAngle);
+//                telemetry.addLine("TargetAngle: " + absTargetAngle);
+//                telemetry.addLine("CumulativeZ: " + getCurrentZ());
+//                telemetry.addLine("Error: " + error);
+//                telemetry.addLine("rotation: counter clockwise");
+//                telemetry.update();
+//
+//            }
+//
+//            while (error < -0.1) {
+//                error = zero + absTargetAngle - getCurrentZ();
+//                if(error > 180){
+//                    error -= 360;
+//                }
+//                if(error < -180){
+//                    error += 360;
+//                }
+//                double proportionalPower = error / dividend;
+//                proportionalPower = Math.abs(proportionalPower);
+//
+//                if(proportionalPower < 0.1){
+//                    proportionalPower = 0.1;
+//                }
+//
+//                //rotate right
+//                driveInDirection(proportionalPower, "ROTATE_RIGHT");
+//
+//                //telemetry
+//                //            telemetry.addLine("currentZ" + getCurrentZ());
+//                telemetry.addLine("StartAngle: " + startAngle);
+////                telemetry.addLine("cumulativeZ" + getCurrentZ());
+//                telemetry.addLine("Error: " + error);
+//                telemetry.addLine("targetAngle: " + absTargetAngle);
+//                telemetry.addLine("rotation: clockwise");
+//                telemetry.update();
+//            }
+//
+//
+//            rightFrontDrive.setPower(0);
+//            leftFrontDrive.setPower(0);
+//            rightBackDrive.setPower(0);
+//            leftBackDrive.setPower(0);
+//
+//        }
+//    }
 
-        if(error > 180){
-            error -= 360;
-        }
-        if(error < -180){
-            error += 360;
-        }
-
-        while(Math.abs(error) > 0.1){
-            while (error > 0.1) {
-                error = zero + absTargetAngle - getCurrentZ();
-                if(error > 180){
-                    error -= 360;
-                }
-                if(error < -180){
-                    error += 360;
-                }
-                double proportionalPower = error / dividend;
-                proportionalPower = Math.abs(proportionalPower);
-
-                if(proportionalPower < 0.1){
-                    proportionalPower = 0.1;
-                }
-
-                //rotate left
-                driveInDirection(proportionalPower, "ROTATE_LEFT");
-
-
-                telemetry.addLine("StartAngle: " + startAngle);
-                telemetry.addLine("TargetAngle: " + absTargetAngle);
-                telemetry.addLine("CumulativeZ: " + getCurrentZ());
-                telemetry.addLine("Error: " + error);
-                telemetry.addLine("rotation: counter clockwise");
-                telemetry.update();
-
-            }
-
-            while (error < -0.1) {
-                error = zero + absTargetAngle - getCurrentZ();
-                if(error > 180){
-                    error -= 360;
-                }
-                if(error < -180){
-                    error += 360;
-                }
-                double proportionalPower = error / dividend;
-                proportionalPower = Math.abs(proportionalPower);
-
-                if(proportionalPower < 0.1){
-                    proportionalPower = 0.1;
-                }
-
-                //rotate right
-                driveInDirection(proportionalPower, "ROTATE_RIGHT");
-
-                //telemetry
-                //            telemetry.addLine("currentZ" + getCurrentZ());
-                telemetry.addLine("StartAngle: " + startAngle);
-                telemetry.addLine("cumulativeZ" + getCurrentZ());
-                telemetry.addLine("Error: " + error);
-                telemetry.addLine("targetAngle: " + absTargetAngle);
-                telemetry.addLine("rotation: clockwise");
-                telemetry.update();
-            }
-
-
-            rightFrontDrive.setPower(0);
-            leftFrontDrive.setPower(0);
-            rightBackDrive.setPower(0);
-            leftBackDrive.setPower(0);
-
-        }
-    }
-
-    public double getCurrentZ() {
-        Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
-        return angles.firstAngle;
-    }
+//    public double getCurrentZ() {
+//        Orientation angles = gyro.getAngularOrientation(AxesReference.INTRINSIC, AxesOrder.ZYX, AngleUnit.DEGREES);
+//        return angles.firstAngle;
+//    }
 
     public void closeClaw(){
         claw.setPosition(ARM_MIN_RANGE);
