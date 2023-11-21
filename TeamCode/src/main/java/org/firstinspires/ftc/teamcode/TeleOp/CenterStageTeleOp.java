@@ -277,7 +277,7 @@ public class CenterStageTeleOp extends RoboMom {
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
-            deliveryFunctions.setSlidesPower(0.2);
+            deliveryFunctions.setSlidesPower(0.75);
 
             switch (deliveryState){
                 case DELIVERY_START:
@@ -344,17 +344,17 @@ public class CenterStageTeleOp extends RoboMom {
                     &&
                 rightMotorPosition > LIFT_MIN)
                 {
-                    targetPosition += gamepad2.left_stick_y;
+                    targetPosition += gamepad2.left_stick_y * 5;
                     telemetry.addLine("within");
                 }
 
                 //if position is greater, allow downwards manual control
                 if(leftMotorPosition > LIFT_MAX && rightMotorPosition > LIFT_MAX && gamepad2.left_stick_y <= 0){
-                    targetPosition += gamepad2.left_stick_y;
+                    targetPosition += gamepad2.left_stick_y * 5;
                 }
                 //if position is less, allow upwards manual control
                 if(leftMotorPosition < LIFT_MIN && rightMotorPosition < LIFT_MIN && gamepad2.left_stick_y >= 0){
-                    targetPosition += gamepad2.left_stick_y;
+                    targetPosition += gamepad2.left_stick_y * 5;
                 }
 
             }

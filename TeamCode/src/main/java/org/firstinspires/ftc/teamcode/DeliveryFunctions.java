@@ -58,6 +58,9 @@ public class DeliveryFunctions {
             rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
+        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
 //        leftSlide.setDirection(DcMotor.Direction.REVERSE);
         rightSlide.setDirection(DcMotor.Direction.REVERSE);
     }
