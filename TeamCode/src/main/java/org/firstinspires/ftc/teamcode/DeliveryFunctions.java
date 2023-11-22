@@ -22,7 +22,7 @@ public class DeliveryFunctions {
 
     public final double TICK_STOP_THRESHOLD = 20;
     public final double TICK_SLOW_THRESHOLD = 250;
-    public final double CARRIAGE_OUTSIDE_CHASSIS = 250;
+    public final double CARRIAGE_OUTSIDE_CHASSIS = 630;
 
     private boolean slidesRunToPosition;
 
@@ -112,13 +112,18 @@ public class DeliveryFunctions {
     public void WristMovementByLiftPosition(){
         currentPosition = rightSlide.getCurrentPosition();
         if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS){
-            wrist.setPosition(Math.toRadians(100));
+            wrist.setPosition(0.75);
         } else{
-            wrist.setPosition(Math.toRadians(10));
+            wrist.setPosition(.08);
         }
         //.35
         //.08
 
-    }
+        //Math.toRadians(100)
+        //Math.toRadians(10)
 
+        linearOpMode.telemetry.addData("wrist pos: ", wrist.getPosition());
+        linearOpMode.telemetry.update();
+
+    }
 }
