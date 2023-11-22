@@ -157,6 +157,7 @@ public class CenterStageTeleOp extends RoboMom {
 
         waitForStart();
 
+        targetPosition = LIFT_LOW;
         deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
 
         while (opModeIsActive()) {
@@ -349,11 +350,11 @@ public class CenterStageTeleOp extends RoboMom {
                 }
 
                 //if position is greater, allow downwards manual control
-                if(leftMotorPosition > LIFT_MAX && rightMotorPosition > LIFT_MAX && gamepad2.left_stick_y <= 0){
+                if((leftMotorPosition > LIFT_MAX || rightMotorPosition > LIFT_MAX) && gamepad2.left_stick_y <= 0){
                     targetPosition -= gamepad2.left_stick_y * 5;
                 }
                 //if position is less, allow upwards manual control
-                if(leftMotorPosition < LIFT_MIN && rightMotorPosition < LIFT_MIN && gamepad2.left_stick_y >= 0){
+                if((leftMotorPosition < LIFT_MIN || rightMotorPosition < LIFT_MIN) && gamepad2.left_stick_y >= 0){
                     targetPosition -= gamepad2.left_stick_y * 5;
                 }
 
