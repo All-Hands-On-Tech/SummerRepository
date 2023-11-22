@@ -14,14 +14,16 @@ public class DeliveryFunctions {
     private Servo wrist = null;
     private LinearOpMode linearOpMode;
     private double CLICKS_PER_METER = 2492.788;
+    private final double servoOut = 0.75;
+    private final double servoIn = 0.08;
 
     private int targetPosition;
-    private double leftError;
-    private double rightError;
     private double currentPosition;
 
+    private double servoPosition;
+    private double targetServoPosition;
+
     public final double TICK_STOP_THRESHOLD = 20;
-    public final double TICK_SLOW_THRESHOLD = 250;
     public final double CARRIAGE_OUTSIDE_CHASSIS = 630;
 
     private boolean slidesRunToPosition;
@@ -97,24 +99,27 @@ public class DeliveryFunctions {
         return wrist.getPosition();
     }
 
-    public void PControlPower(){
-        leftError = targetPosition - leftSlide.getCurrentPosition();
-        rightError = targetPosition - rightSlide.getCurrentPosition();
-
-        leftSlide.setPower(leftError / TICK_SLOW_THRESHOLD);
-        rightSlide.setPower(rightError / TICK_SLOW_THRESHOLD);
-    }
+//    public void PControlPower(){
+//        leftError = targetPosition - leftSlide.getCurrentPosition();
+//        rightError = targetPosition - rightSlide.getCurrentPosition();
+//
+//        leftSlide.setPower(leftError / TICK_SLOW_THRESHOLD);
+//        rightSlide.setPower(rightError / TICK_SLOW_THRESHOLD);
+//    }
 
     public void Dump(){
         linearOpMode.telemetry.addLine("WIP");
     }
 
     public void WristMovementByLiftPosition(){
+        servoPosition = wrist.getPosition();
         currentPosition = rightSlide.getCurrentPosition();
         if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS){
-            wrist.setPosition(0.75);
+            //targetServoPosition is going to be out when 200 ticks from outside
+            targetServoPosition = servoOut * (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
+            wrist.setPosition(targetServoPosition);
         } else{
-            wrist.setPosition(.08);
+            wrist.setPosition(servoIn);
         }
         //.35
         //.08
@@ -122,7 +127,7 @@ public class DeliveryFunctions {
         //Math.toRadians(100)
         //Math.toRadians(10)
 
-        linearOpMode.telemetry.addData("wrist pos: ", wrist.getPosition());
+        linearOpMode.telemetry.addData("wrist pos: ", servoPosition);
         linearOpMode.telemetry.update();
 
     }
