@@ -21,6 +21,10 @@ public class ArmTestTeleop extends LinearOpMode {
         waitForStart();
 
         while(opModeIsActive()){
+
+            telemetry.addData("Servo Position: ", deliveryFunctions.getWristPosition());
+            
+
             if(Math.abs(gamepad2.left_stick_y) > DEADZONE){
 
                 deliveryFunctions.setSlidesPower(gamepad2.left_stick_y * 0.9);

@@ -47,16 +47,11 @@ public class DeliveryFunctions {
 
     private void Initialize(){
         try {
-            leftSlide = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
-            rightSlide = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
-            wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
             rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
-            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
+//            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+//            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -92,8 +87,8 @@ public class DeliveryFunctions {
             leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
             rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
-            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
+//            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+//            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -190,21 +185,21 @@ public class DeliveryFunctions {
 
     }
 
-    public void OpenHolderServoByIndex(int i){
-        if(i == 0){
-            holder1.setPosition(HOLDER_OPEN);
-        }
-        if(i == 1){
-            holder1.setPosition(HOLDER_OPEN);
-        }
-    }
-
-    public void CloseHolderServoByIndex(int i){
-        if(i == 0){
-            holder1.setPosition(HOLDER_CLOSE);
-        }
-        if(i == 1){
-            holder1.setPosition(HOLDER_CLOSE);
-        }
-    }
+//    public void OpenHolderServoByIndex(int i){
+//        if(i == 0){
+//            holder1.setPosition(HOLDER_OPEN);
+//        }
+//        if(i == 1){
+//            holder1.setPosition(HOLDER_OPEN);
+//        }
+//    }
+//
+//    public void CloseHolderServoByIndex(int i){
+//        if(i == 0){
+//            holder1.setPosition(HOLDER_CLOSE);
+//        }
+//        if(i == 1){
+//            holder1.setPosition(HOLDER_CLOSE);
+//        }
+//    }
 }
