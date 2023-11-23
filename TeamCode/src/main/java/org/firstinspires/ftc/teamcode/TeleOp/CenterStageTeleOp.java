@@ -64,17 +64,8 @@ public class CenterStageTeleOp extends RoboMom {
 
     double speedScalar = 1;
 
-    public Vector2d vel = new Vector2d(0, 0);
-    public double velMag = vel.distTo(new Vector2d(0, 0));
-
-    public double rotateVel = 0;
 
     private float TARGET_DISTANCE_TO_TAG = 12;
-
-    double lfPower = 0;
-    double lbPower = 0;
-    double rfPower = 0;
-    double rbPower = 0;
 
     final double STRAFE_GAIN = 0.015;
     final double FORWARD_GAIN = 0.012;
@@ -124,8 +115,6 @@ public class CenterStageTeleOp extends RoboMom {
 
     static SampleMecanumDrive drive;
 
-     IMU imu;
-
      private static final double HARDWARECHECK_DELAY = 1;
 
     private ElapsedTime hardwareCheckTimer = new ElapsedTime();
@@ -140,15 +129,6 @@ public class CenterStageTeleOp extends RoboMom {
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
-
-        // Retrieve the IMU from the hardware map
-        imu = hardwareMap.get(IMU.class, "imu");
-// Adjust the orientation parameters to match robot
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                RevHubOrientationOnRobot.UsbFacingDirection.LEFT));
-// Without this, the REV Hub's orientation is assumed to be logo up / USB forward
-        imu.initialize(parameters);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -180,24 +160,16 @@ public class CenterStageTeleOp extends RoboMom {
             if(hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
 
-            inputVel(new Vector2d(0, 0));
             /**GAMEPAD 1**/
 
             //Store inputted desired velocity (left_stick_x, left_stick_y)
             if(!controlsRelinquished){
 
-                if(Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone){
-                    inputVel(new Vector2d(gamepad1.left_stick_x, -gamepad1.left_stick_y));
+                if(Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone){
+                    drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
                 } else{
-                    inputVel(new Vector2d(0, 0));
+                    drivetrainFunctions.Stop();
                 }
-                //Store inputted desired rotational velocity (right_stick_x)
-                if(Math.abs(gamepad1.right_stick_x) > deadZone){
-                    rotateVel = gamepad1.right_stick_x;
-                }else{
-                    rotateVel = 0;
-                }
-
             }
 
 //            if(gamepad1.dpad_down){
@@ -236,9 +208,7 @@ public class CenterStageTeleOp extends RoboMom {
 //                    double x = 0.5;
 //                    double y = 0.7;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
-                    inputVel(new Vector2d(x,y));
-//                    driveFunctions.move(x,y,bearing);
-                    rotateVel = bearing;
+                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, speedScalar);
                 } else {
                     controlsRelinquished = false;
                 }
@@ -253,17 +223,11 @@ public class CenterStageTeleOp extends RoboMom {
                  */
             }
 
-            applyVectorsToPower();
 
 //            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
 //                applyFieldOrientedVectorsToPower();
 //            }
 
-//            telemetry.addData("lf", lfPower);
-//            telemetry.addData("lb", lbPower);
-//            telemetry.addLine();
-//            telemetry.addData("rf", rfPower);
-//            telemetry.addData("rb", rbPower);
             telemetry.update();
 
 
@@ -279,14 +243,8 @@ public class CenterStageTeleOp extends RoboMom {
             }
 
 
-
-            leftFrontDrive.setPower(lfPower);
-            leftBackDrive.setPower(lbPower);
-            rightFrontDrive.setPower(rfPower);
-            rightBackDrive.setPower(rbPower);
-
-            if (gamepad1.options) {
-                imu.resetYaw();
+            if (gamepad1.y) {
+                drivetrainFunctions.ResetIMU();
             }
 
     //Gamepad 2
@@ -438,55 +396,8 @@ public class CenterStageTeleOp extends RoboMom {
 
 
 
-    public void inputVel(Vector2d inputVector){
-        vel = inputVector;
-//        velMag = vel.distTo(new Vector2d(0, 0));
-//        vel = vel.div(velMag); //normalize
-    }
-    public Vector2d normalize(Vector2d target){
-        double targetMag = target.distTo(new Vector2d(0, 0));
-        target = target.div(targetMag); //normalize
-        return target;
-    }
-    public void applyVectorsToPower() {
-
-
-            lfPower = (vel.getY() + vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            lbPower = (vel.getY() - vel.getX() + rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            rfPower = (vel.getY() - vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            rbPower = (vel.getY() + vel.getX() - rotateVel / (Math.abs(vel.getY()) + Math.abs(vel.getX()) + Math.abs(rotateVel))) * speedScalar;
-            lfPower = vel.getY() + vel.getX() + rotateVel;
-            lbPower = vel.getY() - vel.getX() + rotateVel;
-            rfPower = vel.getY() - vel.getX() - rotateVel;
-            rbPower = vel.getY() + vel.getX() - rotateVel;
-    }
-    public void applyFieldOrientedVectorsToPower (){
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
-
-        double rotX = vel.getX() * Math.cos(-botHeading) - vel.getY() * Math.sin(-botHeading);
-        double rotY = vel.getX() * Math.sin(-botHeading) + vel.getY() * Math.cos(-botHeading);
-
-        rotX = rotX * 1.1;  // Counteract imperfect strafing
-
-        // Denominator is the largest motor power (absolute value) or 1
-        // This ensures all the powers maintain the same ratio,
-        // but only if at least one is out of the range [-1, 1]
-        double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rotateVel), 1);
-        lfPower = (rotY + rotX + rotateVel) / denominator * speedScalar;
-        lbPower = (rotY - rotX + rotateVel) / denominator * speedScalar;
-        rfPower = (rotY - rotX - rotateVel) / denominator * speedScalar;
-        rbPower = (rotY + rotX - rotateVel) / denominator * speedScalar;
-    }
-
-
-
-
     private void safeStop(){
-        leftFrontDrive.setPower(0);
-        leftBackDrive.setPower(0);
-        rightFrontDrive.setPower(0);
-        rightBackDrive.setPower(0);
-
+        drivetrainFunctions.Stop();
         deliveryFunctions.setSlidesPower(0);
         intakeFunctions.RunIntakeMotor(0);
     }

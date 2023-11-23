@@ -85,7 +85,7 @@ public class DrivetrainFunctions {
 
     }
 
-    public void Move(double y, double x, double rx, double speedScalar){
+    public void Move(float y, float x, float rx, double speedScalar){
         if(isDisabled)
             return;
 
@@ -96,7 +96,7 @@ public class DrivetrainFunctions {
         rightBackDrive.setPower(((y + x - rx) / denominator) * speedScalar);
     }
 
-    public void MoveFieldOriented (double y, double x, double rx, double speedScalar){
+    public void MoveFieldOriented (float y, float x, float rx, double speedScalar){
         if(isDisabled)
             return;
 
@@ -112,6 +112,19 @@ public class DrivetrainFunctions {
         leftBackDrive.setPower((rotY - rotX + rx) / denominator * speedScalar);
         rightFrontDrive.setPower((rotY - rotX - rx) / denominator * speedScalar);
         rightBackDrive.setPower((rotY + rotX - rx) / denominator * speedScalar);
+    }
+
+    public void Stop(){
+        leftFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        rightBackDrive.setPower(0);
+    }
+
+    public void ResetIMU(){
+        if(isDisabled)
+            return;
+        imu.resetYaw();
     }
 
     public boolean areMotorsOn() {
