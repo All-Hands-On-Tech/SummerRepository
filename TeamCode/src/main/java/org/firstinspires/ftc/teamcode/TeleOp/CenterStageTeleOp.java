@@ -385,7 +385,8 @@ public class CenterStageTeleOp extends RoboMom {
             }
 
         }
-
+        //when opmode is NOT active
+        safeStop();
 
     }
 
@@ -460,9 +461,16 @@ public class CenterStageTeleOp extends RoboMom {
     }
 
 
-    public double getCurrentZ() {
 
-        return 0.0;
+
+    private void safeStop(){
+        leftFrontDrive.setPower(0);
+        leftBackDrive.setPower(0);
+        rightFrontDrive.setPower(0);
+        rightBackDrive.setPower(0);
+
+        deliveryFunctions.setSlidesPower(0);
+        intakeFunctions.RunIntakeMotor(0);
     }
 
 }

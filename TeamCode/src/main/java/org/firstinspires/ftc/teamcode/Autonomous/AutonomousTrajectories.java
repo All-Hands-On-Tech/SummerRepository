@@ -128,9 +128,9 @@ public class AutonomousTrajectories {
 
     //blue backstage left
     public TrajectorySequence BlueBackstageLeftTrajectoryChopperPush0 = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
-            .splineTo(new Vector2d(-36, 33), Math.toRadians(0))
+            .splineToLinearHeading(new Pose2d(-30, 33, Math.toRadians(90)), Math.toRadians(-20))
             .build();
-    public TrajectorySequence BlueBackstageLeftTrajectoryChopperPush1 = drive.trajectorySequenceBuilder(new Pose2d(-36, 33, Math.toRadians(0)))
+    public TrajectorySequence BlueBackstageLeftTrajectoryChopperPush1 = drive.trajectorySequenceBuilder(new Pose2d(-13, 11, Math.toRadians(0)))
             .back(20)
             .waitSeconds(1)
             .setReversed(true)
@@ -153,13 +153,12 @@ public class AutonomousTrajectories {
     //Blue backstage right
 
     public TrajectorySequence BlueBackstageRightTrajectoryChopperPush0 = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
-            .splineToLinearHeading(new Pose2d(-32, 0, Math.toRadians(-90)), Math.toRadians(-90))
+            .splineToLinearHeading(new Pose2d(-35, 10, Math.toRadians(90)), Math.toRadians(-90))
             .build();
 
-    public TrajectorySequence BlueBackstageRightTrajectoryChopperPush1 = drive.trajectorySequenceBuilder(new Pose2d(-32, 0, Math.toRadians(-90)))
-            .back(20)
-            .setReversed(true)
-            .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
+    public TrajectorySequence BlueBackstageRightTrajectoryChopperPush1 = drive.trajectorySequenceBuilder(new Pose2d(-35, 10, Math.toRadians(90)))
+            .forward(20)
+            .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(90)), Math.toRadians(90))
             .build();
 
     //BLUE LANDING ZONE
