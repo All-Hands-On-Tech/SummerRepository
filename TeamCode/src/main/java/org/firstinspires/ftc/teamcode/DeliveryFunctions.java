@@ -28,6 +28,10 @@ public class DeliveryFunctions {
 
     private boolean slidesRunToPosition;
 
+    public boolean isDisabled = false;
+
+    private double initAttempts = 0;
+
 
     public DeliveryFunctions(LinearOpMode l, Boolean slidesRunToPosition)
     {
@@ -38,33 +42,75 @@ public class DeliveryFunctions {
 
 
     private void Initialize(){
-        leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
-        rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
-        wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        try {
+            leftSlide = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
+            rightSlide = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
+            wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
+            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-        leftSlide.setTargetPosition(leftSlide.getCurrentPosition());
-        rightSlide.setTargetPosition(rightSlide.getCurrentPosition());
+            leftSlide.setTargetPosition(leftSlide.getCurrentPosition());
+            rightSlide.setTargetPosition(rightSlide.getCurrentPosition());
 
-        if(slidesRunToPosition){
+            if (slidesRunToPosition) {
+                leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                linearOpMode.telemetry.addLine("RunMode: RUN_TO_POSITION");
+                linearOpMode.telemetry.update();
+            } else {
+                leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            linearOpMode.telemetry.addLine("RunMode: RUN_TO_POSITION");
-            linearOpMode.telemetry.update();
-        } else{
-            leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
+            //        leftSlide.setDirection(DcMotor.Direction.REVERSE);
+            rightSlide.setDirection(DcMotor.Direction.REVERSE);
+        }catch(NullPointerException e){
+            initAttempts++;
+            linearOpMode.telemetry.addData("Couldn't find delivery.       Attempt: ", initAttempts);
+            isDisabled = true;
         }
+    }
 
-        leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-        rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    public void Reinitialize(){
+        try {
+            leftSlide = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
+            rightSlide = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
+            wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
+            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-//        leftSlide.setDirection(DcMotor.Direction.REVERSE);
-        rightSlide.setDirection(DcMotor.Direction.REVERSE);
+            leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+
+            leftSlide.setTargetPosition(leftSlide.getCurrentPosition());
+            rightSlide.setTargetPosition(rightSlide.getCurrentPosition());
+
+            if (slidesRunToPosition) {
+                leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+                linearOpMode.telemetry.addLine("RunMode: RUN_TO_POSITION");
+                linearOpMode.telemetry.update();
+            } else {
+                leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            }
+
+            leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+            rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+
+            rightSlide.setDirection(DcMotor.Direction.REVERSE);
+            isDisabled = false;
+        }catch(NullPointerException e){
+            initAttempts++;
+            linearOpMode.telemetry.addData("Couldn't find delivery.       Attempt: ", initAttempts);
+            isDisabled = true;
+        }
     }
 
     public void setSlidesTargetPosition(int clicks){

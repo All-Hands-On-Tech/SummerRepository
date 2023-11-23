@@ -19,37 +19,76 @@ public class DrivetrainFunctions {
     private LinearOpMode linearOpMode;
     private double CLICKS_PER_METER = 2492.788;
 
-    public DrivetrainFunctions(LinearOpMode l, boolean useIMU)
+    public boolean isDisabled = false;
+
+    private double initAttempts = 0;
+
+    public DrivetrainFunctions(LinearOpMode l)
     {
         linearOpMode = l;
         Initialize();
-        if(useIMU)
+        try {
             InitIMU(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
+        }catch(NullPointerException e){
+            linearOpMode.telemetry.addLine("IMU not found");
+        }
     }
 
 
     private void Initialize(){
-        leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftFrontAndRightEncoder");
-        leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
-        rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
-        rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
+        try {
+            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftFrontAndRightEncoder");
+            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
+            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
+            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
 
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-        rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+            leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        }catch(NullPointerException e){
+            initAttempts++;
+            linearOpMode.telemetry.addData("Couldn't find motors.       Attempt: ", initAttempts);
+            isDisabled = true;
+        }
+    }
+
+    public void Reinitialize(){
+        try {
+            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftFrontAndRightEncoder");
+            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
+            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
+            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
+
+            leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+            isDisabled = false;
+        }catch(NullPointerException e){
+            initAttempts++;
+            linearOpMode.telemetry.addData("Couldn't find motors.       Attempt: ", initAttempts);
+            isDisabled = true;
+        }
     }
 
     private void InitIMU(RevHubOrientationOnRobot.LogoFacingDirection logoOrientation, RevHubOrientationOnRobot.UsbFacingDirection usbOrientation){
+        if(!isDisabled)
+            return;
+
         imu = linearOpMode.hardwareMap.get(IMU.class, "imu");
 
         IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
                 logoOrientation,
                 usbOrientation));
         imu.initialize(parameters);
+
     }
 
     public void Move(double y, double x, double rx, double speedScalar){
+        if(isDisabled)
+            return;
+
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         leftFrontDrive.setPower(((y + x + rx) / denominator) * speedScalar);
         leftBackDrive.setPower(((y - x + rx) / denominator) * speedScalar);
@@ -58,6 +97,9 @@ public class DrivetrainFunctions {
     }
 
     public void MoveFieldOriented (double y, double x, double rx, double speedScalar){
+        if(isDisabled)
+            return;
+
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
@@ -66,17 +108,20 @@ public class DrivetrainFunctions {
         rotX = rotX * 1.1;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        leftFrontDrive.setPower ((rotY + rotX + rx) / denominator * speedScalar);
+        leftFrontDrive.setPower((rotY + rotX + rx) / denominator * speedScalar);
         leftBackDrive.setPower((rotY - rotX + rx) / denominator * speedScalar);
         rightFrontDrive.setPower((rotY - rotX - rx) / denominator * speedScalar);
         rightBackDrive.setPower((rotY + rotX - rx) / denominator * speedScalar);
     }
 
     public boolean areMotorsOn() {
-        return rightFrontDrive.getPower()!=0
-                || leftFrontDrive.getPower()!=0
-                || rightBackDrive.getPower()!=0
-                || leftBackDrive.getPower()!=0;
+        if(isDisabled)
+            return false;
+
+        return rightFrontDrive.getPower() != 0
+                || leftFrontDrive.getPower() != 0
+                || rightBackDrive.getPower() != 0
+                || leftBackDrive.getPower() != 0;
     }
 
 }

@@ -41,6 +41,7 @@ import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
+import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -98,6 +99,8 @@ public class CenterStageTeleOp extends RoboMom {
     private DeliveryFunctions deliveryFunctions;
     private IntakeFunctions intakeFunctions;
 
+    private DrivetrainFunctions drivetrainFunctions;
+
     private DeliveryState deliveryState = DeliveryState.DELIVERY_START;
 
     private final int LIFT_HIGH = 500;
@@ -123,6 +126,10 @@ public class CenterStageTeleOp extends RoboMom {
 
      IMU imu;
 
+     private static final double HARDWARECHECK_DELAY = 1;
+
+    private ElapsedTime hardwareCheckTimer = new ElapsedTime();
+
     @Override
     public void runOpMode() {
         super.runOpMode();
@@ -132,6 +139,7 @@ public class CenterStageTeleOp extends RoboMom {
         aprilTagsFunctions = new AprilTagsFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
+        drivetrainFunctions = new DrivetrainFunctions(this);
 
         // Retrieve the IMU from the hardware map
         imu = hardwareMap.get(IMU.class, "imu");
@@ -161,6 +169,16 @@ public class CenterStageTeleOp extends RoboMom {
         deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
 
         while (opModeIsActive()) {
+
+            if(intakeFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+                intakeFunctions.Reinitialize();
+            if(deliveryFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+                deliveryFunctions.Reinitialize();
+            if(drivetrainFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+                drivetrainFunctions.Reinitialize();
+
+            if(hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
+                hardwareCheckTimer.reset();
 
             inputVel(new Vector2d(0, 0));
             /**GAMEPAD 1**/

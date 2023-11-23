@@ -11,6 +11,10 @@ public class IntakeFunctions {
     private LinearOpMode linearOpMode;
     private double CLICKS_PER_METER = 2492.788;
 
+    public boolean isDisabled = false;
+
+    private double initAttempts = 0;
+
     public IntakeFunctions(LinearOpMode l)
     {
         linearOpMode = l;
@@ -19,19 +23,49 @@ public class IntakeFunctions {
 
 
     private void Initialize(){
-        intakeMotor  = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
-        intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        try {
+            intakeMotor = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
+            intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }catch(NullPointerException e){
+            initAttempts++;
+            linearOpMode.telemetry.addData("Couldn't find intake.       Attempt: ", initAttempts);
+            isDisabled = true;
+        }
+    }
+
+    public void Reinitialize(){
+        try {
+            intakeMotor = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
+            intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            isDisabled = false;
+        }catch(NullPointerException e){
+            initAttempts++;
+            linearOpMode.telemetry.addData("Couldn't find intake.       Attempt: ", initAttempts);
+            isDisabled = true;
+        }
     }
 
     public void RunIntakeMotor(float power){
+        if(isDisabled)
+            return;
+
         intakeMotor.setPower(power);
     }
 
     public void StopIntakeMotor(){
+        if(isDisabled)
+            return;
+
         intakeMotor.setPower(0);
     }
 
-    public void OutakeFromIntake(float power){ intakeMotor.setPower(power);}
+    public void OutakeFromIntake(float power){
+        if(isDisabled)
+            return;
+
+        intakeMotor.setPower(power);
+    }
 
 }
