@@ -52,13 +52,13 @@ public class DeliveryFunctions {
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
-        rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
-        wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-        holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
-        holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
-        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
+            rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
+            wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
+            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
+            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -89,11 +89,6 @@ public class DeliveryFunctions {
 
     public void Reinitialize(){
         try {
-            leftSlide = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
-            rightSlide = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
-            wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
             rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
