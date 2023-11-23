@@ -12,8 +12,12 @@ public class DeliveryFunctions {
     private DcMotor rightSlide = null;
 
     private Servo wrist = null;
+    private Servo holder1 = null;
+    private Servo holder2 = null;
     private LinearOpMode linearOpMode;
     private double CLICKS_PER_METER = 2492.788;
+    private double HOLDER_OPEN = 0;
+    private double HOLDER_CLOSE = 1;
     private final double servoOut = 0.75;
     private final double servoIn = 0.08;
 
@@ -48,6 +52,13 @@ public class DeliveryFunctions {
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
+        rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
+        wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
+        holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+        holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
+        leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
             leftSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             rightSlide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -68,7 +79,6 @@ public class DeliveryFunctions {
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            //        leftSlide.setDirection(DcMotor.Direction.REVERSE);
             rightSlide.setDirection(DcMotor.Direction.REVERSE);
         }catch(NullPointerException e){
             initAttempts++;
@@ -82,6 +92,13 @@ public class DeliveryFunctions {
             leftSlide = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
             rightSlide = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
+            leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
+            rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
+            wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
+            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -176,5 +193,23 @@ public class DeliveryFunctions {
         linearOpMode.telemetry.addData("wrist pos: ", servoPosition);
         linearOpMode.telemetry.update();
 
+    }
+
+    public void OpenHolderServoByIndex(int i){
+        if(i == 0){
+            holder1.setPosition(HOLDER_OPEN);
+        }
+        if(i == 1){
+            holder1.setPosition(HOLDER_OPEN);
+        }
+    }
+
+    public void CloseHolderServoByIndex(int i){
+        if(i == 0){
+            holder1.setPosition(HOLDER_CLOSE);
+        }
+        if(i == 1){
+            holder1.setPosition(HOLDER_CLOSE);
+        }
     }
 }
