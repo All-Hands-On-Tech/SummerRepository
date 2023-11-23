@@ -219,6 +219,7 @@ public class CenterStageTeleOp extends RoboMom {
 //                    double y = 0.7;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
                     inputVel(new Vector2d(x,y));
+//                    driveFunctions.move(x,y,bearing);
                     rotateVel = bearing;
                 } else {
                     controlsRelinquished = false;
