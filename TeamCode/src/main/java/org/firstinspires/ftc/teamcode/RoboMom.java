@@ -233,6 +233,7 @@ public abstract class RoboMom extends LinearOpMode {
     public RevBlinkinLedDriver.BlinkinPattern setLEDColor (String color) {
         switch (color) {
             case "BLACK":
+            case "no color":
                 return RevBlinkinLedDriver.BlinkinPattern.BLACK;
             case "WHITE":
                 return RevBlinkinLedDriver.BlinkinPattern.WHITE;
@@ -242,10 +243,8 @@ public abstract class RoboMom extends LinearOpMode {
                 return RevBlinkinLedDriver.BlinkinPattern.GREEN;
             case "PURPLE":
                 return RevBlinkinLedDriver.BlinkinPattern.VIOLET;
-            case "RAINBOW":
-                return RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
             default:
-                return RevBlinkinLedDriver.BlinkinPattern.BLACK;
+                return RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         }
     }
 
