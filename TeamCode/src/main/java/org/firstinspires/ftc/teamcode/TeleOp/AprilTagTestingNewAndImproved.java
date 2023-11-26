@@ -110,9 +110,9 @@ public class AprilTagTestingNewAndImproved extends RoboMom {
                 }
 
             // runs if robot is not currently following a trajectory
-            //ab is the tag on the left
-            //ba is the tag in the center
-            //cx is the tag on the right
+            //b is the tag on the left
+            //a is the tag in the center
+            //x is the tag on the right
 
             if (gamepad1.b) {
                 if (!drive.isBusy()) {

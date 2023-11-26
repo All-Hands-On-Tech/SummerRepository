@@ -29,6 +29,7 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -210,6 +211,15 @@ public class CenterStageTeleOp extends RoboMom {
                     isAutoDrivingToAprilTag = true;
                 }
                  */
+            }
+
+            if (aprilTagsFunctions.numberOfDetections()>1) {
+                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
+                telemetry.addLine(String.format("XYH %3.1f %3.1f %3.1f  (in, in, deg)",
+                        aprilTagLocation.getX(),
+                        aprilTagLocation.getY(),
+                        Math.toDegrees(aprilTagLocation.getHeading())));
+
             }
 
 
