@@ -88,17 +88,20 @@ public class DrivetrainFunctions {
     public void Move(float y, float x, float rx, double speedScalar){
         if(isDisabled)
             return;
+        x = -x;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        leftFrontDrive.setPower(((y + x + rx) / denominator) * speedScalar);
-        leftBackDrive.setPower(((y - x + rx) / denominator) * speedScalar);
-        rightFrontDrive.setPower(((y - x - rx) / denominator) * speedScalar);
-        rightBackDrive.setPower(((y + x - rx) / denominator) * speedScalar);
+        leftFrontDrive.setPower(((x + y + rx) / denominator) * speedScalar);
+        leftBackDrive.setPower(((x - y + rx) / denominator) * speedScalar);
+        rightFrontDrive.setPower(((x - y - rx) / denominator) * speedScalar);
+        rightBackDrive.setPower(((x + y - rx) / denominator) * speedScalar);
     }
 
     public void MoveFieldOriented (float y, float x, float rx, double speedScalar){
         if(isDisabled)
             return;
+
+        x = -x;
 
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
@@ -108,10 +111,10 @@ public class DrivetrainFunctions {
         rotX = rotX * 1.1;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        leftFrontDrive.setPower((rotY + rotX + rx) / denominator * speedScalar);
-        leftBackDrive.setPower((rotY - rotX + rx) / denominator * speedScalar);
-        rightFrontDrive.setPower((rotY - rotX - rx) / denominator * speedScalar);
-        rightBackDrive.setPower((rotY + rotX - rx) / denominator * speedScalar);
+        leftFrontDrive.setPower((rotX + rotY + rx) / denominator * speedScalar);
+        leftBackDrive.setPower((rotX - rotY + rx) / denominator * speedScalar);
+        rightFrontDrive.setPower((rotX - rotY - rx) / denominator * speedScalar);
+        rightBackDrive.setPower((rotX + rotY - rx) / denominator * speedScalar);
     }
 
     public void Stop(){

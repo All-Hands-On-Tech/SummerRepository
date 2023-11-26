@@ -88,7 +88,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final double DUMP_TIME = 1;
 
-    private final int LIFT_MAX = 1333;
+    private final int LIFT_MAX = 1500;
     private final int LIFT_MIN = 0;
 
     private int leftMotorPosition;
@@ -315,11 +315,11 @@ public class CenterStageTeleOp extends RoboMom {
                 }
 
                 //if position is greater, allow downwards manual control
-                if((leftMotorPosition > LIFT_MAX || rightMotorPosition > LIFT_MAX) && gamepad2.left_stick_y <= 0){
+                if((leftMotorPosition > LIFT_MAX || rightMotorPosition > LIFT_MAX) && gamepad2.left_stick_y >= 0){
                     targetPosition -= gamepad2.left_stick_y * 5;
                 }
                 //if position is less, allow upwards manual control
-                if((leftMotorPosition < LIFT_MIN || rightMotorPosition < LIFT_MIN) && gamepad2.left_stick_y >= 0){
+                if((leftMotorPosition < LIFT_MIN || rightMotorPosition < LIFT_MIN) && gamepad2.left_stick_y <= 0){
                     targetPosition -= gamepad2.left_stick_y * 5;
                 }
 
