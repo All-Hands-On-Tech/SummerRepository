@@ -147,6 +147,10 @@ public class DeliveryFunctions {
     public DcMotor.RunMode getRunMode(){
         return leftSlide.getMode();
     }
+    public void setRunMode(DcMotor.RunMode mode){
+        leftSlide.setMode(mode);
+        rightSlide.setMode(mode);
+    }
 
     public double getWristPosition(){
         return wrist.getPosition();

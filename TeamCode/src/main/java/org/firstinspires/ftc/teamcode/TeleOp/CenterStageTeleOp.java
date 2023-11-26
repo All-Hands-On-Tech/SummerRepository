@@ -97,6 +97,7 @@ public class CenterStageTeleOp extends RoboMom {
     private int targetPosition;
 
     private boolean dumped = false;
+    private boolean isRunToPosition = true;
 
     ElapsedTime deliveryTimer = new ElapsedTime();
     static DcMotor[] motors;
@@ -247,9 +248,15 @@ public class CenterStageTeleOp extends RoboMom {
 
             switch (deliveryState){
                 case DELIVERY_START:
+                    if(isRunToPosition){
+                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+                        isRunToPosition = false;
+                    }
                     if(gamepad2.a){
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = LIFT_HIGH;
+                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+                        isRunToPosition = true;
                     }
                     break;
 
@@ -293,38 +300,19 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
             }
 
-            if(Math.abs(gamepad2.left_stick_y) >= DEADZONE){
+            telemetry.addData("Delivery State: ", deliveryState);
+
+            if(Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE){
                 deliveryState = DeliveryState.DELIVERY_START;
 
                 telemetry.addLine("manual control");
-                //targetPosition += gamepad2.left_stick_y;
-//                deliveryFunctions.setSlidesPower(1);
 
-                //if position within max and min, allow manual control
-                if
-                (leftMotorPosition <= LIFT_MAX
-                    &&
-                rightMotorPosition <= LIFT_MAX
-                    &&
-                leftMotorPosition > LIFT_MIN
-                    &&
-                rightMotorPosition > LIFT_MIN)
-                {
-                    targetPosition -= gamepad2.left_stick_y * 5;
-                    telemetry.addLine("within");
-                }
-
-                //if position is greater, allow downwards manual control
-                if((leftMotorPosition > LIFT_MAX || rightMotorPosition > LIFT_MAX) && gamepad2.left_stick_y >= 0){
-                    targetPosition -= gamepad2.left_stick_y * 5;
-                }
-                //if position is less, allow upwards manual control
-                if((leftMotorPosition < LIFT_MIN || rightMotorPosition < LIFT_MIN) && gamepad2.left_stick_y <= 0){
-                    targetPosition -= gamepad2.left_stick_y * 5;
-                }
+                targetPosition -= gamepad2.right_stick_y * 5;
+                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
 
             }
 
+            targetPosition = Math.max(LIFT_MIN, Math.min(LIFT_MAX, targetPosition));
             deliveryFunctions.setSlidesTargetPosition(targetPosition);
 
             deliveryFunctions.WristMovementByLiftPosition();
