@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 @Disabled
 public class DrivetrainFunctions {
@@ -21,7 +22,11 @@ public class DrivetrainFunctions {
 
     public boolean isDisabled = false;
 
+    public boolean odometryIsDisabled = false;
+
     private double initAttempts = 0;
+
+    private static SampleMecanumDrive drive;
 
     public DrivetrainFunctions(LinearOpMode l)
     {
@@ -42,6 +47,13 @@ public class DrivetrainFunctions {
             rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
             rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
 
+
+//            try{
+//                drive = new SampleMecanumDrive(linearOpMode.hardwareMap);
+//            }catch(NullPointerException e){
+//                odometryIsDisabled = true;
+//            }
+
             leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -59,6 +71,8 @@ public class DrivetrainFunctions {
             leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
             rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
             rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
+
+
 
             leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -105,8 +119,8 @@ public class DrivetrainFunctions {
 
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
 
         rotX = rotX * 1.1;
 
@@ -139,5 +153,7 @@ public class DrivetrainFunctions {
                 || rightBackDrive.getPower() != 0
                 || leftBackDrive.getPower() != 0;
     }
+
+
 
 }
