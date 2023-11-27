@@ -39,7 +39,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.Vision.AprilTagsFunctions;
+//import org.firstinspires.ftc.teamcode.Vision.AprilTagsFunctions;
 
 
 @TeleOp(name="Linear Slide Testing", group="A")

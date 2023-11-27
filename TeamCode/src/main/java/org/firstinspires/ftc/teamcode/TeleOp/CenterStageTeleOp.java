@@ -88,7 +88,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final double DUMP_TIME = 1;
 
-    private final int LIFT_MAX = 1500;
+    private final int LIFT_MAX = 1400;
     private final int LIFT_MIN = 0;
 
     private int leftMotorPosition;
@@ -248,15 +248,17 @@ public class CenterStageTeleOp extends RoboMom {
 
             switch (deliveryState){
                 case DELIVERY_START:
-                    if(isRunToPosition){
-                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-                        isRunToPosition = false;
-                    }
+//                    if(isRunToPosition){
+////                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                        isRunToPosition = false;
+//                        deliveryFunctions.setSlidesPower(0);
+//                    }
                     if(gamepad2.a){
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = LIFT_HIGH;
-                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-                        isRunToPosition = true;
+//                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                        isRunToPosition = true;
+//                        deliveryFunctions.setSlidesPower(0.75);
                     }
                     break;
 
@@ -307,8 +309,8 @@ public class CenterStageTeleOp extends RoboMom {
 
                 telemetry.addLine("manual control");
 
-                targetPosition -= gamepad2.right_stick_y * 5;
-                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
+                targetPosition -= gamepad2.right_stick_y * 10;
+//                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
 
             }
 
@@ -325,15 +327,15 @@ public class CenterStageTeleOp extends RoboMom {
             if(gamepad2.left_bumper){
                 intakeFunctions.RunIntakeMotor(0.75f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
-//                deliveryFunctions.OpenHolderServoByIndex(1);
+                deliveryFunctions.OpenHolderServoByIndex(1);
             } else if(gamepad2.left_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
-//                deliveryFunctions.OpenHolderServoByIndex(1);
+                deliveryFunctions.OpenHolderServoByIndex(1);
             }else{
                 intakeFunctions.StopIntakeMotor();
 //                deliveryFunctions.CloseHolderServoByIndex(0);
-//                deliveryFunctions.CloseHolderServoByIndex(1);
+                deliveryFunctions.CloseHolderServoByIndex(1);
             }
 
         }
