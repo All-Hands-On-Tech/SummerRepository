@@ -27,7 +27,6 @@ public class DroneLauncherFunctions {
     {
         linearOpMode = l;
         Initialize();
-
     }
 
 
