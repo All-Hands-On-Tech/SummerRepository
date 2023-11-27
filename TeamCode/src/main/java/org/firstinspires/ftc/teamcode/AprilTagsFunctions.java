@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
@@ -57,6 +58,14 @@ public class AprilTagsFunctions {
         setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
     }
 
+    private void updateDetections() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+    }
+    public int numberOfDetections() {
+        updateDetections();
+        return currentDetections.size();
+    }
+
 
     private void setManualExposure(int exposureMS, int gain) {
         // Wait for the camera to be open, then use the controls
@@ -93,7 +102,7 @@ public class AprilTagsFunctions {
     {
         boolean targetFound = false;
         // Step through the list of detected tags and look for a matching tag
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        updateDetections();
         for (AprilTagDetection detection : currentDetections) {
             // Look to see if we have size info on this tag.
             if (detection.metadata != null) {
@@ -116,6 +125,106 @@ public class AprilTagsFunctions {
         return targetFound;
     }
 
+    public Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {
+        double tagX = 0;
+        double tagY = 0;
+        double tagAngle = 0;
+
+        //add stuff here based on tag number
+        //Needs to be checked
+        switch (aprilTag.id) {
+            case 1:
+                tagX = -41.40;
+                tagY = 62.01;
+                tagAngle = -90;
+                break;
+            case 2:
+                tagX = -35.40;
+                tagY = 62.01;
+                tagAngle = -90;
+                break;
+            case 3:
+                tagX = -29.40;
+                tagY = 62.01;
+                tagAngle = -90;
+                break;
+            case 4:
+                tagX = 29.48;
+                tagY = 62.01;
+                tagAngle = -90;
+                break;
+            case 5:
+                tagX = 35.48;
+                tagY = 62.01;
+                tagAngle = -90;
+                break;
+            case 6:
+                tagX = 41.48;
+                tagY = 62.01;
+                tagAngle = -90;
+                break;
+            case 7:
+                tagX = 40.93;
+                tagY = -70.58;
+                tagAngle = -90;
+                break;
+            case 8:
+                tagX = 35.43;
+                tagY = -70.58;
+                tagAngle = -90;
+                break;
+            case 9:
+                tagX = -35.51;
+                tagY = -70.58;
+                tagAngle = -90;
+            case 10:
+                tagX = -41.01;
+                tagY = -70.58;
+                tagAngle = -90;
+                break;
+        }
+
+        double range = aprilTag.ftcPose.range;
+        double yaw = -Math.toRadians(aprilTag.ftcPose.yaw);
+        double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
+
+        //add stuff here based on camera position relative to center of robot
+        double x1 = 2;
+        double y1 = 7.5;
+        tagX-=x1*Math.cos(yaw)-y1*Math.sin(yaw);
+        tagY-=x1*Math.sin(yaw)+y1*Math.cos(yaw);
+
+        double x = tagX + range * Math.sin(yaw + bearing);
+        double y = tagY - range * Math.cos(yaw + bearing);
+        double angle = Math.toDegrees(yaw) + 90;
+
+        return new Pose2d(x, y, Math.toRadians(angle));
+    }
+
+    public Pose2d AverageAbsolutePositionFromAprilTags() {
+        updateDetections();
+        double numOfDetections = numberOfDetections();
+        double AprilTagX = 0;
+        double AprilTagY = 0;
+        double AprilTagAngle = 0;
+
+        if (numOfDetections > 1) {
+            for (AprilTagDetection detection : currentDetections) {
+                Pose2d location = absolutePositionFromAprilTag(detection);
+                AprilTagX += location.getX();
+                AprilTagY += location.getY();
+                AprilTagAngle += location.getHeading();
+            }
+
+            AprilTagX /= numOfDetections;
+            AprilTagY /= numOfDetections;
+            AprilTagAngle /= numOfDetections;
+
+            return new Pose2d(AprilTagX, AprilTagY, AprilTagAngle);
+        } else {
+            return new Pose2d(0/0, 0/0, 0/0);
+        }
+    }
 
 }
 

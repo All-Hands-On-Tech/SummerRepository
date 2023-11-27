@@ -27,13 +27,15 @@ public class PixelColorDetection extends RoboMom {
     RevBlinkinLedDriver.BlinkinPattern pattern;
 
     double yellowBack = 80;
-    double yellowFront = 110;
-    double greenBack = 110;
-    double greenFront = 140;
-    double whiteBack = 150;
-    double whiteFront = 180;
-    double purpleBack = 200;
+    double yellowFront = 141;
+    double greenBack = 150;
+    double greenFront = 170;
+    double whiteBack = 180;
+    double whiteFront = 195;
+    double purpleBack = 196;
     double purpleFront = 220;
+
+    double sensorDistance = 6.5;
 
     @Override
     public void runOpMode() {
@@ -43,18 +45,20 @@ public class PixelColorDetection extends RoboMom {
         frontColorSensor.setGain(10);
 
         blinkinLedDriver = hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
-        pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
+
 
         waitForStart();
 
         while (opModeIsActive()) {
+            pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
+
             NormalizedRGBA backColors = backColorSensor.getNormalizedColors();
             Color.colorToHSV(backColors.toColor(), backHSVValues);
 
             NormalizedRGBA frontColors = frontColorSensor.getNormalizedColors();
             Color.colorToHSV(frontColors.toColor(), frontHSVValues);
 
-            if (((DistanceSensor) backColorSensor).getDistance(DistanceUnit.CM) < 3) {
+            if (((DistanceSensor) backColorSensor).getDistance(DistanceUnit.CM) < sensorDistance) {
                 useFrontSensor = false;
                 if (backHSVValues[0] > yellowBack && backHSVValues[0] < yellowFront) {
                     backColor = "YELLOW";
@@ -71,7 +75,7 @@ public class PixelColorDetection extends RoboMom {
                 backColor = "no pixel";
             }
 
-            if (((DistanceSensor) frontColorSensor).getDistance(DistanceUnit.CM) < 3) {
+            if (((DistanceSensor) frontColorSensor).getDistance(DistanceUnit.CM) < sensorDistance) {
                 useFrontSensor = true;
                 if (frontHSVValues[0] > yellowBack && frontHSVValues[0] < yellowFront) {
                     frontColor = "YELLOW";
@@ -82,15 +86,17 @@ public class PixelColorDetection extends RoboMom {
                 } else if (frontHSVValues[0] > purpleBack && frontHSVValues[0] < purpleFront) {
                     frontColor = "PURPLE";
                 } else {
-                    backColor = "color not detected";
+                    frontColor = "color not detected";
                 }
             } else {
-                backColor = "no pixel";
+                frontColor = "no pixel";
             }
 
 
-            if (useFrontSensor) {setLEDColor(frontColor);}
-            else {setLEDColor(backColor);}
+            if (useFrontSensor) {pattern = setLEDColor(frontColor);}
+            else {pattern = setLEDColor(backColor);}
+
+            blinkinLedDriver.setPattern(pattern);
 
             telemetry.addData("Pattern: ", pattern.toString());
             telemetry.addLine("Back sensor");
@@ -116,6 +122,7 @@ public class PixelColorDetection extends RoboMom {
                     .addData("Saturation", "%.3f", frontHSVValues[1])
                     .addData("Value", "%.3f", frontHSVValues[2]);
             telemetry.addData("Distance (cm)", "%.3f", ((DistanceSensor) frontColorSensor).getDistance(DistanceUnit.CM));
+            telemetry.addLine(Boolean.toString(useFrontSensor));
             telemetry.update();
 
         }
