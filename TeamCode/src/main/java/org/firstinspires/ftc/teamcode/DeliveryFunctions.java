@@ -19,7 +19,8 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
     private final double servoOut = 0.22;
-    private final double servoIn = 0.16;
+    private final double servoIn = 0.17;
+    private final double servoDodge = 0.1625;
 
     private int targetPosition;
     private double currentPosition;
@@ -176,7 +177,11 @@ public class DeliveryFunctions {
             targetServoPosition = servoOut; //* (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
             wrist.setPosition(targetServoPosition);
         } else{
-            wrist.setPosition(servoIn);
+            if(currentPosition > 125){
+                wrist.setPosition(servoDodge);
+            }else{
+                wrist.setPosition(servoIn);
+            }
         }
         //.35
         //.08
