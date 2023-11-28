@@ -135,7 +135,7 @@ public class CenterStageTeleOp extends RoboMom {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
 
-        motors = new DcMotor[] {leftFrontDrive, leftBackDrive, rightBackDrive, rightFrontDrive};
+
 
         waitForStart();
 

@@ -3,10 +3,12 @@ package org.firstinspires.ftc.teamcode.Autonomous.Competition;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
+import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
@@ -24,7 +26,8 @@ public class BlueBackstage extends RoboMom {
 
     //logan was here
 
-    AutonomousTrajectories autoTraj = new AutonomousTrajectories();
+    AutonomousTrajectories autoTraj; //= new AutonomousTrajectories(this);
+
 
     IntakeFunctions intakeFuncts = new IntakeFunctions(this);
     double fx = VisionConstants.fx;
@@ -38,6 +41,8 @@ public class BlueBackstage extends RoboMom {
     int TIMEOUT = 5;
     OpenCvCamera webcam;
 
+    SampleMecanumDrive drive;
+
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
 
     Pose2d startPose = new Pose2d(-60, 14, Math.toRadians(0));
@@ -46,13 +51,15 @@ public class BlueBackstage extends RoboMom {
 
     @Override
     public void runOpMode() {
+        super.runOpMode();
+        autoTraj = new AutonomousTrajectories(this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
         webcam.setPipeline(circleDetectionPipeline);
 
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+        drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
@@ -94,12 +101,12 @@ public class BlueBackstage extends RoboMom {
         sleep(1000);
         circleDetectionPipeline.setState(CircleDetectionPipeline.DetectionState.DETECT);
 
-        spikePosition = spikePosition = MakeDetection(TIMEOUT);
+        spikePosition = MakeDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
                 telemetry.update();
-//                drive.followTrajectorySequence(left);
+                drive.followTrajectorySequence(left);
 
                 //CHOPPER PUSHBOT
                 drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush0);
@@ -113,7 +120,7 @@ public class BlueBackstage extends RoboMom {
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
-//                drive.followTrajectorySequence(center);
+                drive.followTrajectorySequence(center);
 
                 //CHOPPER PUSHBOT
                 drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush0);
@@ -126,7 +133,7 @@ public class BlueBackstage extends RoboMom {
             case "RIGHT":
                 telemetry.addLine("right");
                 telemetry.update();
-//                drive.followTrajectorySequence(right);
+                drive.followTrajectorySequence(right);
 
                 //CHOPPER PUSHBOT
                 drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush0);

@@ -62,7 +62,7 @@ public class AprilTagsFunctions {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();
     }
     public int numberOfDetections() {
-        updateDetections();
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         return currentDetections.size();
     }
 
@@ -98,11 +98,10 @@ public class AprilTagsFunctions {
         }
     }
 
-    public boolean DetectAprilTag(int desiredTag)
-    {
+    public boolean DetectAprilTag(int desiredTag) {
         boolean targetFound = false;
         // Step through the list of detected tags and look for a matching tag
-        updateDetections();
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         for (AprilTagDetection detection : currentDetections) {
             // Look to see if we have size info on this tag.
             if (detection.metadata != null) {
@@ -202,7 +201,7 @@ public class AprilTagsFunctions {
     }
 
     public Pose2d AverageAbsolutePositionFromAprilTags() {
-        updateDetections();
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
         double numOfDetections = numberOfDetections();
         double AprilTagX = 0;
         double AprilTagY = 0;

@@ -1,25 +1,49 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
 import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.hardwareMap;
+import static org.firstinspires.ftc.robotcore.external.BlocksOpModeCompanion.linearOpMode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Autonomous.Competition.BlueBackstage;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 
 public class AutonomousTrajectories {
 
-    public SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+    LinearOpMode linearOpMode;
+
+    SampleMecanumDrive drive;
+
+
+    public void AutonomousTrajectories(LinearOpMode l) {
+        linearOpMode = l;
+        drive = new SampleMecanumDrive(l.hardwareMap);
+        Initialize();
+    }
 
     private Pose2d RED_BACKSTAGE_START_POSE = new Pose2d(60, 14, Math.toRadians(180));
     private Pose2d RED_LANDING_ZONE_START_POSE = new Pose2d(60, -38, Math.toRadians(180));
     private Pose2d BLUE_BACKSTAGE_START_POSE = new Pose2d(-60, 14, Math.toRadians(0));
     private Pose2d BLUE_LANDING_ZONE_START_POSE = new Pose2d(-60, -38, Math.toRadians(0));
 
+    public TrajectorySequence BlueBackstageLeftTrajectory;
+    public TrajectorySequence BlueBackstageCenterTrajectory;
+    public TrajectorySequence BlueBackstageRightTrajectory;
+    public TrajectorySequence BlueLandingZoneRightTrajectory;
+    public TrajectorySequence BlueLandingZoneCenterTrajectory;
+    public TrajectorySequence BlueLandingZoneLeftTrajectory;
+    public TrajectorySequence RedBackstageLeftTrajectory;
+    public TrajectorySequence RedBackstageCenterTrajectory;
+    public TrajectorySequence RedBackstageRightTrajectory;
+    public TrajectorySequence RedLandingZoneLeftTrajectory;
+
+    private void Initialize(){
 
     //BLUE BACKSTAGE
-    public TrajectorySequence BlueBackstageLeftTrajectory = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+     BlueBackstageLeftTrajectory = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
             .splineTo(new Vector2d(-36, 23), Math.toRadians(0))
             .back(10)
             .waitSeconds(1)
@@ -27,7 +51,7 @@ public class AutonomousTrajectories {
             .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
             .build();
 
-    public TrajectorySequence BlueBackstageCenterTrajectory = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+    BlueBackstageCenterTrajectory = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
             .splineTo(new Vector2d(-30, 11), Math.toRadians(0))
             .back(10)
             .waitSeconds(1)
@@ -35,7 +59,7 @@ public class AutonomousTrajectories {
             .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
             .build();
 
-    public TrajectorySequence BlueBackstageRightTrajectory = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+    BlueBackstageRightTrajectory = drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
             .splineToLinearHeading(new Pose2d(-32, 10, Math.toRadians(-90)), Math.toRadians(-90))
             .waitSeconds(1)
             .setReversed(true)
@@ -43,8 +67,8 @@ public class AutonomousTrajectories {
             .build();
 
 
-//BLUE LANDING ZONE
-    public TrajectorySequence BlueLandingZoneRightTrajectory = drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
+    //BLUE LANDING ZONE
+    BlueLandingZoneRightTrajectory = drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
             .splineToConstantHeading(new Vector2d(-38, -47), Math.toRadians(0))
             .back(7)
             .strafeLeft(12.5)
@@ -52,7 +76,7 @@ public class AutonomousTrajectories {
             .lineToLinearHeading(new Pose2d(-8, 50, Math.toRadians(0)))
             .build();
 
-    public TrajectorySequence BlueLandingZoneCenterTrajectory = drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
+    BlueLandingZoneCenterTrajectory = drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
             .splineTo(new Vector2d(-31, -35), Math.toRadians(0))
             .back(5)
             .strafeRight(15)
@@ -60,7 +84,7 @@ public class AutonomousTrajectories {
             .lineToLinearHeading(new Pose2d(-10, 50, Math.toRadians(0)))
             .build();
 
-    public TrajectorySequence BlueLandingZoneLeftTrajectory = drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
+    BlueLandingZoneLeftTrajectory = drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
             .splineToLinearHeading(new Pose2d(-30, -34, Math.toRadians(90)), Math.toRadians(90))
             .back(5)
             .strafeRight(18)
@@ -68,17 +92,15 @@ public class AutonomousTrajectories {
             .build();
 
 
-
-
     //RED BACKSTAGE
-    public TrajectorySequence RedBackstageLeftTrajectory = drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
+    RedBackstageLeftTrajectory = drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
             .splineToLinearHeading(new Pose2d(29, 10, Math.toRadians(-90)), Math.toRadians(-90))
             .waitSeconds(1)
             .setReversed(true)
             .splineToLinearHeading(new Pose2d(55, 50, Math.toRadians(-90)), Math.toRadians(90))
             .build();
 
-    public TrajectorySequence RedBackstageCenterTrajectory = drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
+    RedBackstageCenterTrajectory = drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
             .splineTo(new Vector2d(30, 11), Math.toRadians(180))
             .back(10)
             .waitSeconds(1)
@@ -86,7 +108,7 @@ public class AutonomousTrajectories {
             .splineToLinearHeading(new Pose2d(55, 50, Math.toRadians(-90)), Math.toRadians(90))
             .build();
 
-    public TrajectorySequence RedBackstageRightTrajectory = drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
+    RedBackstageRightTrajectory = drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
             .splineTo(new Vector2d(36, 23), Math.toRadians(180))
             .back(10)
             .waitSeconds(1)
@@ -293,4 +315,6 @@ public class AutonomousTrajectories {
             .strafeRight(18)
             .lineToLinearHeading(new Pose2d(12, 50, Math.toRadians(90)))
             .build();
+
+}
 }

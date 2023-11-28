@@ -26,7 +26,7 @@ public class DrivetrainFunctions {
 
     private double initAttempts = 0;
 
-    private static SampleMecanumDrive drive;
+    public static SampleMecanumDrive drive;
 
     public DrivetrainFunctions(LinearOpMode l)
     {
