@@ -219,6 +219,8 @@ public class CenterStageTeleOp extends RoboMom {
                     isAutoDrivingToAprilTag = true;
                 }
                  */
+            }else{          //align to point (pose of aprilTag)
+
             }
 
             if (aprilTagsFunctions.numberOfDetections()>1) {
