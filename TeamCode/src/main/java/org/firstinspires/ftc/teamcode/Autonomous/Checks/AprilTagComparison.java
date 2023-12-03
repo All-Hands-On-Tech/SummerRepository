@@ -23,8 +23,8 @@ public class AprilTagComparison extends RoboMom {
 
     private ElapsedTime runtime = new ElapsedTime();
 
-    Pose2d startPose = new Pose2d(24, 120, Math.toRadians(90));
-    Pose2d targetPose = new Pose2d(36, 120, Math.toRadians(90));
+    Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
+    Pose2d targetPose = new Pose2d(36, 36, Math.toRadians(90));
 
     @Override
     public void runOpMode() {
@@ -69,10 +69,10 @@ public class AprilTagComparison extends RoboMom {
             Pose2d poseEstimateAprilTag = new Pose2d(AprilTagX, AprilTagY, AprilTagAngle);
             Pose2d poseEstimateRoadRunner = drive.getPoseEstimate();
 
-            if (1<runtime.milliseconds()) {
-                drive.setPoseEstimate(poseEstimateAprilTag);
-                runtime.reset();
-            }
+//            if (1<runtime.milliseconds()) {
+//                drive.setPoseEstimate(poseEstimateAprilTag);
+//                runtime.reset();
+//            }
 
             drive.update();
 
