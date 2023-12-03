@@ -24,7 +24,7 @@ public class AprilTagComparison extends RoboMom {
     private ElapsedTime runtime = new ElapsedTime();
 
     Pose2d startPose = new Pose2d(0, 0, Math.toRadians(90));
-    Pose2d targetPose = new Pose2d(36, 36, Math.toRadians(90));
+    Pose2d targetPose = new Pose2d(-48, 36, Math.toRadians(90));
 
     @Override
     public void runOpMode() {
@@ -75,6 +75,11 @@ public class AprilTagComparison extends RoboMom {
 //            }
 
             drive.update();
+
+            if (!drive.isBusy()) {
+                runtime.reset();
+                driveForTime("FORWARD", 0.3, 1);
+            }
 
             // Print pose to telemetry
             telemetry.addLine("RR   AT");
