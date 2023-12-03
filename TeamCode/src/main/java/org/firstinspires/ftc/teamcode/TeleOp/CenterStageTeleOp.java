@@ -206,7 +206,7 @@ public class CenterStageTeleOp extends RoboMom {
 //                    double x = 0.5;
 //                    double y = 0.7;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
-                    drivetrainFunctions.Move((float)y,(float)x,(float)bearing, speedScalar);
+                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
                 } else {
                     controlsRelinquished = false;
                 }
@@ -345,7 +345,7 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
             if(gamepad2.left_bumper){
-                intakeFunctions.RunIntakeMotor(0.9f);
+                intakeFunctions.OutakeFromIntake(0.9f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
             } else if(gamepad2.left_trigger >= 0.05) {
