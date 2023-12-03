@@ -23,15 +23,15 @@ public class IntakeFunctions {
 
 
     private void Initialize(){
-        try {
+//        try {
             intakeMotor = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-        }catch(NullPointerException e){
-            initAttempts++;
-            linearOpMode.telemetry.addData("Couldn't find intake.       Attempt: ", initAttempts);
-            isDisabled = true;
-        }
+//        }catch(NullPointerException e){
+//            initAttempts++;
+//            linearOpMode.telemetry.addData("Couldn't find intake.       Attempt: ", initAttempts);
+//            isDisabled = true;
+//        }
     }
 
     public void Reinitialize(){

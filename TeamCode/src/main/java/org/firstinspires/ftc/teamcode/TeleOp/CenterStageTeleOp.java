@@ -29,12 +29,14 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
 
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
+import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -80,6 +82,8 @@ public class CenterStageTeleOp extends RoboMom {
 
     private DrivetrainFunctions drivetrainFunctions;
 
+    private DroneLauncherFunctions droneLauncherFunctions;
+
     private DeliveryState deliveryState = DeliveryState.DELIVERY_START;
 
     private final int LIFT_HIGH = 500;
@@ -88,7 +92,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final double DUMP_TIME = 1;
 
-    private final int LIFT_MAX = 1333;
+    private final int LIFT_MAX = 1400;
     private final int LIFT_MIN = 0;
 
     private int leftMotorPosition;
@@ -97,6 +101,7 @@ public class CenterStageTeleOp extends RoboMom {
     private int targetPosition;
 
     private boolean dumped = false;
+    private boolean isRunToPosition = true;
 
     ElapsedTime deliveryTimer = new ElapsedTime();
     static DcMotor[] motors;
@@ -117,6 +122,7 @@ public class CenterStageTeleOp extends RoboMom {
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
+        droneLauncherFunctions = new DroneLauncherFunctions(this);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -129,7 +135,7 @@ public class CenterStageTeleOp extends RoboMom {
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
 
-        motors = new DcMotor[] {leftFrontDrive, leftBackDrive, rightBackDrive, rightFrontDrive};
+
 
         waitForStart();
 
@@ -144,6 +150,8 @@ public class CenterStageTeleOp extends RoboMom {
                 deliveryFunctions.Reinitialize();
             if(drivetrainFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 drivetrainFunctions.Reinitialize();
+            if(droneLauncherFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+                droneLauncherFunctions.Reinitialize();
 
             if(hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
@@ -158,6 +166,8 @@ public class CenterStageTeleOp extends RoboMom {
                 } else{
                     drivetrainFunctions.Stop();
                 }
+                if(gamepad1.b)
+                    droneLauncherFunctions.ReleaseDrone();
             }
 
 //            if(gamepad1.dpad_down){
@@ -196,7 +206,7 @@ public class CenterStageTeleOp extends RoboMom {
 //                    double x = 0.5;
 //                    double y = 0.7;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
-                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, speedScalar);
+                    drivetrainFunctions.Move((float)y,(float)x,(float)bearing, speedScalar);
                 } else {
                     controlsRelinquished = false;
                 }
@@ -209,6 +219,17 @@ public class CenterStageTeleOp extends RoboMom {
                     isAutoDrivingToAprilTag = true;
                 }
                  */
+            }else{          //align to point (pose of aprilTag)
+
+            }
+
+            if (aprilTagsFunctions.numberOfDetections()>1) {
+                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
+                telemetry.addLine(String.format("XYH %3.1f %3.1f %3.1f  (in, in, deg)",
+                        aprilTagLocation.getX(),
+                        aprilTagLocation.getY(),
+                        Math.toDegrees(aprilTagLocation.getHeading())));
+
             }
 
 
@@ -247,9 +268,17 @@ public class CenterStageTeleOp extends RoboMom {
 
             switch (deliveryState){
                 case DELIVERY_START:
+//                    if(isRunToPosition){
+////                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+//                        isRunToPosition = false;
+//                        deliveryFunctions.setSlidesPower(0);
+//                    }
                     if(gamepad2.a){
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = LIFT_HIGH;
+//                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
+//                        isRunToPosition = true;
+//                        deliveryFunctions.setSlidesPower(0.75);
                     }
                     break;
 
@@ -293,38 +322,19 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
             }
 
-            if(Math.abs(gamepad2.left_stick_y) >= DEADZONE){
+            telemetry.addData("Delivery State: ", deliveryState);
+
+            if(Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE){
                 deliveryState = DeliveryState.DELIVERY_START;
 
                 telemetry.addLine("manual control");
-                //targetPosition += gamepad2.left_stick_y;
-//                deliveryFunctions.setSlidesPower(1);
 
-                //if position within max and min, allow manual control
-                if
-                (leftMotorPosition <= LIFT_MAX
-                    &&
-                rightMotorPosition <= LIFT_MAX
-                    &&
-                leftMotorPosition > LIFT_MIN
-                    &&
-                rightMotorPosition > LIFT_MIN)
-                {
-                    targetPosition -= gamepad2.left_stick_y * 5;
-                    telemetry.addLine("within");
-                }
-
-                //if position is greater, allow downwards manual control
-                if((leftMotorPosition > LIFT_MAX || rightMotorPosition > LIFT_MAX) && gamepad2.left_stick_y <= 0){
-                    targetPosition -= gamepad2.left_stick_y * 5;
-                }
-                //if position is less, allow upwards manual control
-                if((leftMotorPosition < LIFT_MIN || rightMotorPosition < LIFT_MIN) && gamepad2.left_stick_y >= 0){
-                    targetPosition -= gamepad2.left_stick_y * 5;
-                }
+                targetPosition -= gamepad2.right_stick_y * 10;
+//                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
 
             }
 
+            targetPosition = Math.max(LIFT_MIN, Math.min(LIFT_MAX, targetPosition));
             deliveryFunctions.setSlidesTargetPosition(targetPosition);
 
             deliveryFunctions.WristMovementByLiftPosition();
@@ -337,16 +347,19 @@ public class CenterStageTeleOp extends RoboMom {
             if(gamepad2.left_bumper){
                 intakeFunctions.RunIntakeMotor(0.75f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
-//                deliveryFunctions.OpenHolderServoByIndex(1);
+
             } else if(gamepad2.left_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
-//                deliveryFunctions.OpenHolderServoByIndex(1);
+                deliveryFunctions.OpenHolderServoByIndex(1);
             }else{
                 intakeFunctions.StopIntakeMotor();
 //                deliveryFunctions.CloseHolderServoByIndex(0);
-//                deliveryFunctions.CloseHolderServoByIndex(1);
+                deliveryFunctions.CloseHolderServoByIndex(1);
             }
+
+            if(gamepad2.right_bumper)
+                deliveryFunctions.OpenHolderServoByIndex(1);
 
         }
         //when opmode is NOT active
@@ -355,32 +368,6 @@ public class CenterStageTeleOp extends RoboMom {
     }
 
 
-
-    public static double[] getErrorAdjustmentVals() {
-        double poseEstimateHeading = drive.getPoseEstimate().getHeading();
-
-
-
-        double[] vals = new double[]{0.0, 0.0, 0.0, 0.0};
-        for(DcMotor motor : motors){
-//            motor
-        }
-
-
-        return vals;
-    }
-
-    private static double getClosestMultipleOf90Degrees(double val){
-        if(val >= -45 && val < 45) {
-            return 0.0;
-        }else if(val >= 45 && val < 135){
-            return 90.0;
-        }else if(val >= 135 && val < 225){
-            return 180.0;
-        }//else
-        return 0.0;
-
-    }
 
 
 

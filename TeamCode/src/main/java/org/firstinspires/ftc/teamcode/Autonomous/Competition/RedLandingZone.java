@@ -21,7 +21,7 @@ public class RedLandingZone extends RoboMom {
 
     //logan was here
 
-    AutonomousTrajectories autoTraj = new AutonomousTrajectories();
+    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
 
     IntakeFunctions intakeFuncts = new IntakeFunctions(this);
     double fx = VisionConstants.fx;

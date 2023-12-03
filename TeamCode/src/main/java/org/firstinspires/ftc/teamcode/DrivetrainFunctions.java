@@ -7,6 +7,8 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+
 
 @Disabled
 public class DrivetrainFunctions {
@@ -21,7 +23,11 @@ public class DrivetrainFunctions {
 
     public boolean isDisabled = false;
 
+    public boolean odometryIsDisabled = false;
+
     private double initAttempts = 0;
+
+    public static SampleMecanumDrive drive;
 
     public DrivetrainFunctions(LinearOpMode l)
     {
@@ -42,6 +48,13 @@ public class DrivetrainFunctions {
             rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
             rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
 
+
+//            try{
+//                drive = new SampleMecanumDrive(linearOpMode.hardwareMap);
+//            }catch(NullPointerException e){
+//                odometryIsDisabled = true;
+//            }
+
             leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
@@ -59,6 +72,8 @@ public class DrivetrainFunctions {
             leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
             rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
             rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
+
+
 
             leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
@@ -88,30 +103,33 @@ public class DrivetrainFunctions {
     public void Move(float y, float x, float rx, double speedScalar){
         if(isDisabled)
             return;
+        x = -x;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        leftFrontDrive.setPower(((y + x + rx) / denominator) * speedScalar);
-        leftBackDrive.setPower(((y - x + rx) / denominator) * speedScalar);
-        rightFrontDrive.setPower(((y - x - rx) / denominator) * speedScalar);
-        rightBackDrive.setPower(((y + x - rx) / denominator) * speedScalar);
+        leftFrontDrive.setPower(((x + y + rx) / denominator) * speedScalar);
+        leftBackDrive.setPower(((x - y + rx) / denominator) * speedScalar);
+        rightFrontDrive.setPower(((x - y - rx) / denominator) * speedScalar);
+        rightBackDrive.setPower(((x + y - rx) / denominator) * speedScalar);
     }
 
     public void MoveFieldOriented (float y, float x, float rx, double speedScalar){
         if(isDisabled)
             return;
 
+        x = -x;
+
         double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
         double rotY = x * Math.sin(-botHeading) + y * Math.cos(-botHeading);
+        double rotX = x * Math.cos(-botHeading) - y * Math.sin(-botHeading);
 
         rotX = rotX * 1.1;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        leftFrontDrive.setPower((rotY + rotX + rx) / denominator * speedScalar);
-        leftBackDrive.setPower((rotY - rotX + rx) / denominator * speedScalar);
-        rightFrontDrive.setPower((rotY - rotX - rx) / denominator * speedScalar);
-        rightBackDrive.setPower((rotY + rotX - rx) / denominator * speedScalar);
+        leftFrontDrive.setPower((rotX + rotY + rx) / denominator * speedScalar);
+        leftBackDrive.setPower((rotX - rotY + rx) / denominator * speedScalar);
+        rightFrontDrive.setPower((rotX - rotY - rx) / denominator * speedScalar);
+        rightBackDrive.setPower((rotX + rotY - rx) / denominator * speedScalar);
     }
 
     public void Stop(){
@@ -136,5 +154,8 @@ public class DrivetrainFunctions {
                 || rightBackDrive.getPower() != 0
                 || leftBackDrive.getPower() != 0;
     }
+
+
+
 
 }

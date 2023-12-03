@@ -193,17 +193,157 @@ public class MeepMeepTesting {
                 );
 
 
-        Image img = null;
-        try { img = ImageIO.read(new File("MeepMeepTesting/src/main/java/com/example/meepmeeptesting/centerstageField.png")); }
-        catch (IOException e) {}
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)//img)
+//        //CHOPPER TRAJECTORIES
+//
+//        //BLUE
+//
+//        //BLUE BACKSTAGE
+//
+//        //blue backstage left
+//        RoadRunnerBotEntity BlueBackstageLeftTrajectoryChopper0 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+//                                .splineToLinearHeading(new Pose2d(-30, 33, Math.toRadians(90)), Math.toRadians(-20))
+//                                .build()
+//                );
+//        RoadRunnerBotEntity BlueBackstageLeftTrajectoryChopper1 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(-30, 33, Math.toRadians(90)))
+//                                .lineToLinearHeading(new Pose2d(-56, 33, Math.toRadians(90)))
+//                                .waitSeconds(1)
+//                                .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(90)), Math.toRadians(90))
+//                                .build()
+//                );
+//
+//
+//        //Blue backstage center
+//        RoadRunnerBotEntity BlueBackstageCenterTrajectoryChopperPush0 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+//                                .splineToLinearHeading(new Pose2d(-13, 11, Math.toRadians(0)), Math.toRadians(-90))
+//                                .build()
+//                );
+//
+//        RoadRunnerBotEntity BlueBackstageCenterTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(-13, 11, Math.toRadians(0)))
+//                                .back(20)
+//                                .waitSeconds(1)
+//                                .setReversed(true)
+//                                .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(-90)), Math.toRadians(90))
+//                                .build()
+//                );
+//
+//
+//        //Blue backstage right
+//
+//        RoadRunnerBotEntity BlueBackstageRightTrajectoryChopperPush0 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+//                                .splineToLinearHeading(new Pose2d(-35, 10, Math.toRadians(90)), Math.toRadians(-90))
+//                                .build()
+//                );
+//
+//        RoadRunnerBotEntity BlueBackstageRightTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(-35, 10, Math.toRadians(90)))
+//                                .forward(20)
+//                                .splineToLinearHeading(new Pose2d(-55, 50, Math.toRadians(90)), Math.toRadians(90))
+//                                .build()
+//                );
+//
+//        //BLUE LANDING ZONE
+//
+//
+//        //Blue landing zone right
+//        RoadRunnerBotEntity BlueLandingZoneRightTrajectoryChopperPush0 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
+//                                .splineToLinearHeading(new Pose2d(-35, -57, Math.toRadians(-90)), Math.toRadians(0))
+//                                .build()
+//                );
+//
+//        RoadRunnerBotEntity BlueLandingZoneRightTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(-35, -57, Math.toRadians(-90)))
+//                                .lineToLinearHeading(new Pose2d(-13, -57, Math.toRadians(0)))
+//                                .lineToLinearHeading(new Pose2d(-10, 50, Math.toRadians(0)))
+//                                .build()
+//                );
+//
+//
+//        //Blue landing zone center
+//
+//        RoadRunnerBotEntity BlueLandingZoneCenterTrajectoryChopperPush0 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
+//                                .splineToLinearHeading(new Pose2d(-13, -35, Math.toRadians(0)), Math.toRadians(90))
+//                                .build()
+//                );
+//
+//        RoadRunnerBotEntity BlueLandingZoneCenterTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(-13, -35, Math.toRadians(0)))
+//                                .forward(3)
+//                                .lineToLinearHeading(new Pose2d(-10, 50, Math.toRadians(0)))
+//                                .build()
+//                );
+//
+//
+//        //Red landing zone left
+//        RoadRunnerBotEntity RedLandingZoneLeftTrajectoryChopperPush0 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(RED_LANDING_ZONE_START_POSE)
+//                                .splineToLinearHeading(new Pose2d(35, -34, Math.toRadians(-90)), Math.toRadians(90))
+//                                .build()
+//                );
+//
+//        RoadRunnerBotEntity RedLandingZoneLeftTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
+//                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+//                .followTrajectorySequence(drive ->
+//                        drive.trajectorySequenceBuilder(new Pose2d(35, -34, Math.toRadians(-90)))
+//                                .forward(15)
+//                                .strafeRight(21)
+//                                .lineToLinearHeading(new Pose2d(12, 50, Math.toRadians(-90)))
+//                                .build()
+//                );
+
+
+        Image img = null;
+        MeepMeep.Background background = null;
+        boolean imgExists = false;
+        try { img = ImageIO.read(new File("MeepMeepTesting/src/main/java/com/example/meepmeeptesting/centerstageField.png")); imgExists = true;}
+        catch (IOException e) {background = MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK; imgExists = false;}
+
+        if(imgExists) {
+            meepMeep.setBackground(img)
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                .addEntity(RedLandingZoneLeftTrajectoryChopperPush0)
-                .addEntity(RedLandingZoneLeftTrajectoryChopperPush1)
-                .start();;
+                    .addEntity(RedLandingZoneLeftTrajectoryChopperPush0)
+                    .addEntity(RedLandingZoneLeftTrajectoryChopperPush1)
+                    .start();
+        }else {
+            meepMeep.setBackground(background)
+//                .addEntity(left)
+//                .addEntity(mid)
+//                .addEntity(right)
+                    .addEntity(RedLandingZoneLeftTrajectoryChopperPush0)
+                    .addEntity(RedLandingZoneLeftTrajectoryChopperPush1)
+                    .start();
+        }
 
                 //official background
 //        meepMeep.setBackground(MeepMeep.Background.FIELD_POWERPLAY_KAI_DARK)

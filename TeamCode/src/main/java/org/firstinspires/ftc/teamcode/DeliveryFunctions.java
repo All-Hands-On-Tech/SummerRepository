@@ -18,8 +18,9 @@ public class DeliveryFunctions {
     private double CLICKS_PER_METER = 2492.788;
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
-    private final double servoOut = 0.75;
-    private final double servoIn = 0.08;
+    private final double servoOut = 0.22;
+    private final double servoIn = 0.17;
+    private final double servoDodge = 0.1625;
 
     private int targetPosition;
     private double currentPosition;
@@ -51,7 +52,7 @@ public class DeliveryFunctions {
             rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
 //            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
-//            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
+            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -147,6 +148,10 @@ public class DeliveryFunctions {
     public DcMotor.RunMode getRunMode(){
         return leftSlide.getMode();
     }
+    public void setRunMode(DcMotor.RunMode mode){
+        leftSlide.setMode(mode);
+        rightSlide.setMode(mode);
+    }
 
     public double getWristPosition(){
         return wrist.getPosition();
@@ -169,10 +174,14 @@ public class DeliveryFunctions {
         currentPosition = rightSlide.getCurrentPosition();
         if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS){
             //targetServoPosition is going to be out when 200 ticks from outside
-            targetServoPosition = servoOut * (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
+            targetServoPosition = servoOut; //* (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
             wrist.setPosition(targetServoPosition);
         } else{
-            wrist.setPosition(servoIn);
+            if(currentPosition > 125){
+                wrist.setPosition(servoDodge);
+            }else{
+                wrist.setPosition(servoIn);
+            }
         }
         //.35
         //.08
@@ -185,21 +194,21 @@ public class DeliveryFunctions {
 
     }
 
-//    public void OpenHolderServoByIndex(int i){
-//        if(i == 0){
-//            holder1.setPosition(HOLDER_OPEN);
-//        }
-//        if(i == 1){
-//            holder1.setPosition(HOLDER_OPEN);
-//        }
-//    }
-//
-//    public void CloseHolderServoByIndex(int i){
-//        if(i == 0){
-//            holder1.setPosition(HOLDER_CLOSE);
-//        }
-//        if(i == 1){
-//            holder1.setPosition(HOLDER_CLOSE);
-//        }
-//    }
+    public void OpenHolderServoByIndex(int i){
+        if(i == 0){
+            holder1.setPosition(HOLDER_OPEN);
+        }
+        if(i == 1){
+            holder2.setPosition(HOLDER_OPEN);
+        }
+    }
+
+    public void CloseHolderServoByIndex(int i){
+        if(i == 0){
+            holder1.setPosition(HOLDER_CLOSE);
+        }
+        if(i == 1){
+            holder2.setPosition(HOLDER_CLOSE);
+        }
+    }
 }
