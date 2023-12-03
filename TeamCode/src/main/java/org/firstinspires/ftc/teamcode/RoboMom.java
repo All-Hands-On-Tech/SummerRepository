@@ -147,6 +147,18 @@ public abstract class RoboMom extends LinearOpMode {
     }
 
     //units are in inches!!!!!!!
+    public Pose2d relativePositionFromAprilTag(AprilTagDetection aprilTag) {
+        double range = aprilTag.ftcPose.range;
+        double yaw = -Math.toRadians(aprilTag.ftcPose.yaw);
+        double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
+
+        double x = range * Math.sin(yaw + bearing);
+        double y = -range * Math.cos(yaw + bearing);
+        double angle = Math.toDegrees(yaw) + 90;
+
+        return new Pose2d(x, y, Math.toRadians(angle));
+    }
+
     public Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {
         double tagX = 0;
         double tagY = 0;
