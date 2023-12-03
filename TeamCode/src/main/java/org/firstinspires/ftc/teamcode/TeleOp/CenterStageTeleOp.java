@@ -343,7 +343,7 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
             if(gamepad2.left_bumper){
-                intakeFunctions.RunIntakeMotor(0.75f);
+                intakeFunctions.RunIntakeMotor(0.9f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
             } else if(gamepad2.left_trigger >= 0.05) {
