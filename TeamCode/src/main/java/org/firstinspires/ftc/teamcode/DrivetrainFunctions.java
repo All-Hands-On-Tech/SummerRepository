@@ -103,7 +103,7 @@ public class DrivetrainFunctions {
     public void Move(float x, float y, float rx, double speedScalar){
         if(isDisabled)
             return;
-        x = -x;
+        y = -y;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         leftFrontDrive.setPower(((y + x + rx) / denominator) * speedScalar);
