@@ -28,6 +28,8 @@ public class AprilTagsFunctions {
 
     public AprilTagDetection detectedTag = null;
 
+    public List<AprilTagDetection> currentDetections = null;
+
     public AprilTagsFunctions(LinearOpMode l){
         this.linearOpMode = l;
         Initialize();
@@ -56,8 +58,8 @@ public class AprilTagsFunctions {
         setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
     }
 
-    public List<AprilTagDetection> getDetections() {
-        return aprilTag.getDetections();
+    private void updateDetections() {
+        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
     }
     public int numberOfDetections() {
         List<AprilTagDetection> currentDetections = aprilTag.getDetections();

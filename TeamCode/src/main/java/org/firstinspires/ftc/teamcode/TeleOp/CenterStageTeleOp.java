@@ -41,11 +41,8 @@ import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.util.List;
 
 
 @TeleOp(name="CenterStage Teleop", group="A")
@@ -186,17 +183,6 @@ public class CenterStageTeleOp extends RoboMom {
 //                vel = new Vector2d(1, vel.getY());
 //            }
 
-            if (aprilTagsFunctions.numberOfDetections() > 1) {
-                for (AprilTagDetection detection : aprilTagsFunctions.getDetections()) {
-                    if (gamepad1.right_trigger > 0.025f && (detection.id == 1 || detection.id == 4)) {
-                        Pose2d location = relativePositionFromAprilTag(detection);
-                        drivetrainFunctions.Move((float) -location.getX(),(float) -location.getY(),(float) -location.getHeading(), 1);
-                    }
-                }
-
-            }
-
-            /*
             if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
                 telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
                 telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
@@ -205,37 +191,37 @@ public class CenterStageTeleOp extends RoboMom {
                 telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
 
                 if(gamepad1.right_trigger > 0.025f){
-                    Pose2d relLoc = relativePositionFromAprilTag(aprilTagsFunctions.detectedTag);
+                    rightTriggerPull = gamepad1.right_trigger;
 
 //                    strafeGain *= rightTriggerPull;
 //                    forwardGain *= rightTriggerPull;
 //                    rotationGain *= rightTriggerPull;
 
-                    double x = relLoc.getX();
-                    double y = -relLoc.getY();
+                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    double y = FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
 
                     telemetry.addData("x: ", x);
                     telemetry.addData("y: ", y);
 
 //                    double x = 0.5;
 //                    double y = 0.7;
-                    double heading = relLoc.getHeading();
-                    drivetrainFunctions.Move((float)x,(float)y,(float)heading, 1);
+                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
                 } else {
                     controlsRelinquished = false;
                 }
 
-
+                /*
                 if (currentGamepad1.right_trigger > 0.5) {
                     y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
                     yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
                     x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
                     isAutoDrivingToAprilTag = true;
                 }
-
+                 */
             }else{          //align to point (pose of aprilTag)
 
-            } */
+            }
 
             if (aprilTagsFunctions.numberOfDetections()>1) {
                 Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
