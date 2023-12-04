@@ -21,6 +21,8 @@ public class MeepMeepTesting {
 
 
     private static Pose2d BLUE_END_POSE = new Pose2d(-34, 38, Math.toRadians(90));
+
+    private static Pose2d RED_END_POSE = new Pose2d(34, 38, Math.toRadians(90));
     public static void main(String[] args) {
 
         double trackWidth = 15.0;
@@ -199,43 +201,95 @@ public class MeepMeepTesting {
 
         //Chopper with slides
 
-        RoadRunnerBotEntity BlueBackstageLeftChopper = new DefaultBotBuilder(meepMeep)
+        //Blue landingzone
+
+        RoadRunnerBotEntity BlueLandingZoneLeftChopper = new DefaultBotBuilder(meepMeep)
                 .setConstraints(39.2, 60, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPose)
+                        drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
                                 .splineToLinearHeading(new Pose2d(-35, -33, Math.toRadians(90)), Math.toRadians(90))
                                 .waitSeconds(5)
                                 .setReversed(true)
                                 .splineToLinearHeading(new Pose2d(-12, -35, Math.toRadians(90)), Math.toRadians(90))
                                 .strafeTo(new Vector2d(-12, 30))
-                                .strafeTo(new Vector2d(-34, 38))
+                                .strafeTo(new Vector2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY()))
                                 .build()
                 );
 
-        RoadRunnerBotEntity BlueBackstageCenterChopper = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity BlueLandingZoneCenterChopper = new DefaultBotBuilder(meepMeep)
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPose)
+                        drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
                                 .splineTo(new Vector2d(-33, -35), Math.toRadians(0))
                                 .waitSeconds(5)
-                                .strafeTo(new Vector2d(-59, -35))
-                                .setReversed(true)
-                                .strafeTo(new Vector2d(-59, 47))
+                                .strafeTo(new Vector2d(-36, -48))
+                                .splineToLinearHeading(new Pose2d(-12, -35, Math.toRadians(90)), Math.toRadians(90))
+                                .strafeTo(new Vector2d(-12, 30))
+                                .strafeTo(new Vector2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY()))
                                 .build()
                 );
 
-        RoadRunnerBotEntity BlueBackstageRightChopper = new DefaultBotBuilder(meepMeep)
+        RoadRunnerBotEntity BlueLandingZoneRightChopper = new DefaultBotBuilder(meepMeep)
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(startPose)
+                        drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
                                 .lineToLinearHeading(new Pose2d(-35, -37, Math.toRadians(-90)))
                                 .waitSeconds(5)
-                                .strafeTo(new Vector2d(-35, -35))
-                                .strafeTo(new Vector2d(-59, -35))
-                                .setReversed(true)
-                                .strafeTo(new Vector2d(-59, 47))
+                                .lineToLinearHeading(new Pose2d(-12, -37, Math.toRadians(180)))
+                                .turn(Math.toRadians(-90))
+                                .lineToLinearHeading(new Pose2d(-12, 30, Math.toRadians(90)))
+                                .strafeTo(new Vector2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY()))
                                 .build()
                 );
+
+        //blue backstage
+
+        
+
+
+
+        //red landingzone
+
+        RoadRunnerBotEntity RedLandingZoneRightChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 60, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(RED_LANDING_ZONE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
+                                .waitSeconds(5)
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
+                                .strafeTo(new Vector2d(12, 30))
+                                .strafeTo(new Vector2d(RED_END_POSE.getX(), RED_END_POSE.getY()))
+                                .build()
+                );
+
+        RoadRunnerBotEntity RedLandingZoneCenterChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(RED_LANDING_ZONE_START_POSE)
+                                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
+                                .waitSeconds(5)
+                                .strafeTo(new Vector2d(39, -48))
+                                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
+                                .strafeTo(new Vector2d(12, 30))
+                                .strafeTo(new Vector2d(RED_END_POSE.getX(), RED_END_POSE.getY()))
+                                .build()
+                );
+
+        RoadRunnerBotEntity RedLandingZoneLeftChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(RED_LANDING_ZONE_START_POSE)
+                                .lineToLinearHeading(new Pose2d(35, -37, Math.toRadians(-90)))
+                                .waitSeconds(5)
+                                .lineToLinearHeading(new Pose2d(12, -37, Math.toRadians(0) -1e-6))
+                                .turn(Math.toRadians(90))
+                                .lineToLinearHeading(new Pose2d(12, 30, Math.toRadians(90)))
+                                .strafeTo(new Vector2d(RED_END_POSE.getX(), RED_END_POSE.getY()))
+                                .build()
+                );
+
+        //red backstage
 
 
         Image img = null;
@@ -249,14 +303,14 @@ public class MeepMeepTesting {
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(BlueBackstageLeftChopper)
+                    .addEntity(RedLandingZoneCenterChopper)
                     .start();
         }else {
             meepMeep.setBackground(background)
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(BlueBackstageLeftChopper)
+                    .addEntity(RedLandingZoneRightChopper)
                     .start();
         }
 
