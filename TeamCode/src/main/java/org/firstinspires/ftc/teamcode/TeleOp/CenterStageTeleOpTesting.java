@@ -190,6 +190,9 @@ public class CenterStageTeleOpTesting extends RoboMom {
                 for (AprilTagDetection detection : aprilTagsFunctions.getDetections()) {
                     if (gamepad1.right_trigger > 0.025f && (detection.id == 1 || detection.id == 4)) {
                         Pose2d location = relativePositionFromAprilTag(detection);
+                        telemetry.addData("TagX: ", -location.getX());
+                        telemetry.addData("TagY: ", -location.getY());
+                        telemetry.addData("TagHeading: ", -location.getHeading());
                         drivetrainFunctions.Move((float) -location.getX(),(float) -location.getY(),(float) -location.getHeading(), 1);
                     }
                 }

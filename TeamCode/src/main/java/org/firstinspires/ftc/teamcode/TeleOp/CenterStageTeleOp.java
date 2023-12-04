@@ -197,15 +197,17 @@ public class CenterStageTeleOp extends RoboMom {
 //                    forwardGain *= rightTriggerPull;
 //                    rotationGain *= rightTriggerPull;
 
-                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    double x = -STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
                     double y = FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
-
-                    telemetry.addData("x: ", x);
-                    telemetry.addData("y: ", y);
 
 //                    double x = 0.5;
 //                    double y = 0.7;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+
+                    telemetry.addData("x: ", x);
+                    telemetry.addData("y: ", y);
+                    telemetry.addData("bearing: ", bearing);
+
                     drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
                 } else {
                     controlsRelinquished = false;

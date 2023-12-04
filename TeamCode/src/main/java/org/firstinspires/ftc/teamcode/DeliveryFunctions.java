@@ -18,9 +18,9 @@ public class DeliveryFunctions {
     private double CLICKS_PER_METER = 2492.788;
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
-    private final double servoOut = 0.22;
-    private final double servoIn = 0.19;
-    private final double servoDodge = 0.17;
+    private final double servoOut = 0.23;
+    private final double servoIn = 0.1820;
+    private final double servoDodge = 0.175;
 
     private int targetPosition;
     private double currentPosition;
