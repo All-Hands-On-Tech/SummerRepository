@@ -244,7 +244,26 @@ public class MeepMeepTesting {
 
         //blue backstage
 
-        
+        RoadRunnerBotEntity BlueBackstageLeftChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(-40, 21, Math.toRadians(0)), Math.toRadians(-20))
+                                .setReversed(true)
+                                .lineToLinearHeading(new Pose2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY(), Math.toRadians(90)))
+                                .build()
+                );
+
+        RoadRunnerBotEntity BlueBackstageCenterChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(-33, 15, Math.toRadians(0)), Math.toRadians(0))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(-40, 9, Math.toRadians(90)), Math.toRadians(-135))
+                                .strafeTo(new Vector2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY()))
+                                .build()
+                );
 
 
 
@@ -310,7 +329,7 @@ public class MeepMeepTesting {
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(RedLandingZoneRightChopper)
+                    .addEntity(BlueBackstageLeftChopper)
                     .start();
         }
 
