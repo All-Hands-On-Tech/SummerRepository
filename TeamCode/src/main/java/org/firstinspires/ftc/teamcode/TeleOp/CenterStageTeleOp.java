@@ -183,56 +183,56 @@ public class CenterStageTeleOp extends RoboMom {
 //                vel = new Vector2d(1, vel.getY());
 //            }
 
-            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
-                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
-                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
-                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
-                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
-                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
-
-                if(gamepad1.right_trigger > 0.025f){
-                    rightTriggerPull = gamepad1.right_trigger;
-
-//                    strafeGain *= rightTriggerPull;
-//                    forwardGain *= rightTriggerPull;
-//                    rotationGain *= rightTriggerPull;
-
-                    double x = -STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                    double y = FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
-
-//                    double x = 0.5;
-//                    double y = 0.7;
-                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
-
-                    telemetry.addData("x: ", x);
-                    telemetry.addData("y: ", y);
-                    telemetry.addData("bearing: ", bearing);
-
-                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
-                } else {
-                    controlsRelinquished = false;
-                }
-
-                /*
-                if (currentGamepad1.right_trigger > 0.5) {
-                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
-                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
-                    isAutoDrivingToAprilTag = true;
-                }
-                 */
-            }else{          //align to point (pose of aprilTag)
-
-            }
-
-            if (aprilTagsFunctions.numberOfDetections()>1) {
-                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
-                telemetry.addLine(String.format("XYH %3.1f %3.1f %3.1f  (in, in, deg)",
-                        aprilTagLocation.getX(),
-                        aprilTagLocation.getY(),
-                        Math.toDegrees(aprilTagLocation.getHeading())));
-
-            }
+//            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
+//                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
+//                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
+//                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
+//                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
+//                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
+//
+//                if(gamepad1.right_trigger > 0.025f){
+//                    rightTriggerPull = gamepad1.right_trigger;
+//
+////                    strafeGain *= rightTriggerPull;
+////                    forwardGain *= rightTriggerPull;
+////                    rotationGain *= rightTriggerPull;
+//
+//                    double x = -STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+//                    double y = FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
+//
+////                    double x = 0.5;
+////                    double y = 0.7;
+//                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+//
+//                    telemetry.addData("x: ", x);
+//                    telemetry.addData("y: ", y);
+//                    telemetry.addData("bearing: ", bearing);
+//
+//                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
+//                } else {
+//                    controlsRelinquished = false;
+//                }
+//
+//                /*
+//                if (currentGamepad1.right_trigger > 0.5) {
+//                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
+//                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+//                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
+//                    isAutoDrivingToAprilTag = true;
+//                }
+//                 */
+//            }else{          //align to point (pose of aprilTag)
+//
+//            }
+//
+//            if (aprilTagsFunctions.numberOfDetections()>1) {
+//                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
+//                telemetry.addLine(String.format("XYH %3.1f %3.1f %3.1f  (in, in, deg)",
+//                        aprilTagLocation.getX(),
+//                        aprilTagLocation.getY(),
+//                        Math.toDegrees(aprilTagLocation.getHeading())));
+//
+//            }
 
 
 //            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
@@ -258,6 +258,10 @@ public class CenterStageTeleOp extends RoboMom {
                 drivetrainFunctions.ResetIMU();
             }
 
+            if (gamepad1.b) {
+                droneLauncherFunctions.ReleaseDrone();
+            }
+
     //Gamepad 2
 
             telemetry.addData("RunMode: ", deliveryFunctions.getRunMode());
@@ -266,7 +270,8 @@ public class CenterStageTeleOp extends RoboMom {
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
-            deliveryFunctions.setSlidesPower(0.75);
+            //deliveryFunctions.setSlidesPower(0.75);
+            //P controlling power at the bottom
 
             switch (deliveryState){
                 case DELIVERY_START:
@@ -331,15 +336,22 @@ public class CenterStageTeleOp extends RoboMom {
 
                 telemetry.addLine("manual control");
 
-                targetPosition -= gamepad2.right_stick_y * 10;
+                if(leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS){
+                    targetPosition -= gamepad2.right_stick_y * 10;
+                } else{
+                    targetPosition -= gamepad2.right_stick_y * 5;
+                }
 //                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
 
             }
 
-            targetPosition = Math.max(LIFT_MIN, Math.min(LIFT_MAX, targetPosition));
             deliveryFunctions.setSlidesTargetPosition(targetPosition);
+            targetPosition = Math.max(LIFT_MIN, Math.min(LIFT_MAX, targetPosition));
+
+            deliveryFunctions.PControlPower();
 
             deliveryFunctions.WristMovementByLiftPosition();
+
 
             //telemetry.addData("Target Position: ", targetPosition);
             telemetry.addData("Target Position in DeliveryFunctions: ", deliveryFunctions.getMotorTargetPosition());
@@ -347,7 +359,7 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
             if(gamepad2.left_bumper){
-                intakeFunctions.OutakeFromIntake(0.9f);
+                intakeFunctions.OutakeFromIntake(-0.9f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
             } else if(gamepad2.left_trigger >= 0.05) {

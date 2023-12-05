@@ -20,7 +20,7 @@ public class DroneLauncherFunctions {
 
     private double initAttempts = 0;
 
-    private static final double RELEASE_POSITION = 0.1;
+    private static final double RELEASE_POSITION = 0.6;
 
 
     public DroneLauncherFunctions(LinearOpMode l)

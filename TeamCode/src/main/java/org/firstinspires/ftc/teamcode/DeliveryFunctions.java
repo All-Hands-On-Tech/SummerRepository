@@ -15,6 +15,8 @@ public class DeliveryFunctions {
     private Servo holder1 = null;
     private Servo holder2 = null;
     private LinearOpMode linearOpMode;
+
+    private double slidePowerMultiplier = 0.75;
     private double CLICKS_PER_METER = 2492.788;
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
@@ -29,7 +31,9 @@ public class DeliveryFunctions {
     private double targetServoPosition;
 
     public final double TICK_STOP_THRESHOLD = 20;
-    public final double CARRIAGE_OUTSIDE_CHASSIS = 630;
+    public final double CARRIAGE_OUTSIDE_CHASSIS = 640;
+    public final double TICK_LOW_POWER_DISTANCE = 200;
+    public final double CARRIAGE_DODGE = 135;
 
     private boolean slidesRunToPosition;
 
@@ -157,13 +161,19 @@ public class DeliveryFunctions {
         return wrist.getPosition();
     }
 
-//    public void PControlPower(){
-//        leftError = targetPosition - leftSlide.getCurrentPosition();
-//        rightError = targetPosition - rightSlide.getCurrentPosition();
-//
-//        leftSlide.setPower(leftError / TICK_SLOW_THRESHOLD);
-//        rightSlide.setPower(rightError / TICK_SLOW_THRESHOLD);
-//    }
+    public void PControlPower(){
+        double leftError = targetPosition - leftSlide.getCurrentPosition();
+        double rightError = targetPosition - rightSlide.getCurrentPosition();
+
+        double leftPower = (Math.abs(leftError) / TICK_LOW_POWER_DISTANCE);
+        double rightPower = (Math.abs(rightError) / TICK_LOW_POWER_DISTANCE);
+
+        leftPower = Math.max(0, Math.min(1, leftPower));
+        rightPower = Math.max(0, Math.min(1, rightPower));
+
+        leftSlide.setPower(leftPower * slidePowerMultiplier);
+        rightSlide.setPower(rightPower * slidePowerMultiplier);
+    }
 
     public void Dump(){
         linearOpMode.telemetry.addLine("WIP");
@@ -177,7 +187,7 @@ public class DeliveryFunctions {
             targetServoPosition = servoOut; //* (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
             wrist.setPosition(targetServoPosition);
         } else{
-            if(currentPosition > 125){
+            if(currentPosition > CARRIAGE_DODGE){
                 wrist.setPosition(servoDodge);
             }else{
                 wrist.setPosition(servoIn);
