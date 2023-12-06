@@ -93,32 +93,32 @@ public class RedBackstage extends RoboMom {
             case "LEFT":
                 telemetry.addLine("left");
                 telemetry.update();
-//                drive.followTrajectorySequence(left);
-                drive.followTrajectorySequence(autoTraj.RedBackstageLeftTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.RedBackstageLeftTrajectoryChopperPush1);
+                drive.followTrajectorySequence(left);
+//                drive.followTrajectorySequence(autoTraj.RedBackstageLeftTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.RedBackstageLeftTrajectoryChopperPush1);
                 break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
-//                drive.followTrajectorySequence(center);
-                drive.followTrajectorySequence(autoTraj.RedBackstageCenterTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.RedBackstageCenterTrajectoryChopperPush1);
+                drive.followTrajectorySequence(center);
+//                drive.followTrajectorySequence(autoTraj.RedBackstageCenterTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.RedBackstageCenterTrajectoryChopperPush1);
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
                 telemetry.update();
-//                drive.followTrajectorySequence(right);
-                drive.followTrajectorySequence(autoTraj.RedBackstageRightTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.RedBackstageRightTrajectoryChopperPush1);
+                drive.followTrajectorySequence(right);
+//                drive.followTrajectorySequence(autoTraj.RedBackstageRightTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.RedBackstageRightTrajectoryChopperPush1);
                 break;
         }
 

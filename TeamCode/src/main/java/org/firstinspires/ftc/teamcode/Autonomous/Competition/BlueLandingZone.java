@@ -95,32 +95,32 @@ public class BlueLandingZone extends RoboMom {
             case "LEFT":
                 telemetry.addLine("left");
                 telemetry.update();
-//                drive.followTrajectorySequence(left);
-                drive.followTrajectorySequence(autoTraj.BlueLandingZoneLeftTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.BlueLandingZoneLeftTrajectoryChopperPush1);
+                drive.followTrajectorySequence(left);
+//                drive.followTrajectorySequence(autoTraj.BlueLandingZoneLeftTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.BlueLandingZoneLeftTrajectoryChopperPush1);
                 break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
-//                drive.followTrajectorySequence(center);
-                drive.followTrajectorySequence(autoTraj.BlueLandingZoneCenterTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.BlueLandingZoneCenterTrajectoryChopperPush1);
+                drive.followTrajectorySequence(center);
+//                drive.followTrajectorySequence(autoTraj.BlueLandingZoneCenterTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.BlueLandingZoneCenterTrajectoryChopperPush1);
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
                 telemetry.update();
-//                drive.followTrajectorySequence(right);
-                drive.followTrajectorySequence(autoTraj.BlueLandingZoneRightTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.BlueLandingZoneRightTrajectoryChopperPush1);
+                drive.followTrajectorySequence(right);
+//                drive.followTrajectorySequence(autoTraj.BlueLandingZoneRightTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.BlueLandingZoneRightTrajectoryChopperPush1);
                 break;
         }
 

@@ -109,11 +109,11 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(left);
 
                 //CHOPPER PUSHBOT
-                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush1);
+//                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush1);
 
 
                 break;
@@ -123,11 +123,11 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(center);
 
                 //CHOPPER PUSHBOT
-                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush1);
+//                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush1);
 
                 break;
             case "RIGHT":
@@ -136,11 +136,11 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(right);
 
                 //CHOPPER PUSHBOT
-                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush0);
-                intakeFuncts.OutakeFromIntake(0.1f);
-                sleep(750);
-                intakeFuncts.StopIntakeMotor();
-                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush1);
+//                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush0);
+//                intakeFuncts.OutakeFromIntake(0.1f);
+//                sleep(750);
+//                intakeFuncts.StopIntakeMotor();
+//                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush1);
 
                 break;
         }
