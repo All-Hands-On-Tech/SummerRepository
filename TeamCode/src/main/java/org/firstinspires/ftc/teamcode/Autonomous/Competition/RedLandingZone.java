@@ -35,7 +35,7 @@ public class RedLandingZone extends RoboMom {
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, true);
 
-    Pose2d startPose = new Pose2d(59.5, -38, Math.toRadians(180));
+    Pose2d startPose = new Pose2d(59.5, -37, Math.toRadians(180));
 
     String spikePosition = "center";
 
@@ -100,7 +100,7 @@ public class RedLandingZone extends RoboMom {
 //                sleep(750);
 //                intakeFuncts.StopIntakeMotor();
 //                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush1);
-//                break;
+                break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
