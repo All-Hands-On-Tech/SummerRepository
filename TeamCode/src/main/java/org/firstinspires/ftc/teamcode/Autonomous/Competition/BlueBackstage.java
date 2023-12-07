@@ -45,7 +45,7 @@ public class BlueBackstage extends RoboMom {
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
 
-    Pose2d startPose = new Pose2d(-60, 14, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-59.5, 14, Math.toRadians(0));
 
     private String spikePosition = "center";
 

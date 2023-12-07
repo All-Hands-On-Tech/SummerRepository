@@ -14,10 +14,10 @@ import java.io.IOException;
 import javax.imageio.ImageIO;
 
 public class MeepMeepTesting {
-    private static Pose2d RED_BACKSTAGE_START_POSE = new Pose2d(60, 14, Math.toRadians(180));
-    private static Pose2d RED_LANDING_ZONE_START_POSE = new Pose2d(60, -38, Math.toRadians(180));
-    private static Pose2d BLUE_BACKSTAGE_START_POSE = new Pose2d(-60, 14, Math.toRadians(0));
-    private static Pose2d BLUE_LANDING_ZONE_START_POSE = new Pose2d(-60, -38, Math.toRadians(0));
+    private static Pose2d RED_BACKSTAGE_START_POSE = new Pose2d(59.5, 14, Math.toRadians(180));
+    private static Pose2d RED_LANDING_ZONE_START_POSE = new Pose2d(59.5, -38, Math.toRadians(180));
+    private static Pose2d BLUE_BACKSTAGE_START_POSE = new Pose2d(-59.5, 14, Math.toRadians(0));
+    private static Pose2d BLUE_LANDING_ZONE_START_POSE = new Pose2d(-59.5, -38, Math.toRadians(0));
 
 
     private static Pose2d BLUE_END_POSE = new Pose2d(-34, 38, Math.toRadians(90));

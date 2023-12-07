@@ -35,7 +35,7 @@ public class RedLandingZone extends RoboMom {
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, true);
 
-    Pose2d startPose = new Pose2d(60, -38, Math.toRadians(180));
+    Pose2d startPose = new Pose2d(59.5, -38, Math.toRadians(180));
 
     String spikePosition = "center";
 
