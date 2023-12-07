@@ -2,6 +2,7 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
@@ -26,9 +27,12 @@ public class AprilTagsFunctions {
     public final int BLUE_2_TAG = 2;
     public final int BLUE_3_TAG = 3;
 
+    private final float TIMEOUT = 5;
+
     public AprilTagDetection detectedTag = null;
 
     public List<AprilTagDetection> currentDetections = null;
+    ElapsedTime time;
 
     public AprilTagsFunctions(LinearOpMode l){
         this.linearOpMode = l;
@@ -76,7 +80,7 @@ public class AprilTagsFunctions {
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             linearOpMode.telemetry.addData("Camera", "Waiting");
             linearOpMode.telemetry.update();
-            while (!linearOpMode.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+            while (time.time() < TIMEOUT && !linearOpMode.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
                 linearOpMode.sleep(20);
             }
             linearOpMode.telemetry.addData("Camera", "Ready");
