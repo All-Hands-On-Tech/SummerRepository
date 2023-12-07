@@ -32,7 +32,7 @@ public class AprilTagsFunctions {
     public AprilTagDetection detectedTag = null;
 
     public List<AprilTagDetection> currentDetections = null;
-    ElapsedTime time;
+    ElapsedTime time = new ElapsedTime();
 
     public AprilTagsFunctions(LinearOpMode l){
         this.linearOpMode = l;

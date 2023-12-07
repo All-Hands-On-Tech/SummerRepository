@@ -26,10 +26,10 @@ public class BlueBackstage extends RoboMom {
 
     //logan was here
 
-    AutonomousTrajectories autoTraj; //= new AutonomousTrajectories(this);
+//    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
 
 
-    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
+//    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
     double cx = VisionConstants.cx;
@@ -47,12 +47,12 @@ public class BlueBackstage extends RoboMom {
 
     Pose2d startPose = new Pose2d(-60, 14, Math.toRadians(0));
 
-    String spikePosition = "center";
+    private String spikePosition = "center";
 
     @Override
     public void runOpMode() {
         super.runOpMode();
-        autoTraj = new AutonomousTrajectories(this);
+//        autoTraj = new AutonomousTrajectories(this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -99,7 +99,7 @@ public class BlueBackstage extends RoboMom {
         if (isStopRequested()) return;
 
         sleep(1000);
-        circleDetectionPipeline.setState(CircleDetectionPipeline.DetectionState.DETECT);
+//        circleDetectionPipeline.setState(CircleDetectionPipeline.DetectionState.DETECT);
 
         spikePosition = MakeDetection(TIMEOUT);
         switch (spikePosition) {
