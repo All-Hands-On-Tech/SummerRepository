@@ -22,9 +22,9 @@ public class BlueLandingZone extends RoboMom {
 
     //logan was here
 
-    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
+//    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
 
-    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
+//    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
 
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
