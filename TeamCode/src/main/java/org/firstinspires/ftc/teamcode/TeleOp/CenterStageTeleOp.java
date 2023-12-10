@@ -118,7 +118,7 @@ public class CenterStageTeleOp extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        aprilTagsFunctions = new AprilTagsFunctions(this);
+        //aprilTagsFunctions = new AprilTagsFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
@@ -339,7 +339,7 @@ public class CenterStageTeleOp extends RoboMom {
                 if(leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS){
                     targetPosition -= gamepad2.right_stick_y * 10;
                 } else{
-                    targetPosition -= gamepad2.right_stick_y * 5;
+                    targetPosition -= gamepad2.right_stick_y * 8;
                 }
 //                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
 

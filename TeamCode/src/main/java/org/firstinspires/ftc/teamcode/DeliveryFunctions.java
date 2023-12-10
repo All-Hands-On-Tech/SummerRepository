@@ -173,6 +173,9 @@ public class DeliveryFunctions {
 
         leftSlide.setPower(leftPower * slidePowerMultiplier);
         rightSlide.setPower(rightPower * slidePowerMultiplier);
+        linearOpMode.telemetry.addData("Left Power: ",leftPower);
+        linearOpMode.telemetry.addData("Right Power: ",rightPower);
+        linearOpMode.telemetry.update();
     }
 
     public void Dump(){
