@@ -69,8 +69,8 @@ public class DeliveryFunctions {
             if (slidesRunToPosition) {
                 leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
                 rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-                linearOpMode.telemetry.addLine("RunMode: RUN_TO_POSITION");
-                linearOpMode.telemetry.update();
+//                linearOpMode.telemetry.addLine("RunMode: RUN_TO_POSITION");
+//                linearOpMode.telemetry.update();
             } else {
                 leftSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
                 rightSlide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -175,6 +175,8 @@ public class DeliveryFunctions {
         rightSlide.setPower(rightPower * slidePowerMultiplier);
         linearOpMode.telemetry.addData("Left Power: ",leftPower);
         linearOpMode.telemetry.addData("Right Power: ",rightPower);
+        linearOpMode.telemetry.addData("Left Error: ",leftError);
+        linearOpMode.telemetry.addData("Right Error: ",rightError);
         linearOpMode.telemetry.update();
     }
 
@@ -202,8 +204,8 @@ public class DeliveryFunctions {
         //Math.toRadians(100)
         //Math.toRadians(10)
 
-        linearOpMode.telemetry.addData("wrist pos: ", servoPosition);
-        linearOpMode.telemetry.update();
+//        linearOpMode.telemetry.addData("wrist pos: ", servoPosition);
+//        linearOpMode.telemetry.update();
 
     }
 

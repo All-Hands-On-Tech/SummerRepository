@@ -264,7 +264,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     //Gamepad 2
 
-            telemetry.addData("RunMode: ", deliveryFunctions.getRunMode());
+            //telemetry.addData("RunMode: ", deliveryFunctions.getRunMode());
             targetPosition = deliveryFunctions.getMotorTargetPosition();
 
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
@@ -345,8 +345,8 @@ public class CenterStageTeleOp extends RoboMom {
 
             }
 
-            deliveryFunctions.setSlidesTargetPosition(targetPosition);
             targetPosition = Math.max(LIFT_MIN, Math.min(LIFT_MAX, targetPosition));
+            deliveryFunctions.setSlidesTargetPosition(targetPosition);
 
             deliveryFunctions.PControlPower();
 
