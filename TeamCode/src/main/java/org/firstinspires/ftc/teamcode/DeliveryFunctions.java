@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
 public class DeliveryFunctions {
@@ -35,11 +36,15 @@ public class DeliveryFunctions {
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 135;
 
+    public final double DUMP_TIME = 1;
+
     private boolean slidesRunToPosition;
 
     public boolean isDisabled = false;
 
     private double initAttempts = 0;
+
+    private ElapsedTime time = new ElapsedTime();
 
 
     public DeliveryFunctions(LinearOpMode l, Boolean slidesRunToPosition)
@@ -181,7 +186,11 @@ public class DeliveryFunctions {
     }
 
     public void Dump(){
-        linearOpMode.telemetry.addLine("WIP");
+        time.reset();
+        holder1.setPosition(HOLDER_OPEN);
+        if(time.seconds() > DUMP_TIME){
+            holder2.setPosition(HOLDER_CLOSE);
+        }
     }
 
     public void WristMovementByLiftPosition(){

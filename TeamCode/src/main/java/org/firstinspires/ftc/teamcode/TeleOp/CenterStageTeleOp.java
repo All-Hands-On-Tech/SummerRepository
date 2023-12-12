@@ -86,7 +86,12 @@ public class CenterStageTeleOp extends RoboMom {
 
     private DeliveryState deliveryState = DeliveryState.DELIVERY_START;
 
-    private final int LIFT_HIGH = 500;
+    private final int LIFT_HIGH = 750;
+
+    private final int SET_1_HEIGHT = 600;
+    private final int SET_2_HEIGHT = 1000;
+
+    private final int SET_3_HEIGHT = 1300;
 
     private final int LIFT_LOW = 0;
 
@@ -275,17 +280,17 @@ public class CenterStageTeleOp extends RoboMom {
 
             switch (deliveryState){
                 case DELIVERY_START:
-//                    if(isRunToPosition){
-////                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-//                        isRunToPosition = false;
-//                        deliveryFunctions.setSlidesPower(0);
-//                    }
                     if(gamepad2.a){
                         deliveryState = DeliveryState.DELIVERY_LIFT;
-                        targetPosition = LIFT_HIGH;
-//                        deliveryFunctions.setRunMode(DcMotor.RunMode.RUN_TO_POSITION);
-//                        isRunToPosition = true;
-//                        deliveryFunctions.setSlidesPower(0.75);
+                        targetPosition = SET_1_HEIGHT;
+                    }
+                    if(gamepad2.x){
+                        deliveryState = DeliveryState.DELIVERY_LIFT;
+                        targetPosition = SET_2_HEIGHT;
+                    }
+                    if(gamepad2.y){
+                        deliveryState = DeliveryState.DELIVERY_LIFT;
+                        targetPosition = SET_3_HEIGHT;
                     }
                     break;
 
@@ -293,9 +298,9 @@ public class CenterStageTeleOp extends RoboMom {
 
                     //if both motors are within stop threshold
                     if
-                    (LIFT_HIGH - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
+                    (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                     &&
-                    LIFT_HIGH - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
+                    targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
                     {
                         deliveryState = DeliveryState.DELIVERY_DUMP;
                     } else{
@@ -303,13 +308,14 @@ public class CenterStageTeleOp extends RoboMom {
                     }
                     break;
                 case DELIVERY_DUMP:
-                    if(gamepad2.right_bumper && !dumped){
+                    if(gamepad2.b && !dumped){
                         dumped = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump();
                     }
 
-                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME){
+                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME && gamepad2.b){
+                        dumped = false;
                         deliveryState = DeliveryState.DELIVERY_RETRACT;
                         targetPosition = LIFT_LOW;
                     }
@@ -318,9 +324,9 @@ public class CenterStageTeleOp extends RoboMom {
 
                     //if both motors are within stop threshold
                     if
-                    (LIFT_LOW - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
+                    (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                             &&
-                    LIFT_LOW - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
+                    targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
                     {
                         deliveryState = DeliveryState.DELIVERY_START;
                     } else{
@@ -334,15 +340,13 @@ public class CenterStageTeleOp extends RoboMom {
             if(Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE){
                 deliveryState = DeliveryState.DELIVERY_START;
 
-                telemetry.addLine("manual control");
+//                telemetry.addLine("manual control");
 
                 if(leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS){
-                    targetPosition -= gamepad2.right_stick_y * 10;
+                    targetPosition -= gamepad2.left_stick_y * 10;
                 } else{
-                    targetPosition -= gamepad2.right_stick_y * 8;
+                    targetPosition -= gamepad2.left_stick_y * 8;
                 }
-//                deliveryFunctions.setSlidesPower(-gamepad2.left_stick_y * 0.5);
-
             }
 
             targetPosition = Math.max(LIFT_MIN, Math.min(LIFT_MAX, targetPosition));
