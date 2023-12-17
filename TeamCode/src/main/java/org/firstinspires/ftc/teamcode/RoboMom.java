@@ -242,21 +242,28 @@ public abstract class RoboMom extends LinearOpMode {
                 || leftBackDrive.getPower()!=0;
     }
 
-    public RevBlinkinLedDriver.BlinkinPattern setLEDColor (String color) {
-        switch (color) {
-            case "WHITE":
-                return RevBlinkinLedDriver.BlinkinPattern.WHITE;
-            case "YELLOW":
-                return RevBlinkinLedDriver.BlinkinPattern.YELLOW;
-            case "GREEN":
-                return RevBlinkinLedDriver.BlinkinPattern.GREEN;
-            case "PURPLE":
-                return RevBlinkinLedDriver.BlinkinPattern.VIOLET;
-            case "color not detected":
-                return RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
-            default:
-                return RevBlinkinLedDriver.BlinkinPattern.BLACK;
+    public RevBlinkinLedDriver.BlinkinPattern setLEDColor (String colorFront, String colorBack) {
+        //color 1 is yellow
+        //color 2 is green
+
+        if (colorBack == "NONE") {
+            if (colorFront == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.WHITE;}
+            if (colorFront == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
+            if (colorFront == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
+            if (colorFront == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.VIOLET;}
+            if (colorFront == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.BLACK;}
+        } else if (colorFront == "NONE") {
+            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.WHITE;}
+            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
+            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
+            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.VIOLET;}
+        } else {
+            if (colorFront == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY;}
+            if (colorFront == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE;}
+            if (colorFront == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;}
+            if (colorFront == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;}
         }
+        return RevBlinkinLedDriver.BlinkinPattern.BLACK;
     }
 
 }
