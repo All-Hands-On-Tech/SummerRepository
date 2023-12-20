@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -37,6 +38,8 @@ public class PixelColorDetection extends RoboMom {
 
     double sensorDistance = 6.5;
 
+    ElapsedTime LEDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS );
+
     @Override
     public void runOpMode() {
         backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "back_color");
@@ -50,6 +53,7 @@ public class PixelColorDetection extends RoboMom {
         waitForStart();
 
         while (opModeIsActive()) {
+            RevBlinkinLedDriver.BlinkinPattern oldPattern = pattern;
             pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
 
             NormalizedRGBA backColors = backColorSensor.getNormalizedColors();
@@ -111,8 +115,11 @@ public class PixelColorDetection extends RoboMom {
                 backColor = "WHITE";
             }
 
-            pattern = setLEDColor(frontColor, backColor);
-            blinkinLedDriver.setPattern(pattern);
+            if (LEDTimer.milliseconds()>=1000) {
+                pattern = setLEDColor(frontColor, backColor);
+                blinkinLedDriver.setPattern(pattern);
+                LEDTimer.reset();
+            }
 
             telemetry.addData("Pattern: ", pattern.toString());
             telemetry.addLine("Back sensor");
