@@ -115,7 +115,7 @@ public class PixelColorDetection extends RoboMom {
                 backColor = "WHITE";
             }
 
-            if (LEDTimer.milliseconds()>=1000) {
+            if (LEDTimer.milliseconds()>=1000 && oldPattern!=pattern) {
                 pattern = setLEDColor(frontColor, backColor);
                 blinkinLedDriver.setPattern(pattern);
                 LEDTimer.reset();
