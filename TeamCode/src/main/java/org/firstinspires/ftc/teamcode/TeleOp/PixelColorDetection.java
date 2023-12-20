@@ -92,6 +92,25 @@ public class PixelColorDetection extends RoboMom {
                 frontColor = "NONE";
             }
 
+            if (gamepad1.a) {
+                frontColor = "GREEN";
+            } else if (gamepad1.x) {
+                frontColor = "PURPLE";
+            } else if (gamepad1.y) {
+                frontColor = "YELLOW";
+            } else if (gamepad1.b) {
+                frontColor = "WHITE";
+            }
+            if (gamepad1.dpad_down) {
+                frontColor = "GREEN";
+            } else if (gamepad1.dpad_left) {
+                frontColor = "PURPLE";
+            } else if (gamepad1.dpad_up) {
+                frontColor = "YELLOW";
+            } else if (gamepad1.dpad_right) {
+                frontColor = "WHITE";
+            }
+
             blinkinLedDriver.setPattern(setLEDColor(frontColor, backColor));
 
             telemetry.addData("Pattern: ", pattern.toString());
