@@ -10,6 +10,7 @@ import com.noahbres.meepmeep.roadrunner.trajectorysequence.TrajectorySequence;
 import java.awt.Image;
 import java.io.File;
 import java.io.IOException;
+import java.util.Vector;
 
 import javax.imageio.ImageIO;
 
@@ -250,6 +251,7 @@ public class MeepMeepTesting {
                         drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
                                 .splineToLinearHeading(new Pose2d(-40, 21, Math.toRadians(0)), Math.toRadians(-20))
                                 .setReversed(true)
+                                .strafeTo(new Vector2d(-53, 21))
                                 .lineToLinearHeading(new Pose2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY(), Math.toRadians(90)))
                                 .build()
                 );
@@ -265,6 +267,16 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
+        RoadRunnerBotEntity BlueBackstageRightChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(-33, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(-40, 15, Math.toRadians(-90)), Math.toRadians(-135))
+                                .lineToLinearHeading(new Pose2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY(), Math.toRadians(90)))
+                                .build()
+                );
 
 
         //red landingzone
@@ -310,6 +322,38 @@ public class MeepMeepTesting {
 
         //red backstage
 
+        RoadRunnerBotEntity RedBackstageLeftChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(32, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                                .setReversed(true)
+                                .strafeTo(new Vector2d(53, 21))
+                                .lineToLinearHeading(new Pose2d(RED_END_POSE.getX(), RED_END_POSE.getY(), Math.toRadians(90)))
+                                .build()
+                );
+
+        RoadRunnerBotEntity RedBackstageCenterChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(34, 12, Math.toRadians(180)), Math.toRadians(180))
+                                .setReversed(true)
+                                .splineToLinearHeading(new Pose2d(43, 7, Math.toRadians(90)), Math.toRadians(-135))
+                                .strafeTo(new Vector2d(RED_END_POSE.getX(), RED_END_POSE.getY()))
+                                .build()
+                );
+
+        RoadRunnerBotEntity RedBackstageRightChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
+                                .splineToLinearHeading(new Pose2d(33, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                                .setReversed(true)
+                                .strafeTo(new Vector2d(33, 15))
+                                .lineToLinearHeading(new Pose2d(RED_END_POSE.getX(), RED_END_POSE.getY(), Math.toRadians(90)))
+                                .build()
+                );
 
         Image img = null;
         MeepMeep.Background background = null;
@@ -322,14 +366,14 @@ public class MeepMeepTesting {
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(RedLandingZoneCenterChopper)
+                    .addEntity(BlueLandingZoneCenterChopper)
                     .start();
         }else {
             meepMeep.setBackground(background)
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(BlueBackstageLeftChopper)
+                    .addEntity(RedBackstageRightChopper)
                     .start();
         }
 

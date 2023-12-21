@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
+import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
@@ -21,9 +22,12 @@ public class RedLandingZone extends RoboMom {
 
     //logan was here
 
+    private static Pose2d endPose = new Pose2d(34, 38, Math.toRadians(90));
+
 //    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
 
 //    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
+    DeliveryFunctions deliveryFunctions = new DeliveryFunctions(this, true);
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
     double cx = VisionConstants.cx;
@@ -53,27 +57,59 @@ public class RedLandingZone extends RoboMom {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineToConstantHeading(new Vector2d(38, -47), Math.toRadians(180))
-                .back(7)
-                .strafeRight(12.5)
-                .forward(33)
-                .lineToLinearHeading(new Pose2d(8, 50, Math.toRadians(180)))
+                .lineToLinearHeading(new Pose2d(35, -37, Math.toRadians(-90)))
+                .waitSeconds(5)
+                .lineToLinearHeading(new Pose2d(12, -37, Math.toRadians(0) -1e-6))
+                .turn(Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(12, 30, Math.toRadians(90)))
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(31, -35), Math.toRadians(180))
-                .back(5)
-                .strafeLeft(15)
-                .forward(27)
-                .turn(Math.toRadians(90))
-                .back(95)
+                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
+                .waitSeconds(5)
+                .strafeTo(new Vector2d(39, -48))
+                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
+                .strafeTo(new Vector2d(12, 30))
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
                 .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(30, -34, Math.toRadians(90)), Math.toRadians(90))
-                .back(5)
-                .strafeLeft(18)
-                .lineToLinearHeading(new Pose2d(12, 50, Math.toRadians(90)))
+                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
+                .waitSeconds(5)
+                .setReversed(true)
+                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
+                .strafeTo(new Vector2d(12, 30))
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+                .build();
+
+        TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
+                .lineToLinearHeading(new Pose2d(32, 42, 90))
+                .build();
+
+        TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
+                .lineToLinearHeading(new Pose2d(34, 42, 90))
+                .build();
+
+        TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
+                .lineToLinearHeading(new Pose2d(36, 42, 90))
+                .build();
+
+
+
+        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, 90))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+                .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
+                .build();
+
+        TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, 90))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+                .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
+                .build();
+
+        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, 90))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+                .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
                 .build();
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
@@ -95,6 +131,13 @@ public class RedLandingZone extends RoboMom {
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
+                drive.followTrajectorySequence(leftScore);
+                deliveryFunctions.setSlidesTargetPosition(675);
+                deliveryFunctions.PControlPower();
+                deliveryFunctions.Dump();
+                drive.followTrajectorySequence(leftPark);
+
+
 //                drive.followTrajectorySequence(autoTraj.RedLandingZoneLeftTrajectoryChopperPush0);
 //                intakeFuncts.OutakeFromIntake(0.1f);
 //                sleep(750);
@@ -105,6 +148,11 @@ public class RedLandingZone extends RoboMom {
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
+                drive.followTrajectorySequence(centerScore);
+                deliveryFunctions.setSlidesTargetPosition(675);
+                deliveryFunctions.PControlPower();
+                deliveryFunctions.Dump();
+                drive.followTrajectorySequence(centerPark);
 //                drive.followTrajectorySequence(autoTraj.RedLandingZoneCenterTrajectoryChopperPush0);
 //                intakeFuncts.OutakeFromIntake(0.1f);
 //                sleep(750);
@@ -115,6 +163,11 @@ public class RedLandingZone extends RoboMom {
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
+                drive.followTrajectorySequence(rightScore);
+                deliveryFunctions.setSlidesTargetPosition(675);
+                deliveryFunctions.PControlPower();
+                deliveryFunctions.Dump();
+                drive.followTrajectorySequence(rightPark);
 //                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush0);
 //                intakeFuncts.OutakeFromIntake(0.1f);
 //                sleep(750);
