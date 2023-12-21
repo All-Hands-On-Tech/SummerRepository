@@ -32,7 +32,7 @@ public class DeliveryFunctions {
     private double targetServoPosition;
 
     public final double TICK_STOP_THRESHOLD = 20;
-    public final double CARRIAGE_OUTSIDE_CHASSIS = 640;
+    public final int CARRIAGE_OUTSIDE_CHASSIS = 640;
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 135;
 
@@ -187,9 +187,49 @@ public class DeliveryFunctions {
 
     public void Dump(){
         time.reset();
-        holder1.setPosition(HOLDER_OPEN);
-        if(time.seconds() > DUMP_TIME){
+        while(time.seconds() < DUMP_TIME){
+            holder2.setPosition(HOLDER_OPEN);
+        }
             holder2.setPosition(HOLDER_CLOSE);
+    }
+
+    public void Score(){
+
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + 100);
+
+        double leftError = targetPosition - leftSlide.getCurrentPosition();
+        double rightError = targetPosition - rightSlide.getCurrentPosition();
+        leftError = Math.abs(leftError);
+        rightError = Math.abs(rightError);
+
+        //LIFT
+        while(leftError <= TICK_STOP_THRESHOLD
+                &&
+                rightError <= TICK_STOP_THRESHOLD){
+
+            leftError = targetPosition - leftSlide.getCurrentPosition();
+            rightError = targetPosition - rightSlide.getCurrentPosition();
+            leftError = Math.abs(leftError);
+            rightError = Math.abs(rightError);
+
+            PControlPower();
+        }
+
+        //DUMP
+        Dump();
+
+        setSlidesTargetPosition(0);
+        //RETRACT
+        while(leftError > 0
+                &&
+                rightError > 0){
+
+            leftError = targetPosition - leftSlide.getCurrentPosition();
+            rightError = targetPosition - rightSlide.getCurrentPosition();
+            leftError = Math.abs(leftError);
+            rightError = Math.abs(rightError);
+
+            PControlPower();
         }
     }
 

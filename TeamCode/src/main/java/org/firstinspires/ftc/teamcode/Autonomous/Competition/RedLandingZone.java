@@ -135,6 +135,7 @@ public class RedLandingZone extends RoboMom {
                 deliveryFunctions.setSlidesTargetPosition(675);
                 deliveryFunctions.PControlPower();
                 deliveryFunctions.Dump();
+                deliveryFunctions.setSlidesTargetPosition(0);
                 drive.followTrajectorySequence(leftPark);
 
 
@@ -152,6 +153,7 @@ public class RedLandingZone extends RoboMom {
                 deliveryFunctions.setSlidesTargetPosition(675);
                 deliveryFunctions.PControlPower();
                 deliveryFunctions.Dump();
+                deliveryFunctions.setSlidesTargetPosition(0);
                 drive.followTrajectorySequence(centerPark);
 //                drive.followTrajectorySequence(autoTraj.RedLandingZoneCenterTrajectoryChopperPush0);
 //                intakeFuncts.OutakeFromIntake(0.1f);
@@ -164,9 +166,7 @@ public class RedLandingZone extends RoboMom {
                 telemetry.update();
                 drive.followTrajectorySequence(right);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.setSlidesTargetPosition(675);
-                deliveryFunctions.PControlPower();
-                deliveryFunctions.Dump();
+                deliveryFunctions.Score();
                 drive.followTrajectorySequence(rightPark);
 //                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush0);
 //                intakeFuncts.OutakeFromIntake(0.1f);
