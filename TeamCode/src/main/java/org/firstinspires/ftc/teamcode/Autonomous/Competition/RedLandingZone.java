@@ -137,13 +137,6 @@ public class RedLandingZone extends RoboMom {
                 deliveryFunctions.Dump();
                 deliveryFunctions.setSlidesTargetPosition(0);
                 drive.followTrajectorySequence(leftPark);
-
-
-//                drive.followTrajectorySequence(autoTraj.RedLandingZoneLeftTrajectoryChopperPush0);
-//                intakeFuncts.OutakeFromIntake(0.1f);
-//                sleep(750);
-//                intakeFuncts.StopIntakeMotor();
-//                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush1);
                 break;
             case "MID":
                 telemetry.addLine("center");
@@ -155,11 +148,6 @@ public class RedLandingZone extends RoboMom {
                 deliveryFunctions.Dump();
                 deliveryFunctions.setSlidesTargetPosition(0);
                 drive.followTrajectorySequence(centerPark);
-//                drive.followTrajectorySequence(autoTraj.RedLandingZoneCenterTrajectoryChopperPush0);
-//                intakeFuncts.OutakeFromIntake(0.1f);
-//                sleep(750);
-//                intakeFuncts.StopIntakeMotor();
-//                drive.followTrajectorySequence(autoTraj.RedLandingZoneCenterTrajectoryChopperPush1);
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
@@ -168,11 +156,6 @@ public class RedLandingZone extends RoboMom {
                 drive.followTrajectorySequence(rightScore);
                 deliveryFunctions.Score();
                 drive.followTrajectorySequence(rightPark);
-//                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush0);
-//                intakeFuncts.OutakeFromIntake(0.1f);
-//                sleep(750);
-//                intakeFuncts.StopIntakeMotor();
-//                drive.followTrajectorySequence(autoTraj.RedLandingZoneRightTrajectoryChopperPush1);
                 break;
         }
 

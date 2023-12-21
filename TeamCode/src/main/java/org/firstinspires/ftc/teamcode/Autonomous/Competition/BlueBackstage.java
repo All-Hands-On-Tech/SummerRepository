@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
+import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
@@ -44,6 +45,8 @@ public class BlueBackstage extends RoboMom {
     SampleMecanumDrive drive;
 
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
+
+    DeliveryFunctions deliveryFunctions = new DeliveryFunctions(this, true);
 
     Pose2d startPose = new Pose2d(-59.5, 14, Math.toRadians(0));
 
@@ -135,41 +138,31 @@ public class BlueBackstage extends RoboMom {
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
-
-                //CHOPPER PUSHBOT
-//                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush0);
-//                intakeFuncts.OutakeFromIntake(0.1f);
-//                sleep(750);
-//                intakeFuncts.StopIntakeMotor();
-//                drive.followTrajectorySequence(autoTraj.BlueBackstageLeftTrajectoryChopperPush1);
-
-
+                drive.followTrajectorySequence(leftScore);
+                deliveryFunctions.setSlidesTargetPosition(675);
+                deliveryFunctions.PControlPower();
+                deliveryFunctions.Dump();
+                deliveryFunctions.setSlidesTargetPosition(0);
+                drive.followTrajectorySequence(leftPark);
                 break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
-
-                //CHOPPER PUSHBOT
-//                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush0);
-//                intakeFuncts.OutakeFromIntake(0.1f);
-//                sleep(750);
-//                intakeFuncts.StopIntakeMotor();
-//                drive.followTrajectorySequence(autoTraj.BlueBackstageCenterTrajectoryChopperPush1);
-
+                drive.followTrajectorySequence(centerScore);
+                deliveryFunctions.setSlidesTargetPosition(675);
+                deliveryFunctions.PControlPower();
+                deliveryFunctions.Dump();
+                deliveryFunctions.setSlidesTargetPosition(0);
+                drive.followTrajectorySequence(centerPark);
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
-
-                //CHOPPER PUSHBOT
-//                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush0);
-//                intakeFuncts.OutakeFromIntake(0.1f);
-//                sleep(750);
-//                intakeFuncts.StopIntakeMotor();
-//                drive.followTrajectorySequence(autoTraj.BlueBackstageRightTrajectoryChopperPush1);
-
+                drive.followTrajectorySequence(rightScore);
+                deliveryFunctions.Score();
+                drive.followTrajectorySequence(rightPark);
                 break;
         }
 
