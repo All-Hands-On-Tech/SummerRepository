@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.hardware.ColorSensor;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.RoboMom;
@@ -37,6 +38,8 @@ public class PixelColorDetection extends RoboMom {
 
     double sensorDistance = 6.5;
 
+    ElapsedTime LEDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS );
+
     @Override
     public void runOpMode() {
         backColorSensor = hardwareMap.get(NormalizedColorSensor.class, "back_color");
@@ -50,6 +53,7 @@ public class PixelColorDetection extends RoboMom {
         waitForStart();
 
         while (opModeIsActive()) {
+            RevBlinkinLedDriver.BlinkinPattern oldPattern = pattern;
             pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
 
             NormalizedRGBA backColors = backColorSensor.getNormalizedColors();
@@ -92,7 +96,30 @@ public class PixelColorDetection extends RoboMom {
                 frontColor = "NONE";
             }
 
-            blinkinLedDriver.setPattern(setLEDColor(frontColor, backColor));
+            if (gamepad1.a) {
+                frontColor = "GREEN";
+            } else if (gamepad1.x) {
+                frontColor = "PURPLE";
+            } else if (gamepad1.y) {
+                frontColor = "YELLOW";
+            } else if (gamepad1.b) {
+                frontColor = "WHITE";
+            }
+            if (gamepad1.dpad_down) {
+                backColor = "GREEN";
+            } else if (gamepad1.dpad_left) {
+                backColor = "PURPLE";
+            } else if (gamepad1.dpad_up) {
+                backColor = "YELLOW";
+            } else if (gamepad1.dpad_right) {
+                backColor = "WHITE";
+            }
+
+            if (LEDTimer.milliseconds()>=1000 && oldPattern!=pattern) {
+                pattern = setLEDColor(frontColor, backColor);
+                blinkinLedDriver.setPattern(pattern);
+                LEDTimer.reset();
+            }
 
             telemetry.addData("Pattern: ", pattern.toString());
             telemetry.addLine("Back sensor");

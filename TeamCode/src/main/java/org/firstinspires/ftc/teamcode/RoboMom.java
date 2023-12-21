@@ -250,13 +250,13 @@ public abstract class RoboMom extends LinearOpMode {
             if (colorFront == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.WHITE;}
             if (colorFront == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
             if (colorFront == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorFront == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.VIOLET;}
+            if (colorFront == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.BLUE;}
             if (colorFront == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.BLACK;}
         } else if (colorFront == "NONE") {
             if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.WHITE;}
             if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
             if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.VIOLET;}
+            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.BLUE;}
         } else {
             if (colorFront == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY;}
             if (colorFront == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE;}
