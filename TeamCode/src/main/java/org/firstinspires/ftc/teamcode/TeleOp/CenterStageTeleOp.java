@@ -202,8 +202,8 @@ public class CenterStageTeleOp extends RoboMom {
 //                    forwardGain *= rightTriggerPull;
 //                    rotationGain *= rightTriggerPull;
 
-                    double x = -STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                    double y = FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
+                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
 
 //                    double x = 0.5;
 //                    double y = 0.7;
