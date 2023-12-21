@@ -25,16 +25,16 @@ public class PixelColorDetection extends RoboMom {
     final float[] frontHSVValues = new float[3];
 
     RevBlinkinLedDriver blinkinLedDriver;
-    RevBlinkinLedDriver.BlinkinPattern pattern;
+    RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;;
 
     double yellowBack = 80;
-    double yellowFront = 141;
-    double greenBack = 150;
-    double greenFront = 170;
+    double yellowFront = 100;
+    double greenBack = 120;
+    double greenFront = 150;
     double whiteBack = 180;
-    double whiteFront = 195;
-    double purpleBack = 196;
-    double purpleFront = 220;
+    double whiteFront = 200;
+    double purpleBack = 210;
+    double purpleFront = 230;
 
     double sensorDistance = 6.5;
 
@@ -115,11 +115,17 @@ public class PixelColorDetection extends RoboMom {
                 backColor = "WHITE";
             }
 
-            if (LEDTimer.milliseconds()>=1000 && oldPattern!=pattern) {
-                pattern = setLEDColor(frontColor, backColor);
-                blinkinLedDriver.setPattern(pattern);
-                LEDTimer.reset();
+            if (gamepad1.left_bumper) {
+                frontColor = "PARTY";
+
             }
+            if (LEDTimer.milliseconds()>=1000 && oldPattern!=setLEDColor(frontColor, backColor, gamepad1.right_bumper)) {
+                pattern = setLEDColor(frontColor, backColor, gamepad1.right_bumper);
+                LEDTimer.reset();
+            } else {
+                pattern = oldPattern;
+            }
+            blinkinLedDriver.setPattern(pattern);
 
             telemetry.addData("Pattern: ", pattern.toString());
             telemetry.addLine("Back sensor");
