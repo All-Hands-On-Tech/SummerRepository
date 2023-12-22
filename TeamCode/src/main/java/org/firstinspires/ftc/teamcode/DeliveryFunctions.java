@@ -1,11 +1,18 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Color;
+
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
+import com.qualcomm.robotcore.hardware.DistanceSensor;
+import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
+import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
+
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 
 @Disabled
 public class DeliveryFunctions {
@@ -15,6 +22,7 @@ public class DeliveryFunctions {
     private Servo wrist = null;
     private Servo holder1 = null;
     private Servo holder2 = null;
+
     private LinearOpMode linearOpMode;
 
     private double slidePowerMultiplier = 0.75;
@@ -43,6 +51,9 @@ public class DeliveryFunctions {
     public boolean isDisabled = false;
 
     private double initAttempts = 0;
+
+    private colorSensor frontColorSensor;
+    private colorSensor backColorSensor;
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -85,6 +96,9 @@ public class DeliveryFunctions {
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             rightSlide.setDirection(DcMotor.Direction.REVERSE);
+
+            frontColorSensor.InitializeColorSensor("front_color");
+            backColorSensor.InitializeColorSensor("back_color");
         }catch(NullPointerException e){
             initAttempts++;
             linearOpMode.telemetry.addData("Couldn't find delivery.       Attempt: ", initAttempts);
@@ -122,11 +136,50 @@ public class DeliveryFunctions {
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             rightSlide.setDirection(DcMotor.Direction.REVERSE);
+
+            frontColorSensor.InitializeColorSensor("front_color");
+            backColorSensor.InitializeColorSensor("back_color");
+
             isDisabled = false;
         }catch(NullPointerException e){
             initAttempts++;
             linearOpMode.telemetry.addData("Couldn't find delivery.       Attempt: ", initAttempts);
             isDisabled = true;
+        }
+    }
+
+    class colorSensor {
+        NormalizedColorSensor sensor;
+        String backColor = "NONE";
+
+        NormalizedRGBA colors;
+
+        final float[] HSVValues = new float[3];
+
+        void InitializeColorSensor(String deviceName) {
+            sensor = linearOpMode.hardwareMap.get(NormalizedColorSensor.class, deviceName);
+            sensor.setGain(10);
+        }
+
+        void updateColorSensor() {
+            colors = sensor.getNormalizedColors();
+            Color.colorToHSV(colors.toColor(), HSVValues);
+        }
+
+        public String detectPixelColor() {
+            updateColorSensor();
+            if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) < 6.5) {
+                if (HSVValues[0] > 80 && HSVValues[0] < 100) {
+                    return "YELLOW";
+                } else if (HSVValues[0] > 120 && HSVValues[0] < 150) {
+                    return "GREEN";
+                } else if (HSVValues[0] > 180 && HSVValues[0] < 200) {
+                    return "WHITE";
+                } else if (HSVValues[0] > 210 && HSVValues[0] < 230) {
+                    return "PURPLE";
+                }
+            }
+            return "NONE";
         }
     }
 

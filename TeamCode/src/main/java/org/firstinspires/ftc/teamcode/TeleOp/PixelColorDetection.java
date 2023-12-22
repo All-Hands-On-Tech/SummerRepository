@@ -38,7 +38,7 @@ public class PixelColorDetection extends RoboMom {
 
     double sensorDistance = 6.5;
 
-    ElapsedTime LEDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS );
+    ElapsedTime LEDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
     @Override
     public void runOpMode() {
