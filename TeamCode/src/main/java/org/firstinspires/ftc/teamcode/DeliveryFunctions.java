@@ -25,13 +25,15 @@ public class DeliveryFunctions {
 
     private LinearOpMode linearOpMode;
 
-    private double slidePowerMultiplier = 0.75;
+    private double slidePowerMultiplier = 0.5;
     private double CLICKS_PER_METER = 2492.788;
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
-    private final double servoOut = 0.23;
-    private final double servoIn = 0.1820;
-    private final double servoDodge = 0.175;
+
+    private final double servoIn = 0.438;
+    private final double servoOut = servoIn + 0.332;//0.77
+
+    private final double servoDodge = servoIn - 0.017;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -95,10 +97,14 @@ public class DeliveryFunctions {
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
+
             rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
-            frontColorSensor.InitializeColorSensor("front_color");
-            backColorSensor.InitializeColorSensor("back_color");
+//            frontColorSensor.InitializeColorSensor("front_color");
+//            backColorSensor.InitializeColorSensor("back_color");
+
+//            leftSlide.setDirection(DcMotor.Direction.REVERSE);
+
         }catch(NullPointerException e){
             initAttempts++;
             linearOpMode.telemetry.addData("Couldn't find delivery.       Attempt: ", initAttempts);
@@ -137,8 +143,10 @@ public class DeliveryFunctions {
 
             rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
-            frontColorSensor.InitializeColorSensor("front_color");
-            backColorSensor.InitializeColorSensor("back_color");
+//            frontColorSensor.InitializeColorSensor("front_color");
+//            backColorSensor.InitializeColorSensor("back_color");
+
+//            leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
             isDisabled = false;
         }catch(NullPointerException e){
@@ -327,5 +335,9 @@ public class DeliveryFunctions {
         if(i == 1){
             holder2.setPosition(HOLDER_CLOSE);
         }
+    }
+
+    public void SetWristPosition(double position){
+        wrist.setPosition(position);
     }
 }

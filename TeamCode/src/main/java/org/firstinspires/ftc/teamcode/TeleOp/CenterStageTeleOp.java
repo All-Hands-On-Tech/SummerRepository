@@ -123,7 +123,7 @@ public class CenterStageTeleOp extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        //aprilTagsFunctions = new AprilTagsFunctions(this);
+        aprilTagsFunctions = new AprilTagsFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
@@ -363,7 +363,7 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
             if(gamepad2.left_bumper){
-                intakeFunctions.OutakeFromIntake(-0.9f);
+                intakeFunctions.OutakeFromIntake(-1f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
             } else if(gamepad2.left_trigger >= 0.05) {

@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 
 @Disabled
@@ -27,6 +28,7 @@ public class IntakeFunctions {
             intakeMotor = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 //        }catch(NullPointerException e){
 //            initAttempts++;
 //            linearOpMode.telemetry.addData("Couldn't find intake.       Attempt: ", initAttempts);
@@ -39,6 +41,7 @@ public class IntakeFunctions {
             intakeMotor = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
             intakeMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             intakeMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            intakeMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             isDisabled = false;
         }catch(NullPointerException e){
             initAttempts++;
