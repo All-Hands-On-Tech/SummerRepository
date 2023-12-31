@@ -57,8 +57,8 @@ public class CenterStageTeleOp extends RoboMom {
 
     private float TARGET_DISTANCE_TO_TAG = 12;
 
-    final double STRAFE_GAIN = 0.015;
-    final double FORWARD_GAIN = 0.012;
+    final double STRAFE_GAIN = 0.02;
+    final double FORWARD_GAIN = 0.02;
 
     final double ROTATION_GAIN = 0.017;
 
@@ -369,15 +369,15 @@ public class CenterStageTeleOp extends RoboMom {
             } else if(gamepad2.left_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
-                deliveryFunctions.OpenHolderServoByIndex(1);
+                deliveryFunctions.OpenHolderServoByIndex(0);
             }else{
                 intakeFunctions.StopIntakeMotor();
 //                deliveryFunctions.CloseHolderServoByIndex(0);
-                deliveryFunctions.CloseHolderServoByIndex(1);
+                deliveryFunctions.CloseHolderServoByIndex(0);
             }
 
             if(gamepad2.right_bumper)
-                deliveryFunctions.OpenHolderServoByIndex(1);
+                deliveryFunctions.OpenHolderServoByIndex(0);
 
         }
         //when opmode is NOT active

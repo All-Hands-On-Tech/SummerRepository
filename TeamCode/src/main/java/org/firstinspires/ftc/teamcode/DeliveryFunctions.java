@@ -25,7 +25,7 @@ public class DeliveryFunctions {
 
     private LinearOpMode linearOpMode;
 
-    private double slidePowerMultiplier = 0.5;
+    private double slidePowerMultiplier = 0.75;
     private double CLICKS_PER_METER = 2492.788;
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
@@ -46,7 +46,7 @@ public class DeliveryFunctions {
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 135;
 
-    public final double DUMP_TIME = 1;
+    public final double DUMP_TIME = 1.5;
 
     private boolean slidesRunToPosition;
 
@@ -73,7 +73,7 @@ public class DeliveryFunctions {
             leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
             rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-//            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
             holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -98,12 +98,12 @@ public class DeliveryFunctions {
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-            rightSlide.setDirection(DcMotor.Direction.REVERSE);
+//            rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
 //            frontColorSensor.InitializeColorSensor("front_color");
 //            backColorSensor.InitializeColorSensor("back_color");
 
-//            leftSlide.setDirection(DcMotor.Direction.REVERSE);
+            leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
         }catch(NullPointerException e){
             initAttempts++;
@@ -117,8 +117,8 @@ public class DeliveryFunctions {
             leftSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "leftSlide");
             rightSlide  = linearOpMode.hardwareMap.get(DcMotor.class, "rightSlide");
             wrist = linearOpMode.hardwareMap.get(Servo.class, "wrist");
-//            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
-//            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
+            holder1 = linearOpMode.hardwareMap.get(Servo.class, "holder1");
+            holder2 = linearOpMode.hardwareMap.get(Servo.class, "holder2");
             leftSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightSlide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
@@ -141,12 +141,12 @@ public class DeliveryFunctions {
             leftSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
             rightSlide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
-            rightSlide.setDirection(DcMotor.Direction.REVERSE);
+//            rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
 //            frontColorSensor.InitializeColorSensor("front_color");
 //            backColorSensor.InitializeColorSensor("back_color");
 
-//            leftSlide.setDirection(DcMotor.Direction.REVERSE);
+            leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
             isDisabled = false;
         }catch(NullPointerException e){
@@ -249,20 +249,22 @@ public class DeliveryFunctions {
     public void Dump(){
         time.reset();
         while(time.seconds() < DUMP_TIME){
-            holder2.setPosition(HOLDER_OPEN);
+            holder1.setPosition(HOLDER_OPEN);
         }
-            holder2.setPosition(HOLDER_CLOSE);
+            holder1.setPosition(HOLDER_CLOSE);
     }
 
     public void Score(){
 
-        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + 100);
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS);
+        PControlPower();
 
         double leftError = targetPosition - leftSlide.getCurrentPosition();
         double rightError = targetPosition - rightSlide.getCurrentPosition();
         leftError = Math.abs(leftError);
         rightError = Math.abs(rightError);
 
+        wrist.setPosition(servoOut);
         //LIFT
         while(leftError <= TICK_STOP_THRESHOLD
                 &&
@@ -274,10 +276,18 @@ public class DeliveryFunctions {
             rightError = Math.abs(rightError);
 
             PControlPower();
+            linearOpMode.telemetry.addData("Left Error: ", leftError);
+            linearOpMode.telemetry.addData("right Error: ", rightError);
+            linearOpMode.telemetry.update();
         }
 
+        linearOpMode.sleep(1000);
         //DUMP
         Dump();
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + 300);
+        setSlidesPower(0.5);
+        wrist.setPosition(servoDodge);
+        linearOpMode.sleep(500);
 
         setSlidesTargetPosition(0);
         //RETRACT
