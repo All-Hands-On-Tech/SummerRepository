@@ -56,6 +56,10 @@ public class CircleCheckPipeline extends OpenCvPipeline {
         this.isRed = isRed;
     }
 
+    public CircleCheckPipeline() {
+        this.isRed = false;
+    }
+
     @Override
     public void init(Mat firstFrame) {
     }

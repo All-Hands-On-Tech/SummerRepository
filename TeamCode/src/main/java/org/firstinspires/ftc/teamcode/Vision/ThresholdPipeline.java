@@ -32,6 +32,10 @@ public class ThresholdPipeline extends OpenCvPipeline {
 
         this.isRed = isRed;
     }
+    public ThresholdPipeline() {
+
+        this.isRed = false;
+    }
 
     @Override
     public void init(Mat firstFrame) {
