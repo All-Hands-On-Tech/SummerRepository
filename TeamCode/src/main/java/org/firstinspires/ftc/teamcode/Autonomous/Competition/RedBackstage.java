@@ -125,22 +125,18 @@ public class RedBackstage extends RoboMom {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.setSlidesTargetPosition(675);
-                deliveryFunctions.PControlPower();
-                deliveryFunctions.Dump();
-                deliveryFunctions.setSlidesTargetPosition(0);
+                deliveryFunctions.Score();
                 drive.followTrajectorySequence(leftPark);
+                deliveryFunctions.Retract();
                 break;
             case "MID":
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.setSlidesTargetPosition(675);
-                deliveryFunctions.PControlPower();
-                deliveryFunctions.Dump();
-                deliveryFunctions.setSlidesTargetPosition(0);
+                deliveryFunctions.Score();
                 drive.followTrajectorySequence(centerPark);
+                deliveryFunctions.Retract();
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
@@ -149,6 +145,7 @@ public class RedBackstage extends RoboMom {
                 drive.followTrajectorySequence(rightScore);
                 deliveryFunctions.Score();
                 drive.followTrajectorySequence(rightPark);
+                deliveryFunctions.Retract();
                 break;
         }
 

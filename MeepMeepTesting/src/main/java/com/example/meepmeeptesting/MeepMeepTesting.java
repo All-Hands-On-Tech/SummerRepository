@@ -275,6 +275,7 @@ public class MeepMeepTesting {
                                 .setReversed(true)
                                 .splineToLinearHeading(new Pose2d(-40, 15, Math.toRadians(-90)), Math.toRadians(-135))
                                 .lineToLinearHeading(new Pose2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY(), Math.toRadians(90)))
+                                .waitSeconds(5)
                                 .build()
                 );
 
@@ -366,14 +367,14 @@ public class MeepMeepTesting {
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(BlueLandingZoneCenterChopper)
+                    .addEntity(BlueBackstageRightChopper)
                     .start();
         }else {
             meepMeep.setBackground(background)
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(RedBackstageRightChopper)
+                    .addEntity(BlueBackstageRightChopper)
                     .start();
         }
 

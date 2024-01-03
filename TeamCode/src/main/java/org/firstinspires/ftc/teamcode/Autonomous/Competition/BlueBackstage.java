@@ -142,6 +142,7 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(leftScore);
                 deliveryFunctions.Score();
                 drive.followTrajectorySequence(leftPark);
+                deliveryFunctions.Retract();
                 break;
             case "MID":
                 telemetry.addLine("center");
@@ -150,6 +151,7 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(centerScore);
                 deliveryFunctions.Score();
                 drive.followTrajectorySequence(centerPark);
+                deliveryFunctions.Retract();
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
@@ -158,6 +160,7 @@ public class BlueBackstage extends RoboMom {
                 drive.followTrajectorySequence(rightScore);
                 deliveryFunctions.Score();
                 drive.followTrajectorySequence(rightPark);
+                deliveryFunctions.Retract();
                 break;
         }
 

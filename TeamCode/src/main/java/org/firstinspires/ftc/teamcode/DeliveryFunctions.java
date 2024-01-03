@@ -288,6 +288,14 @@ public class DeliveryFunctions {
         setSlidesPower(0.5);
         wrist.setPosition(servoDodge);
         linearOpMode.sleep(500);
+    }
+
+    public void Retract(){
+
+        double leftError = targetPosition - leftSlide.getCurrentPosition();
+        double rightError = targetPosition - rightSlide.getCurrentPosition();
+        leftError = Math.abs(leftError);
+        rightError = Math.abs(rightError);
 
         setSlidesTargetPosition(0);
         //RETRACT
