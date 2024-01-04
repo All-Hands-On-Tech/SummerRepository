@@ -27,7 +27,7 @@ public class RedLandingZone extends RoboMom {
 //    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
 
 //    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
-    DeliveryFunctions deliveryFunctions = new DeliveryFunctions(this, true);
+    DeliveryFunctions deliveryFunctions;
     double fx = VisionConstants.fx;
     double fy = VisionConstants.fy;
     double cx = VisionConstants.cx;
@@ -48,6 +48,8 @@ public class RedLandingZone extends RoboMom {
     @Override
     public void runOpMode() {
 
+
+        deliveryFunctions = new DeliveryFunctions(this, true);
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
 
@@ -84,31 +86,31 @@ public class RedLandingZone extends RoboMom {
                 .build();
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(32, 42, 90))
+                .lineToLinearHeading(new Pose2d(32, 42, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(34, 42, 90))
+                .lineToLinearHeading(new Pose2d(34, 42, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(36, 42, 90))
+                .lineToLinearHeading(new Pose2d(36, 42, Math.toRadians(90)))
                 .build();
 
 
 
-        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, 90))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
                 .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
                 .build();
 
-        TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, 90))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+        TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
                 .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
                 .build();
 
-        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, 90))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
                 .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
                 .build();
 

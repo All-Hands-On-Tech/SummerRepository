@@ -2,17 +2,18 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 
-@Autonomous(name="MANUAL WRIST CONTROL", group="Z")
+@TeleOp(name="MANUAL WRIST CONTROL", group="Z")
 public class WristControlTest extends LinearOpMode{
 
     DeliveryFunctions deliveryFunctions;
 
     int leftMotorPosition;
     int rightMotorPosition;
-    double targetServoPosition = 0.5;
+    double targetServoPosition = 0.08;
 
     @Override
     public void runOpMode() {

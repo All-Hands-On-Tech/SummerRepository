@@ -30,7 +30,7 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    private final double servoIn = 0.438;
+    private final double servoIn = 0.0865;
     private final double servoOut = servoIn + 0.332;//0.77
 
     private final double servoDodge = servoIn - 0.017;//0.421
