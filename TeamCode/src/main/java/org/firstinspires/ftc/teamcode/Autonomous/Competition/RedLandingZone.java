@@ -95,7 +95,7 @@ public class RedLandingZone extends RoboMom {
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(42, 51, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(42.5, 51, Math.toRadians(90)))
                 .build();
 
 
