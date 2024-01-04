@@ -88,15 +88,15 @@ public class BlueLandingZone extends RoboMom {
                 .build();
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-32, 42, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-37, 51, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-34, 42, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-33, 51, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-36, 42, Math.toRadians(90)))
+                .splineToLinearHeading(new Pose2d(-28, 51, Math.toRadians(90)), Math.toRadians(90))
                 .build();
 
 
