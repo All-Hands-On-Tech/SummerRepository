@@ -255,7 +255,7 @@ public class DeliveryFunctions {
     }
 
     public void Score(){
-
+        slidePowerMultiplier = 0.15;
         setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS);
         PControlPower();
 
@@ -263,8 +263,6 @@ public class DeliveryFunctions {
         double rightError = targetPosition - rightSlide.getCurrentPosition();
         leftError = Math.abs(leftError);
         rightError = Math.abs(rightError);
-
-        wrist.setPosition(servoOut);
         //LIFT
         while(leftError <= TICK_STOP_THRESHOLD
                 &&
@@ -281,35 +279,34 @@ public class DeliveryFunctions {
             linearOpMode.telemetry.update();
         }
 
-        linearOpMode.sleep(1000);
+        wrist.setPosition(servoOut);
+
+        linearOpMode.sleep(2000);
         //DUMP
         Dump();
-        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + 300);
-        setSlidesPower(0.5);
+
+        linearOpMode.sleep(1000);
+
         wrist.setPosition(servoDodge);
-        linearOpMode.sleep(500);
     }
 
     public void Retract(){
-
         double leftError = targetPosition - leftSlide.getCurrentPosition();
         double rightError = targetPosition - rightSlide.getCurrentPosition();
         leftError = Math.abs(leftError);
         rightError = Math.abs(rightError);
 
-        setSlidesTargetPosition(0);
+        double tempTarget = leftSlide.getCurrentPosition();
         //RETRACT
-        while(leftError > 0
-                &&
-                rightError > 0){
-
-            leftError = targetPosition - leftSlide.getCurrentPosition();
-            rightError = targetPosition - rightSlide.getCurrentPosition();
-            leftError = Math.abs(leftError);
-            rightError = Math.abs(rightError);
+        while(leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0){
+            tempTarget --;
 
             PControlPower();
         }
+
+        wrist.setPosition(servoIn);
+
+        slidePowerMultiplier = 0.75;
     }
 
     public void WristMovementByLiftPosition(){
