@@ -80,11 +80,11 @@ public class RedBackstage extends RoboMom {
                 .build();
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(28, 51, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(24, 51, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(33, 51, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(28, 51, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
