@@ -59,13 +59,13 @@ public class RedLandingZone extends RoboMom {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(35, -37, Math.toRadians(-90)))
+                .lineToLinearHeading(new Pose2d(30, -37, Math.toRadians(-90)))
                 .waitSeconds(5)
                 .back(2)
-                .lineToLinearHeading(new Pose2d(12, -37, Math.toRadians(180) -1e-6))
-                .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(12, 30, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(9, -37))
+                .lineToConstantHeading(new Vector2d(9, 30))
                 .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+                .turn(Math.toRadians(180))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
@@ -91,7 +91,7 @@ public class RedLandingZone extends RoboMom {
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(37, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(40, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)

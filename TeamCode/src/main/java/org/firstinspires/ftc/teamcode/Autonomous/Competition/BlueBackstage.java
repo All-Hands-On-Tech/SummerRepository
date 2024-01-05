@@ -69,7 +69,7 @@ public class BlueBackstage extends RoboMom {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-40, 21, Math.toRadians(0)), Math.toRadians(-20))
+                .splineToLinearHeading(new Pose2d(-40, 21, Math.toRadians(0)), Math.toRadians(90))
                 .setReversed(true)
                 .strafeTo(new Vector2d(-53, 21))
                 .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))

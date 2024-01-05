@@ -278,10 +278,11 @@ public class DeliveryFunctions {
             linearOpMode.telemetry.addData("right Error: ", rightError);
             linearOpMode.telemetry.update();
         }
+        linearOpMode.sleep(2000);
 
         wrist.setPosition(servoOut);
 
-        linearOpMode.sleep(2000);
+        linearOpMode.sleep(1000);
         //DUMP
         Dump();
 
@@ -296,15 +297,22 @@ public class DeliveryFunctions {
         leftError = Math.abs(leftError);
         rightError = Math.abs(rightError);
 
-        double tempTarget = leftSlide.getCurrentPosition();
+        int tempTarget = leftSlide.getCurrentPosition();
         //RETRACT
         while(leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0){
-            tempTarget --;
+            tempTarget -= 5;
 
-            PControlPower();
+            setSlidesTargetPosition(tempTarget);
+
+            setSlidesPower(0.25);
+
+            if(leftSlide.getCurrentPosition() < CARRIAGE_OUTSIDE_CHASSIS - 350){
+                wrist.setPosition(servoIn);
+            }
         }
+        setSlidesPower(0);
 
-        wrist.setPosition(servoIn);
+
 
         slidePowerMultiplier = 0.75;
     }

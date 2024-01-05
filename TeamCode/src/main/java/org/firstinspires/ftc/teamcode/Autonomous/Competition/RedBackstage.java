@@ -62,29 +62,33 @@ public class RedBackstage extends RoboMom {
                 .splineToLinearHeading(new Pose2d(32, 10, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(true)
                 .strafeTo(new Vector2d(53, 21))
+                .setReversed(false)
                 .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(34, 12, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(34.5, 12, Math.toRadians(180)), Math.toRadians(180))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(43, 7, Math.toRadians(90)), Math.toRadians(-135))
+                .splineToLinearHeading(new Pose2d(43, 7, Math.toRadians(90)), Math.toRadians(90))
+                .setReversed(false)
                 .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
                 .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(33, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(39, 23, Math.toRadians(180)), Math.toRadians(90))
+                .back(2)
                 .setReversed(true)
-                .strafeTo(new Vector2d(33, 15))
+                .strafeTo(new Vector2d(40, 30))
+                .setReversed(false)
                 .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))
                 .build();
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(23, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(37, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(38, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
@@ -92,18 +96,18 @@ public class RedBackstage extends RoboMom {
                 .build();
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
                 .splineToConstantHeading(new Vector2d(55, 50), Math.toRadians(90))
                 .build();
 
         TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), 90))
+                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
                 .splineToConstantHeading(new Vector2d(55, 50), Math.toRadians(90))
                 .build();
 
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, Math.toRadians(90)))
                 .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(55, 50), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(58, 50), Math.toRadians(90))
                 .build();
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){

@@ -63,10 +63,11 @@ public class BlueLandingZone extends RoboMom {
                 .lineToLinearHeading(new Pose2d(-35, -37, Math.toRadians(-90)))
                 .waitSeconds(5)
                 .back(2)
-                .lineToLinearHeading(new Pose2d(-12, -37, Math.toRadians(0) +1e-6))
+                .lineToConstantHeading(new Vector2d(-12, -37))
                 .turn(Math.toRadians(90))
-                .lineToLinearHeading(new Pose2d(-12, 30, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(-12, 30))
                 .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+                .turn(Math.toRadians(180))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
