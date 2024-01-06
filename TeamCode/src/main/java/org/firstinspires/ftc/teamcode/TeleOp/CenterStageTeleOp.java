@@ -45,7 +45,7 @@ import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 
-@TeleOp(name="CenterStage Teleop", group="A")
+@TeleOp(name="CenterStage Teleop", group="AAA")
 
 
 public class CenterStageTeleOp extends RoboMom {
