@@ -249,9 +249,9 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
-                                .splineToLinearHeading(new Pose2d(-40, 21, Math.toRadians(0)), Math.toRadians(-20))
+                                .splineToLinearHeading(new Pose2d(-40, 24, Math.toRadians(0)), Math.toRadians(0))
                                 .setReversed(true)
-                                .strafeTo(new Vector2d(-53, 21))
+                                .strafeTo(new Vector2d(-53, 26))
                                 .lineToLinearHeading(new Pose2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY(), Math.toRadians(90)))
                                 .build()
                 );
@@ -271,7 +271,7 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
-                                .splineToLinearHeading(new Pose2d(-33, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                                .splineToLinearHeading(new Pose2d(-33, 15, Math.toRadians(-90)), Math.toRadians(-90))
                                 .setReversed(true)
                                 .splineToLinearHeading(new Pose2d(-40, 15, Math.toRadians(-90)), Math.toRadians(-135))
                                 .lineToLinearHeading(new Pose2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY(), Math.toRadians(90)))
@@ -299,13 +299,21 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(RED_LANDING_ZONE_START_POSE)
-                                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
+                                .splineToLinearHeading(new Pose2d(33, -35, Math.toRadians(180)), Math.toRadians(0))
                                 .waitSeconds(5)
                                 .strafeTo(new Vector2d(39, -48))
                                 .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
                                 .strafeTo(new Vector2d(12, 30))
                                 .strafeTo(new Vector2d(RED_END_POSE.getX(), RED_END_POSE.getY()))
                                 .build()
+
+//                                .splineToLinearHeading(new Pose2d(39, 23, Math.toRadians(180)), Math.toRadians(90))
+//                                .back(5)
+//                                .setReversed(true)
+//                                .strafeTo(new Vector2d(44, 30))
+//                                .setReversed(false)
+//                                .lineToLinearHeading(new Pose2d(34, 38, Math.toRadians(90)))
+//                                .build()
                 );
 
         RoadRunnerBotEntity RedLandingZoneLeftChopper = new DefaultBotBuilder(meepMeep)
@@ -349,10 +357,12 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
-                                .splineToLinearHeading(new Pose2d(33, 10, Math.toRadians(-90)), Math.toRadians(-90))
+                                .splineToLinearHeading(new Pose2d(39, 23, Math.toRadians(180)), Math.toRadians(90))
+                                .back(5)
                                 .setReversed(true)
-                                .strafeTo(new Vector2d(33, 15))
-                                .lineToLinearHeading(new Pose2d(RED_END_POSE.getX(), RED_END_POSE.getY(), Math.toRadians(90)))
+                                .strafeTo(new Vector2d(44, 30))
+                                .setReversed(false)
+                                .lineToLinearHeading(new Pose2d(34, 38, Math.toRadians(90)))
                                 .build()
                 );
 
@@ -366,7 +376,7 @@ public class MeepMeepTesting {
             meepMeep.setBackground(img)
 //                .addEntity(left)
 //                .addEntity(mid)
-//                .addEntity(right)
+                    .addEntity(RedBackstageRightChopper)
                     .addEntity(BlueBackstageRightChopper)
                     .start();
         }else {

@@ -101,18 +101,18 @@ public class RedLandingZone extends RoboMom {
 
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
+                .back(2)
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
                 .build();
 
         TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
+                .back(2)
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
                 .build();
 
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(32, endPose.getY(), Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(12, 50), Math.toRadians(90))
+                .back(2)
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
                 .build();
 
         webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){

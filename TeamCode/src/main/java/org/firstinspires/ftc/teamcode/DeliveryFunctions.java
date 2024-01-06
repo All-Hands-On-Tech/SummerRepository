@@ -5,7 +5,6 @@ import android.graphics.Color;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.DistanceSensor;
 import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
 import com.qualcomm.robotcore.hardware.NormalizedRGBA;
@@ -33,7 +32,7 @@ public class DeliveryFunctions {
     private final double servoIn = 0.0865;
     private final double servoOut = servoIn + 0.332;//0.77
 
-    private final double servoDodge = servoIn - 0.017;//0.421
+    private final double servoDodge = servoIn - 0.019;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -248,6 +247,7 @@ public class DeliveryFunctions {
 
     public void Dump(){
         time.reset();
+        setSlidesTargetPosition(leftSlide.getCurrentPosition()+100);
         while(time.seconds() < DUMP_TIME){
             holder1.setPosition(HOLDER_OPEN);
         }
@@ -255,8 +255,8 @@ public class DeliveryFunctions {
     }
 
     public void Score(){
-        slidePowerMultiplier = 0.15;
-        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS);
+        slidePowerMultiplier = 0.2;
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + 100);
         PControlPower();
 
         double leftError = targetPosition - leftSlide.getCurrentPosition();
@@ -278,7 +278,7 @@ public class DeliveryFunctions {
             linearOpMode.telemetry.addData("right Error: ", rightError);
             linearOpMode.telemetry.update();
         }
-        linearOpMode.sleep(2000);
+        linearOpMode.sleep(1000);
 
         wrist.setPosition(servoOut);
 
@@ -287,8 +287,8 @@ public class DeliveryFunctions {
         Dump();
 
         linearOpMode.sleep(1000);
-
         wrist.setPosition(servoDodge);
+        linearOpMode.sleep(2000);
     }
 
     public void Retract(){
@@ -306,7 +306,7 @@ public class DeliveryFunctions {
 
             setSlidesPower(0.25);
 
-            if(leftSlide.getCurrentPosition() < CARRIAGE_OUTSIDE_CHASSIS - 350){
+            if(leftSlide.getCurrentPosition() < CARRIAGE_OUTSIDE_CHASSIS - 250){
                 wrist.setPosition(servoIn);
             }
         }
