@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Autonomous.Competition;
+package org.firstinspires.ftc.teamcode.Autonomous.Other;
 
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -18,10 +18,9 @@ public class Score extends LinearOpMode {
         waitForStart();
         if (isStopRequested()) return;
 
-
-        deliveryFunctions.setSlidesTargetPosition(600);
-        sleep(5000);
         deliveryFunctions.Score();
+        sleep(5000);
+        deliveryFunctions.Retract();
 
     }
 }

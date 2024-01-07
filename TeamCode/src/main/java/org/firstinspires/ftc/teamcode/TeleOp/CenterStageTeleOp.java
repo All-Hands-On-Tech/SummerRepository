@@ -97,7 +97,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final double DUMP_TIME = 1;
 
-    private final int LIFT_MAX = 1600;
+    private final int LIFT_MAX = 1800;
     private final int LIFT_MIN = 0;
 
     private int leftMotorPosition;
