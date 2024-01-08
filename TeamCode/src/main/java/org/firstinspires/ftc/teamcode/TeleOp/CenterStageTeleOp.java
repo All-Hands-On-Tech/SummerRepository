@@ -188,6 +188,7 @@ public class CenterStageTeleOp extends RoboMom {
 //                vel = new Vector2d(1, vel.getY());
 //            }
 
+<<<<<<< Updated upstream
 //            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
 //                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
 //                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
@@ -229,6 +230,52 @@ public class CenterStageTeleOp extends RoboMom {
 //            }else{          //align to point (pose of aprilTag)
 //
 //            }
+=======
+//            float[] XYBearing = aprilTagsFunctions.moveToTag(aprilTagsFunctions.BLUE_1_TAG);
+//            drivetrainFunctions.Move(XYBearing[0], XYBearing[1], XYBearing[2], 1);
+
+            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
+                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
+                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
+                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
+                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
+                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
+
+                if(gamepad1.right_trigger > 0.025f){
+                    rightTriggerPull = gamepad1.right_trigger;
+
+//                    strafeGain *= rightTriggerPull;
+//                    forwardGain *= rightTriggerPull;
+//                    rotationGain *= rightTriggerPull;
+
+                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
+
+//                    double x = 0.5;
+//                    double y = 0.7;
+                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+
+                    telemetry.addData("x: ", x);
+                    telemetry.addData("y: ", y);
+                    telemetry.addData("bearing: ", bearing);
+
+                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
+                } else {
+                    controlsRelinquished = false;
+                }
+
+                /*
+                if (currentGamepad1.right_trigger > 0.5) {
+                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
+                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
+                    isAutoDrivingToAprilTag = true;
+                }
+                 */
+            }else{          //align to point (pose of aprilTag)
+
+            }
+>>>>>>> Stashed changes
 
 //            if (aprilTagsFunctions.numberOfDetections()>1) {
 //                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
