@@ -188,7 +188,6 @@ public class CenterStageTeleOp extends RoboMom {
 //                vel = new Vector2d(1, vel.getY());
 //            }
 
-<<<<<<< Updated upstream
 //            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
 //                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
 //                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
@@ -230,7 +229,6 @@ public class CenterStageTeleOp extends RoboMom {
 //            }else{          //align to point (pose of aprilTag)
 //
 //            }
-=======
 //            float[] XYBearing = aprilTagsFunctions.moveToTag(aprilTagsFunctions.BLUE_1_TAG);
 //            drivetrainFunctions.Move(XYBearing[0], XYBearing[1], XYBearing[2], 1);
 
@@ -275,7 +273,6 @@ public class CenterStageTeleOp extends RoboMom {
             }else{          //align to point (pose of aprilTag)
 
             }
->>>>>>> Stashed changes
 
 //            if (aprilTagsFunctions.numberOfDetections()>1) {
 //                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
