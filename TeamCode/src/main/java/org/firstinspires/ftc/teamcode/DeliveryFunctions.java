@@ -24,7 +24,7 @@ public class DeliveryFunctions {
 
     private LinearOpMode linearOpMode;
 
-    private double slidePowerMultiplier = 0.75;
+    private double slidePowerMultiplier = 0.8;
     private double CLICKS_PER_METER = 2492.788;
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
@@ -32,7 +32,7 @@ public class DeliveryFunctions {
     private final double servoIn = 0.0865;
     private final double servoOut = servoIn + 0.332;//0.77
 
-    private final double servoDodge = servoIn - 0.019;//0.421
+    private final double servoDodge = 0;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -41,7 +41,7 @@ public class DeliveryFunctions {
     private double targetServoPosition;
 
     public final double TICK_STOP_THRESHOLD = 20;
-    public final int CARRIAGE_OUTSIDE_CHASSIS = 640;
+    public final int CARRIAGE_OUTSIDE_CHASSIS = 740;
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 135;
 
@@ -247,7 +247,7 @@ public class DeliveryFunctions {
 
     public void Dump(){
         time.reset();
-        setSlidesTargetPosition(leftSlide.getCurrentPosition()+100);
+        setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
         while(time.seconds() < DUMP_TIME){
             holder1.setPosition(HOLDER_OPEN);
         }
@@ -292,6 +292,7 @@ public class DeliveryFunctions {
     }
 
     public void Retract(){
+        wrist.setPosition(servoDodge);
         double leftError = targetPosition - leftSlide.getCurrentPosition();
         double rightError = targetPosition - rightSlide.getCurrentPosition();
         leftError = Math.abs(leftError);
@@ -306,7 +307,7 @@ public class DeliveryFunctions {
 
             setSlidesPower(0.25);
 
-            if(leftSlide.getCurrentPosition() < CARRIAGE_OUTSIDE_CHASSIS - 250){
+            if(leftSlide.getCurrentPosition() < CARRIAGE_OUTSIDE_CHASSIS - 600){
                 wrist.setPosition(servoIn);
             }
         }

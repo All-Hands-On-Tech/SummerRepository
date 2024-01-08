@@ -15,6 +15,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 public class AprilTagsFunctions {
+    private static final double STRAFE_GAIN = 0.02;
+    private static final double FORWARD_GAIN = 0.02;
+    private static final double ROTATION_GAIN = 0.017;
     private LinearOpMode linearOpMode;
     private AprilTagProcessor aprilTag;
     private VisionPortal visionPortal;
@@ -35,7 +38,7 @@ public class AprilTagsFunctions {
     ElapsedTime time = new ElapsedTime();
 
     public AprilTagsFunctions(LinearOpMode l){
-        this.linearOpMode = l;
+        linearOpMode = l;
         Initialize();
     }
 
@@ -228,6 +231,35 @@ public class AprilTagsFunctions {
             return new Pose2d(0/0, 0/0, 0/0);
         }
     }
+    public float[] moveToTag(int tag){
+        if(DetectAprilTag(tag)){
+            linearOpMode.telemetry.addData("Found", "ID %d (%s)", detectedTag.id, detectedTag.metadata.name);
+            linearOpMode.telemetry.addData("Range",  "%5.1f inches", detectedTag.ftcPose.range);
+            linearOpMode.telemetry.addData("Bearing","%3.0f degrees", detectedTag.ftcPose.bearing);
+            linearOpMode.telemetry.addData("Yaw","%3.0f degrees", detectedTag.ftcPose.yaw);
+            linearOpMode.telemetry.addData("X delta","%3.0f inches", detectedTag.ftcPose.x);
+
+            if(linearOpMode.gamepad1.right_trigger > 0.025f){
+                float rightTriggerPull = linearOpMode.gamepad1.right_trigger;
+
+//                    strafeGain *= rightTriggerPull;
+//                    forwardGain *= rightTriggerPull;
+//                    rotationGain *= rightTriggerPull;
+
+                double x = STRAFE_GAIN * detectedTag.ftcPose.yaw;
+                double y = -FORWARD_GAIN * detectedTag.ftcPose.range;
+                double bearing = -ROTATION_GAIN * detectedTag.ftcPose.bearing;
+
+                linearOpMode.telemetry.addData("x: ", x);
+                linearOpMode.telemetry.addData("y: ", y);
+                linearOpMode.telemetry.addData("bearing: ", bearing);
+
+                return new float[] {(float)x, (float)y, (float)bearing};
+            }
+    }
+        return new float[3];
+}
+
 
 }
 
