@@ -57,10 +57,10 @@ public class CenterStageTeleOp extends RoboMom {
 
     private float TARGET_DISTANCE_TO_TAG = 12;
 
-    final double STRAFE_GAIN = 0.02;
-    final double FORWARD_GAIN = 0.02;
+    final double STRAFE_GAIN = 0.0271;
+    final double FORWARD_GAIN = 0.0288;
 
-    final double ROTATION_GAIN = 0.017;
+    final double ROTATION_GAIN = 0.022;
 
     double rightTriggerPull;
 
