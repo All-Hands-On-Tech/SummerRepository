@@ -366,6 +366,42 @@ public class MeepMeepTesting {
                                 .build()
                 );
 
+        RoadRunnerBotEntity BlueBackstageLeft = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-66.51 ,8, Math.toRadians(0)))
+                .splineTo(new Vector2d(-30.28, 23.01), Math.toRadians(90.00))
+                .lineToConstantHeading(new Vector2d(-30.28, 5.80))
+                 .setReversed(false)
+                .splineTo(new Vector2d(-46.47, 27.91), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-35.18, 47.95), Math.toRadians(90.00))
+                .build()
+                );
+
+        RoadRunnerBotEntity LoganAuto = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(11.58, 66.51, Math.toRadians(-90.00)))
+                                .splineTo(new Vector2d(24.14, 65.38), Math.toRadians(5.88))
+                                .splineTo(new Vector2d(34.56, 55.53), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(29.35, 43.28), Math.toRadians(180.00))
+                                .splineTo(new Vector2d(29.63, 27.94), Math.toRadians(0.00))
+                                .splineTo(new Vector2d(28.65, 12.46), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(12.88, 11.05), Math.toRadians(180.00))
+                                .splineTo(new Vector2d(8.23, -0.21), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(18.65, -3.45), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(21.18, -0.21), Math.toRadians(51.95))
+                                .splineTo(new Vector2d(20.34, 4.86), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(29.91, 2.89), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(34.28, -4.29), Math.toRadians(270.00))
+                                .splineTo(new Vector2d(29.77, -16.54), Math.toRadians(225.00))
+                                .splineTo(new Vector2d(30.19, -41.31), Math.toRadians(90.00))
+                                .splineTo(new Vector2d(16.40, -44.13), Math.toRadians(191.53))
+                                .splineTo(new Vector2d(2.32, -40.33), Math.toRadians(153.43))
+                                .splineTo(new Vector2d(-9.08, -37.51), Math.toRadians(90.00))
+                .build()
+                );
+
         Image img = null;
         MeepMeep.Background background = null;
         boolean imgExists = false;
