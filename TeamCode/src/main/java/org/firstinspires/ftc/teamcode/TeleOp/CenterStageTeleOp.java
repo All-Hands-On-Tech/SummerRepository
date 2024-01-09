@@ -88,10 +88,10 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final int LIFT_HIGH = 750;
 
-    private final int SET_1_HEIGHT = 600;
-    private final int SET_2_HEIGHT = 1000;
+    private final int SET_1_HEIGHT = 1000;
+    private final int SET_2_HEIGHT = 1500;
 
-    private final int SET_3_HEIGHT = 1300;
+    private final int SET_3_HEIGHT = 1800;
 
     private final int LIFT_LOW = 0;
 
@@ -106,7 +106,10 @@ public class CenterStageTeleOp extends RoboMom {
     private int targetPosition;
 
     private boolean dumped = false;
+    private boolean secondDump = false;
     private boolean isRunToPosition = true;
+
+    private boolean retracting = false;
 
     ElapsedTime deliveryTimer = new ElapsedTime();
     static DcMotor[] motors;
@@ -123,7 +126,7 @@ public class CenterStageTeleOp extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        //aprilTagsFunctions = new AprilTagsFunctions(this);
+        aprilTagsFunctions = new AprilTagsFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
@@ -355,7 +358,13 @@ public class CenterStageTeleOp extends RoboMom {
                     if(gamepad2.b && !dumped){
                         dumped = true;
                         deliveryTimer.reset();
-                        deliveryFunctions.Dump();
+                        deliveryFunctions.Dump(1);
+                    }
+
+                    if(gamepad2.b && secondDump){
+                        secondDump = true;
+                        deliveryTimer.reset();
+                        deliveryFunctions.Dump(2);
                     }
 
                     if(dumped && deliveryTimer.seconds() >= DUMP_TIME && gamepad2.b){
@@ -365,7 +374,8 @@ public class CenterStageTeleOp extends RoboMom {
                     }
                     break;
                 case DELIVERY_RETRACT:
-
+                    retracting = true;
+                    deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                     //if both motors are within stop threshold
                     if
                     (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
@@ -373,6 +383,7 @@ public class CenterStageTeleOp extends RoboMom {
                     targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
                     {
                         deliveryState = DeliveryState.DELIVERY_START;
+                        retracting = false;
                     } else{
                         //Still Moving
                     }
@@ -398,7 +409,9 @@ public class CenterStageTeleOp extends RoboMom {
 
             deliveryFunctions.PControlPower();
 
-            deliveryFunctions.WristMovementByLiftPosition();
+            if(!retracting){
+                deliveryFunctions.WristMovementByLiftPosition();
+            }
 
 
             //telemetry.addData("Target Position: ", targetPosition);

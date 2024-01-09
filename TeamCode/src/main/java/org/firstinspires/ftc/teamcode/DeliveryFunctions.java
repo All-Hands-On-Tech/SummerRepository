@@ -29,7 +29,7 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    private final double servoIn = 0.0865;
+    private final double servoIn = 0.028;
     private final double servoOut = servoIn + 0.332;//0.77
 
     private final double servoDodge = 0;//0.421
@@ -43,7 +43,7 @@ public class DeliveryFunctions {
     public final double TICK_STOP_THRESHOLD = 20;
     public final int CARRIAGE_OUTSIDE_CHASSIS = 740;
     public final double TICK_LOW_POWER_DISTANCE = 200;
-    public final double CARRIAGE_DODGE = 135;
+    public final double CARRIAGE_DODGE = 200;
 
     public final double DUMP_TIME = 1.5;
 
@@ -245,13 +245,36 @@ public class DeliveryFunctions {
         linearOpMode.telemetry.update();
     }
 
-    public void Dump(){
-        time.reset();
-        setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
-        while(time.seconds() < DUMP_TIME){
-            holder1.setPosition(HOLDER_OPEN);
-        }
+    public void Dump(int holder){
+        if(holder == 1){
+            time.reset();
+            setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
+            while(time.seconds() < DUMP_TIME){
+                holder1.setPosition(HOLDER_OPEN);
+            }
             holder1.setPosition(HOLDER_CLOSE);
+            holder2.setPosition(HOLDER_OPEN);
+        }
+        if(holder == 2){
+            time.reset();
+            setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
+            while(time.seconds() < DUMP_TIME){
+                holder2.setPosition(HOLDER_OPEN);
+            }
+            holder2.setPosition(HOLDER_CLOSE);
+        }
+        if(holder == 3){
+            time.reset();
+            setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
+            while(time.seconds() < DUMP_TIME){
+                holder1.setPosition(HOLDER_OPEN);
+                holder2.setPosition(HOLDER_OPEN);
+            }
+            holder1.setPosition(HOLDER_CLOSE);
+            holder2.setPosition(HOLDER_CLOSE);
+        }
+
+
     }
 
     public void Score(){
@@ -284,7 +307,7 @@ public class DeliveryFunctions {
 
         linearOpMode.sleep(1000);
         //DUMP
-        Dump();
+        Dump(1);
 
         linearOpMode.sleep(1000);
         wrist.setPosition(servoDodge);
@@ -307,7 +330,7 @@ public class DeliveryFunctions {
 
             setSlidesPower(0.25);
 
-            if(leftSlide.getCurrentPosition() < CARRIAGE_OUTSIDE_CHASSIS - 600){
+            if(leftSlide.getCurrentPosition() < CARRIAGE_DODGE){
                 wrist.setPosition(servoIn);
             }
         }

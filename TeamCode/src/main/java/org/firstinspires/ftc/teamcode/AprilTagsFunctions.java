@@ -62,7 +62,9 @@ public class AprilTagsFunctions {
                 .addProcessor(aprilTag)
                 .build();
 
-        setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+        if(visionPortal != null){
+            setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+        }
     }
 
     public List<AprilTagDetection> getDetections() {

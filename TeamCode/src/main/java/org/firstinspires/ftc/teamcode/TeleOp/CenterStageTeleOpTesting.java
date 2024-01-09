@@ -316,7 +316,7 @@ public class CenterStageTeleOpTesting extends RoboMom {
                     if(gamepad2.right_bumper && !dumped){
                         dumped = true;
                         deliveryTimer.reset();
-                        deliveryFunctions.Dump();
+                        deliveryFunctions.Dump(0);
                     }
 
                     if(dumped && deliveryTimer.seconds() >= DUMP_TIME){

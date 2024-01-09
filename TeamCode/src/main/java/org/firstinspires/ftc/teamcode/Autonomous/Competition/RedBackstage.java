@@ -58,28 +58,49 @@ public class RedBackstage extends RoboMom {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
-        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(32, 10, Math.toRadians(-90)), Math.toRadians(-90))
+//        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+//                .splineToLinearHeading(new Pose2d(32, 10, Math.toRadians(-90)), Math.toRadians(-90))
+//                .setReversed(true)
+//                .strafeTo(new Vector2d(53, 21))
+//                .setReversed(false)
+//                .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))
+//                .build();
+//
+//        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
+//                .splineToLinearHeading(new Pose2d(34.5, 12, Math.toRadians(180)), Math.toRadians(180))
+//                .setReversed(true)
+//                .splineToLinearHeading(new Pose2d(43, 7, Math.toRadians(90)), Math.toRadians(90))
+//                .setReversed(false)
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+//                .build();
+//
+//        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+//                .splineToLinearHeading(new Pose2d(39, 23, Math.toRadians(180)), Math.toRadians(90))
+//                .back(2)
+//                .setReversed(true)
+//                .strafeTo(new Vector2d(40, 30))
+//                .setReversed(false)
+//                .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))
+//                .build();
+
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(40, 24, Math.toRadians(0)), Math.toRadians(0))
                 .setReversed(true)
-                .strafeTo(new Vector2d(53, 21))
-                .setReversed(false)
+                .strafeTo(new Vector2d(53, 26))
                 .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(34.5, 12, Math.toRadians(180)), Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(33, 15, Math.toRadians(0)), Math.toRadians(0))
                 .setReversed(true)
-                .splineToLinearHeading(new Pose2d(43, 7, Math.toRadians(90)), Math.toRadians(90))
-                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(40, 9, Math.toRadians(90)), Math.toRadians(135))
                 .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
                 .build();
 
-        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(39, 23, Math.toRadians(180)), Math.toRadians(90))
-                .back(2)
+        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(33, 10, Math.toRadians(-90)), Math.toRadians(-90))
                 .setReversed(true)
-                .strafeTo(new Vector2d(40, 30))
-                .setReversed(false)
+                .splineToLinearHeading(new Pose2d(40, 15, Math.toRadians(-90)), Math.toRadians(-90))
                 .lineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)))
                 .build();
 

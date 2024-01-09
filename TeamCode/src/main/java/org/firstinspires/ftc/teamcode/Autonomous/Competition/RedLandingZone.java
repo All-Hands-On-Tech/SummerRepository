@@ -58,20 +58,78 @@ public class RedLandingZone extends RoboMom {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
+//        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
+//                .lineToLinearHeading(new Pose2d(30, -37, Math.toRadians(-90)))
+//                .waitSeconds(5)
+//                .back(2)
+//                .lineToConstantHeading(new Vector2d(9, -37))
+//                .lineToConstantHeading(new Vector2d(9, 30))
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+//                .turn(Math.toRadians(180))
+//                .build();
+//
+//        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
+//                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
+//                .waitSeconds(5)
+//                .strafeTo(new Vector2d(39, -48))
+//                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
+//                .strafeTo(new Vector2d(12, 30))
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+//                .build();
+//
+//        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+//                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
+//                .waitSeconds(5)
+//                .setReversed(true)
+//                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
+//                .strafeTo(new Vector2d(12, 30))
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+//                .build();
+//
+//        TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
+//                .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))
+//                .build();
+//
+//        TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
+//                .lineToLinearHeading(new Pose2d(40, 52, Math.toRadians(90)))
+//                .build();
+//
+//        TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
+//                .lineToLinearHeading(new Pose2d(42.5, 52, Math.toRadians(90)))
+//                .build();
+//
+//
+//
+//        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
+//                .back(2)
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
+//                .build();
+//
+//        TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, Math.toRadians(90)))
+//                .back(2)
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
+//                .build();
+//
+//        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, Math.toRadians(90)))
+//                .back(2)
+//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
+//                .build();
+
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(30, -37, Math.toRadians(-90)))
-                .waitSeconds(5)
+                .waitSeconds(1)
                 .back(2)
-                .lineToConstantHeading(new Vector2d(9, -37))
-                .lineToConstantHeading(new Vector2d(9, 30))
-                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+                .lineToConstantHeading(new Vector2d(11, -37))
                 .turn(Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(11, 30))
+                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+//                .turn(Math.toRadians(180))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
+                .splineTo(new Vector2d(33, -35), Math.toRadians(0))
                 .waitSeconds(5)
-                .strafeTo(new Vector2d(39, -48))
+                .strafeTo(new Vector2d(36, -55))
                 .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
                 .strafeTo(new Vector2d(12, 30))
                 .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
