@@ -355,23 +355,33 @@ public class CenterStageTeleOp extends RoboMom {
                     }
                     break;
                 case DELIVERY_DUMP:
-                    if(gamepad2.b && !dumped){
+                    boolean queuedB = false;
+                    if(gamepad2.b){
+                        queuedB = true;
+                    }
+
+                    if((gamepad2.b || queuedB) && !dumped){
+                        queuedB = false;
                         dumped = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(1);
                     }
 
-                    if(gamepad2.b && secondDump){
+                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDump){
+                        queuedB = false;
                         secondDump = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(2);
                     }
 
-                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME && gamepad2.b){
+                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump){
+                        queuedB = false;
                         dumped = false;
+                        secondDump = false;
                         deliveryState = DeliveryState.DELIVERY_RETRACT;
                         targetPosition = LIFT_LOW;
                     }
+
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
