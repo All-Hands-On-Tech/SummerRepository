@@ -8,6 +8,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
+import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
@@ -44,12 +45,14 @@ public class AutonomousOpmode extends LinearOpMode {
     protected AprilTagsFunctions aprilTagsFunctions;
     protected CircleDetectionPipeline circleDetectionPipeline;
     protected DeliveryFunctions deliveryFunctions;
+    protected IntakeFunctions intakeFunctions;
 
 
     protected void Initialize(LinearOpMode l) {
         circleDetectionPipeline = new CircleDetectionPipeline(l.telemetry, isRed);
 
         aprilTagsFunctions = new AprilTagsFunctions(l);
+        intakeFunctions = new IntakeFunctions(l);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
         webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
@@ -78,6 +81,10 @@ public class AutonomousOpmode extends LinearOpMode {
         } else{
             return circleDetectionPipeline.spikePosition;
         }
+    }
+
+    protected void MoveToTagForSeconds(int desiredTag, double seconds){
+
     }
 
     //    if (aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)) {
