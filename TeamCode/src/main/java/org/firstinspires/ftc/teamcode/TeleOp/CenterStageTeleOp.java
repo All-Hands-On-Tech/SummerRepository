@@ -152,29 +152,29 @@ public class CenterStageTeleOp extends RoboMom {
 
         while (opModeIsActive()) {
 
-            if(intakeFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+            if (intakeFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 intakeFunctions.Reinitialize();
-            if(deliveryFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+            if (deliveryFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 deliveryFunctions.Reinitialize();
-            if(drivetrainFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+            if (drivetrainFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 drivetrainFunctions.Reinitialize();
-            if(droneLauncherFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+            if (droneLauncherFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 droneLauncherFunctions.Reinitialize();
 
-            if(hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
+            if (hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
 
             /**GAMEPAD 1**/
 
             //Store inputted desired velocity (left_stick_x, left_stick_y)
-            if(!controlsRelinquished){
+            if (!controlsRelinquished) {
 
-                if(Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone){
+                if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone) {
                     drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
-                } else{
+                } else {
                     drivetrainFunctions.Stop();
                 }
-                if(gamepad1.b)
+                if (gamepad1.b)
                     droneLauncherFunctions.ReleaseDrone();
             }
 
@@ -235,14 +235,14 @@ public class CenterStageTeleOp extends RoboMom {
 //            float[] XYBearing = aprilTagsFunctions.moveToTag(aprilTagsFunctions.BLUE_1_TAG);
 //            drivetrainFunctions.Move(XYBearing[0], XYBearing[1], XYBearing[2], 1);
 
-            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
+            if (aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)) {
                 telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
-                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
-                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
-                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
-                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
+                telemetry.addData("Range", "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
+                telemetry.addData("Bearing", "%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
+                telemetry.addData("Yaw", "%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
+                telemetry.addData("X delta", "%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
 
-                if(gamepad1.right_trigger > 0.025f){
+                if (gamepad1.right_trigger > 0.025f) {
                     rightTriggerPull = gamepad1.right_trigger;
 
 //                    strafeGain *= rightTriggerPull;
@@ -260,7 +260,7 @@ public class CenterStageTeleOp extends RoboMom {
                     telemetry.addData("y: ", y);
                     telemetry.addData("bearing: ", bearing);
 
-                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
+                    drivetrainFunctions.Move((float) x, (float) y, (float) bearing, 1);
                 } else {
                     controlsRelinquished = false;
                 }
@@ -273,7 +273,7 @@ public class CenterStageTeleOp extends RoboMom {
                     isAutoDrivingToAprilTag = true;
                 }
                  */
-            }else{          //align to point (pose of aprilTag)
+            } else {          //align to point (pose of aprilTag)
 
             }
 
@@ -294,14 +294,12 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.update();
 
 
-
-
             //slow down power if bumper is pressed
             if (gamepad1.left_bumper) {
                 speedScalar = 0.5;
             } else if (gamepad1.right_bumper) {
                 speedScalar = 0.8;
-            }else {
+            } else {
                 speedScalar = 1;
             }
 
@@ -314,7 +312,7 @@ public class CenterStageTeleOp extends RoboMom {
                 droneLauncherFunctions.ReleaseDrone();
             }
 
-    //Gamepad 2
+            //Gamepad 2
 
             //telemetry.addData("RunMode: ", deliveryFunctions.getRunMode());
             targetPosition = deliveryFunctions.getMotorTargetPosition();
@@ -325,19 +323,26 @@ public class CenterStageTeleOp extends RoboMom {
             //deliveryFunctions.setSlidesPower(0.75);
             //P controlling power at the bottom
 
-            switch (deliveryState){
+            switch (deliveryState) {
                 case DELIVERY_START:
-                    if(gamepad2.a){
+                    if (gamepad2.a) {
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = SET_1_HEIGHT;
                     }
-                    if(gamepad2.x){
+                    if (gamepad2.x) {
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = SET_2_HEIGHT;
                     }
-                    if(gamepad2.y){
+                    if (gamepad2.y) {
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = SET_3_HEIGHT;
+                    }
+
+                    if (gamepad2.b && !dumped && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
+                        deliveryState = DeliveryState.DELIVERY_DUMP;
+                        dumped = true;
+                        deliveryTimer.reset();
+                        deliveryFunctions.Dump(1);
                     }
                     break;
 
@@ -346,35 +351,36 @@ public class CenterStageTeleOp extends RoboMom {
                     //if both motors are within stop threshold
                     if
                     (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
-                    &&
-                    targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
-                    {
+                            &&
+                            targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
                         deliveryState = DeliveryState.DELIVERY_DUMP;
-                    } else{
+                    } else {
                         //Still going
                     }
                     break;
+
+
                 case DELIVERY_DUMP:
                     boolean queuedB = false;
-                    if(gamepad2.b){
+                    if (gamepad2.b) {
                         queuedB = true;
                     }
 
-                    if((gamepad2.b || queuedB) && !dumped){
+                    if ((gamepad2.b || queuedB) && !dumped) {
                         queuedB = false;
                         dumped = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(1);
                     }
 
-                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDump){
+                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDump) {
                         queuedB = false;
                         secondDump = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(2);
                     }
 
-                    if(dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump){
+                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump) {
                         queuedB = false;
                         dumped = false;
                         secondDump = false;
@@ -385,16 +391,18 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
-                    deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                     //if both motors are within stop threshold
                     if
                     (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                             &&
-                    targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD)
-                    {
+                            targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
+                        if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
+                            deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
+                        }
                         deliveryState = DeliveryState.DELIVERY_START;
                         retracting = false;
-                    } else{
+                    } else {
                         //Still Moving
                     }
                     break;
@@ -402,14 +410,14 @@ public class CenterStageTeleOp extends RoboMom {
 
 //            telemetry.addData("Delivery State: ", deliveryState);
 
-            if(Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE){
+            if (Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE) {
                 deliveryState = DeliveryState.DELIVERY_START;
 
 //                telemetry.addLine("manual control");
 
-                if(leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS){
+                if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
                     targetPosition -= gamepad2.left_stick_y * 10;
-                } else{
+                } else {
                     targetPosition -= gamepad2.left_stick_y * 8;
                 }
             }
@@ -419,7 +427,7 @@ public class CenterStageTeleOp extends RoboMom {
 
             deliveryFunctions.PControlPower();
 
-            if(!retracting){
+            if (!retracting) {
                 deliveryFunctions.WristMovementByLiftPosition();
             }
 
@@ -429,22 +437,24 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.addData("Left Motor Position: ", leftMotorPosition);
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
-            if(gamepad2.left_bumper){
+            if (gamepad2.left_bumper) {
                 intakeFunctions.OutakeFromIntake(-1f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
-            } else if(gamepad2.left_trigger >= 0.05) {
+            } else if (gamepad2.left_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
-//                deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(0);
-            }else{
+                deliveryFunctions.OpenHolderServoByIndex(1);
+            } else {
                 intakeFunctions.StopIntakeMotor();
-//                deliveryFunctions.CloseHolderServoByIndex(0);
                 deliveryFunctions.CloseHolderServoByIndex(0);
+                deliveryFunctions.CloseHolderServoByIndex(1);
             }
 
-            if(gamepad2.right_bumper)
+            if (gamepad2.right_bumper){
                 deliveryFunctions.OpenHolderServoByIndex(0);
+                deliveryFunctions.OpenHolderServoByIndex(1);
+            }
 
         }
         //when opmode is NOT active

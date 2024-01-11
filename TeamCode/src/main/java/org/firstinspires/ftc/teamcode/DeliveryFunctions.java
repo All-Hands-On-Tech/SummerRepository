@@ -29,7 +29,7 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    private final double servoIn = 0.028;
+    public final double servoIn = 0.028;
     private final double servoOut = servoIn + 0.332;//0.77
 
     private final double servoDodge = 0;//0.421
@@ -246,26 +246,47 @@ public class DeliveryFunctions {
     }
 
     public void Dump(int holder){
-        if(holder == 1){
+        if(holder == 0){
+            //OPEN BOTH AUTO
             time.reset();
+            //LIFT SLIDES
             setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
             while(time.seconds() < DUMP_TIME){
                 holder1.setPosition(HOLDER_OPEN);
+                holder2.setPosition(HOLDER_OPEN);
             }
             holder1.setPosition(HOLDER_CLOSE);
-            holder2.setPosition(HOLDER_OPEN);
+            holder2.setPosition(HOLDER_CLOSE);
+        }
+
+        if(holder == 1){
+            //OPEN 1
+            time.reset();
+            while(time.seconds() < DUMP_TIME){
+                holder1.setPosition(HOLDER_OPEN);
+            }
+            //CLOSE 1
+            time.reset();
+            while(time.seconds() < DUMP_TIME){
+                holder1.setPosition(HOLDER_CLOSE);
+            }
+            //OPEN 2
+            time.reset();
+            while(time.seconds() < DUMP_TIME){
+                holder2.setPosition(HOLDER_OPEN);
+            }
         }
         if(holder == 2){
+            //OPEN 2
             time.reset();
-            setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
             while(time.seconds() < DUMP_TIME){
                 holder2.setPosition(HOLDER_OPEN);
             }
             holder2.setPosition(HOLDER_CLOSE);
         }
         if(holder == 3){
+            //OPEN BOTH
             time.reset();
-            setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
             while(time.seconds() < DUMP_TIME){
                 holder1.setPosition(HOLDER_OPEN);
                 holder2.setPosition(HOLDER_OPEN);
