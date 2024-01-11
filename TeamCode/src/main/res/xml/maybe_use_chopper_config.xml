@@ -1,0 +1,38 @@
+<?xml version='1.0' encoding='UTF-8' standalone='yes' ?>
+
+<Robot type="FirstInspires-FTC">
+
+    <LynxUsbDevice
+        name="Expansion Hub Portal 1"
+        serialNumber="(embedded)" parentModuleAddress="2">
+
+        <LynxModule name="Control Hub" port="2">
+            <LynxEmbeddedIMU name="imu" port="0" bus="0" />
+
+            <Motor name="rightRear"  port="0" />
+            <Motor name="leftRearAndLeftEncoder"  port="1" />
+            <Motor name="rightFrontAndFrontEncoder"  port="2" />
+            <Motor name="leftFrontAndRightEncoder"  port="3" />
+        </LynxModule>
+
+        <LynxModule name="Expansion Hub" port="3">
+            <Motor name="intake"  port="0" />
+            <Motor name="rightSlide"  port="2" />
+            <Motor name="leftSlide"  port="3" />
+
+            <RevColorSensorV3 name="backColor" port="0" bus="0" />
+            <RevColorSensorV3 name="frontColor" port="0" bus="1" />
+
+            <RevBlinkinLedDriver name="blinkin" port="0" bus="0" />
+
+            <Servo name="droneServo" port="2" />
+            <Servo name="holder1" port="3" />
+            <Servo name="holder2" port="4" />
+            <Servo name="wrist" port="5" />
+        </LynxModule>
+
+    </LynxUsbDevice>
+
+    <Webcam name="Webcam 1" serialNumber="1A76722F"/>
+
+</Robot>
