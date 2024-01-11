@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
@@ -23,7 +24,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 import java.sql.Time;
 
 @Autonomous(name="Blue Backstage", group="B")
-public class BlueBackstage extends RoboMom {
+public class BlueBackstage extends LinearOpMode {
 
     //logan was here
 
@@ -47,6 +48,7 @@ public class BlueBackstage extends RoboMom {
     CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
 
     DeliveryFunctions deliveryFunctions;
+    AprilTagsFunctions aprilTagsFunctions;
 
     Pose2d startPose = new Pose2d(-59.5, 14, Math.toRadians(0));
 
@@ -56,7 +58,6 @@ public class BlueBackstage extends RoboMom {
 
     @Override
     public void runOpMode() {
-        super.runOpMode();
 //        autoTraj = new AutonomousTrajectories(this);
 
         int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
@@ -66,6 +67,7 @@ public class BlueBackstage extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
          deliveryFunctions = new DeliveryFunctions(this, true);
+        aprilTagsFunctions = new AprilTagsFunctions(this);
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
@@ -184,5 +186,47 @@ public class BlueBackstage extends RoboMom {
             return circleDetectionPipeline.spikePosition;
         }
     }
+
+//    if (aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)) {
+//        telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
+//        telemetry.addData("Range", "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
+//        telemetry.addData("Bearing", "%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
+//        telemetry.addData("Yaw", "%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
+//        telemetry.addData("X delta", "%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
+//
+//        if (gamepad1.right_trigger > 0.025f) {
+//            rightTriggerPull = gamepad1.right_trigger;
+//
+////                    strafeGain *= rightTriggerPull;
+////                    forwardGain *= rightTriggerPull;
+////                    rotationGain *= rightTriggerPull;
+//
+//            double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+//            double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
+//
+////                    double x = 0.5;
+////                    double y = 0.7;
+//            double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+//
+//            telemetry.addData("x: ", x);
+//            telemetry.addData("y: ", y);
+//            telemetry.addData("bearing: ", bearing);
+//
+//            drivetrainFunctions.Move((float) x, (float) y, (float) bearing, 1);
+//        } else {
+//            controlsRelinquished = false;
+//        }
+//
+//                /*
+//                if (currentGamepad1.right_trigger > 0.5) {
+//                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
+//                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+//                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
+//                    isAutoDrivingToAprilTag = true;
+//                }
+//                 */
+//    } else {          //align to point (pose of aprilTag)
+//
+//    }
 
 }
