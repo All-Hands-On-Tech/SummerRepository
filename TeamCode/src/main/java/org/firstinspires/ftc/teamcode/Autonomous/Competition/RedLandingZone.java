@@ -5,6 +5,7 @@ import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
+import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
@@ -18,7 +19,7 @@ import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
 
 @Autonomous(name="Red Landing Zone", group="ARed")
-public class RedLandingZone extends RoboMom {
+public class RedLandingZone extends AutonomousOpmode {
 
     //logan was here
 
@@ -116,33 +117,32 @@ public class RedLandingZone extends RoboMom {
 //                .build();
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(30, -37, Math.toRadians(-90)))
-                .waitSeconds(1)
-                .back(2)
-                .lineToConstantHeading(new Vector2d(11, -37))
-                .turn(Math.toRadians(180))
-                .lineToConstantHeading(new Vector2d(11, 30))
-                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
-//                .turn(Math.toRadians(180))
+                .lineToLinearHeading(new Pose2d(33.85, -36.37, Math.toRadians(90.00)))
+                .lineTo(new Vector2d(11.58, -35.48))
+                .lineTo(new Vector2d(12.02, 34.74))
+                .splineTo(new Vector2d(endPose.getX(), endPose.getY()), Math.toRadians(90.00))
                 .build();
+
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(33, -35), Math.toRadians(0))
+                .splineTo(new Vector2d(34.00, -54.33), Math.toRadians(181.60))
+                .splineToSplineHeading(new Pose2d(13.51, -40.38, Math.toRadians(180.00)), Math.toRadians(45.00))
+                .addTemporalMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.3f, 0.5))
                 .waitSeconds(5)
-                .strafeTo(new Vector2d(36, -55))
-                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
-                .strafeTo(new Vector2d(12, 30))
-                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+                .lineToSplineHeading(new Pose2d(11.28, -40.68, Math.toRadians(90.00)))
+                .lineTo(new Vector2d(11.28, 36.96))
+                .splineTo(new Vector2d(endPose.getX(), endPose.getY()), Math.toRadians(90.00))
                 .build();
 
+
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
-                .waitSeconds(5)
-                .setReversed(true)
-                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
-                .strafeTo(new Vector2d(12, 30))
-                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
+                .splineTo(new Vector2d(18.11, -30.43), Math.toRadians(90.00))
+                .addTemporalMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.3f, 0.5))
+                .lineTo(new Vector2d(12.17, -31.03))
+                .lineTo(new Vector2d(12.17, 35.18))
+                .splineTo(new Vector2d(36.07, 46.47), Math.toRadians(90.00))
                 .build();
+
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
                 .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))

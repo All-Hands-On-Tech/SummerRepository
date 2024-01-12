@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
 public class IntakeFunctions {
@@ -15,6 +16,8 @@ public class IntakeFunctions {
     public boolean isDisabled = false;
 
     private double initAttempts = 0;
+
+    private ElapsedTime time = new ElapsedTime();
 
     public IntakeFunctions(LinearOpMode l)
     {
@@ -69,6 +72,16 @@ public class IntakeFunctions {
             return;
 
         intakeMotor.setPower(power);
+    }
+
+    public void OutakeFromIntakeForTime(float power, double outTime){
+        time.reset();
+        if(isDisabled)
+            return;
+        while (outTime > time.seconds()) {
+            intakeMotor.setPower(power);
+        }
+        intakeMotor.setPower(0);
     }
 
 }
