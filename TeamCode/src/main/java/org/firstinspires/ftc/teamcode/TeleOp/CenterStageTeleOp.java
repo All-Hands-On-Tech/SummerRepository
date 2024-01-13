@@ -396,9 +396,10 @@ public class CenterStageTeleOp extends RoboMom {
                     (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                             &&
                             targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                         if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
                             deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
+                        } else {
+                            deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                         }
                         deliveryState = DeliveryState.DELIVERY_START;
                         retracting = false;
