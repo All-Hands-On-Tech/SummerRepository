@@ -384,13 +384,16 @@ public class CenterStageTeleOp extends RoboMom {
                         queuedB = false;
                         dumped = false;
                         secondDump = false;
+                        deliveryTimer.reset();
+                        retracting = true;
+                        deliveryState = DeliveryState.DELIVERY_RETRACT;
                         targetPosition = LIFT_LOW;
                     }
 
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
-                    if(deliveryTimer.seconds() <= DUMP_TIME + 1){
+                    if(deliveryTimer.seconds() <= DUMP_TIME + 5){
                         deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                         break;
                     }
