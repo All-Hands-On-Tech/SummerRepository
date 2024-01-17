@@ -387,14 +387,14 @@ public class CenterStageTeleOp extends RoboMom {
                         deliveryTimer.reset();
                         retracting = true;
                         deliveryState = DeliveryState.DELIVERY_RETRACT;
-                        targetPosition = LIFT_LOW;
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                     }
 
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
                     if(deliveryTimer.seconds() <= DUMP_TIME + 5){
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
+                        targetPosition = LIFT_LOW;
                         break;
                     }
                     //if both motors are within stop threshold
