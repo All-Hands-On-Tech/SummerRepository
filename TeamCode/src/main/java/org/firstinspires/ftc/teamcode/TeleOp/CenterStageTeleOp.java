@@ -393,21 +393,24 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
-                    if(deliveryTimer.seconds() <= DUMP_TIME + 5){
+                    if(deliveryTimer.seconds() <= DUMP_TIME + 2){
                         targetPosition = LIFT_LOW;
                         deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
                         break;
                     }
+
+                    if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
+                    } else {
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
+                    }
+
                     //if both motors are within stop threshold
                     if
-                    (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
+                    (targetPosition + leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                             &&
-                            targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
-                        if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
-                            deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
-                        } else {
-                            deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
-                        }
+                            targetPosition + rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
+
                         deliveryState = DeliveryState.DELIVERY_START;
                         retracting = false;
                     } else {
@@ -437,8 +440,6 @@ public class CenterStageTeleOp extends RoboMom {
 
             if (!retracting) {
                 deliveryFunctions.WristMovementByLiftPosition();
-            } else{
-                deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
             }
 
 

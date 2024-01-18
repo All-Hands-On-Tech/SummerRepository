@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
+import org.firstinspires.ftc.teamcode.Vision.CombinedVisionProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
@@ -19,7 +20,7 @@ public class AprilTagsFunctions {
     private static final double FORWARD_GAIN = 0.02;
     private static final double ROTATION_GAIN = 0.017;
     private LinearOpMode linearOpMode;
-    private AprilTagProcessor aprilTag;
+    private CombinedVisionProcessor aprilTag;
     private VisionPortal visionPortal;
 
     public final int RED_1_TAG = 4;
@@ -45,7 +46,7 @@ public class AprilTagsFunctions {
     private void Initialize()
     {
         // Create the AprilTag processor by using a builder.
-        aprilTag = new AprilTagProcessor.Builder().build();
+        aprilTag = new CombinedVisionProcessor.Builder().build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
