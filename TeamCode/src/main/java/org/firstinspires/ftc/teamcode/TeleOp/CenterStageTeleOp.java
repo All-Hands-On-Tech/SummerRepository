@@ -387,7 +387,7 @@ public class CenterStageTeleOp extends RoboMom {
                         deliveryTimer.reset();
                         retracting = true;
                         deliveryState = DeliveryState.DELIVERY_RETRACT;
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                     }
 
                     break;
@@ -395,14 +395,14 @@ public class CenterStageTeleOp extends RoboMom {
                     retracting = true;
                     if(deliveryTimer.seconds() <= DUMP_TIME + 2){
                         targetPosition = LIFT_LOW;
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                         break;
                     }
 
                     if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
                         deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
                     } else {
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                     }
 
                     //if both motors are within stop threshold
@@ -419,7 +419,7 @@ public class CenterStageTeleOp extends RoboMom {
                     break;
             }
 
-//            telemetry.addData("Delivery State: ", deliveryState);
+            telemetry.addData("Delivery State: ", deliveryState);
 
             if (Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE) {
                 deliveryState = DeliveryState.DELIVERY_START;
