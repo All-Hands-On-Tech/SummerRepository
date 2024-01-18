@@ -420,7 +420,6 @@ public class CenterStageTeleOp extends RoboMom {
 
             if (Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE) {
                 deliveryState = DeliveryState.DELIVERY_START;
-                deliveryFunctions.WristMovementByLiftPosition();
 
 //                telemetry.addLine("manual control");
 
@@ -437,7 +436,9 @@ public class CenterStageTeleOp extends RoboMom {
             deliveryFunctions.PControlPower();
 
             if (!retracting) {
-//                deliveryFunctions.WristMovementByLiftPosition();
+                deliveryFunctions.WristMovementByLiftPosition();
+            } else{
+                deliveryFunctions.SetWristPosition(deliveryFunctions.CARRIAGE_DODGE);
             }
 
 
