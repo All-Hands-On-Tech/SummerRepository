@@ -120,5 +120,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 break;
         }
 
+        MoveToTagForSeconds(0, 1);
+
     }
 }
