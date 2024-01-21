@@ -118,6 +118,7 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
     Mat ROI = new Mat();
 
     boolean isRed;
+    boolean isBackStage;
 
     public float sigmaX = 2.5f;
     public float sigmaY = 2.5f;
@@ -229,6 +230,37 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
         canvasAnnotator = new AprilTagCanvasAnnotator(cameraMatrix);
     }
 
+    public void setProcessorState(Boolean detectingTeamProp){
+        if(detectingTeamProp){
+            state = DetectionState.DETECT_PROP;
+        } else{
+            state = DetectionState.DETECT_APRILTAG;
+        }
+    }
+
+    public Boolean isDetectingTeamProp(){
+        if(state == DetectionState.DETECT_PROP) {
+            return true;
+        }
+        else {
+            return false;
+        }
+
+    }
+
+    public void setStartPosition(boolean isRedAlliance, boolean startingBackstage){
+        isRed = isRedAlliance;
+        isBackStage = startingBackstage;
+    }
+
+    public boolean isTeamPropDetected(){
+        return isDetected;
+    }
+
+    public String getPropDetection(){
+        return spikePosition;
+    }
+
     @Override
     public Object processFrame(Mat input, long captureTimeNanos)
     {
@@ -308,8 +340,10 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
                     spikePosition = "RIGHT";
                     isDetected = true;
 
+                } else if(isBackStage){
+                    spikePosition ="RIGHT";
                 } else{
-                    spikePosition ="MID";
+                    spikePosition = "LEFT";
                 }
 
                 return input;

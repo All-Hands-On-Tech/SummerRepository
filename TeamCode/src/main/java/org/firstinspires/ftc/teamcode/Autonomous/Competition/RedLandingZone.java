@@ -6,12 +6,9 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
-import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
 import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
@@ -186,7 +183,7 @@ public class RedLandingZone extends AutonomousOpmode {
         waitForStart();
         if (isStopRequested()) return;
 
-        spikePosition = MakeDetection(TIMEOUT);
+        spikePosition = MakePropDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
@@ -219,7 +216,7 @@ public class RedLandingZone extends AutonomousOpmode {
 
     }
 
-    public String MakeDetection(int timeoutInSeconds) {
+    public String MakePropDetection(int timeoutInSeconds) {
         int tries = 0;
         while (opModeIsActive() && !circleDetectionPipeline.isDetected() && tries < timeoutInSeconds * 10) {
             sleep(50);

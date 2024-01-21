@@ -29,17 +29,12 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.apache.commons.math3.geometry.euclidean.threed.Rotation;
-import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
-import org.firstinspires.ftc.teamcode.DeliveryFunctions;
+import org.firstinspires.ftc.teamcode.VisionFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
-import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
-import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
@@ -65,7 +60,7 @@ public class DrivetrainAndAprilTag extends RoboMom {
 
     double increment = 0.00001;
 
-    private AprilTagsFunctions aprilTagsFunctions;
+    private VisionFunctions aprilTagsFunctions;
 
     private boolean controlsRelinquished = false;
 
@@ -89,7 +84,7 @@ public class DrivetrainAndAprilTag extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        aprilTagsFunctions = new AprilTagsFunctions(this);
+        aprilTagsFunctions = new VisionFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

@@ -10,17 +10,18 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainCon
 import org.firstinspires.ftc.teamcode.Vision.CombinedVisionProcessor;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
-import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
-public class AprilTagsFunctions {
+public class VisionFunctions {
+
+    public boolean isTeamPropDetected = false;
     private static final double STRAFE_GAIN = 0.02;
     private static final double FORWARD_GAIN = 0.02;
     private static final double ROTATION_GAIN = 0.017;
     private LinearOpMode linearOpMode;
-    private CombinedVisionProcessor aprilTag;
+    private CombinedVisionProcessor visionProcessor;
     private VisionPortal visionPortal;
 
     public final int RED_1_TAG = 4;
@@ -38,7 +39,7 @@ public class AprilTagsFunctions {
     public List<AprilTagDetection> currentDetections = null;
     ElapsedTime time = new ElapsedTime();
 
-    public AprilTagsFunctions(LinearOpMode l){
+    public VisionFunctions(LinearOpMode l){
         linearOpMode = l;
         Initialize();
     }
@@ -46,7 +47,7 @@ public class AprilTagsFunctions {
     private void Initialize()
     {
         // Create the AprilTag processor by using a builder.
-        aprilTag = new CombinedVisionProcessor.Builder().build();
+        visionProcessor = new CombinedVisionProcessor.Builder().build();
 
         // Adjust Image Decimation to trade-off detection-range for detection-rate.
         // eg: Some typical detection data using a Logitech C920 WebCam
@@ -55,12 +56,12 @@ public class AprilTagsFunctions {
         // Decimation = 3 ..  Detect 2" Tag from 4  feet away at 30 Frames Per Second
         // Decimation = 3 ..  Detect 5" Tag from 10 feet away at 30 Frames Per Second
         // Note: Decimation can be changed on-the-fly to adapt during a match.
-        aprilTag.setDecimation(2);
+        visionProcessor.setDecimation(2);
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
                 .setCamera(linearOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
-                .addProcessor(aprilTag)
+                .addProcessor(visionProcessor)
                 .build();
 
         if(visionPortal != null){
@@ -69,10 +70,10 @@ public class AprilTagsFunctions {
     }
 
     public List<AprilTagDetection> getDetections() {
-        return aprilTag.getDetections();
+        return visionProcessor.getDetections();
     }
     public int numberOfDetections() {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        List<AprilTagDetection> currentDetections = visionProcessor.getDetections();
         return currentDetections.size();
     }
 
@@ -108,10 +109,17 @@ public class AprilTagsFunctions {
         }
     }
 
+    public void startDetectingApriltags(){
+        visionProcessor.setProcessorState(false);
+    }
+    public void startDetectingProp(){
+        visionProcessor.setProcessorState(true);
+    }
+
     public boolean DetectAprilTag(int desiredTag) {
         boolean targetFound = false;
         // Step through the list of detected tags and look for a matching tag
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        List<AprilTagDetection> currentDetections = visionProcessor.getDetections();
         for (AprilTagDetection detection : currentDetections) {
             // Look to see if we have size info on this tag.
             if (detection.metadata != null) {
@@ -132,6 +140,14 @@ public class AprilTagsFunctions {
         }
         linearOpMode.telemetry.update();
         return targetFound;
+    }
+
+    public String DetectTeamProp(){
+        if(visionProcessor.isTeamPropDetected()){
+            isTeamPropDetected = true;
+            return visionProcessor.getPropDetection();
+        }
+        return null;
     }
 
     public Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {
@@ -211,7 +227,7 @@ public class AprilTagsFunctions {
     }
 
     public Pose2d AverageAbsolutePositionFromAprilTags() {
-        List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+        List<AprilTagDetection> currentDetections = visionProcessor.getDetections();
         double numOfDetections = numberOfDetections();
         double AprilTagX = 0;
         double AprilTagY = 0;

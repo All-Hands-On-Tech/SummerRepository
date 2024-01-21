@@ -3,25 +3,12 @@ package org.firstinspires.ftc.teamcode.Autonomous.Competition;
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
-import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
-import org.firstinspires.ftc.teamcode.Autonomous.AutonomousTrajectories;
-import org.firstinspires.ftc.teamcode.DeliveryFunctions;
-import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
-import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
-import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
-import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.openftc.easyopencv.OpenCvCamera;
-import org.openftc.easyopencv.OpenCvCameraFactory;
 import org.openftc.easyopencv.OpenCvCameraRotation;
-
-import java.sql.Time;
 
 @Autonomous(name="Blue Backstage", group="B")
 public class BlueBackstage extends AutonomousOpmode {
@@ -102,7 +89,7 @@ public class BlueBackstage extends AutonomousOpmode {
         sleep(1000);
 //        circleDetectionPipeline.setState(CircleDetectionPipeline.DetectionState.DETECT);
 
-        spikePosition = MakeDetection(TIMEOUT);
+        spikePosition = MakePropDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
                 telemetry.addLine("left");
@@ -132,9 +119,6 @@ public class BlueBackstage extends AutonomousOpmode {
                 deliveryFunctions.Retract();
                 break;
         }
-
-        telemetry.addData("X: ", circleDetectionPipeline.getX());
-        telemetry.update();
 
     }
 }

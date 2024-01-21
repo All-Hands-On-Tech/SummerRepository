@@ -40,12 +40,10 @@ import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
+import org.firstinspires.ftc.teamcode.VisionFunctions;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import java.util.List;
 
 
 @TeleOp(name="CenterStage Teleop Testing", group="A")
@@ -67,7 +65,7 @@ public class CenterStageTeleOpTesting extends RoboMom {
 
     double rightTriggerPull;
 
-    private AprilTagsFunctions aprilTagsFunctions;
+    private VisionFunctions aprilTagsFunctions;
 
     private boolean controlsRelinquished = false;
 
@@ -121,7 +119,7 @@ public class CenterStageTeleOpTesting extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        aprilTagsFunctions = new AprilTagsFunctions(this);
+        aprilTagsFunctions = new VisionFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);

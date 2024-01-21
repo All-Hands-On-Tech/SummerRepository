@@ -278,5 +278,15 @@ public abstract class CombinedVisionProcessor implements VisionProcessor
      * @return a list containing fresh detections, or NULL.
      */
     public abstract ArrayList<AprilTagDetection> getFreshDetections();
+
+    public abstract void setProcessorState(Boolean detectingTeamProp);
+
+    public abstract Boolean isDetectingTeamProp();
+
+    public abstract void setStartPosition(boolean isRedAlliance, boolean startingBackstage);
+
+    public abstract boolean isTeamPropDetected();
+
+    public abstract String getPropDetection();
 }
 

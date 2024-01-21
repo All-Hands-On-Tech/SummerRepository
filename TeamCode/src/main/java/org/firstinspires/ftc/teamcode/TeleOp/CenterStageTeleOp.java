@@ -29,7 +29,6 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -40,7 +39,7 @@ import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
-import org.firstinspires.ftc.teamcode.AprilTagsFunctions;
+import org.firstinspires.ftc.teamcode.VisionFunctions;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -64,7 +63,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     double rightTriggerPull;
 
-    private AprilTagsFunctions aprilTagsFunctions;
+    private VisionFunctions aprilTagsFunctions;
 
     private boolean controlsRelinquished = false;
 
@@ -126,7 +125,7 @@ public class CenterStageTeleOp extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        aprilTagsFunctions = new AprilTagsFunctions(this);
+        aprilTagsFunctions = new VisionFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
