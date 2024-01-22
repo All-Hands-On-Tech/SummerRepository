@@ -22,6 +22,7 @@ public class BlueBackstage extends AutonomousOpmode {
     @Override
     public void runOpMode() {
         super.Initialize(this);
+        drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setPoseEstimate(startPose);
 
