@@ -74,15 +74,15 @@ public class BlueBackstage extends AutonomousOpmode {
                 .splineToConstantHeading(new Vector2d(-59, 50), Math.toRadians(90))
                 .build();
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
-            public void onOpened()
-            {
-                webcam.startStreaming(RESWIDTH, RESHEIGHT, OpenCvCameraRotation.UPRIGHT);
-            }
-            public void onError(int errorCode){
-
-            }
-        });
+//        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
+//            public void onOpened()
+//            {
+//                webcam.startStreaming(RESWIDTH, RESHEIGHT, OpenCvCameraRotation.UPRIGHT);
+//            }
+//            public void onError(int errorCode){
+//
+//            }
+//        });
 
         waitForStart();
         if (isStopRequested()) return;
