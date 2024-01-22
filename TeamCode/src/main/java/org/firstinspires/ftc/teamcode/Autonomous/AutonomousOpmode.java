@@ -30,7 +30,7 @@ public class AutonomousOpmode extends LinearOpMode {
     protected int RESHEIGHT = VisionConstants.RESHEIGHT;
     protected int TIMEOUT = 5;
     protected CircleDetectionPipeline circleDetection;
-    protected SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
+//    protected SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
     protected Pose2d startPose;
     protected boolean isRed;
     protected boolean isBackstage;
@@ -61,7 +61,7 @@ public class AutonomousOpmode extends LinearOpMode {
 
         webcam.setPipeline(circleDetectionPipeline);
 
-        drive = new SampleMecanumDrive(hardwareMap);
+//        drive = new SampleMecanumDrive(hardwareMap);
         deliveryFunctions = new DeliveryFunctions(l, true);
         visionFunctions = new VisionFunctions(l);
 
