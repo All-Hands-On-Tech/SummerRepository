@@ -115,7 +115,7 @@ public class RedLandingZone extends AutonomousOpmode {
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(33.85, -36.37, Math.toRadians(90.00)))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.1f, 0.5))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)
                 .lineTo(new Vector2d(11.58, -35.48))
                 .lineTo(new Vector2d(12.02, 34.74))
@@ -126,7 +126,7 @@ public class RedLandingZone extends AutonomousOpmode {
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(34.00, -54.33), Math.toRadians(180.00))
                 .splineToSplineHeading(new Pose2d(13.51, -40.38, Math.toRadians(180.00)), Math.toRadians(45.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.1f, 0.5))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)
                 .lineToSplineHeading(new Pose2d(11.28, -40.68, Math.toRadians(90.00)))
                 .lineTo(new Vector2d(11.28, 36.96))
@@ -136,7 +136,7 @@ public class RedLandingZone extends AutonomousOpmode {
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(18.11, -30.43), Math.toRadians(90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.1f, 0.5))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .lineTo(new Vector2d(12.17, -31.03))
                 .lineTo(new Vector2d(12.17, 35.18))
                 .splineTo(new Vector2d(36.07, 46.47), Math.toRadians(90.00))
