@@ -69,7 +69,7 @@ public class BlueLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-33.00, -54.33), Math.toRadians(0))
+                .splineTo(new Vector2d(-34.00, -54.33), Math.toRadians(0))
                 .splineToSplineHeading(new Pose2d(-13.51, -40.38, Math.toRadians(0.00)), Math.toRadians(135.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)

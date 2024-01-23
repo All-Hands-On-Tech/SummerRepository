@@ -1,5 +1,7 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.util.Size;
+
 import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -60,6 +62,7 @@ public class VisionFunctions {
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
+                .setCameraResolution(new Size(1920,1080))
                 .setCamera(linearOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(visionProcessor)
                 .build();
@@ -67,6 +70,8 @@ public class VisionFunctions {
         if(visionPortal != null){
             setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
         }
+
+        linearOpMode.telemetry.addData("Camera State: ", visionPortal.getCameraState());
     }
 
     public List<AprilTagDetection> getDetections() {
@@ -144,10 +149,14 @@ public class VisionFunctions {
 
     public String DetectTeamProp(){
         if(visionProcessor.isTeamPropDetected()){
-            isTeamPropDetected = true;
+            linearOpMode.telemetry.addData("Team Prop Detection Function", visionProcessor.isTeamPropDetected());
             return visionProcessor.getPropDetection();
         }
         return null;
+    }
+
+    public boolean checkIfPropIsDetected(){
+        return visionProcessor.isTeamPropDetected();
     }
 
     public Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {

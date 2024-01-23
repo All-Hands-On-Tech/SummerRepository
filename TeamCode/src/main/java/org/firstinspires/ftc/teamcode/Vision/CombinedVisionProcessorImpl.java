@@ -153,7 +153,7 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
         STOP
     }
 
-    public DetectionState state = DetectionState.STOP;
+    public DetectionState state = DetectionState.DETECT_PROP;
 
     public CombinedVisionProcessorImpl(double fx, double fy, double cx, double cy, DistanceUnit outputUnitsLength, AngleUnit outputUnitsAngle, AprilTagLibrary tagLibrary, boolean drawAxes, boolean drawCube, boolean drawOutline, boolean drawTagID, TagFamily tagFamily, int threads)
     {
@@ -264,6 +264,7 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
     @Override
     public Object processFrame(Mat input, long captureTimeNanos)
     {
+//        state = DetectionState.DETECT_PROP;
         switch (state){
             case DETECT_APRILTAG:
                 // Convert to greyscale
@@ -346,7 +347,7 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
                     spikePosition = "LEFT";
                 }
 
-                return input;
+                return null;
 
             case STOP:
                 return null;
@@ -550,6 +551,7 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
         {
             ArrayList<AprilTagDetection> ret = detectionsUpdate;
             detectionsUpdate = null;
+
             return ret;
         }
     }

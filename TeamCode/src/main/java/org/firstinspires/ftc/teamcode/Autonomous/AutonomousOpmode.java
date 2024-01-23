@@ -51,6 +51,8 @@ public class AutonomousOpmode extends LinearOpMode {
 
 
     protected void Initialize(LinearOpMode l) {
+        time = new ElapsedTime();
+        time.startTime();
 //        circleDetectionPipeline = new CircleDetectionPipeline(l.telemetry, isRed);
 
         intakeFunctions = new IntakeFunctions(l);
@@ -65,27 +67,34 @@ public class AutonomousOpmode extends LinearOpMode {
         visionFunctions = new VisionFunctions(l);
 
         drivetrainFunctions = new DrivetrainFunctions(l);
+
+        BeginPropDetection();
     }
 
     protected String MakePropDetection(int timeoutInSeconds) {
-        BeginPropDetection();
-        int tries = 0;
-        while (opModeIsActive() && !visionFunctions.isTeamPropDetected && tries < timeoutInSeconds * 10) {
-            sleep(50);
-            tries++;
-        }
-        if (!visionFunctions.isTeamPropDetected){
-            telemetry.addLine("Defaulted");
-            BeginAprilTagDetection();
-            telemetry.addData("Detection tries:", tries);
-            telemetry.addData("Elapsed Time", time.seconds());
-            return "MID";
-        } else{
-            BeginAprilTagDetection();
-            telemetry.addData("Detection tries:", tries);
-            telemetry.addData("Elapsed Time", time.seconds());
-            return visionFunctions.DetectTeamProp();
-        }
+        telemetry.addData("Is Prop detected?", visionFunctions.checkIfPropIsDetected());
+        return visionFunctions.DetectTeamProp();
+//
+//        BeginPropDetection();
+//        int tries = 0;
+//        while (opModeIsActive() && !visionFunctions.checkIfPropIsDetected() && tries < timeoutInSeconds * 10) {
+//
+//
+//            sleep(50);
+//            tries++;
+//        }
+//        if (!visionFunctions.checkIfPropIsDetected()){
+//            telemetry.addLine("Defaulted");
+//            BeginAprilTagDetection();
+//            telemetry.addData("Detection tries:", tries);
+//            telemetry.addData("Elapsed Time", time.seconds());
+//            return "MID";
+//        } else{
+//            BeginAprilTagDetection();
+//            telemetry.addData("Detection tries:", tries);
+//            telemetry.addData("Elapsed Time", time.seconds());
+//            return visionFunctions.DetectTeamProp();
+//        }
     }
 
     protected void BeginAprilTagDetection(){

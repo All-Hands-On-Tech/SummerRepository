@@ -34,7 +34,7 @@ public class BlueBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-24.64, 27.46, Math.toRadians(90)), Math.toRadians(-45.00))
+                .splineToLinearHeading(new Pose2d(-22.64, 29.46, Math.toRadians(90)), Math.toRadians(-45.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();

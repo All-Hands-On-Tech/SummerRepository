@@ -45,7 +45,7 @@ public class DeliveryFunctions {
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 200;
 
-    public final double DUMP_TIME = 1.5;
+    public final double DUMP_TIME = 0.5;
 
     private boolean slidesRunToPosition;
 
@@ -326,7 +326,7 @@ public class DeliveryFunctions {
 
         wrist.setPosition(servoOut);
 
-        linearOpMode.sleep(1000);
+        linearOpMode.sleep(2000);
         //DUMP
         Dump(1);
 
