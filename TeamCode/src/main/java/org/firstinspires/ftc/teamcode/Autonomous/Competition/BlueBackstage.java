@@ -29,7 +29,7 @@ public class BlueBackstage extends AutonomousOpmode {
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-32.51, 32.36), Math.toRadians(90.00))
 //                .addTemporalMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.3f, 0.5))
-                .splineTo(new Vector2d(-endPose.getX(), endPose.getY()), Math.toRadians(90))
+                .splineTo(new Vector2d(endPose.getX(), endPose.getY()), Math.toRadians(90))
                 .build();
 
 
