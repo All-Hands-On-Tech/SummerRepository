@@ -82,22 +82,22 @@ public class RedBackstage extends AutonomousOpmode {
 //                .build();
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(new Pose2d(startPose.getX(), startPose.getY(), Math.toRadians(90.00)))
-                .splineTo(new Vector2d(-32.51, 32.36), Math.toRadians(90.00))
-                .addTemporalMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.3f, 0.5))
-                .splineTo(new Vector2d(-endPose.getX(), endPose.getY()), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-32.51, 32.36, Math.toRadians(90)), Math.toRadians(90.00))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.1f, 0.5))
+                .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(new Pose2d(startPose.getX(), startPose.getY(), Math.toRadians(90.00)))
-                .splineTo(new Vector2d(-24.49, 27.46), Math.toRadians(-90.00))
-                .addTemporalMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.3f, 0.5))
-                .splineTo(new Vector2d(endPose.getX(), endPose.getY()), Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(-24.49, 27.46, Math.toRadians(90)), Math.toRadians(-90.00))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.1f, 0.5))
+                .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(33.55, 9.95), Math.toRadians(90.00))
-                .addTemporalMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.3f, 0.5))
-                .splineTo(new Vector2d(-36.22, 46.47), Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(33.55, 9.95, Math.toRadians(90)), Math.toRadians(90.00))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(0.1f, 0.5))
+                .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
 
