@@ -138,7 +138,7 @@ public class BlueLandingZone extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score();
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -147,7 +147,7 @@ public class BlueLandingZone extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(center);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score();
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -156,7 +156,7 @@ public class BlueLandingZone extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(right);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score();
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;

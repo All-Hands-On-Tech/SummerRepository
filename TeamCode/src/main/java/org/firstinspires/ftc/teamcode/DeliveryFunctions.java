@@ -298,9 +298,9 @@ public class DeliveryFunctions {
 
     }
 
-    public void Score(){
-        slidePowerMultiplier = 0.2;
-        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + 100);
+    public void Score(int ticksFromOutsideChassis){
+        slidePowerMultiplier = 0.5;
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + ticksFromOutsideChassis);
         PControlPower();
 
         double leftError = targetPosition - leftSlide.getCurrentPosition();
@@ -332,7 +332,6 @@ public class DeliveryFunctions {
 
         linearOpMode.sleep(1000);
         wrist.setPosition(servoDodge);
-        linearOpMode.sleep(2000);
     }
 
     public void Retract(){
