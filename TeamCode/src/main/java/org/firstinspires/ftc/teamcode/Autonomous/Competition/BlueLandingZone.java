@@ -36,11 +36,11 @@ public class BlueLandingZone extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(-33.85, -54.37))
+                .lineTo(new Vector2d(-19.85, -48.37))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .waitSeconds(5)
+                .waitSeconds(3)
                 .lineTo(new Vector2d(-11.58, -35.48))
-                .lineTo(new Vector2d(12.02, 34.74))
+                .lineTo(new Vector2d(-12.02, 34.74))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
@@ -49,8 +49,8 @@ public class BlueLandingZone extends AutonomousOpmode {
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-34.00, -54.33), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-13.51, -39, Math.toRadians(0.00)), Math.toRadians(135.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5d))
+                .splineToSplineHeading(new Pose2d(-11.51, -39, Math.toRadians(0.00)), Math.toRadians(135.00))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 1.5d))
                 .waitSeconds(5)
                 .lineToSplineHeading(new Pose2d(-11.28, -40.68, Math.toRadians(90.00)))
                 .lineTo(new Vector2d(-11.28, 36.96))
@@ -59,17 +59,17 @@ public class BlueLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-18.11, -30.43), Math.toRadians(90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5d))
+                .splineToLinearHeading(new Pose2d(-28.11, -37.43, Math.toRadians(-90)), Math.toRadians(90.00))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 1.5d))
                 .waitSeconds(5)
-                .lineTo(new Vector2d(-12.17, -31.03))
-                .lineTo(new Vector2d(-12.17, 35.18))
-                .splineTo(new Vector2d(endPose.getX(), endPose.getY()), Math.toRadians(90.00))
+                .lineTo(new Vector2d(-11, -31.03))
+                .lineTo(new Vector2d(-11, 35.18))
+                .splineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)), Math.toRadians(90.00))
                 .build();
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-40, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-40.25, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)

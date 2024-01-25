@@ -326,7 +326,7 @@ public class DeliveryFunctions {
 
         wrist.setPosition(servoOut);
 
-        linearOpMode.sleep(2000);
+        linearOpMode.sleep(1000);
         //DUMP
         Dump(1);
 
@@ -335,16 +335,17 @@ public class DeliveryFunctions {
     }
 
     public void Retract(){
-        wrist.setPosition(servoDodge);
+        time.reset();
+        while(time.seconds() < 0.5){
+            wrist.setPosition(servoDodge);
+        }
         double leftError = targetPosition - leftSlide.getCurrentPosition();
         double rightError = targetPosition - rightSlide.getCurrentPosition();
-        leftError = Math.abs(leftError);
-        rightError = Math.abs(rightError);
 
         int tempTarget = leftSlide.getCurrentPosition();
         //RETRACT
         while(leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0){
-            tempTarget -= 5;
+            tempTarget -= 4;
 
             setSlidesTargetPosition(tempTarget);
 

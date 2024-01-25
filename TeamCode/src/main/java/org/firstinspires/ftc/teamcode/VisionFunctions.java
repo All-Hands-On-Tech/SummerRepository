@@ -69,7 +69,7 @@ public class VisionFunctions {
                 .build();
 
         if(visionPortal != null){
-//            setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+            setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
         }
 
         linearOpMode.telemetry.addData("Camera State: ", visionPortal.getCameraState());
@@ -85,6 +85,7 @@ public class VisionFunctions {
 
 
     private void setManualExposure(int exposureMS, int gain) {
+        time.reset();
         // Wait for the camera to be open, then use the controls
         if (visionPortal == null) {
             return;
@@ -93,7 +94,7 @@ public class VisionFunctions {
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             linearOpMode.telemetry.addData("Camera", "Waiting");
             linearOpMode.telemetry.update();
-            while (time.time() < TIMEOUT && !linearOpMode.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
+            while (time.seconds() < TIMEOUT && !linearOpMode.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
                 linearOpMode.sleep(20);
             }
             linearOpMode.telemetry.addData("Camera", "Ready");
