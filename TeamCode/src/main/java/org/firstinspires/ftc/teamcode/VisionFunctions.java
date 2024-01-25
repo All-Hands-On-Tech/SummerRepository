@@ -10,6 +10,7 @@ import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.ExposureControl;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.controls.GainControl;
 import org.firstinspires.ftc.teamcode.Vision.CombinedVisionProcessor;
+import org.firstinspires.ftc.teamcode.Vision.VisionConstants;
 import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
@@ -62,13 +63,13 @@ public class VisionFunctions {
 
         // Create the vision portal by using a builder.
         visionPortal = new VisionPortal.Builder()
-                .setCameraResolution(new Size(1920,1080))
+                .setCameraResolution(new Size(VisionConstants.RESWIDTH,VisionConstants.RESHEIGHT))
                 .setCamera(linearOpMode.hardwareMap.get(WebcamName.class, "Webcam 1"))
                 .addProcessor(visionProcessor)
                 .build();
 
         if(visionPortal != null){
-            setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
+//            setManualExposure(6, 250);  // Use low exposure time to reduce motion blur
         }
 
         linearOpMode.telemetry.addData("Camera State: ", visionPortal.getCameraState());
