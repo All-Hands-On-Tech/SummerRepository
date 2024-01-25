@@ -35,8 +35,8 @@ public class BlueLandingZone extends AutonomousOpmode {
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
-        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(-33.85, -36.37))
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+                .lineTo(new Vector2d(-33.85, -54.37))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)
                 .lineTo(new Vector2d(-11.58, -35.48))
@@ -47,9 +47,9 @@ public class BlueLandingZone extends AutonomousOpmode {
 
 
 
-        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-34.00, -54.33), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-13.51, -40.38, Math.toRadians(0.00)), Math.toRadians(135.00))
+                .splineToSplineHeading(new Pose2d(-13.51, -39, Math.toRadians(0.00)), Math.toRadians(135.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5d))
                 .waitSeconds(5)
                 .lineToSplineHeading(new Pose2d(-11.28, -40.68, Math.toRadians(90.00)))
