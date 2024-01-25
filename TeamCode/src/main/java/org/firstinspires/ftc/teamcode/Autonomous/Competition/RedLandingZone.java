@@ -20,98 +20,17 @@ public class RedLandingZone extends AutonomousOpmode {
 
     //logan was here
 
-    private static Pose2d endPose = new Pose2d(34, 38, Math.toRadians(90));
-
-//    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
-
-//    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
-    DeliveryFunctions deliveryFunctions;
-    double fx = VisionConstants.fx;
-    double fy = VisionConstants.fy;
-    double cx = VisionConstants.cx;
-    double cy = VisionConstants.cy;
-
-    int RESWIDTH = VisionConstants.RESWIDTH;
-    int RESHEIGHT = VisionConstants.RESHEIGHT;
-    OpenCvCamera webcam;
-
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, true);
-
+    SampleMecanumDrive drive;
     Pose2d startPose = new Pose2d(59.5, -37, Math.toRadians(180));
-
-    String spikePosition = "center";
-
-    private int TIMEOUT = 5;
+    private static Pose2d endPose = new Pose2d(34, 38, Math.toRadians(90));
+    private String spikePosition = "center";
 
     @Override
     public void runOpMode() {
+        super.Initialize(this);
+        drive = new SampleMecanumDrive(hardwareMap);
 
-
-        deliveryFunctions = new DeliveryFunctions(this, true);
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
-
-        webcam.setPipeline(circleDetectionPipeline);
-
-        SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
-
-//        TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-//                .lineToLinearHeading(new Pose2d(30, -37, Math.toRadians(-90)))
-//                .waitSeconds(5)
-//                .back(2)
-//                .lineToConstantHeading(new Vector2d(9, -37))
-//                .lineToConstantHeading(new Vector2d(9, 30))
-//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
-//                .turn(Math.toRadians(180))
-//                .build();
-//
-//        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-//                .splineTo(new Vector2d(33, -35), Math.toRadians(180))
-//                .waitSeconds(5)
-//                .strafeTo(new Vector2d(39, -48))
-//                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
-//                .strafeTo(new Vector2d(12, 30))
-//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
-//                .build();
-//
-//        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-//                .splineToLinearHeading(new Pose2d(35, -33, Math.toRadians(90)), Math.toRadians(90))
-//                .waitSeconds(5)
-//                .setReversed(true)
-//                .splineToLinearHeading(new Pose2d(12, -35, Math.toRadians(90)), Math.toRadians(90))
-//                .strafeTo(new Vector2d(12, 30))
-//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY()))
-//                .build();
-//
-//        TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-//                .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))
-//                .build();
-//
-//        TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-//                .lineToLinearHeading(new Pose2d(40, 52, Math.toRadians(90)))
-//                .build();
-//
-//        TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-//                .lineToLinearHeading(new Pose2d(42.5, 52, Math.toRadians(90)))
-//                .build();
-//
-//
-//
-//        TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
-//                .back(2)
-//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
-//                .build();
-//
-//        TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(34, 42, Math.toRadians(90)))
-//                .back(2)
-//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
-//                .build();
-//
-//        TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, Math.toRadians(90)))
-//                .back(2)
-//                .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
-//                .build();
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .lineToLinearHeading(new Pose2d(33.85, -36.37, Math.toRadians(90.00)))
@@ -172,18 +91,10 @@ public class RedLandingZone extends AutonomousOpmode {
                 .strafeTo(new Vector2d(endPose.getX(), endPose.getY() + 5))
                 .build();
 
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
-            public void onOpened()
-            {
-                webcam.startStreaming(RESWIDTH, RESHEIGHT, OpenCvCameraRotation.UPRIGHT);
-            }
-            public void onError(int errorCode){
-
-            }
-        });
-
         waitForStart();
         if (isStopRequested()) return;
+
+        sleep(1000);
 
         spikePosition = MakePropDetection(TIMEOUT);
         switch (spikePosition) {
@@ -218,19 +129,4 @@ public class RedLandingZone extends AutonomousOpmode {
 
     }
 
-    public String MakePropDetection(int timeoutInSeconds) {
-        int tries = 0;
-        while (opModeIsActive() && !circleDetectionPipeline.isDetected() && tries < timeoutInSeconds * 10) {
-            sleep(50);
-            tries++;
-            telemetry.addData("Detection tries:", tries);
-        }
-        if (!circleDetectionPipeline.isDetected()){
-            telemetry.addLine("Defaulted");
-
-            return "MID";
-        } else{
-            return circleDetectionPipeline.spikePosition;
-        }
-    }
 }
