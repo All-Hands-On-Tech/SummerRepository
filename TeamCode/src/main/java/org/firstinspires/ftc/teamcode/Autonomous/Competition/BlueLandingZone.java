@@ -30,7 +30,7 @@ public class BlueLandingZone extends AutonomousOpmode {
     @Override
     public void runOpMode() {
 
-        super.Initialize(this);
+        super.Initialize(this, false);
 
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);

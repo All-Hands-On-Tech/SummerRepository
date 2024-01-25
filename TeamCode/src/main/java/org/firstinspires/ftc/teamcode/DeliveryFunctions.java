@@ -29,7 +29,7 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    public final double servoIn = 0.2185;
+    public final double servoIn = 0.22;
     private final double servoOut = servoIn + 0.54;//0.77
 
     public final double servoDodge = 0.2;//0.421
@@ -322,15 +322,15 @@ public class DeliveryFunctions {
             linearOpMode.telemetry.addData("right Error: ", rightError);
             linearOpMode.telemetry.update();
         }
-        linearOpMode.sleep(1000);
+        linearOpMode.sleep(750);
 
         wrist.setPosition(servoOut);
 
-        linearOpMode.sleep(1000);
+        linearOpMode.sleep(2000);
         //DUMP
         Dump(1);
 
-        linearOpMode.sleep(1000);
+//        linearOpMode.sleep(1000);
         wrist.setPosition(servoDodge);
     }
 
@@ -345,7 +345,7 @@ public class DeliveryFunctions {
         int tempTarget = leftSlide.getCurrentPosition();
         //RETRACT
         while(leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0){
-            tempTarget -= 4;
+            tempTarget -= 5;
 
             setSlidesTargetPosition(tempTarget);
 

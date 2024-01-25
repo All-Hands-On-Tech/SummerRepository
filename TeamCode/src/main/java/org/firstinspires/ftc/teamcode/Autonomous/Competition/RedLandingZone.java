@@ -27,18 +27,18 @@ public class RedLandingZone extends AutonomousOpmode {
 
     @Override
     public void runOpMode() {
-        super.Initialize(this);
+        super.Initialize(this, true);
         drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(33.85, -36.37, Math.toRadians(90.00)))
+                .lineToLinearHeading(new Pose2d(33.85, -34.37, Math.toRadians(90.00)))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)
                 .lineTo(new Vector2d(11.58, -35.48))
-                .lineTo(new Vector2d(12.02, 34.74))
-                .splineTo(new Vector2d(endPose.getX(), endPose.getY()), Math.toRadians(90.00))
+                .lineTo(new Vector2d(11.58, 32))
+                .lineTo(new Vector2d(endPose.getX(), endPose.getY()))
                 .build();
 
 
@@ -63,15 +63,15 @@ public class RedLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(28, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(40, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(42.5, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(40, 52, Math.toRadians(90)))
                 .build();
 
 

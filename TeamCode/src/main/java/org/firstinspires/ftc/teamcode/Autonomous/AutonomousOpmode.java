@@ -5,6 +5,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
@@ -50,7 +51,8 @@ public class AutonomousOpmode extends LinearOpMode {
     protected DrivetrainFunctions drivetrainFunctions;
 
 
-    protected void Initialize(LinearOpMode l) {
+    protected void Initialize(LinearOpMode l, boolean AllianceColorisRed) {
+        isRed = AllianceColorisRed;
         time = new ElapsedTime();
         time.startTime();
 //        circleDetectionPipeline = new CircleDetectionPipeline(l.telemetry, isRed);
@@ -73,28 +75,28 @@ public class AutonomousOpmode extends LinearOpMode {
 
     protected String MakePropDetection(int timeoutInSeconds) {
         telemetry.addData("Is Prop detected?", visionFunctions.checkIfPropIsDetected());
-        return visionFunctions.DetectTeamProp();
-//
-//        BeginPropDetection();
-//        int tries = 0;
-//        while (opModeIsActive() && !visionFunctions.checkIfPropIsDetected() && tries < timeoutInSeconds * 10) {
-//
-//
-//            sleep(50);
-//            tries++;
-//        }
-//        if (!visionFunctions.checkIfPropIsDetected()){
-//            telemetry.addLine("Defaulted");
-//            BeginAprilTagDetection();
-//            telemetry.addData("Detection tries:", tries);
-//            telemetry.addData("Elapsed Time", time.seconds());
-//            return "MID";
-//        } else{
-//            BeginAprilTagDetection();
-//            telemetry.addData("Detection tries:", tries);
-//            telemetry.addData("Elapsed Time", time.seconds());
-//            return visionFunctions.DetectTeamProp();
-//        }
+//        return visionFunctions.DetectTeamProp();
+
+        BeginPropDetection();
+        int tries = 0;
+        while (opModeIsActive() && !visionFunctions.checkIfPropIsDetected() && tries < timeoutInSeconds * 10) {
+
+
+            sleep(50);
+            tries++;
+        }
+        if (!visionFunctions.checkIfPropIsDetected()){
+            telemetry.addLine("Defaulted");
+            BeginAprilTagDetection();
+            telemetry.addData("Detection tries:", tries);
+            telemetry.addData("Elapsed Time", time.seconds());
+            return "MID";
+        } else{
+            BeginAprilTagDetection();
+            telemetry.addData("Detection tries:", tries);
+            telemetry.addData("Elapsed Time", time.seconds());
+            return visionFunctions.DetectTeamProp();
+        }
     }
 
     protected void BeginAprilTagDetection(){
