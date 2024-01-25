@@ -7,6 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.teamcode.Autonomous.AutonomousOpmode;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
+import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.Vision.CircleDetectionPipeline;
@@ -19,24 +20,6 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class BlueLandingZone extends AutonomousOpmode {
 
     //logan was here
-
-//    AutonomousTrajectories autoTraj = new AutonomousTrajectories(this);
-
-//    IntakeFunctions intakeFuncts = new IntakeFunctions(this);
-
-    double fx = VisionConstants.fx;
-    double fy = VisionConstants.fy;
-    double cx = VisionConstants.cx;
-    double cy = VisionConstants.cy;
-
-    int RESWIDTH = VisionConstants.RESWIDTH;
-    int RESHEIGHT = VisionConstants.RESHEIGHT;
-    OpenCvCamera webcam;
-
-    CircleDetectionPipeline circleDetectionPipeline = new CircleDetectionPipeline(telemetry, false);
-
-    DeliveryFunctions deliveryFunctions;
-
     Pose2d startPose = new Pose2d(-59.5, -38, Math.toRadians(0));
 
     private static Pose2d endPose = new Pose2d(-34, 38, Math.toRadians(90));
@@ -47,12 +30,8 @@ public class BlueLandingZone extends AutonomousOpmode {
     @Override
     public void runOpMode() {
 
-        int cameraMonitorViewId = hardwareMap.appContext.getResources().getIdentifier("cameraMonitorViewId", "id", hardwareMap.appContext.getPackageName());
-        webcam = OpenCvCameraFactory.getInstance().createWebcam(hardwareMap.get(WebcamName.class, "Webcam 1"), cameraMonitorViewId);
+        super.Initialize(this);
 
-        webcam.setPipeline(circleDetectionPipeline);
-
-        deliveryFunctions = new DeliveryFunctions(this, true);
         SampleMecanumDrive drive = new SampleMecanumDrive(hardwareMap);
         drive.setPoseEstimate(startPose);
 
@@ -71,7 +50,7 @@ public class BlueLandingZone extends AutonomousOpmode {
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-34.00, -54.33), Math.toRadians(0))
                 .splineToSplineHeading(new Pose2d(-13.51, -40.38, Math.toRadians(0.00)), Math.toRadians(135.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5d))
                 .waitSeconds(5)
                 .lineToSplineHeading(new Pose2d(-11.28, -40.68, Math.toRadians(90.00)))
                 .lineTo(new Vector2d(-11.28, 36.96))
@@ -81,7 +60,7 @@ public class BlueLandingZone extends AutonomousOpmode {
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(-18.11, -30.43), Math.toRadians(90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
+                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5d))
                 .waitSeconds(5)
                 .lineTo(new Vector2d(-12.17, -31.03))
                 .lineTo(new Vector2d(-12.17, 35.18))
@@ -116,16 +95,6 @@ public class BlueLandingZone extends AutonomousOpmode {
                 .back(2)
                 .strafeTo(new Vector2d(-30, endPose.getY() + 5))
                 .build();
-
-        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
-            public void onOpened()
-            {
-                webcam.startStreaming(RESWIDTH, RESHEIGHT, OpenCvCameraRotation.UPRIGHT);
-            }
-            public void onError(int errorCode){
-
-            }
-        });
 
         waitForStart();
         if (isStopRequested()) return;
@@ -162,20 +131,6 @@ public class BlueLandingZone extends AutonomousOpmode {
                 break;
         }
 
-    }
-
-    public String MakePropDetection(int timeoutInSeconds) {
-        int tries = 0;
-        while (opModeIsActive() && !circleDetectionPipeline.isDetected() && tries < timeoutInSeconds * 10) {
-            sleep(50);
-            tries++;
-            telemetry.addData("Detection tries:", tries);
-        }
-        if (!circleDetectionPipeline.isDetected()){
-            return "MID";
-        } else{
-            return circleDetectionPipeline.spikePosition;
-        }
     }
 
 

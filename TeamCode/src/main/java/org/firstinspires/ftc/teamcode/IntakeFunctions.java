@@ -19,7 +19,7 @@ public class IntakeFunctions {
 
     private ElapsedTime time = new ElapsedTime();
 
-    public float outPower = 0.175f;
+    public final float outPower = 0.175f;
 
     public IntakeFunctions(LinearOpMode l)
     {
