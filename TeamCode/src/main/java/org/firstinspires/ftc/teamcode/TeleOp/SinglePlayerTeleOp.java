@@ -362,11 +362,11 @@ public class SinglePlayerTeleOp extends RoboMom {
             telemetry.addData("Left Motor Position: ", leftMotorPosition);
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
-            if (gamepad1.left_bumper) {
+            if (gamepad1.y) {
                 intakeFunctions.OutakeFromIntake(-1f);
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
-            } else if (gamepad1.left_trigger >= 0.05) {
+            } else if (gamepad1.right_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad1.left_trigger);
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
