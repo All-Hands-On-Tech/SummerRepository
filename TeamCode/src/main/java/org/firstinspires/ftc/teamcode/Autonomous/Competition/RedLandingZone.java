@@ -27,7 +27,7 @@ public class RedLandingZone extends AutonomousOpmode {
 
     @Override
     public void runOpMode() {
-        super.Initialize(this, true, true);
+        super.Initialize(this, true, false);
         drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setPoseEstimate(startPose);
@@ -44,7 +44,7 @@ public class RedLandingZone extends AutonomousOpmode {
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(32.00, -54.33), Math.toRadians(180.00))
-                .splineToSplineHeading(new Pose2d(12.51, -40.38, Math.toRadians(180.00)), Math.toRadians(45.00))
+                .splineToSplineHeading(new Pose2d(13.51, -45.38, Math.toRadians(-90.00)), Math.toRadians(45.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)
                 .lineToSplineHeading(new Pose2d(11.28, -40.68, Math.toRadians(90.00)))
@@ -104,7 +104,7 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Score(-250);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;

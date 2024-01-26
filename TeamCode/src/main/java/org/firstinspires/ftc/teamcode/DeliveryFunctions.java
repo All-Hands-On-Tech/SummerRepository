@@ -250,11 +250,15 @@ public class DeliveryFunctions {
             //OPEN BOTH AUTO
             time.reset();
             //LIFT SLIDES
-            setSlidesTargetPosition(leftSlide.getCurrentPosition()+250);
             while(time.seconds() < DUMP_TIME){
                 holder1.setPosition(HOLDER_OPEN);
                 holder2.setPosition(HOLDER_OPEN);
+
+                if(time.seconds() > DUMP_TIME/2){
+                    setSlidesTargetPosition(leftSlide.getCurrentPosition()+750);
+                }
             }
+
             holder1.setPosition(HOLDER_CLOSE);
             holder2.setPosition(HOLDER_CLOSE);
         }
@@ -326,9 +330,27 @@ public class DeliveryFunctions {
 
         wrist.setPosition(servoOut);
 
-        linearOpMode.sleep(2000);
+        linearOpMode.sleep(1000);
+
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + ticksFromOutsideChassis - 50);
+        while(leftError <= TICK_STOP_THRESHOLD
+                &&
+                rightError <= TICK_STOP_THRESHOLD){
+
+            leftError = targetPosition - leftSlide.getCurrentPosition();
+            rightError = targetPosition - rightSlide.getCurrentPosition();
+            leftError = Math.abs(leftError);
+            rightError = Math.abs(rightError);
+
+            PControlPower();
+            linearOpMode.telemetry.addData("Left Error: ", leftError);
+            linearOpMode.telemetry.addData("right Error: ", rightError);
+            linearOpMode.telemetry.update();
+        }
+
+        linearOpMode.sleep(1000);
         //DUMP
-        Dump(1);
+        Dump(0);
 
 //        linearOpMode.sleep(1000);
         wrist.setPosition(servoDodge);

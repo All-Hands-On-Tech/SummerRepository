@@ -40,14 +40,14 @@ public class RedBackstage extends AutonomousOpmode {
 
         drive.setPoseEstimate(startPose);
 
-        TrajectorySequence right = drive.trajectorySequenceBuilder(new Pose2d(startPose.getX(), startPose.getY(), Math.toRadians(90.00)))
-                .splineToLinearHeading(new Pose2d(-32.51, 32.36, Math.toRadians(90)), Math.toRadians(90.00))
+        TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(45.51, 22, Math.toRadians(0)), Math.toRadians(0.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
-        TrajectorySequence center = drive.trajectorySequenceBuilder(new Pose2d(startPose.getX(), startPose.getY(), Math.toRadians(90.00)))
-                .splineToLinearHeading(new Pose2d(-24.49, 27.46, Math.toRadians(90)), Math.toRadians(-90.00))
+        TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
+                .splineToLinearHeading(new Pose2d(24, 29, Math.toRadians(90)), Math.toRadians(-90.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
@@ -62,15 +62,15 @@ public class RedBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(27, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(27, 51.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(38, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(35.25, 51.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(42.5, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(41, 50.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
@@ -84,8 +84,9 @@ public class RedBackstage extends AutonomousOpmode {
                 .build();
 
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(36, 42, Math.toRadians(90)))
-                .lineToLinearHeading(new Pose2d(35, endPose.getY(), Math.toRadians(90)))
-                .splineToConstantHeading(new Vector2d(58, 50), Math.toRadians(90))
+                .lineToLinearHeading(new Pose2d(35, endPose.getY()+4, Math.toRadians(90)))
+                .lineTo(new Vector2d(57, endPose.getY()+4))
+                .splineToConstantHeading(new Vector2d(57, 50), Math.toRadians(90))
                 .build();
 
         waitForStart();
@@ -100,7 +101,7 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(0);
+                deliveryFunctions.Score(-250);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -109,7 +110,7 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(center);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score(0);
+                deliveryFunctions.Score(-250);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -118,7 +119,7 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(right);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score(0);
+                deliveryFunctions.Score(-250);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;
