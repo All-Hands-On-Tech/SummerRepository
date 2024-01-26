@@ -144,6 +144,8 @@ public class SinglePlayerTeleOp extends RoboMom {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
+        aprilTagsFunctions.startDetectingApriltags();
+
 
 
 

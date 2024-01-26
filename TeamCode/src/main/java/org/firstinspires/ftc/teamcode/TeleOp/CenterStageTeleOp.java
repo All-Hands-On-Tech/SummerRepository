@@ -141,7 +141,7 @@ public class CenterStageTeleOp extends RoboMom {
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
         rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-
+        aprilTagsFunctions.startDetectingApriltags();
 
 
         waitForStart();
