@@ -64,15 +64,15 @@ public class RedLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(28, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(28, 52.15, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(35, 52.15, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(40, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(40, 52.15, Math.toRadians(90)))
                 .build();
 
 
