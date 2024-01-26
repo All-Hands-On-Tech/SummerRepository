@@ -157,6 +157,10 @@ public class VisionFunctions {
         return null;
     }
 
+    public void setRobotStartPosition(boolean isRed, boolean isBackstage){
+        visionProcessor.setStartPosition(isRed, isBackstage);
+    }
+
     public boolean checkIfPropIsDetected(){
         return visionProcessor.isTeamPropDetected();
     }

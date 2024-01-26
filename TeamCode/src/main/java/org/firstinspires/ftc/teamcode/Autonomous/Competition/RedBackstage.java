@@ -35,7 +35,7 @@ public class RedBackstage extends AutonomousOpmode {
     @Override
     public void runOpMode() {
 
-        super.Initialize(this, true);
+        super.Initialize(this, true, true);
         drive = new SampleMecanumDrive(hardwareMap);
 
         drive.setPoseEstimate(startPose);

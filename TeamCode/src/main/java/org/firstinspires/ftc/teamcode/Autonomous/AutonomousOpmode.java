@@ -51,8 +51,10 @@ public class AutonomousOpmode extends LinearOpMode {
     protected DrivetrainFunctions drivetrainFunctions;
 
 
-    protected void Initialize(LinearOpMode l, boolean AllianceColorisRed) {
+    protected void Initialize(LinearOpMode l, boolean AllianceColorisRed, boolean startBackstage) {
         isRed = AllianceColorisRed;
+        isBackstage = startBackstage;
+
         time = new ElapsedTime();
         time.startTime();
 //        circleDetectionPipeline = new CircleDetectionPipeline(l.telemetry, isRed);
@@ -69,6 +71,8 @@ public class AutonomousOpmode extends LinearOpMode {
         visionFunctions = new VisionFunctions(l);
 
         drivetrainFunctions = new DrivetrainFunctions(l);
+
+        visionFunctions.setRobotStartPosition(isRed, isBackstage);
 
         BeginPropDetection();
     }
