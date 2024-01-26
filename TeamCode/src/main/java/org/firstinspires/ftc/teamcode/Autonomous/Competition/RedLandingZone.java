@@ -54,7 +54,7 @@ public class RedLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(28.11, -35.43, Math.toRadians(-90)), Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(26.11, -35.43, Math.toRadians(-90)), Math.toRadians(90.00))
                 .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
                 .waitSeconds(5)
                 .lineTo(new Vector2d(12.17, -31.03))
