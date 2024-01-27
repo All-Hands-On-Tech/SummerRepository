@@ -359,6 +359,7 @@ public class CenterStageTeleOp extends RoboMom {
                         dumped = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(1);
+                        secondDump = false;
                     }
                     break;
 
@@ -370,6 +371,8 @@ public class CenterStageTeleOp extends RoboMom {
                             &&
                             targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
                         deliveryState = DeliveryState.DELIVERY_DUMP;
+                        dumped = false;
+                        secondDump = false;
                     } else {
                         //Still going
                     }
