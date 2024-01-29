@@ -35,17 +35,17 @@ public class AUTOAPRILTAGTEST extends LinearOpMode {
         sleep(1000);
         apriltagFunctions.startDetectingApriltags();
 
-        MoveToTagForSeconds(apriltagFunctions.BLUE_1_TAG, 1000);
+        MoveToTagForSeconds(apriltagFunctions.BLUE_1_TAG, 1000, 10);
 
 
     }
 
-    private void MoveToTagForSeconds(int desiredTag, double seconds){
+    private void MoveToTagForSeconds(int desiredTag, double seconds, float distanceinInches){
         time.reset();
         while(time.seconds() < seconds){
             apriltagFunctions.DetectAprilTag(desiredTag);
             if(apriltagFunctions.detectedTag != null){
-                float moveProfile[] = apriltagFunctions.moveToTag(desiredTag);
+                float moveProfile[] = apriltagFunctions.moveToTag(desiredTag, distanceinInches);
                 drivetrainFunctions.Move(moveProfile[0], moveProfile[1], moveProfile[2], 0.5);
                 telemetry.addLine("Moving");
             } else {

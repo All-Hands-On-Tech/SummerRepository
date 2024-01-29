@@ -265,7 +265,7 @@ public class VisionFunctions {
             return new Pose2d(0/0, 0/0, 0/0);
         }
     }
-    public float[] moveToTag(int tag){
+    public float[] moveToTag(int tag, float distance){
         if(DetectAprilTag(tag)){
             linearOpMode.telemetry.addData("Found", "ID %d (%s)", detectedTag.id, detectedTag.metadata.name);
             linearOpMode.telemetry.addData("Range",  "%5.1f inches", detectedTag.ftcPose.range);
@@ -274,7 +274,7 @@ public class VisionFunctions {
             linearOpMode.telemetry.addData("X delta","%3.0f inches", detectedTag.ftcPose.x);
 
                 double x = STRAFE_GAIN * detectedTag.ftcPose.yaw;
-                double y = -FORWARD_GAIN * detectedTag.ftcPose.range;
+                double y = -FORWARD_GAIN * (detectedTag.ftcPose.range - distance);
                 double bearing = -ROTATION_GAIN * detectedTag.ftcPose.bearing;
 
                 linearOpMode.telemetry.addData("x: ", x);

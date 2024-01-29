@@ -110,10 +110,10 @@ public class AutonomousOpmode extends LinearOpMode {
         visionFunctions.startDetectingProp();
     }
 
-    protected void MoveToTagForSeconds(int desiredTag, double seconds){
+    protected void MoveToTagForSeconds(int desiredTag, double seconds, float distanceInInches){
         time.reset();
         while(time.seconds() < seconds){
-            float moveProfile[] = visionFunctions.moveToTag(desiredTag);
+            float moveProfile[] = visionFunctions.moveToTag(desiredTag, distanceInInches);
             drivetrainFunctions.Move(moveProfile[0], moveProfile[1], moveProfile[2], 1);
         }
     }
