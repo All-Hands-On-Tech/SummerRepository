@@ -119,6 +119,9 @@ public class CenterStageTeleOp extends RoboMom {
 
     private ElapsedTime hardwareCheckTimer = new ElapsedTime();
 
+    int targetTagIDRed;
+    int targetTagIDBlue;
+
     @Override
     public void runOpMode() {
         super.runOpMode();
@@ -234,15 +237,29 @@ public class CenterStageTeleOp extends RoboMom {
 //            float[] XYBearing = aprilTagsFunctions.moveToTag(aprilTagsFunctions.BLUE_1_TAG);
 //            drivetrainFunctions.Move(XYBearing[0], XYBearing[1], XYBearing[2], 1);
 
-            if (aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)) {
+            if(gamepad1.dpad_left){
+                targetTagIDRed = aprilTagsFunctions.RED_1_TAG;
+                targetTagIDBlue = aprilTagsFunctions.BLUE_1_TAG;
+            }
+            if(gamepad1.dpad_down){
+                targetTagIDRed = aprilTagsFunctions.RED_2_TAG;
+                targetTagIDBlue = aprilTagsFunctions.BLUE_2_TAG;
+            }
+            if(gamepad1.dpad_right){
+                targetTagIDRed = aprilTagsFunctions.RED_3_TAG;
+                targetTagIDBlue = aprilTagsFunctions.BLUE_3_TAG;
+            }
+
+
+            if (aprilTagsFunctions.DetectAprilTag(targetTagIDBlue) || aprilTagsFunctions.DetectAprilTag(targetTagIDRed)) {
                 telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
                 telemetry.addData("Range", "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
                 telemetry.addData("Bearing", "%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
                 telemetry.addData("Yaw", "%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
                 telemetry.addData("X delta", "%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
 
-                if (gamepad1.right_trigger > 0.025f) {
-                    rightTriggerPull = gamepad1.right_trigger;
+                if (gamepad1.dpad_left || gamepad1.dpad_down || gamepad1.dpad_right) {
+//                    rightTriggerPull = gamepad1.right_trigger;
 
 //                    strafeGain *= rightTriggerPull;
 //                    forwardGain *= rightTriggerPull;
@@ -342,6 +359,7 @@ public class CenterStageTeleOp extends RoboMom {
                         dumped = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(1);
+                        secondDump = false;
                     }
                     break;
 
@@ -353,6 +371,8 @@ public class CenterStageTeleOp extends RoboMom {
                             &&
                             targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
                         deliveryState = DeliveryState.DELIVERY_DUMP;
+                        dumped = false;
+                        secondDump = false;
                     } else {
                         //Still going
                     }
