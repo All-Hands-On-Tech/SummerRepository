@@ -15,7 +15,7 @@ public class BlueBackstage extends AutonomousOpmode {
 
     //logan was here
     SampleMecanumDrive drive;
-    Pose2d startPose = new Pose2d(-59.5, 14, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-63, 14.5, Math.toRadians(0));
     private static Pose2d endPose = new Pose2d(-34, 38, Math.toRadians(90));
     private String spikePosition = "center";
 
@@ -27,24 +27,26 @@ public class BlueBackstage extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-32.51, 32.36, Math.toRadians(90)), Math.toRadians(90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .splineToLinearHeading(endPose, Math.toRadians(90))
+                .splineTo(new Vector2d(-30.88, 30.14), Math.toRadians(0.00))
+                .lineToConstantHeading(new Vector2d(-30.73, 37.86))
+                .lineToSplineHeading(endPose)
                 .build();
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-22.64, 29.46, Math.toRadians(90)), Math.toRadians(-45.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .splineToLinearHeading(endPose, Math.toRadians(90))
+                .splineTo(new Vector2d(-21.38, 23.31), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(-21.38, 35.63))
+                .lineToLinearHeading(endPose)
                 .build();
+
 
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-33.55, 9.95, Math.toRadians(90)), Math.toRadians(90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .splineToLinearHeading(endPose, Math.toRadians(90))
+                .splineTo(new Vector2d(21.38, 23.31), Math.toRadians(180.67))
+                .lineToConstantHeading(new Vector2d(21.38, 35.63))
+                .lineToLinearHeading(endPose)
                 .build();
+
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
                 .lineToLinearHeading(new Pose2d(-41, 52, Math.toRadians(90)))
@@ -93,6 +95,7 @@ public class BlueBackstage extends AutonomousOpmode {
         spikePosition = MakePropDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
+                targetApriltagID = visionFunctions.BLUE_1_TAG;
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
@@ -102,6 +105,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 deliveryFunctions.Retract();
                 break;
             case "MID":
+                targetApriltagID = visionFunctions.BLUE_2_TAG;
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
@@ -111,6 +115,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 deliveryFunctions.Retract();
                 break;
             case "RIGHT":
+                targetApriltagID = visionFunctions.BLUE_3_TAG;
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
@@ -121,6 +126,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 break;
         }
 
+//        MoveToTagForSeconds(targetApriltagID, 5);
 
     }
 }

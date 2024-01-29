@@ -26,7 +26,7 @@ public class RedBackstage extends AutonomousOpmode {
 
     SampleMecanumDrive drive;
 
-    Pose2d startPose = new Pose2d(59.5, 14, Math.toRadians(180));
+    Pose2d startPose = new Pose2d(63, 14.5, Math.toRadians(180));
 
     private static Pose2d endPose = new Pose2d(34, 38, Math.toRadians(90));
 
@@ -41,24 +41,26 @@ public class RedBackstage extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(45.51, 22, Math.toRadians(0)), Math.toRadians(0.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .splineToLinearHeading(endPose, Math.toRadians(90))
+                .splineTo(new Vector2d(30.88, 30.14), Math.toRadians(180.00))
+                .lineToConstantHeading(new Vector2d(30.73, 37.86))
+                .lineToSplineHeading(endPose)
                 .build();
 
+
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(24, 29, Math.toRadians(90)), Math.toRadians(-90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .splineToLinearHeading(endPose, Math.toRadians(90))
+                .splineTo(new Vector2d(21.38, 23.31), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(21.38, 35.63))
+                .lineToLinearHeading(endPose)
                 .build();
+
 
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .lineToLinearHeading(new Pose2d(41, 17, Math.toRadians(45)))
-                .splineToLinearHeading(new Pose2d(41, 9, Math.toRadians(45)), Math.toRadians(45.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .splineToLinearHeading(endPose, Math.toRadians(90))
+                .splineTo(new Vector2d(33.55, 7.57), Math.toRadians(180))
+                .lineToConstantHeading(new Vector2d(33.55, 22.42))
+                .lineToLinearHeading(endPose)
                 .build();
+
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)

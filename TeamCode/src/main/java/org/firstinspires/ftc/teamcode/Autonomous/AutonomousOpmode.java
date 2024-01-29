@@ -36,6 +36,7 @@ public class AutonomousOpmode extends LinearOpMode {
     protected boolean isRed;
     protected boolean isBackstage;
     protected String spikePosition;
+    protected int targetApriltagID;
 
     protected TrajectorySequence left;
     protected TrajectorySequence center;

@@ -20,7 +20,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class BlueLandingZone extends AutonomousOpmode {
 
     //logan was here
-    Pose2d startPose = new Pose2d(-59.5, -38, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-63, -38, Math.toRadians(0));
 
     private static Pose2d endPose = new Pose2d(-34, 38, Math.toRadians(90));
 
@@ -36,36 +36,35 @@ public class BlueLandingZone extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .lineTo(new Vector2d(-19.85, -48.37))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 0.5))
-                .waitSeconds(3)
-                .lineTo(new Vector2d(-11.58, -35.48))
-                .lineTo(new Vector2d(-12.02, 34.74))
-                .splineToLinearHeading(endPose, Math.toRadians(90.00))
+                .splineTo(new Vector2d(-46.02, -56.26), Math.toRadians(-23.65))
+                .lineToConstantHeading(new Vector2d(-24.49, -56.26))
+                .splineToLinearHeading(new Pose2d(-18.56, -41.86, Math.toRadians(90.00)), Math.toRadians(90.90))
+                .lineToConstantHeading(new Vector2d(-10.54, -41.86))
+                .splineToConstantHeading(new Vector2d(-11.43, 39.04), Math.toRadians(95.00))
+                .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
+
 
 
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-34.00, -54.33), Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(-11.51, -39, Math.toRadians(0.00)), Math.toRadians(135.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 1.5d))
-                .waitSeconds(5)
-                .lineToSplineHeading(new Pose2d(-11.28, -40.68, Math.toRadians(90.00)))
-                .lineTo(new Vector2d(-11.28, 36.96))
+                .splineTo(new Vector2d(-21.97, -47.36), Math.toRadians(0.00))
+                .lineToConstantHeading(new Vector2d(-21.67, -55.08))
+                .lineToLinearHeading(new Pose2d(-10.69, -48.84, Math.toRadians(90.00)))
+                .splineToConstantHeading(new Vector2d(-10.69, 38.00), Math.toRadians(95.00))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(-28.11, -37.43, Math.toRadians(-90)), Math.toRadians(90.00))
-                .addDisplacementMarker(()->intakeFunctions.OutakeFromIntakeForTime(intakeFunctions.outPower, 1.5d))
-                .waitSeconds(5)
-                .lineTo(new Vector2d(-11, -31.03))
-                .lineTo(new Vector2d(-11, 35.18))
-                .splineToLinearHeading(new Pose2d(endPose.getX(), endPose.getY(), Math.toRadians(90)), Math.toRadians(90.00))
+                .splineTo(new Vector2d(-33.25, -30.88), Math.toRadians(90.00))
+                .lineToConstantHeading(new Vector2d(-33.55, -45.13))
+                .lineToLinearHeading(new Pose2d(-9.95, -46.17, Math.toRadians(90.00)))
+                .splineTo(new Vector2d(-10.84, 39.34), Math.toRadians(95.00))
+                .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
+
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
