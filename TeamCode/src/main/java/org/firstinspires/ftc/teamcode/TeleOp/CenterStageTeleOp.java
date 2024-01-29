@@ -87,8 +87,8 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final int LIFT_HIGH = 750;
 
-    private final int SET_1_HEIGHT = 1000;
-    private final int SET_2_HEIGHT = 1500;
+    private final int SET_1_HEIGHT = 750;
+    private final int SET_2_HEIGHT = 1000;
 
     private final int SET_3_HEIGHT = 1800;
 
@@ -380,13 +380,15 @@ public class CenterStageTeleOp extends RoboMom {
                     }
 
                     if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump) {
-                        queuedB = false;
-                        dumped = false;
-                        secondDump = false;
-                        deliveryTimer.reset();
-                        retracting = true;
-                        deliveryState = DeliveryState.DELIVERY_RETRACT;
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
+//                        queuedB = false;
+//                        dumped = false;
+//                        secondDump = false;
+//                        deliveryTimer.reset();
+//                        retracting = true;
+//                        deliveryState = DeliveryState.DELIVERY_RETRACT;
+//                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
+                        deliveryState = DeliveryState.DELIVERY_LIFT;
+                        targetPosition = SET_1_HEIGHT;
                     }
 
                     break;
@@ -426,7 +428,7 @@ public class CenterStageTeleOp extends RoboMom {
 //                telemetry.addLine("manual control");
 
                 if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
-                    targetPosition -= gamepad2.left_stick_y * 10;
+                    targetPosition -= gamepad2.left_stick_y * 15;
                 } else {
                     targetPosition -= gamepad2.left_stick_y * 8;
                 }

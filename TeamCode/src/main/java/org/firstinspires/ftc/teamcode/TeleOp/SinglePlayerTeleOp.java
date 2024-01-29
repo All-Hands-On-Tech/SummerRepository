@@ -54,7 +54,7 @@ public class SinglePlayerTeleOp extends RoboMom {
 
     private float TARGET_DISTANCE_TO_TAG = 12;
 
-    final double STRAFE_GAIN = 0.0271;
+    final double STRAFE_GAIN = 0.02;
     final double FORWARD_GAIN = 0.0288;
 
     final double ROTATION_GAIN = 0.022;
@@ -85,8 +85,8 @@ public class SinglePlayerTeleOp extends RoboMom {
 
     private final int LIFT_HIGH = 750;
 
-    private final int SET_1_HEIGHT = 1000;
-    private final int SET_2_HEIGHT = 1500;
+    private final int SET_1_HEIGHT = 750;
+    private final int SET_2_HEIGHT = 1000;
 
     private final int SET_3_HEIGHT = 1800;
 
@@ -268,7 +268,7 @@ public class SinglePlayerTeleOp extends RoboMom {
                     (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                             &&
                             targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
-                        deliveryState = DeliveryState.DELIVERY_DUMP;
+                        deliveryState = DeliveryState.DELIVERY_START;
                     } else {
                         //Still going
                     }
@@ -344,7 +344,7 @@ public class SinglePlayerTeleOp extends RoboMom {
             }
 
             if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
-                slideSpeed = 10;
+                slideSpeed = 15;
             } else {
                 slideSpeed = 8;
             }
@@ -369,18 +369,13 @@ public class SinglePlayerTeleOp extends RoboMom {
 //                deliveryFunctions.OpenHolderServoByIndex(0);
 
             } else if (gamepad1.right_trigger >= 0.05) {
-                intakeFunctions.RunIntakeMotor(gamepad1.left_trigger);
+                intakeFunctions.RunIntakeMotor(gamepad1.right_trigger);
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
             } else {
                 intakeFunctions.StopIntakeMotor();
                 deliveryFunctions.CloseHolderServoByIndex(0);
                 deliveryFunctions.CloseHolderServoByIndex(1);
-            }
-
-            if (gamepad1.right_bumper){
-                deliveryFunctions.OpenHolderServoByIndex(0);
-                deliveryFunctions.OpenHolderServoByIndex(1);
             }
 
         }

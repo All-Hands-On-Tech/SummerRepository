@@ -20,9 +20,9 @@ import java.util.concurrent.TimeUnit;
 public class VisionFunctions {
 
     public boolean isTeamPropDetected = false;
-    private static final double STRAFE_GAIN = 0.02;
-    private static final double FORWARD_GAIN = 0.02;
-    private static final double ROTATION_GAIN = 0.017;
+    private static final double STRAFE_GAIN = 0.0339;
+    private static final double FORWARD_GAIN = 0.0227;
+    private static final double ROTATION_GAIN = 0.0448;
     private LinearOpMode linearOpMode;
     private CombinedVisionProcessor visionProcessor;
     private VisionPortal visionPortal;
@@ -273,13 +273,6 @@ public class VisionFunctions {
             linearOpMode.telemetry.addData("Yaw","%3.0f degrees", detectedTag.ftcPose.yaw);
             linearOpMode.telemetry.addData("X delta","%3.0f inches", detectedTag.ftcPose.x);
 
-            if(linearOpMode.gamepad1.right_trigger > 0.025f){
-                float rightTriggerPull = linearOpMode.gamepad1.right_trigger;
-
-//                    strafeGain *= rightTriggerPull;
-//                    forwardGain *= rightTriggerPull;
-//                    rotationGain *= rightTriggerPull;
-
                 double x = STRAFE_GAIN * detectedTag.ftcPose.yaw;
                 double y = -FORWARD_GAIN * detectedTag.ftcPose.range;
                 double bearing = -ROTATION_GAIN * detectedTag.ftcPose.bearing;
@@ -289,7 +282,6 @@ public class VisionFunctions {
                 linearOpMode.telemetry.addData("bearing: ", bearing);
 
                 return new float[] {(float)x, (float)y, (float)bearing};
-            }
     }
         return new float[3];
 }

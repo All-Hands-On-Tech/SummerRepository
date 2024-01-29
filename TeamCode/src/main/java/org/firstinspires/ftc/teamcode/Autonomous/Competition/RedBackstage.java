@@ -62,15 +62,15 @@ public class RedBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(27, 51.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(27, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35.25, 51.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(35.25, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(41, 50.5, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(41, 52, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
