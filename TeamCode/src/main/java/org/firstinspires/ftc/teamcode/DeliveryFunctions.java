@@ -47,6 +47,8 @@ public class DeliveryFunctions {
 
     public final double DUMP_TIME = 0.75;
 
+    public final double RETRACT_TIMEOUT = 7;
+
     private boolean slidesRunToPosition;
 
     public boolean isDisabled = false;
@@ -303,7 +305,7 @@ public class DeliveryFunctions {
     }
 
     public void Score(int ticksFromOutsideChassis){
-        slidePowerMultiplier = 0.5;
+        slidePowerMultiplier = 0.75;
         setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + ticksFromOutsideChassis);
         PControlPower();
 
@@ -352,19 +354,22 @@ public class DeliveryFunctions {
         //DUMP
         Dump(0);
 
-//        linearOpMode.sleep(1000);
         wrist.setPosition(servoDodge);
     }
 
     public void Retract(){
         time.reset();
         wrist.setPosition(servoDodge);
-        double leftError = targetPosition - leftSlide.getCurrentPosition();
-        double rightError = targetPosition - rightSlide.getCurrentPosition();
+
+        //Waiting for servo to move
+        while(time.seconds() > 2){
+            linearOpMode.telemetry.addLine("Waiting to Retract");
+            linearOpMode.telemetry.update();
+        }
 
         int tempTarget = leftSlide.getCurrentPosition();
         //RETRACT
-        while(leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0){
+        while((leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0) || time.seconds() > RETRACT_TIMEOUT){
             tempTarget -= 5;
 
             setSlidesTargetPosition(tempTarget);
@@ -385,7 +390,7 @@ public class DeliveryFunctions {
     public void WristMovementByLiftPosition(){
         servoPosition = wrist.getPosition();
         currentPosition = rightSlide.getCurrentPosition();
-        if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS){
+        if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS - 200){
             //targetServoPosition is going to be out when 200 ticks from outside
             targetServoPosition = servoOut; //* (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
             wrist.setPosition(targetServoPosition);
