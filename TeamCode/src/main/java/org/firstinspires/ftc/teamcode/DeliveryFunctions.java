@@ -45,7 +45,7 @@ public class DeliveryFunctions {
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 150;
 
-    public final double DUMP_TIME = 0.5;
+    public final double DUMP_TIME = 0.75;
 
     private boolean slidesRunToPosition;
 

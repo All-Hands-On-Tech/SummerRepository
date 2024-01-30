@@ -22,7 +22,7 @@ public class BlueLandingZone extends AutonomousOpmode {
     //logan was here
     Pose2d startPose = new Pose2d(-63, -38, Math.toRadians(0));
 
-    private static Pose2d endPose = new Pose2d(-34, 38, Math.toRadians(90));
+    private static Pose2d endPose = new Pose2d(-34, 34, Math.toRadians(90));
 
     String spikePosition = "center";
     int TIMEOUT = 5;
@@ -36,11 +36,11 @@ public class BlueLandingZone extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-46.02, -56.26), Math.toRadians(-23.65))
+                .splineTo(new Vector2d(-46.02, -56.26), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(-24.49, -56.26))
-                .splineToLinearHeading(new Pose2d(-18.56, -41.86, Math.toRadians(90.00)), Math.toRadians(90.90))
-                .lineToConstantHeading(new Vector2d(-10.54, -41.86))
-                .splineToConstantHeading(new Vector2d(-11.43, 39.04), Math.toRadians(95.00))
+                .splineToLinearHeading(new Pose2d(-21, -48, Math.toRadians(90.00)), Math.toRadians(90.0))
+                .lineToConstantHeading(new Vector2d(-11.5, -48))
+                .lineToConstantHeading(new Vector2d(-11.5, 30))
                 .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
@@ -61,7 +61,7 @@ public class BlueLandingZone extends AutonomousOpmode {
                 .splineTo(new Vector2d(-33.25, -30.88), Math.toRadians(90.00))
                 .lineToConstantHeading(new Vector2d(-33.55, -45.13))
                 .lineToLinearHeading(new Pose2d(-9.95, -46.17, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(-10.84, 39.34), Math.toRadians(95.00))
+                .lineToLinearHeading(new Pose2d(-10.84, 39.34, Math.toRadians(90)))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
@@ -102,28 +102,34 @@ public class BlueLandingZone extends AutonomousOpmode {
         spikePosition = MakePropDetection(TIMEOUT);
         switch (spikePosition) {
             case "LEFT":
+                targetApriltagID = visionFunctions.BLUE_1_TAG;
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
-                drive.followTrajectorySequence(leftScore);
+//                drive.followTrajectorySequence(leftScore);
+                MoveToTagForSeconds(targetApriltagID, 5, 1);
                 deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
             case "MID":
+                targetApriltagID = visionFunctions.BLUE_2_TAG;
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
-                drive.followTrajectorySequence(centerScore);
+//                drive.followTrajectorySequence(centerScore);
+                MoveToTagForSeconds(targetApriltagID, 5, 1);
                 deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
             case "RIGHT":
+                targetApriltagID = visionFunctions.BLUE_3_TAG;
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
-                drive.followTrajectorySequence(rightScore);
+//                drive.followTrajectorySequence(rightScore);
+                MoveToTagForSeconds(targetApriltagID, 3, 1);
                 deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();

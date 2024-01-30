@@ -115,7 +115,7 @@ public class AutonomousOpmode extends LinearOpMode {
         time.reset();
         while(time.seconds() < seconds){
             float moveProfile[] = visionFunctions.moveToTag(desiredTag, distanceInInches);
-            drivetrainFunctions.Move(moveProfile[0], moveProfile[1], moveProfile[2], 1);
+            drivetrainFunctions.Move(moveProfile[0], moveProfile[1], moveProfile[2], 0.75);
         }
     }
     public void runOpMode() {
