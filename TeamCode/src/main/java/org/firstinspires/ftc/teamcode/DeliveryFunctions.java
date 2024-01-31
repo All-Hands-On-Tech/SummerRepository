@@ -29,8 +29,8 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    public final double servoIn = 0.3;
-    private final double servoOut = servoIn + 0.54;//0.77
+    public final double servoIn = 0.2425;
+    private final double servoOut = 0.51;//0.77
 
     public final double servoDodge = 0.225;//0.421
 
@@ -45,7 +45,7 @@ public class DeliveryFunctions {
     public final double TICK_LOW_POWER_DISTANCE = 200;
     public final double CARRIAGE_DODGE = 150;
 
-    public final double DUMP_TIME = 0.75;
+    public final double DUMP_TIME = 0.5;
 
     public final double RETRACT_TIMEOUT = 7;
 
@@ -362,7 +362,7 @@ public class DeliveryFunctions {
         wrist.setPosition(servoDodge);
 
         //Waiting for servo to move
-        while(time.seconds() > 2){
+        while(time.seconds() > 1){
             linearOpMode.telemetry.addLine("Waiting to Retract");
             linearOpMode.telemetry.update();
         }
@@ -390,7 +390,7 @@ public class DeliveryFunctions {
     public void WristMovementByLiftPosition(){
         servoPosition = wrist.getPosition();
         currentPosition = rightSlide.getCurrentPosition();
-        if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS - 200){
+        if(currentPosition > CARRIAGE_OUTSIDE_CHASSIS - 150){
             //targetServoPosition is going to be out when 200 ticks from outside
             targetServoPosition = servoOut; //* (currentPosition / CARRIAGE_OUTSIDE_CHASSIS + 200);
             wrist.setPosition(targetServoPosition);

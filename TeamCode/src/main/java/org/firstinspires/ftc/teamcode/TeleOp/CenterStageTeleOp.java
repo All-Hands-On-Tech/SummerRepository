@@ -396,7 +396,7 @@ public class CenterStageTeleOp extends RoboMom {
                         queuedB = false;
                         secondDump = true;
                         deliveryTimer.reset();
-                        deliveryFunctions.Dump(2);
+                        deliveryFunctions.Dump(3);
                     }
 
                     if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump) {
