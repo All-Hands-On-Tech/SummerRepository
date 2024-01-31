@@ -153,9 +153,13 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(new Pose2d(-35, -57, Math.toRadians(-90)))
-                            .lineToLinearHeading(new Pose2d(-13, -57, Math.toRadians(0)))
-                            .lineToLinearHeading(new Pose2d(-10, 50, Math.toRadians(0)))
-                            .build()
+                                .splineTo(new Vector2d(-46.02, -56.26), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(-24.49, -56.26))
+                                .splineToLinearHeading(new Pose2d(-21, -48, Math.toRadians(90.00)), Math.toRadians(90.0))
+                                .lineToConstantHeading(new Vector2d(-11.5, -48))
+                                .lineToConstantHeading(new Vector2d(-11.5, 30))
+                                .splineToLinearHeading(new Pose2d(-34, 34, Math.toRadians(90)), Math.toRadians(90))
+                                .build()
                 );
 
 
@@ -167,15 +171,6 @@ public class MeepMeepTesting {
                         drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
                                 .splineToLinearHeading(new Pose2d(-13, -35, Math.toRadians(0)), Math.toRadians(90))
                                 .build()
-                );
-
-        RoadRunnerBotEntity BlueLandingZoneCenterTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
-                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
-                .followTrajectorySequence(drive ->
-                        drive.trajectorySequenceBuilder(new Pose2d(-13, -35, Math.toRadians(0)))
-                            .forward(3)
-                            .lineToLinearHeading(new Pose2d(-10, 50, Math.toRadians(0)))
-                            .build()
                 );
 
 
@@ -357,12 +352,9 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(RED_BACKSTAGE_START_POSE)
-                                .splineToLinearHeading(new Pose2d(39, 23, Math.toRadians(180)), Math.toRadians(90))
-                                .back(5)
-                                .setReversed(true)
-                                .strafeTo(new Vector2d(44, 30))
-                                .setReversed(false)
-                                .lineToLinearHeading(new Pose2d(34, 38, Math.toRadians(90)))
+                                .splineTo(new Vector2d(30.88, 30.14), Math.toRadians(180.00))
+                                .lineToConstantHeading(new Vector2d(30.73, 37.86))
+                                .lineToSplineHeading(new Pose2d(34, 38, Math.toRadians(90)))
                                 .build()
                 );
 
@@ -412,8 +404,8 @@ public class MeepMeepTesting {
             meepMeep.setBackground(img)
 //                .addEntity(left)
 //                .addEntity(mid)
+                    .addEntity(BlueLandingZoneRightTrajectoryChopperPush1)
                     .addEntity(RedBackstageRightChopper)
-                    .addEntity(BlueBackstageRightChopper)
                     .start();
         }else {
             meepMeep.setBackground(background)
