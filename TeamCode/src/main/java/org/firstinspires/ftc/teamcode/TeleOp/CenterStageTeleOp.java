@@ -99,18 +99,28 @@ public class CenterStageTeleOp extends RoboMom {
     private final int LIFT_MAX = 1800;
     private final int LIFT_MIN = 0;
 
+    private final double QUEUE_BUFFER = 0.25;
+
+    private int tempTarget;
+
     private int leftMotorPosition;
     private int rightMotorPosition;
 
     private int targetPosition;
 
     private boolean dumped = false;
-    private boolean secondDump = false;
+    private boolean secondDumped = false;
     private boolean isRunToPosition = true;
+
+    private boolean dumping = false;
+    private boolean secondDumping = false;
+
+    private  boolean queuedB = false;
 
     private boolean retracting = false;
 
     ElapsedTime deliveryTimer = new ElapsedTime();
+    ElapsedTime queueBufferTimer = new ElapsedTime();
     static DcMotor[] motors;
 
     static SampleMecanumDrive drive;
@@ -359,7 +369,7 @@ public class CenterStageTeleOp extends RoboMom {
                         dumped = true;
                         deliveryTimer.reset();
                         deliveryFunctions.Dump(1);
-                        secondDump = false;
+                        secondDumped = false;
                     }
                     break;
 
@@ -372,7 +382,7 @@ public class CenterStageTeleOp extends RoboMom {
                             targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
                         deliveryState = DeliveryState.DELIVERY_DUMP;
                         dumped = false;
-                        secondDump = false;
+                        secondDumped = false;
                     } else {
                         //Still going
                     }
@@ -380,41 +390,98 @@ public class CenterStageTeleOp extends RoboMom {
 
 
                 case DELIVERY_DUMP:
-                    boolean queuedB = false;
-                    if (gamepad2.b) {
+//                    boolean queuedB = false;
+//                    if (gamepad2.b) {
+//                        queuedB = true;
+//                    }
+//
+//                    if ((gamepad2.b || queuedB) && !dumped) {
+//                        queuedB = false;
+//                        dumped = true;
+//                        deliveryTimer.reset();
+//                        deliveryFunctions.Dump(1);
+//                    }
+//
+//                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDump) {
+//                        queuedB = false;
+//                        secondDump = true;
+//                        deliveryTimer.reset();
+//                        deliveryFunctions.Dump(3);
+//                    }
+//
+//                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump) {
+////                        queuedB = false;
+////                        dumped = false;
+////                        secondDump = false;
+////                        deliveryTimer.reset();
+////                        retracting = true;
+////                        deliveryState = DeliveryState.DELIVERY_RETRACT;
+////                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
+//                        deliveryState = DeliveryState.DELIVERY_LIFT;
+//                        targetPosition = SET_1_HEIGHT;
+//                    }
+
+                    if (gamepad2.b && queueBufferTimer.seconds() > QUEUE_BUFFER) {
+                        queueBufferTimer.reset();
                         queuedB = true;
                     }
 
-                    if ((gamepad2.b || queuedB) && !dumped) {
-                        queuedB = false;
-                        dumped = true;
-                        deliveryTimer.reset();
-                        deliveryFunctions.Dump(1);
+                    if(dumping){
+                        if(deliveryTimer.seconds() < DUMP_TIME/3){
+                            deliveryFunctions.OpenHolderServoByIndex(0);
+                        }
+                        //CLOSE 1
+                        else if(deliveryTimer.seconds() < DUMP_TIME){
+                            deliveryFunctions.CloseHolderServoByIndex(0);
+                        }
+                        //OPEN 2
+                        else if(deliveryTimer.seconds() < DUMP_TIME * 1.5){
+                            deliveryFunctions.OpenHolderServoByIndex(1);
+                        } else if(deliveryTimer.seconds() > DUMP_TIME * 1.5){
+                            dumped = true;
+                            dumping = false;
+                        }
                     }
 
-                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDump) {
-                        queuedB = false;
-                        secondDump = true;
-                        deliveryTimer.reset();
-                        deliveryFunctions.Dump(3);
+                    if(secondDumping){
+                        if(deliveryTimer.seconds() < DUMP_TIME/2){
+                            deliveryFunctions.OpenHolderServoByIndex(0);
+                        } else if(deliveryTimer.seconds() > DUMP_TIME){
+                            deliveryFunctions.CloseHolderServoByIndex(0);
+                            secondDumped = true;
+                            secondDumping = false;
+                        }
                     }
 
-                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump) {
-//                        queuedB = false;
-//                        dumped = false;
-//                        secondDump = false;
-//                        deliveryTimer.reset();
-//                        retracting = true;
-//                        deliveryState = DeliveryState.DELIVERY_RETRACT;
-//                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
-                        deliveryState = DeliveryState.DELIVERY_LIFT;
-                        targetPosition = SET_1_HEIGHT;
+                    if ((gamepad2.b || queuedB) && !dumped && !dumping) {
+                        queuedB = false;
+                        dumping = true;
+                        deliveryTimer.reset();
+                        queueBufferTimer.reset();
+                    }
+
+                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDumped && !secondDumping) {
+                        queuedB = false;
+                        secondDumping = true;
+                        deliveryTimer.reset();
+                        queueBufferTimer.reset();
+                    }
+
+                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDumped) {
+                        queuedB = false;
+                        dumped = false;
+                        secondDumped = false;
+                        deliveryTimer.reset();
+                        retracting = true;
+                        deliveryState = DeliveryState.DELIVERY_RETRACT;
+                        tempTarget = deliveryFunctions.getMotorPositionByIndex(1);
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                     }
 
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
-                    if(deliveryTimer.seconds() <= DUMP_TIME + 2){
+                    if(deliveryTimer.seconds() <= DUMP_TIME + 1){
                         targetPosition = LIFT_LOW;
                         deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                         break;
@@ -477,7 +544,7 @@ public class CenterStageTeleOp extends RoboMom {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
-            } else {
+            } else if(!dumping && !secondDumping){
                 intakeFunctions.StopIntakeMotor();
                 deliveryFunctions.CloseHolderServoByIndex(0);
                 deliveryFunctions.CloseHolderServoByIndex(1);
