@@ -49,15 +49,15 @@ public class BlueBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-41, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-41, 52.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-33.5, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(-38.5, 52.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .splineToLinearHeading(new Pose2d(-27.5, 52, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-27.5, 52.5, Math.toRadians(90)), Math.toRadians(90))
                 .build();
 
 
@@ -100,7 +100,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(0);
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -110,7 +110,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(center);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score(0);
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -120,7 +120,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(right);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score(0);
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;

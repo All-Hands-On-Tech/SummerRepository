@@ -257,7 +257,7 @@ public class DeliveryFunctions {
                 holder2.setPosition(HOLDER_OPEN);
 
                 if(time.seconds() > DUMP_TIME/2){
-                    setSlidesTargetPosition(leftSlide.getCurrentPosition()+750);
+                    setSlidesTargetPosition(leftSlide.getCurrentPosition()+300);
                 }
             }
 

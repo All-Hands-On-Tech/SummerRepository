@@ -48,7 +48,7 @@ public class RedBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(21.38, 23.31), Math.toRadians(180))
+                .splineTo(new Vector2d(23.38, 23.31), Math.toRadians(180))
                 .lineToConstantHeading(new Vector2d(21.38, 35.63))
                 .lineToLinearHeading(endPose)
                 .build();
@@ -64,15 +64,15 @@ public class RedBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(27, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(27, 52.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35.25, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(38.5, 52.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(41, 52, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(41, 52.5, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(32, 42, Math.toRadians(90)))
@@ -103,7 +103,7 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(left);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(-250);
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -112,7 +112,7 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(center);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score(-250);
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -121,7 +121,7 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.update();
                 drive.followTrajectorySequence(right);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score(-250);
+                deliveryFunctions.Score(100);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;

@@ -184,8 +184,8 @@ public class SinglePlayerTeleOp extends RoboMom {
             //Store inputted desired velocity (left_stick_x, left_stick_y)
             if (!controlsRelinquished) {
 
-                if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone) {
-                    if(Math.abs(gamepad1.right_stick_y) > deadZone) {
+                if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone || Math.abs(gamepad1.right_stick_y) > deadZone*2) {
+                    if(Math.abs(gamepad1.right_stick_y) > deadZone*2) {
                         drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_x, scoreSpeedScalar);
                     }else{
                         drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
