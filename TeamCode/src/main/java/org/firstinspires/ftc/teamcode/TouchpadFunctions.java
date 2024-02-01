@@ -6,7 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 @Disabled
 public class TouchpadFunctions {
-    public static final double TOUCHPADXMULTIPLIER = 0.5;
+    public static final double TOUCHPADXMULTIPLIER = 0.05;
+    public static final double TOUCHPADYMULTIPLIER = 0.01;
     private Gamepad prevGamepad;
     private Gamepad currentGamepad;
 

@@ -242,16 +242,21 @@ public class SinglePlayerTeleOp extends RoboMom {
             // WIP WIP WIP WIP WIP WIP
             if(aprilTagsFunctions.DetectAprilTag(-1) && touchpad1.getTouchpad()){
                 boolean down = touchpad1.getTouchpadDown();
-                float swipe = touchpad1.getXSwipe();
+                boolean up = touchpad1.getTouchpadUp();
+                float xSwipe = touchpad1.getXSwipe();
+                float ySwipe = touchpad1.getYSwipe();
                 double rotation = ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                double x = touchpad1.TOUCHPADXMULTIPLIER * swipe;
+                double x = touchpad1.TOUCHPADXMULTIPLIER * xSwipe;
+                double y = touchpad1.TOUCHPADYMULTIPLIER * ySwipe;
 
                 telemetry.addData("Touchpad Down? ", down);
-                telemetry.addData("Touchpad Swipe:  ", swipe);
+                telemetry.addData("Touchpad Up? ", up);
+                telemetry.addData("Touchpad Swipe:  ", xSwipe);
                 telemetry.addData("Rotation: ", rotation);
                 telemetry.addData("Strafe: ", x);
+                telemetry.addData("Forward: ", y);
 
-                drivetrainFunctions.Move((float) x, (float) 0, (float) rotation, 1);
+                drivetrainFunctions.Move((float) x, (float) y, (float) rotation, 1);
 
             }
 
