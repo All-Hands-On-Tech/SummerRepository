@@ -3,12 +3,10 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.Gamepad;
-import com.qualcomm.robotcore.hardware.Servo;
-
-import org.apache.commons.math3.geometry.euclidean.twod.Vector2D;
 
 @Disabled
 public class TouchpadFunctions {
+    public static final double TOUCHPADXMULTIPLIER = 0.5;
     private Gamepad prevGamepad;
     private Gamepad currentGamepad;
 
@@ -68,6 +66,10 @@ public class TouchpadFunctions {
         } else{
             return false;
         }
+    }
+
+    public boolean getTouchpad(){
+        return gamepad.touchpad_finger_1;
     }
 
     public void updateTouchpadStateAtEndOfLoop(){
