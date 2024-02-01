@@ -40,6 +40,7 @@ import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
+import org.firstinspires.ftc.teamcode.TouchpadFunctions;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
 
 
@@ -81,6 +82,7 @@ public class SinglePlayerTeleOp extends RoboMom {
     private IntakeFunctions intakeFunctions;
 
     private DrivetrainFunctions drivetrainFunctions;
+    private TouchpadFunctions touchpad1;
 
     private DroneLauncherFunctions droneLauncherFunctions;
 
@@ -144,6 +146,7 @@ public class SinglePlayerTeleOp extends RoboMom {
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
         droneLauncherFunctions = new DroneLauncherFunctions(this);
+        touchpad1 = new TouchpadFunctions(this, 1);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -232,6 +235,23 @@ public class SinglePlayerTeleOp extends RoboMom {
                 } else {
                     controlsRelinquished = false;
                 }
+
+            }
+
+            //use touchpad to align to apriltag and strafe right and left
+            // WIP WIP WIP WIP WIP WIP
+            if(aprilTagsFunctions.DetectAprilTag(-1) && touchpad1.getTouchpad()){
+                boolean down = touchpad1.getTouchpadDown();
+                float swipe = touchpad1.getXSwipe();
+                double rotation = ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
+                double x = touchpad1.TOUCHPADXMULTIPLIER * swipe;
+
+                telemetry.addData("Touchpad Down? ", down);
+                telemetry.addData("Touchpad Swipe:  ", swipe);
+                telemetry.addData("Rotation: ", rotation);
+                telemetry.addData("Strafe: ", x);
+
+                drivetrainFunctions.Move((float) x, (float) 0, (float) rotation, 1);
 
             }
 
