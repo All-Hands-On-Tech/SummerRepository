@@ -27,14 +27,14 @@ public class BlueBackstage extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-30.88, 30.14), Math.toRadians(0.00))
+                .splineTo(new Vector2d(-30.88, 28), Math.toRadians(0.00))
                 .lineToConstantHeading(new Vector2d(-30.73, 37.86))
                 .lineToSplineHeading(endPose)
                 .build();
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-21.38, 23.31), Math.toRadians(0))
+                .splineTo(new Vector2d(-23.38, 23.31), Math.toRadians(0))
                 .lineToConstantHeading(new Vector2d(-21.38, 35.63))
                 .lineToLinearHeading(endPose)
                 .build();

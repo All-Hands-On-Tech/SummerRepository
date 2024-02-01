@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Gamepad;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
@@ -50,6 +51,8 @@ public class SinglePlayerTeleOp extends RoboMom {
     double deadZone = 0.05;
 
     double speedScalar = 1;
+
+    private double scoreSpeedScalar = 0.2;
 
 
     private float TARGET_DISTANCE_TO_TAG = 12;
@@ -182,7 +185,11 @@ public class SinglePlayerTeleOp extends RoboMom {
             if (!controlsRelinquished) {
 
                 if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone) {
-                    drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
+                    if(Math.abs(gamepad1.right_stick_y) > deadZone) {
+                        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_x, scoreSpeedScalar);
+                    }else{
+                        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
+                    }
                 } else {
                     drivetrainFunctions.Stop();
                 }
@@ -417,10 +424,10 @@ public class SinglePlayerTeleOp extends RoboMom {
             }
 
             if(deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_DODGE){
-                gamepad1.rumble(10);
+                gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
             }
             if(OpModeTimer.seconds() > 10){
-                gamepad1.rumble(10);
+                gamepad1.rumble(Gamepad.RUMBLE_DURATION_CONTINUOUS);
             }
 
             telemetry.update();

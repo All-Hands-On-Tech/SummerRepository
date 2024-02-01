@@ -53,6 +53,8 @@ public class CenterStageTeleOp extends RoboMom {
 
     double speedScalar = 1;
 
+    private double scoreSpeedScalar = 0.2;
+
 
     private float TARGET_DISTANCE_TO_TAG = 12;
 
@@ -182,7 +184,11 @@ public class CenterStageTeleOp extends RoboMom {
             if (!controlsRelinquished) {
 
                 if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone) {
-                    drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
+                    if(Math.abs(gamepad1.right_stick_y) > deadZone) {
+                        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_x, scoreSpeedScalar);
+                    }else{
+                        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
+                    }
                 } else {
                     drivetrainFunctions.Stop();
                 }
