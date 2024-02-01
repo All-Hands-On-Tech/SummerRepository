@@ -193,7 +193,7 @@ public class SinglePlayerTeleOp extends RoboMom {
                 } else {
                     drivetrainFunctions.Stop();
                 }
-                if (gamepad1.b)
+                if (gamepad1.dpad_up)
                     droneLauncherFunctions.ReleaseDrone();
             }
 

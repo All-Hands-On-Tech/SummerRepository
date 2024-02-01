@@ -196,63 +196,6 @@ public class CenterStageTeleOp extends RoboMom {
                     droneLauncherFunctions.ReleaseDrone();
             }
 
-//            if(gamepad1.dpad_down){
-//                vel = new Vector2d(vel.getX(), -1);
-//            }
-//            if(gamepad1.dpad_up){
-//                vel = new Vector2d(vel.getX(), 1);
-//            }
-//            if(gamepad1.dpad_left){
-//                vel = new Vector2d(-1, vel.getY());
-//            }
-//            if(gamepad1.dpad_right){
-//                vel = new Vector2d(1, vel.getY());
-//            }
-
-//            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
-//                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
-//                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
-//                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
-//                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
-//                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
-//
-//                if(gamepad1.right_trigger > 0.025f){
-//                    rightTriggerPull = gamepad1.right_trigger;
-//
-////                    strafeGain *= rightTriggerPull;
-////                    forwardGain *= rightTriggerPull;
-////                    rotationGain *= rightTriggerPull;
-//
-//                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-//                    double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
-//
-////                    double x = 0.5;
-////                    double y = 0.7;
-//                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
-//
-//                    telemetry.addData("x: ", x);
-//                    telemetry.addData("y: ", y);
-//                    telemetry.addData("bearing: ", bearing);
-//
-//                    drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
-//                } else {
-//                    controlsRelinquished = false;
-//                }
-//
-//                /*
-//                if (currentGamepad1.right_trigger > 0.5) {
-//                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
-//                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-//                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
-//                    isAutoDrivingToAprilTag = true;
-//                }
-//                 */
-//            }else{          //align to point (pose of aprilTag)
-//
-//            }
-//            float[] XYBearing = aprilTagsFunctions.moveToTag(aprilTagsFunctions.BLUE_1_TAG);
-//            drivetrainFunctions.Move(XYBearing[0], XYBearing[1], XYBearing[2], 1);
-
             if(gamepad1.dpad_left){
                 targetTagIDRed = aprilTagsFunctions.RED_1_TAG;
                 targetTagIDBlue = aprilTagsFunctions.BLUE_1_TAG;
@@ -275,17 +218,9 @@ public class CenterStageTeleOp extends RoboMom {
                 telemetry.addData("X delta", "%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
 
                 if (gamepad1.dpad_left || gamepad1.dpad_down || gamepad1.dpad_right) {
-//                    rightTriggerPull = gamepad1.right_trigger;
-
-//                    strafeGain *= rightTriggerPull;
-//                    forwardGain *= rightTriggerPull;
-//                    rotationGain *= rightTriggerPull;
 
                     double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
                     double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
-
-//                    double x = 0.5;
-//                    double y = 0.7;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
 
                     telemetry.addData("x: ", x);
@@ -297,31 +232,9 @@ public class CenterStageTeleOp extends RoboMom {
                     controlsRelinquished = false;
                 }
 
-                /*
-                if (currentGamepad1.right_trigger > 0.5) {
-                    y      = SPEED_GAIN * (aprilTagsFunctions.detectedTag.ftcPose.range - DESIRED_DISTANCE_TO_APRIL_TAG_INCHES);
-                    yaw    = -TURN_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                    x      = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.x;
-                    isAutoDrivingToAprilTag = true;
-                }
-                 */
             } else {          //align to point (pose of aprilTag)
 
             }
-
-//            if (aprilTagsFunctions.numberOfDetections()>1) {
-//                Pose2d aprilTagLocation = aprilTagsFunctions.AverageAbsolutePositionFromAprilTags();
-//                telemetry.addLine(String.format("XYH %3.1f %3.1f %3.1f  (in, in, deg)",
-//                        aprilTagLocation.getX(),
-//                        aprilTagLocation.getY(),
-//                        Math.toDegrees(aprilTagLocation.getHeading())));
-//
-//            }
-
-
-//            if(gamepad1.dpad_down || gamepad1.dpad_up || gamepad1.dpad_left || gamepad1.dpad_right) {
-//                applyFieldOrientedVectorsToPower();
-//            }
 
             telemetry.update();
 
@@ -346,14 +259,11 @@ public class CenterStageTeleOp extends RoboMom {
 
             //Gamepad 2
 
-            //telemetry.addData("RunMode: ", deliveryFunctions.getRunMode());
             targetPosition = deliveryFunctions.getMotorTargetPosition();
 
             leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
             rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
 
-            //deliveryFunctions.setSlidesPower(0.75);
-            //P controlling power at the bottom
 
             switch (deliveryState) {
                 case DELIVERY_START:
@@ -396,36 +306,6 @@ public class CenterStageTeleOp extends RoboMom {
 
 
                 case DELIVERY_DUMP:
-//                    boolean queuedB = false;
-//                    if (gamepad2.b) {
-//                        queuedB = true;
-//                    }
-//
-//                    if ((gamepad2.b || queuedB) && !dumped) {
-//                        queuedB = false;
-//                        dumped = true;
-//                        deliveryTimer.reset();
-//                        deliveryFunctions.Dump(1);
-//                    }
-//
-//                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDump) {
-//                        queuedB = false;
-//                        secondDump = true;
-//                        deliveryTimer.reset();
-//                        deliveryFunctions.Dump(3);
-//                    }
-//
-//                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDump) {
-////                        queuedB = false;
-////                        dumped = false;
-////                        secondDump = false;
-////                        deliveryTimer.reset();
-////                        retracting = true;
-////                        deliveryState = DeliveryState.DELIVERY_RETRACT;
-////                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
-//                        deliveryState = DeliveryState.DELIVERY_LIFT;
-//                        targetPosition = SET_1_HEIGHT;
-//                    }
 
                     if (gamepad2.b && queueBufferTimer.seconds() > QUEUE_BUFFER) {
                         queueBufferTimer.reset();
@@ -515,10 +395,10 @@ public class CenterStageTeleOp extends RoboMom {
 
             telemetry.addData("Delivery State: ", deliveryState);
 
+            //MANUAL
             if (Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE) {
                 deliveryState = DeliveryState.DELIVERY_START;
 
-//                telemetry.addLine("manual control");
 
                 if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
                     targetPosition -= gamepad2.left_stick_y * 15;
@@ -544,7 +424,6 @@ public class CenterStageTeleOp extends RoboMom {
 
             if (gamepad2.left_bumper) {
                 intakeFunctions.OutakeFromIntake(-1f);
-//                deliveryFunctions.OpenHolderServoByIndex(0);
 
             } else if (gamepad2.left_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
