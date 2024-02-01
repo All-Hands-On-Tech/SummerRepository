@@ -116,6 +116,7 @@ public class SinglePlayerTeleOp extends RoboMom {
 
     ElapsedTime deliveryTimer = new ElapsedTime();
     ElapsedTime queueBufferTimer = new ElapsedTime();
+    ElapsedTime OpModeTimer = new ElapsedTime();
     static DcMotor[] motors;
 
     static SampleMecanumDrive drive;
@@ -413,6 +414,13 @@ public class SinglePlayerTeleOp extends RoboMom {
                 intakeFunctions.StopIntakeMotor();
                 deliveryFunctions.CloseHolderServoByIndex(0);
                 deliveryFunctions.CloseHolderServoByIndex(1);
+            }
+
+            if(deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_DODGE){
+                gamepad1.rumble(10);
+            }
+            if(OpModeTimer.seconds() > 10){
+                gamepad1.rumble(10);
             }
 
             telemetry.update();
