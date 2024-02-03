@@ -15,7 +15,7 @@
             <Motor name="leftFrontAndRightEncoder"  port="3" />
         </LynxModule>
 
-        <LynxModule name="Expansion Hub" port="3">
+        <LynxModule name="Expansion Hub" port="2">
             <Motor name="intake"  port="0" />
             <Motor name="rightSlide"  port="2" />
             <Motor name="leftSlide"  port="3" />

@@ -27,16 +27,16 @@ public class PixelColorDetection extends RoboMom {
     RevBlinkinLedDriver blinkinLedDriver;
     RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;;
 
-    double yellowBack = 80;
-    double yellowFront = 100;
-    double greenBack = 120;
-    double greenFront = 150;
-    double whiteBack = 180;
-    double whiteFront = 200;
-    double purpleBack = 210;
-    double purpleFront = 230;
+    double yellowBack = 75;
+    double yellowFront = 95;
+    double greenBack = 115;
+    double greenFront = 135;
+    double whiteBack = 160;
+    double whiteFront = 180;
+    double purpleBack = 196;
+    double purpleFront = 216;
 
-    double sensorDistance = 6.5;
+    double sensorDistance = 1.8;
 
     ElapsedTime LEDTimer = new ElapsedTime(ElapsedTime.Resolution.MILLISECONDS);
 
