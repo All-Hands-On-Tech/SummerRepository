@@ -29,10 +29,10 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    public final double servoIn = 0.2425;
-    private final double servoOut = 0.51;//0.77
+    public final double servoIn = 0.605;
+    private final double servoOut = 0.867;//0.77
 
-    public final double servoDodge = 0.225;//0.421
+    public final double servoDodge = 0.58;//0.421
 
     private int targetPosition;
     private double currentPosition;
