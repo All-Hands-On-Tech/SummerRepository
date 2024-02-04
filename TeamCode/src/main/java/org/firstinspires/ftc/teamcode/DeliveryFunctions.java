@@ -55,8 +55,8 @@ public class DeliveryFunctions {
 
     private double initAttempts = 0;
 
-    private colorSensor frontColorSensor;
-    private colorSensor backColorSensor;
+    public colorSensor frontColorSensor;
+    public colorSensor backColorSensor;
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -101,8 +101,8 @@ public class DeliveryFunctions {
 
 //            rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
-//            frontColorSensor.InitializeColorSensor("front_color");
-//            backColorSensor.InitializeColorSensor("back_color");
+            frontColorSensor.InitializeColorSensor("front_color");
+            backColorSensor.InitializeColorSensor("back_color");
 
             leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
@@ -144,8 +144,8 @@ public class DeliveryFunctions {
 
 //            rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
-//            frontColorSensor.InitializeColorSensor("front_color");
-//            backColorSensor.InitializeColorSensor("back_color");
+            frontColorSensor.InitializeColorSensor("front_color");
+            backColorSensor.InitializeColorSensor("back_color");
 
             leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
@@ -157,9 +157,8 @@ public class DeliveryFunctions {
         }
     }
 
-    class colorSensor {
+    public class colorSensor {
         NormalizedColorSensor sensor;
-        String backColor = "NONE";
 
         NormalizedRGBA colors;
 

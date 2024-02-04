@@ -196,6 +196,12 @@ public class CenterStageTeleOp extends RoboMom {
                     droneLauncherFunctions.ReleaseDrone();
             }
 
+            boolean displayback = false;
+            if(gamepad1.x) {
+                displayback = true;
+            }
+            drivetrainFunctions.setLEDColor(deliveryFunctions.frontColorSensor.detectPixelColor(), deliveryFunctions.backColorSensor.detectPixelColor(), displayback);
+
             if(gamepad1.dpad_left){
                 targetTagIDRed = aprilTagsFunctions.RED_1_TAG;
                 targetTagIDBlue = aprilTagsFunctions.BLUE_1_TAG;
