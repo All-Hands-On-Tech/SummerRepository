@@ -162,15 +162,15 @@ public class DrivetrainFunctions {
                 || leftBackDrive.getPower() != 0;
     }
 
-    public void setLEDColor (String colorFront, String colorBack, boolean displayBack) {
-        if (displayBack) {
+    public void setLEDColor (String colorFront, String colorBack, String extras) {
+        if (extras == "BACK") {
             if (colorBack == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
             if (colorBack == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
             if (colorBack == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
             if (colorBack == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
             if (colorBack == "NONE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);}
         }
-        if (colorFront == "PARTY") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);}
+        if (extras == "PARTY") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);}
 
         if (colorBack == "NONE") {
             if (colorFront == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
