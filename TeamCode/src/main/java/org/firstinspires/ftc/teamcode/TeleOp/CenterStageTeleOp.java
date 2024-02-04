@@ -204,8 +204,12 @@ public class CenterStageTeleOp extends RoboMom {
             } else if (LEDExtras == "BACK"){
                 LEDExtras = "";
             }
-            if(gamepad1.a) {
-                LEDExtras = "PARTY";
+            if(gamepad1.y) {
+                if (LEDExtras == "PARTY"){
+                    LEDExtras = "";
+                } else {
+                    LEDExtras = "PARTY";
+                }
             }
             drivetrainFunctions.setLEDColor(deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
 
@@ -259,15 +263,6 @@ public class CenterStageTeleOp extends RoboMom {
                 speedScalar = 0.8;
             } else {
                 speedScalar = 1;
-            }
-
-
-            if (gamepad1.y) {
-                drivetrainFunctions.ResetIMU();
-            }
-
-            if (gamepad1.b) {
-                droneLauncherFunctions.ReleaseDrone();
             }
 
             //Gamepad 2
