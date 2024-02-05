@@ -33,12 +33,13 @@ public class RedLandingZone extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(46.02, -56.26), Math.toRadians(203.65))
-                .lineToConstantHeading(new Vector2d(24.49, -56.26))
-                .splineToLinearHeading(new Pose2d(18.56, -41.86, Math.toRadians(90.00)), Math.toRadians(89.10))
-                .lineToConstantHeading(new Vector2d(10.54, -41.86))
-                .splineToConstantHeading(new Vector2d(11.43, 39.04), Math.toRadians(85.00))
-                .splineToLinearHeading(endPose, Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(45, -50, Math.toRadians(-90)), Math.toRadians(0))
+                .strafeLeft(5)
+                .waitSeconds(3)
+                .lineToConstantHeading(new Vector2d(50, -36))
+                .lineToConstantHeading(new Vector2d(11.5, -36))
+                .lineToConstantHeading(new Vector2d(11.5, 30))
+                .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
 
@@ -54,25 +55,26 @@ public class RedLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(33.25, -30.88), Math.toRadians(90.00))
+                .splineTo(new Vector2d(33.25, startPose.getY()), Math.toRadians(90.00))
+                .lineToConstantHeading(new Vector2d(33.25, -30.88))
                 .lineToConstantHeading(new Vector2d(33.55, -45.13))
                 .lineToLinearHeading(new Pose2d(10.39, -44.68, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(10.84, 39.34), Math.toRadians(85.00))
+                .lineTo(new Vector2d(10.84, 39.34))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(28, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(28, 51, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(35, 51, Math.toRadians(90)))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(40, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(40, 51, Math.toRadians(90)))
                 .build();
 
 

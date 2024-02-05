@@ -32,7 +32,7 @@ public class DeliveryFunctions {
     public final double servoIn = 0.605;
     private final double servoOut = 0.867;//0.77
 
-    public final double servoDodge = 0.58;//0.421
+    public final double servoDodge = 0.57;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -252,12 +252,12 @@ public class DeliveryFunctions {
             //OPEN BOTH AUTO
             time.reset();
             //LIFT SLIDES
-            while(time.seconds() < DUMP_TIME){
+            while(time.seconds() < DUMP_TIME*2){
                 holder1.setPosition(HOLDER_OPEN);
                 holder2.setPosition(HOLDER_OPEN);
 
                 if(time.seconds() > DUMP_TIME/2){
-                    setSlidesTargetPosition(leftSlide.getCurrentPosition()+300);
+                    setSlidesTargetPosition(leftSlide.getCurrentPosition()+100);
                 }
             }
 
@@ -334,7 +334,7 @@ public class DeliveryFunctions {
 
         linearOpMode.sleep(1000);
 
-        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + ticksFromOutsideChassis - 50);
+        setSlidesTargetPosition(CARRIAGE_OUTSIDE_CHASSIS + ticksFromOutsideChassis - 150);
         while(leftError <= TICK_STOP_THRESHOLD
                 &&
                 rightError <= TICK_STOP_THRESHOLD){
