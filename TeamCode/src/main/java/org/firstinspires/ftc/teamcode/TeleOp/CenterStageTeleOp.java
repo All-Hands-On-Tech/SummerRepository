@@ -253,10 +253,6 @@ public class CenterStageTeleOp extends RoboMom {
                 drivetrainFunctions.ResetIMU();
             }
 
-            if (gamepad1.b) {
-                droneLauncherFunctions.ReleaseDrone();
-            }
-
             //Gamepad 2
 
             targetPosition = deliveryFunctions.getMotorTargetPosition();
