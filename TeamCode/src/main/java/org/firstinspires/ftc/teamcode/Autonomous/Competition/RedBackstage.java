@@ -104,8 +104,9 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -113,8 +114,9 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -122,8 +124,9 @@ public class RedBackstage extends AutonomousOpmode {
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;
