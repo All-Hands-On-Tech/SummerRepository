@@ -78,6 +78,10 @@ public class BlueBackstage extends AutonomousOpmode {
                 .splineToConstantHeading(new Vector2d(-59, 50), Math.toRadians(90))
                 .build();
 
+        TrajectorySequence corner = drive.trajectorySequenceBuilder(new Pose2d(-59, 50, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(-62, 56))
+                .build();
+
 //        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){
 //            public void onOpened()
 //            {
@@ -106,6 +110,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
+                drive.followTrajectorySequence(corner);
                 break;
             case "MID":
                 targetApriltagID = visionFunctions.BLUE_2_TAG;
@@ -117,6 +122,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
+                drive.followTrajectorySequence(corner);
                 break;
             case "RIGHT":
                 targetApriltagID = visionFunctions.BLUE_3_TAG;
@@ -128,6 +134,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
+                drive.followTrajectorySequence(corner);
                 break;
         }
 

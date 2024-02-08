@@ -93,6 +93,10 @@ public class RedBackstage extends AutonomousOpmode {
                 .splineToConstantHeading(new Vector2d(60, 50), Math.toRadians(90))
                 .build();
 
+        TrajectorySequence corner = drive.trajectorySequenceBuilder(new Pose2d(60, 50, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(62, 56))
+                .build();
+
         waitForStart();
         if (isStopRequested()) return;
 
@@ -109,6 +113,7 @@ public class RedBackstage extends AutonomousOpmode {
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
+                drive.followTrajectorySequence(corner);
                 break;
             case "MID":
                 telemetry.addLine("center");
@@ -119,6 +124,7 @@ public class RedBackstage extends AutonomousOpmode {
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
+                drive.followTrajectorySequence(corner);
                 break;
             case "RIGHT":
                 telemetry.addLine("right");
@@ -129,6 +135,7 @@ public class RedBackstage extends AutonomousOpmode {
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
+                drive.followTrajectorySequence(corner);
                 break;
         }
 

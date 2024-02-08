@@ -33,9 +33,9 @@ public class RedLandingZone extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineToLinearHeading(new Pose2d(45, -50, Math.toRadians(-90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(45, -49.75, Math.toRadians(-90)), Math.toRadians(-90))
                 .strafeLeft(5)
-                .waitSeconds(3)
+                .waitSeconds(4)
                 .lineToConstantHeading(new Vector2d(50, -36))
                 .lineToConstantHeading(new Vector2d(11.5, -36))
                 .lineToConstantHeading(new Vector2d(11.5, 30))
@@ -47,6 +47,7 @@ public class RedLandingZone extends AutonomousOpmode {
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(23, -47.36), Math.toRadians(180.00))
                 .lineToConstantHeading(new Vector2d(21.67, -55.08))
+                .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(11, -48.84, Math.toRadians(90.00)))
                 .splineToConstantHeading(new Vector2d(11.5, 35.00), Math.toRadians(85.00))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
@@ -57,6 +58,7 @@ public class RedLandingZone extends AutonomousOpmode {
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
                 .splineTo(new Vector2d(34, startPose.getY()), Math.toRadians(180.00))
                 .lineToConstantHeading(new Vector2d(34, -30.88))
+                .waitSeconds(4)
                 .lineToConstantHeading(new Vector2d(34, -45.13))
                 .lineToLinearHeading(new Pose2d(10.39, -44.68, Math.toRadians(90.00)))
                 .lineTo(new Vector2d(10.84, 39.34))
@@ -66,17 +68,14 @@ public class RedLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(44, 51, Math.toRadians(90)))
-                .lineToConstantHeading(new Vector2d(28.5, 51))
+                .lineToConstantHeading(new Vector2d(29.75, 51))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(29.5, 51.25, Math.toRadians(90)))
                 .lineToConstantHeading(new Vector2d(35.1, 51))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(29, 51.4, Math.toRadians(90)))
                 .lineToConstantHeading(new Vector2d(42, 51.4))
                 .build();
 
@@ -108,7 +107,7 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
-                deliveryFunctions.Lift(50);
+                deliveryFunctions.Lift(200);
                 drive.followTrajectorySequence(leftScore);
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(leftPark);
@@ -118,7 +117,7 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
-                deliveryFunctions.Lift(50);
+                deliveryFunctions.Lift(250);
                 drive.followTrajectorySequence(centerScore);
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(centerPark);
@@ -128,7 +127,7 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
-                deliveryFunctions.Lift(50);
+                deliveryFunctions.Lift(200);
                 drive.followTrajectorySequence(rightScore);
                 deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(rightPark);

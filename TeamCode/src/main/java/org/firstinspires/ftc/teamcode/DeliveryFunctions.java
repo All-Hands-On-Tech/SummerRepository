@@ -32,7 +32,7 @@ public class DeliveryFunctions {
     public final double servoIn = 0.605;
     private final double servoOut = 0.867;//0.77
 
-    public final double servoDodge = 0.565;//0.421
+    public final double servoDodge = 0.555;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -270,6 +270,7 @@ public class DeliveryFunctions {
                 holder2.setPosition(HOLDER_OPEN);
 
                 if(time.seconds() > DUMP_TIME*1.5){
+                    wrist.setPosition(servoOut + 0.02);
                     setSlidesTargetPosition(leftSlide.getCurrentPosition()+100);
                 }
             }

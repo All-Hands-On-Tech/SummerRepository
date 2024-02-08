@@ -376,7 +376,7 @@ public class CenterStageTeleOp extends RoboMom {
                 case DELIVERY_RETRACT:
                     retracting = true;
                     if(deliveryTimer.seconds() <= DUMP_TIME + 1){
-                        targetPosition = LIFT_LOW;
+                        targetPosition = deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS - 250;
                         deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                         break;
                     }
@@ -406,7 +406,7 @@ public class CenterStageTeleOp extends RoboMom {
             //MANUAL
             if (Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE) {
                 deliveryState = DeliveryState.DELIVERY_START;
-
+                retracting = false;
 
                 if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
                     targetPosition -= gamepad2.left_stick_y * 15;
