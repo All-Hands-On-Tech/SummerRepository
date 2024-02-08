@@ -27,8 +27,9 @@ public class BlueBackstage extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(-30.88, 28), Math.toRadians(0.00))
-                .lineToConstantHeading(new Vector2d(-30.73, 37.86))
+                .splineToLinearHeading(new Pose2d(-45, 26, Math.toRadians(90)), Math.toRadians(0.00))
+                .strafeLeft(5)
+                .lineToConstantHeading(new Vector2d(-50, 37.86))
                 .lineToSplineHeading(endPose)
                 .build();
 
@@ -42,22 +43,23 @@ public class BlueBackstage extends AutonomousOpmode {
 
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(21.38, 23.31), Math.toRadians(180.67))
-                .lineToConstantHeading(new Vector2d(21.38, 35.63))
+                .splineTo(new Vector2d(-35, 20), Math.toRadians(0))
+                .lineToConstantHeading(new Vector2d(-35, 7))
+                .lineToConstantHeading(new Vector2d(-35, 30))
                 .lineToLinearHeading(endPose)
                 .build();
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-41, 52.5, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(-41, 52))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(-38.5, 52.5, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(-36.5, 52.25))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .splineToLinearHeading(new Pose2d(-27.5, 52.5, Math.toRadians(90)), Math.toRadians(90))
+                .lineToConstantHeading(new Vector2d(-30, 52.25))
                 .build();
 
 
@@ -99,8 +101,9 @@ public class BlueBackstage extends AutonomousOpmode {
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -109,8 +112,9 @@ public class BlueBackstage extends AutonomousOpmode {
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -119,8 +123,9 @@ public class BlueBackstage extends AutonomousOpmode {
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;

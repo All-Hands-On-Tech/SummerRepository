@@ -33,46 +33,51 @@ public class RedLandingZone extends AutonomousOpmode {
         drive.setPoseEstimate(startPose);
 
         TrajectorySequence left = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(46.02, -56.26), Math.toRadians(203.65))
-                .lineToConstantHeading(new Vector2d(24.49, -56.26))
-                .splineToLinearHeading(new Pose2d(18.56, -41.86, Math.toRadians(90.00)), Math.toRadians(89.10))
-                .lineToConstantHeading(new Vector2d(10.54, -41.86))
-                .splineToConstantHeading(new Vector2d(11.43, 39.04), Math.toRadians(85.00))
-                .splineToLinearHeading(endPose, Math.toRadians(90.00))
+                .splineToLinearHeading(new Pose2d(45, -50, Math.toRadians(-90)), Math.toRadians(-90))
+                .strafeLeft(5)
+                .waitSeconds(3)
+                .lineToConstantHeading(new Vector2d(50, -36))
+                .lineToConstantHeading(new Vector2d(11.5, -36))
+                .lineToConstantHeading(new Vector2d(11.5, 30))
+                .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
 
 
         TrajectorySequence center = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(21.97, -47.36), Math.toRadians(180.00))
+                .splineTo(new Vector2d(23, -47.36), Math.toRadians(180.00))
                 .lineToConstantHeading(new Vector2d(21.67, -55.08))
-                .lineToLinearHeading(new Pose2d(10.69, -48.84, Math.toRadians(90.00)))
-                .splineToConstantHeading(new Vector2d(10.69, 38.00), Math.toRadians(85.00))
+                .lineToLinearHeading(new Pose2d(11, -48.84, Math.toRadians(90.00)))
+                .splineToConstantHeading(new Vector2d(11.5, 35.00), Math.toRadians(85.00))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
 
 
         TrajectorySequence right = drive.trajectorySequenceBuilder(startPose)
-                .splineTo(new Vector2d(33.25, -30.88), Math.toRadians(90.00))
-                .lineToConstantHeading(new Vector2d(33.55, -45.13))
+                .splineTo(new Vector2d(34, startPose.getY()), Math.toRadians(180.00))
+                .lineToConstantHeading(new Vector2d(34, -30.88))
+                .lineToConstantHeading(new Vector2d(34, -45.13))
                 .lineToLinearHeading(new Pose2d(10.39, -44.68, Math.toRadians(90.00)))
-                .splineTo(new Vector2d(10.84, 39.34), Math.toRadians(85.00))
+                .lineTo(new Vector2d(10.84, 39.34))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(28, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(44, 51, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(28.5, 51))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(35, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(29.5, 51.25, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(35.1, 51))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToLinearHeading(new Pose2d(40, 52.15, Math.toRadians(90)))
+                .lineToLinearHeading(new Pose2d(29, 51.4, Math.toRadians(90)))
+                .lineToConstantHeading(new Vector2d(42, 51.4))
                 .build();
 
 
@@ -103,8 +108,9 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.addLine("left");
                 telemetry.update();
                 drive.followTrajectorySequence(left);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(leftScore);
-                deliveryFunctions.Score(-250);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(leftPark);
                 deliveryFunctions.Retract();
                 break;
@@ -112,8 +118,9 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(centerScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(centerPark);
                 deliveryFunctions.Retract();
                 break;
@@ -121,8 +128,9 @@ public class RedLandingZone extends AutonomousOpmode {
                 telemetry.addLine("right");
                 telemetry.update();
                 drive.followTrajectorySequence(right);
+                deliveryFunctions.Lift(50);
                 drive.followTrajectorySequence(rightScore);
-                deliveryFunctions.Score(100);
+                deliveryFunctions.Dump(0);
                 drive.followTrajectorySequence(rightPark);
                 deliveryFunctions.Retract();
                 break;
