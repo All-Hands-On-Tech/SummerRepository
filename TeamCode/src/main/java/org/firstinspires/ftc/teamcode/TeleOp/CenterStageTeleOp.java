@@ -164,6 +164,8 @@ public class CenterStageTeleOp extends RoboMom {
         targetPosition = LIFT_LOW;
         deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
 
+        String LEDExtras = "";
+
         while (opModeIsActive()) {
 
             if (intakeFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
@@ -195,6 +197,21 @@ public class CenterStageTeleOp extends RoboMom {
                 if (gamepad1.b)
                     droneLauncherFunctions.ReleaseDrone();
             }
+
+
+            if(gamepad1.x) {
+                LEDExtras = "BACK";
+            } else if (LEDExtras == "BACK"){
+                LEDExtras = "";
+            }
+            if(gamepad1.y) {
+                if (LEDExtras == "PARTY"){
+                    LEDExtras = "";
+                } else {
+                    LEDExtras = "PARTY";
+                }
+            }
+            drivetrainFunctions.setLEDColor(deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
 
             if(gamepad1.dpad_left){
                 targetTagIDRed = aprilTagsFunctions.RED_1_TAG;
@@ -246,11 +263,6 @@ public class CenterStageTeleOp extends RoboMom {
                 speedScalar = 0.8;
             } else {
                 speedScalar = 1;
-            }
-
-
-            if (gamepad1.y) {
-                drivetrainFunctions.ResetIMU();
             }
 
             //Gamepad 2

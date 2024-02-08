@@ -55,8 +55,18 @@ public class DeliveryFunctions {
 
     private double initAttempts = 0;
 
-    private colorSensor frontColorSensor;
-    private colorSensor backColorSensor;
+    NormalizedColorSensor sensorFront;
+    NormalizedRGBA colorsFront;
+    final float[] HSVValuesFront = new float[3];
+    NormalizedColorSensor sensorBack;
+    NormalizedRGBA colorsBack;
+    final float[] HSVValuesBack = new float[3];
+
+    double yellow = 86;
+    double green = 125;
+    double white = 173;
+    double purple = 206;
+    double distance = 1.8;
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -101,8 +111,10 @@ public class DeliveryFunctions {
 
 //            rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
-//            frontColorSensor.InitializeColorSensor("front_color");
-//            backColorSensor.InitializeColorSensor("back_color");
+            sensorFront = linearOpMode.hardwareMap.get(NormalizedColorSensor.class, "front_color");
+            sensorFront.setGain(10);
+            sensorBack = linearOpMode.hardwareMap.get(NormalizedColorSensor.class, "back_color");
+            sensorBack.setGain(10);
 
             leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
@@ -144,8 +156,10 @@ public class DeliveryFunctions {
 
 //            rightSlide.setDirection(DcMotor.Direction.REVERSE);
 
-//            frontColorSensor.InitializeColorSensor("front_color");
-//            backColorSensor.InitializeColorSensor("back_color");
+            sensorFront = linearOpMode.hardwareMap.get(NormalizedColorSensor.class, "front_color");
+            sensorFront.setGain(10);
+            sensorBack = linearOpMode.hardwareMap.get(NormalizedColorSensor.class, "back_color");
+            sensorBack.setGain(10);
 
             leftSlide.setDirection(DcMotor.Direction.REVERSE);
 
@@ -157,39 +171,38 @@ public class DeliveryFunctions {
         }
     }
 
-    class colorSensor {
-        NormalizedColorSensor sensor;
-        String backColor = "NONE";
-
-        NormalizedRGBA colors;
-
-        final float[] HSVValues = new float[3];
-
-        void InitializeColorSensor(String deviceName) {
-            sensor = linearOpMode.hardwareMap.get(NormalizedColorSensor.class, deviceName);
-            sensor.setGain(10);
-        }
-
-        void updateColorSensor() {
-            colors = sensor.getNormalizedColors();
-            Color.colorToHSV(colors.toColor(), HSVValues);
-        }
-
-        public String detectPixelColor() {
-            updateColorSensor();
-            if (((DistanceSensor) sensor).getDistance(DistanceUnit.CM) < 6.5) {
-                if (HSVValues[0] > 80 && HSVValues[0] < 100) {
-                    return "YELLOW";
-                } else if (HSVValues[0] > 120 && HSVValues[0] < 150) {
-                    return "GREEN";
-                } else if (HSVValues[0] > 180 && HSVValues[0] < 200) {
-                    return "WHITE";
-                } else if (HSVValues[0] > 210 && HSVValues[0] < 230) {
-                    return "PURPLE";
-                }
+    public String detectFrontPixelColor() {
+        colorsFront = sensorFront.getNormalizedColors();
+        Color.colorToHSV(colorsFront.toColor(), HSVValuesFront);
+        if (((DistanceSensor) sensorFront).getDistance(DistanceUnit.CM) < distance) {
+            if (HSVValuesFront[0] > yellow-10 && HSVValuesFront[0] < yellow+10) {
+                return "YELLOW";
+            } else if (HSVValuesFront[0] > green-10 && HSVValuesFront[0] < green+10) {
+                return "GREEN";
+            } else if (HSVValuesFront[0] > white-10 && HSVValuesFront[0] < white+10) {
+                return "WHITE";
+            } else if (HSVValuesFront[0] > purple-10 && HSVValuesFront[0] < purple+10) {
+                return "PURPLE";
             }
-            return "NONE";
         }
+        return "NONE";
+    }
+
+    public String detectBackPixelColor() {
+        colorsBack = sensorBack.getNormalizedColors();
+        Color.colorToHSV(colorsBack.toColor(), HSVValuesBack);
+        if (((DistanceSensor) sensorBack).getDistance(DistanceUnit.CM) < distance) {
+            if (HSVValuesBack[0] > yellow-10 && HSVValuesBack[0] < yellow+10) {
+                return "YELLOW";
+            } else if (HSVValuesBack[0] > green-10 && HSVValuesBack[0] < green+10) {
+                return "GREEN";
+            } else if (HSVValuesBack[0] > white-10 && HSVValuesBack[0] < white+10) {
+                return "WHITE";
+            } else if (HSVValuesBack[0] > purple-10 && HSVValuesBack[0] < purple+10) {
+                return "PURPLE";
+            }
+        }
+        return "NONE";
     }
 
     public void setSlidesTargetPosition(int clicks){

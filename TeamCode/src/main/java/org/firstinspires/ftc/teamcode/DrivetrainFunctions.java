@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -16,6 +17,8 @@ public class DrivetrainFunctions {
     public DcMotor leftFrontDrive = null;
     public DcMotor rightBackDrive = null;
     public DcMotor leftBackDrive = null;
+
+    RevBlinkinLedDriver blinkinLedDriver;
 
     public IMU imu;
     private LinearOpMode linearOpMode;
@@ -59,6 +62,8 @@ public class DrivetrainFunctions {
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+            blinkinLedDriver = linearOpMode.hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         }catch(NullPointerException e){
             initAttempts++;
             linearOpMode.telemetry.addData("Couldn't find motors.       Attempt: ", initAttempts);
@@ -79,6 +84,8 @@ public class DrivetrainFunctions {
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
+            blinkinLedDriver = linearOpMode.hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
             isDisabled = false;
         }catch(NullPointerException e){
             initAttempts++;
@@ -153,6 +160,35 @@ public class DrivetrainFunctions {
                 || leftFrontDrive.getPower() != 0
                 || rightBackDrive.getPower() != 0
                 || leftBackDrive.getPower() != 0;
+    }
+
+    public void setLEDColor (String colorFront, String colorBack, String extras) {
+        if (extras == "BACK") {
+            if (colorBack == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
+            if (colorBack == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
+            if (colorBack == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
+            if (colorBack == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
+            if (colorBack == "NONE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);}
+        }
+        if (extras == "PARTY") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);}
+
+        if (colorBack == "NONE") {
+            if (colorFront == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
+            if (colorFront == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
+            if (colorFront == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
+            if (colorFront == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
+            if (colorFront == "NONE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);}
+        } else if (colorFront == "NONE") {
+            if (colorBack == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
+            if (colorBack == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
+            if (colorBack == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
+            if (colorBack == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
+        } else {
+            if (colorFront == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY);}
+            if (colorFront == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE);}
+            if (colorFront == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE);}
+            if (colorFront == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE);}
+        }
     }
 
 
