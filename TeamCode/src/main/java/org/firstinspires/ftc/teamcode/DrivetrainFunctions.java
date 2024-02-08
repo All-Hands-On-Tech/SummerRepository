@@ -19,6 +19,7 @@ public class DrivetrainFunctions {
     public DcMotor leftBackDrive = null;
 
     RevBlinkinLedDriver blinkinLedDriver;
+    RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
 
     public IMU imu;
     private LinearOpMode linearOpMode;
@@ -164,30 +165,35 @@ public class DrivetrainFunctions {
 
     public void setLEDColor (String colorFront, String colorBack, String extras) {
         if (extras == "BACK") {
-            if (colorBack == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
-            if (colorBack == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
-            if (colorBack == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
-            if (colorBack == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
-            if (colorBack == "NONE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);}
+            if (colorBack == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.GRAY;}
+            if (colorBack == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
+            if (colorBack == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
+            if (colorBack == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
+            if (colorBack == "NONE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;}
         } else if (extras == "PARTY") {
-            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE);
+            pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         } else if (colorBack == "NONE") {
-            if (colorFront == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
-            if (colorFront == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
-            if (colorFront == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
-            if (colorFront == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
-            if (colorFront == "NONE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);}
+            if (colorFront == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
+            if (colorFront == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
+            if (colorFront == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
+            if (colorFront == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
+            if (colorFront == "NONE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;}
         } else if (colorFront == "NONE") {
-            if (colorBack == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY);}
-            if (colorBack == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
-            if (colorBack == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}
-            if (colorBack == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLUE);}
+            if (colorBack == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.GRAY;}
+            if (colorBack == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
+            if (colorBack == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
+            if (colorBack == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
         } else {
-            if (colorFront == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY);}
-            if (colorFront == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE);}
-            if (colorFront == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE);}
-            if (colorFront == "PURPLE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE);}
+            if (colorFront == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY;}
+            if (colorFront == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE;}
+            if (colorFront == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;}
+            if (colorFront == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;}
         }
+        blinkinLedDriver.setPattern(pattern);
+    }
+
+    public String getLEDColor() {
+        return pattern.toString();
     }
 
 

@@ -201,12 +201,15 @@ public class CenterStageTeleOp extends RoboMom {
 
             if(gamepad1.x) {
                 LEDExtras = "BACK";
-            } else if(gamepad1.y) {
+            }
+            if(gamepad1.y) {
                 LEDExtras = "PARTY";
-            } else {
+            }
+            if (gamepad1.a){
                 LEDExtras = "";
             }
             drivetrainFunctions.setLEDColor(deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
+            telemetry.addData("LEDs", "%s %s %s", deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
 
             if(gamepad1.dpad_left){
                 targetTagIDRed = aprilTagsFunctions.RED_1_TAG;
