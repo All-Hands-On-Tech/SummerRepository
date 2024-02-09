@@ -25,7 +25,7 @@ public class PixelColorDetection extends RoboMom {
     final float[] frontHSVValues = new float[3];
 
     RevBlinkinLedDriver blinkinLedDriver;
-    RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;;
+    RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
 
     double yellowBack = 75;
     double yellowFront = 95;
