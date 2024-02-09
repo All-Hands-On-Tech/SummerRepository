@@ -102,8 +102,10 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(BLUE_BACKSTAGE_START_POSE)
-                            .splineToLinearHeading(new Pose2d(-13, 11, Math.toRadians(0)), Math.toRadians(-90))
-                            .build()
+                                .splineTo(new Vector2d(-23.38, 23.31), Math.toRadians(0))
+                                .lineToConstantHeading(new Vector2d(-21.38, 35.63))
+                                .lineToLinearHeading(new Pose2d(-34, 38, Math.toRadians(90)))
+                                .build()
                 );
 
         RoadRunnerBotEntity BlueBackstageCenterTrajectoryChopperPush1 = new DefaultBotBuilder(meepMeep)
@@ -216,12 +218,30 @@ public class MeepMeepTesting {
                 .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
                 .followTrajectorySequence(drive ->
                         drive.trajectorySequenceBuilder(BLUE_LANDING_ZONE_START_POSE)
-                                .splineTo(new Vector2d(-33, -35), Math.toRadians(0))
+                                .splineTo(new Vector2d(-24, -47.36), Math.toRadians(0.00))
+                                .waitSeconds(4)
+                                .lineToConstantHeading(new Vector2d(-21.67, -55.08))
+                                .lineToLinearHeading(new Pose2d(-12, -48.84, Math.toRadians(90.00)))
+                                .splineToConstantHeading(new Vector2d(-12, 35.00), Math.toRadians(95.00))
+                                .splineToLinearHeading(new Pose2d(-34, 34, Math.toRadians(90)), Math.toRadians(90.00))
+                                .build()
+                );
+        RoadRunnerBotEntity BlueLandingZoneCenterScoreChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-34, 34, Math.toRadians(90)))
                                 .waitSeconds(5)
-                                .strafeTo(new Vector2d(-36, -48))
-                                .splineToLinearHeading(new Pose2d(-12, -35, Math.toRadians(90)), Math.toRadians(90))
-                                .strafeTo(new Vector2d(-12, 30))
-                                .strafeTo(new Vector2d(BLUE_END_POSE.getX(), BLUE_END_POSE.getY()))
+                                .lineToConstantHeading(new Vector2d(-36.5, 52.25))
+                                .build()
+                );
+
+        RoadRunnerBotEntity BlueLandingZoneCenterParkChopper = new DefaultBotBuilder(meepMeep)
+                .setConstraints(39.2, 30, Math.toRadians(180), Math.toRadians(180), trackWidth)
+                .followTrajectorySequence(drive ->
+                        drive.trajectorySequenceBuilder(new Pose2d(-36.5, 52.25, Math.toRadians(90)))
+                                .waitSeconds(8)
+                                .back(2)
+                                .strafeTo(new Vector2d(-30, 52.25 + 7))
                                 .build()
                 );
 
@@ -404,15 +424,17 @@ public class MeepMeepTesting {
             meepMeep.setBackground(img)
 //                .addEntity(left)
 //                .addEntity(mid)
-                    .addEntity(BlueLandingZoneRightTrajectoryChopperPush1)
-                    .addEntity(RedBackstageRightChopper)
+                    .addEntity(BlueLandingZoneCenterChopper)
+                    .addEntity(BlueLandingZoneCenterScoreChopper)
+                    .addEntity(BlueLandingZoneCenterParkChopper)
+                    .addEntity(BlueBackstageCenterTrajectoryChopperPush0)
                     .start();
         }else {
             meepMeep.setBackground(background)
 //                .addEntity(left)
 //                .addEntity(mid)
 //                .addEntity(right)
-                    .addEntity(BlueBackstageRightChopper)
+                    .addEntity(BlueBackstageCenterTrajectoryChopperPush0)
                     .start();
         }
 
