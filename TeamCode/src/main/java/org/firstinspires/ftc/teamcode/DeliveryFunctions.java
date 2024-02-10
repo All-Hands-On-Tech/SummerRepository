@@ -32,7 +32,7 @@ public class DeliveryFunctions {
     public final double servoIn = 0.605;
     private final double servoOut = 0.867;//0.77
 
-    public final double servoDodge = 0.555;//0.421
+    public final double servoDodge = 0.4805;//0.421
 
     private int targetPosition;
     private double currentPosition;
