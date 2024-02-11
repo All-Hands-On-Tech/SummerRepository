@@ -407,9 +407,9 @@ public class CenterStageTeleOp extends RoboMom {
                 retracting = false;
 
                 if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
-                    targetPosition -= gamepad2.left_stick_y * 15;
+                    targetPosition -= gamepad2.left_stick_y * 20;
                 } else {
-                    targetPosition -= gamepad2.left_stick_y * 10;
+                    targetPosition -= gamepad2.left_stick_y * 15;
                 }
             }
 
