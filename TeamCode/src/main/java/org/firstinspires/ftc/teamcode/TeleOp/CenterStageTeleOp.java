@@ -234,6 +234,8 @@ public class CenterStageTeleOp extends RoboMom {
 
                 if (gamepad1.dpad_left || gamepad1.dpad_down || gamepad1.dpad_right) {
 
+                    controlsRelinquished = true;
+
                     double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
                     double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
                     double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
