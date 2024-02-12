@@ -174,7 +174,7 @@ public class DrivetrainFunctions {
             pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
         } else if (colorBack == "NONE") {
             if (colorFront == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorFront == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
+            if (colorFront == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.RED;}
             if (colorFront == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
             if (colorFront == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
             if (colorFront == "NONE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;}

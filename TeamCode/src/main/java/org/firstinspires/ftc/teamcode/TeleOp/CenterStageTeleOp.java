@@ -374,7 +374,7 @@ public class CenterStageTeleOp extends RoboMom {
                 case DELIVERY_RETRACT:
                     retracting = true;
                     if(deliveryTimer.seconds() <= DUMP_TIME + 1){
-                        targetPosition = deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS - 250;
+                        targetPosition = 200;
                         deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                         break;
                     }
@@ -428,10 +428,10 @@ public class CenterStageTeleOp extends RoboMom {
             telemetry.addData("Left Motor Position: ", leftMotorPosition);
             telemetry.addData("Right Motor Position: ", rightMotorPosition);
 
-            if (gamepad2.left_bumper) {
+            if (gamepad1.left_trigger > 0.05) {
                 intakeFunctions.OutakeFromIntake(-1f);
 
-            } else if (gamepad2.left_trigger >= 0.05) {
+            } else if (gamepad1.right_trigger >= 0.05) {
                 intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
@@ -441,7 +441,7 @@ public class CenterStageTeleOp extends RoboMom {
                 deliveryFunctions.CloseHolderServoByIndex(1);
             }
 
-            if (gamepad2.right_bumper){
+            if (gamepad2.left_trigger > 0.05){
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
             }
