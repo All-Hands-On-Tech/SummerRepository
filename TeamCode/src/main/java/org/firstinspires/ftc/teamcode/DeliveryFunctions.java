@@ -29,10 +29,10 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    public final double servoIn = 0.605;
-    private final double servoOut = 0.867;//0.77
+    public final double servoIn = 0.7165;
+    private final double servoOut = 0.767;//0.77
 
-    public final double servoDodge = 0.4805;//0.421
+    public final double servoDodge = 0.704;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -342,7 +342,7 @@ public class DeliveryFunctions {
             linearOpMode.telemetry.addData("right Error: ", rightError);
             linearOpMode.telemetry.update();
         }
-        linearOpMode.sleep(750);
+        linearOpMode.sleep(1000);
 
         wrist.setPosition(servoOut);
 

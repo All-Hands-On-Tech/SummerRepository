@@ -94,7 +94,7 @@ public class CenterStageTeleOp extends RoboMom {
 
     private final int SET_3_HEIGHT = 1800;
 
-    private final int LIFT_LOW = 0;
+    private final int LIFT_LOW = 200;
 
     private final double DUMP_TIME = 1;
 
@@ -161,8 +161,8 @@ public class CenterStageTeleOp extends RoboMom {
 
         waitForStart();
 
-        targetPosition = LIFT_LOW;
-        deliveryFunctions.setSlidesTargetPosition(LIFT_LOW);
+        targetPosition = LIFT_MIN;
+        deliveryFunctions.setSlidesTargetPosition(LIFT_MIN);
 
         String LEDExtras = "";
 
@@ -244,13 +244,13 @@ public class CenterStageTeleOp extends RoboMom {
                     telemetry.addData("y: ", y);
                     telemetry.addData("bearing: ", bearing);
 
-                    drivetrainFunctions.Move((float) x, (float) y, (float) bearing, 1);
+                    drivetrainFunctions.Move((float) x, (float) y, (float) bearing, 0.5);
                 } else {
                     controlsRelinquished = false;
                 }
 
             } else {          //align to point (pose of aprilTag)
-
+                controlsRelinquished = false;
             }
 
             telemetry.update();
@@ -287,14 +287,21 @@ public class CenterStageTeleOp extends RoboMom {
                         deliveryState = DeliveryState.DELIVERY_LIFT;
                         targetPosition = SET_3_HEIGHT;
                     }
-
-                    if (gamepad2.b && !dumped && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
-                        deliveryState = DeliveryState.DELIVERY_DUMP;
-                        dumped = true;
+                    if (gamepad2.b && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_DODGE) {
+                        deliveryState = DeliveryState.DELIVERY_RETRACT;
+//                        targetPosition = LIFT_LOW;
+                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                         deliveryTimer.reset();
-                        deliveryFunctions.Dump(1);
-                        secondDumped = false;
+                        retracting = true;
                     }
+
+//                    if (gamepad2.right_bumper && !dumped && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
+//                        deliveryState = DeliveryState.DELIVERY_DUMP;
+//                        dumped = true;
+//                        deliveryTimer.reset();
+//                        deliveryFunctions.Dump(1);
+//                        secondDumped = false;
+//                    }
                     break;
 
                 case DELIVERY_LIFT:
@@ -304,7 +311,7 @@ public class CenterStageTeleOp extends RoboMom {
                     (targetPosition - leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
                             &&
                             targetPosition - rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
-                        deliveryState = DeliveryState.DELIVERY_DUMP;
+                        deliveryState = DeliveryState.DELIVERY_START;
                         dumped = false;
                         secondDumped = false;
                     } else {
@@ -314,94 +321,94 @@ public class CenterStageTeleOp extends RoboMom {
 
 
                 case DELIVERY_DUMP:
-
-                    if (gamepad2.b && queueBufferTimer.seconds() > QUEUE_BUFFER) {
-                        queueBufferTimer.reset();
-                        queuedB = true;
-                    }
-
-                    if(dumping){
-                        if(deliveryTimer.seconds() < DUMP_TIME/3){
-                            deliveryFunctions.OpenHolderServoByIndex(0);
-                        }
-                        //CLOSE 1
-                        else if(deliveryTimer.seconds() < DUMP_TIME){
-                            deliveryFunctions.CloseHolderServoByIndex(0);
-                        }
-                        //OPEN 2
-                        else if(deliveryTimer.seconds() < DUMP_TIME * 1.5){
-                            deliveryFunctions.OpenHolderServoByIndex(1);
-                        } else if(deliveryTimer.seconds() > DUMP_TIME * 1.5){
-                            dumped = true;
-                            dumping = false;
-                        }
-                    }
-
-                    if(secondDumping){
-                        if(deliveryTimer.seconds() < DUMP_TIME/2){
-                            deliveryFunctions.OpenHolderServoByIndex(0);
-                        } else if(deliveryTimer.seconds() > DUMP_TIME){
-                            deliveryFunctions.CloseHolderServoByIndex(0);
-                            secondDumped = true;
-                            secondDumping = false;
-                        }
-                    }
-
-                    if ((gamepad2.b || queuedB) && !dumped && !dumping) {
-                        queuedB = false;
-                        dumping = true;
-                        deliveryTimer.reset();
-                        queueBufferTimer.reset();
-                    }
-
-                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && !secondDumped && !secondDumping) {
-                        queuedB = false;
-                        secondDumping = true;
-                        deliveryTimer.reset();
-                        queueBufferTimer.reset();
-                    }
-
-                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.b || queuedB) && secondDumped) {
-                        queuedB = false;
-                        dumped = false;
-                        secondDumped = false;
-                        deliveryTimer.reset();
-                        retracting = true;
-                        deliveryState = DeliveryState.DELIVERY_RETRACT;
-                        tempTarget = deliveryFunctions.getMotorPositionByIndex(1);
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
-                    }
+                    deliveryState = DeliveryState.DELIVERY_START;
+//                    if (gamepad2.right_bumper && queueBufferTimer.seconds() > QUEUE_BUFFER) {
+//                        queueBufferTimer.reset();
+//                        queuedB = true;
+//                    }
+//
+//                    if(dumping){
+//                        if(deliveryTimer.seconds() < DUMP_TIME/3){
+//                            deliveryFunctions.OpenHolderServoByIndex(0);
+//                        }
+//                        //CLOSE 1
+//                        else if(deliveryTimer.seconds() < DUMP_TIME){
+//                            deliveryFunctions.CloseHolderServoByIndex(0);
+//                        }
+//                        //OPEN 2
+//                        else if(deliveryTimer.seconds() < DUMP_TIME * 1.5){
+//                            deliveryFunctions.OpenHolderServoByIndex(1);
+//                        } else if(deliveryTimer.seconds() > DUMP_TIME * 1.5){
+//                            dumped = true;
+//                            dumping = false;
+//                        }
+//                    }
+//
+//                    if(secondDumping){
+//                        if(deliveryTimer.seconds() < DUMP_TIME/2){
+//                            deliveryFunctions.OpenHolderServoByIndex(0);
+//                        } else if(deliveryTimer.seconds() > DUMP_TIME){
+//                            deliveryFunctions.CloseHolderServoByIndex(0);
+//                            secondDumped = true;
+//                            secondDumping = false;
+//                        }
+//                    }
+//
+//                    if ((gamepad2.right_bumper || queuedB) && !dumped && !dumping) {
+//                        queuedB = false;
+//                        dumping = true;
+//                        deliveryTimer.reset();
+//                        queueBufferTimer.reset();
+//                    }
+//
+//                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.right_bumper || queuedB) && !secondDumped && !secondDumping) {
+//                        queuedB = false;
+//                        secondDumping = true;
+//                        deliveryTimer.reset();
+//                        queueBufferTimer.reset();
+//                    }
+//
+//                    if (dumped && deliveryTimer.seconds() >= DUMP_TIME && (gamepad2.right_bumper || queuedB) && secondDumped) {
+//                        queuedB = false;
+//                        dumped = false;
+//                        secondDumped = false;
+//                        deliveryTimer.reset();
+//                        retracting = true;
+//                        deliveryState = DeliveryState.DELIVERY_RETRACT;
+//                        tempTarget = deliveryFunctions.getMotorPositionByIndex(1);
+//                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
+//                    }
 
                     break;
                 case DELIVERY_RETRACT:
                     retracting = true;
-                    if(deliveryTimer.seconds() <= DUMP_TIME + 1){
-                        targetPosition = 200;
+                    if(deliveryTimer.seconds() <= 0.5){
                         deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
                         break;
+                    }else{
+                        targetPosition = LIFT_LOW;
+                        if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
+                            deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
+                        } else {
+                            deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
+                        }
+
+                        //if both motors are within stop threshold
+                        if
+                        (leftMotorPosition - targetPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
+                                &&
+                                rightMotorPosition - targetPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
+
+                            deliveryState = DeliveryState.DELIVERY_START;
+                            retracting = false;
+                        }
                     }
 
-                    if (deliveryFunctions.getMotorPositionByIndex(0) < deliveryFunctions.CARRIAGE_DODGE) {
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoIn);
-                    } else {
-                        deliveryFunctions.SetWristPosition(deliveryFunctions.servoDodge);
-                    }
-
-                    //if both motors are within stop threshold
-                    if
-                    (targetPosition + leftMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD
-                            &&
-                            targetPosition + rightMotorPosition <= deliveryFunctions.TICK_STOP_THRESHOLD) {
-
-                        deliveryState = DeliveryState.DELIVERY_START;
-                        retracting = false;
-                    } else {
-                        //Still Moving
-                    }
                     break;
             }
 
             telemetry.addData("Delivery State: ", deliveryState);
+            telemetry.addData("Delivery Timer: ", deliveryTimer.seconds());
 
             //MANUAL
             if (Math.abs(gamepad2.right_stick_y) >= DEADZONE || Math.abs(gamepad2.left_stick_y) >= DEADZONE) {
@@ -409,9 +416,9 @@ public class CenterStageTeleOp extends RoboMom {
                 retracting = false;
 
                 if (leftMotorPosition > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
-                    targetPosition -= gamepad2.left_stick_y * 20;
+                    targetPosition -= gamepad2.left_stick_y * 35;
                 } else {
-                    targetPosition -= gamepad2.left_stick_y * 15;
+                    targetPosition -= gamepad2.left_stick_y * 25;
                 }
             }
 
@@ -434,10 +441,10 @@ public class CenterStageTeleOp extends RoboMom {
                 intakeFunctions.OutakeFromIntake(-1f);
 
             } else if (gamepad1.right_trigger >= 0.05) {
-                intakeFunctions.RunIntakeMotor(gamepad2.left_trigger);
+                intakeFunctions.RunIntakeMotor(gamepad1.right_trigger);
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
-            } else if(!dumping && !secondDumping){
+            } else if(!dumping && !secondDumping && !(gamepad2.left_trigger >= 0.05)){
                 intakeFunctions.StopIntakeMotor();
                 deliveryFunctions.CloseHolderServoByIndex(0);
                 deliveryFunctions.CloseHolderServoByIndex(1);
@@ -445,6 +452,8 @@ public class CenterStageTeleOp extends RoboMom {
 
             if (gamepad2.left_trigger > 0.05){
                 deliveryFunctions.OpenHolderServoByIndex(0);
+            }
+            if (gamepad2.left_bumper){
                 deliveryFunctions.OpenHolderServoByIndex(1);
             }
 

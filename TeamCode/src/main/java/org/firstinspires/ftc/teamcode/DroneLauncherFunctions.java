@@ -22,6 +22,8 @@ public class DroneLauncherFunctions {
 
     private static final double RELEASE_POSITION = 0.6;
 
+    private static final double DEFAULT_POSITION = 0.1;
+
 
     public DroneLauncherFunctions(LinearOpMode l)
     {
@@ -55,5 +57,7 @@ public class DroneLauncherFunctions {
     public void ReleaseDrone(){
         droneServo.setPosition(RELEASE_POSITION);
     }
+
+    public void initDroneServo(){droneServo.setPosition(DEFAULT_POSITION);}
 
 }
