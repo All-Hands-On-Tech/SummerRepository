@@ -23,9 +23,9 @@ public class TouchpadFunctions {
 
     public TouchpadFunctions(LinearOpMode l, int gamepadNumber)
     {
+        gamepadNum = gamepadNumber;
         linearOpMode = l;
         Initialize();
-        gamepadNum = gamepadNumber;
 
     }
 
@@ -70,7 +70,7 @@ public class TouchpadFunctions {
     }
 
     public boolean getTouchpad(){
-        return linearOpMode.gamepad1.touchpad_finger_1;
+        return gamepad.touchpad_finger_1;
     }
 
     public void updateTouchpadStateAtEndOfLoop(){
