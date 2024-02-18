@@ -78,23 +78,23 @@ public class BlueLandingZone extends AutonomousOpmode {
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToConstantHeading(new Vector2d(-28, 52.25))
+                .lineToConstantHeading(new Vector2d(-31, 52.25))
                 .build();
 
 
         TrajectorySequence leftPark = drive.trajectorySequenceBuilder(new Pose2d(-32, 42, Math.toRadians(90)))
                 .back(2)
-                .strafeTo(new Vector2d(-30, endPose.getY() + 7))
+                .strafeTo(new Vector2d(-30, endPose.getY() + 10))
                 .build();
 
         TrajectorySequence centerPark = drive.trajectorySequenceBuilder(new Pose2d(-34, 42, Math.toRadians(90)))
                 .back(2)
-                .strafeTo(new Vector2d(-30, endPose.getY() + 7))
+                .strafeTo(new Vector2d(-30, endPose.getY() + 10))
                 .build();
 
         TrajectorySequence rightPark = drive.trajectorySequenceBuilder(new Pose2d(-36, 42, Math.toRadians(90)))
                 .back(2)
-                .strafeTo(new Vector2d(-30, endPose.getY() + 7))
+                .strafeTo(new Vector2d(-30, endPose.getY() + 10))
                 .build();
 
         waitForStart();

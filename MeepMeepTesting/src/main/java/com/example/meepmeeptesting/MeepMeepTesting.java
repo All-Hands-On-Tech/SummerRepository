@@ -425,8 +425,8 @@ public class MeepMeepTesting {
 //                .addEntity(left)
 //                .addEntity(mid)
                     .addEntity(BlueLandingZoneCenterChopper)
-                    .addEntity(BlueLandingZoneCenterScoreChopper)
-                    .addEntity(BlueLandingZoneCenterParkChopper)
+//                    .addEntity(BlueLandingZoneCenterScoreChopper)
+//                    .addEntity(BlueLandingZoneCenterParkChopper)
                     .addEntity(BlueBackstageCenterTrajectoryChopperPush0)
                     .start();
         }else {

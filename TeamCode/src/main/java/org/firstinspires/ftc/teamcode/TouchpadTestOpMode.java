@@ -1,8 +1,11 @@
-package org.firstinspires.ftc.robotcontroller.external.samples;
+package org.firstinspires.ftc.teamcode;
 
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
+import android.text.method.Touch;
+
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.hardware.Gamepad;
+
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 
 /*
@@ -34,12 +37,14 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
  */
 
 
-@TeleOp(name="Concept: Gamepad Touchpad", group ="Concept")
-public class ConceptGamepadTouchpad extends LinearOpMode
+@TeleOp(name="Touchpad Test", group ="Concept")
+public class TouchpadTestOpMode extends LinearOpMode
 {
     @Override
     public void runOpMode()
     {
+        TouchpadFunctions touchpad = new TouchpadFunctions(this, 1);
+
         telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
 
         telemetry.addData(">", "Press Start");
@@ -52,7 +57,7 @@ public class ConceptGamepadTouchpad extends LinearOpMode
             boolean finger = false;
 
             // Display finger 1 x & y position if finger detected
-            if(gamepad1.touchpad_finger_1)
+            if(touchpad.getTouchpad())
             {
                 finger = true;
                 telemetry.addLine(String.format("Finger 1: x=%5.2f y=%5.2f\n", gamepad1.touchpad_finger_1_x, gamepad1.touchpad_finger_1_y));
