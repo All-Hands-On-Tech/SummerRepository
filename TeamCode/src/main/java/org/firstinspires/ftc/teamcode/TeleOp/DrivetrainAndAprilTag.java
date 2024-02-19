@@ -33,6 +33,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.teamcode.TouchpadFunctions;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
@@ -44,7 +45,7 @@ import org.firstinspires.ftc.teamcode.RoboMom;
 
 public class DrivetrainAndAprilTag extends RoboMom {
 
-    double deadZone = 0.05;
+    double deadZone = 0.5;
 
     double speedScalar = 1;
 
@@ -60,7 +61,7 @@ public class DrivetrainAndAprilTag extends RoboMom {
 
     double increment = 0.00001;
 
-    private VisionFunctions aprilTagsFunctions;
+    private VisionFunctions vision;
 
     private boolean controlsRelinquished = false;
 
@@ -84,8 +85,10 @@ public class DrivetrainAndAprilTag extends RoboMom {
 
         drive = new SampleMecanumDrive(hardwareMap);
 
-        aprilTagsFunctions = new VisionFunctions(this);
+        vision = new VisionFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
+
+        TouchpadFunctions touchpad1 = new TouchpadFunctions(this, 1);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -147,25 +150,25 @@ public class DrivetrainAndAprilTag extends RoboMom {
             telemetry.addData("Rotation Gain: ", ROTATION_GAIN);
 
 
-            if(aprilTagsFunctions.DetectAprilTag(aprilTagsFunctions.BLUE_1_TAG)){
-                telemetry.addData("Found", "ID %d (%s)", aprilTagsFunctions.detectedTag.id, aprilTagsFunctions.detectedTag.metadata.name);
-                telemetry.addData("Range",  "%5.1f inches", aprilTagsFunctions.detectedTag.ftcPose.range);
-                telemetry.addData("Bearing","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.bearing);
-                telemetry.addData("Yaw","%3.0f degrees", aprilTagsFunctions.detectedTag.ftcPose.yaw);
-                telemetry.addData("X delta","%3.0f inches", aprilTagsFunctions.detectedTag.ftcPose.x);
+            if(vision.DetectAprilTag(vision.BLUE_1_TAG)){
+                telemetry.addData("Found", "ID %d (%s)", vision.detectedTag.id, vision.detectedTag.metadata.name);
+                telemetry.addData("Range",  "%5.1f inches", vision.detectedTag.ftcPose.range);
+                telemetry.addData("Bearing","%3.0f degrees", vision.detectedTag.ftcPose.bearing);
+                telemetry.addData("Yaw","%3.0f degrees", vision.detectedTag.ftcPose.yaw);
+                telemetry.addData("X delta","%3.0f inches", vision.detectedTag.ftcPose.x);
 
                 if(gamepad1.right_trigger > 0.025f){
                     rightTriggerPull = gamepad1.right_trigger;
 
-                    double x = STRAFE_GAIN * aprilTagsFunctions.detectedTag.ftcPose.yaw;
-                    double y = -FORWARD_GAIN * aprilTagsFunctions.detectedTag.ftcPose.range;
-                    double bearing = -ROTATION_GAIN * aprilTagsFunctions.detectedTag.ftcPose.bearing;
+                    double x = STRAFE_GAIN * vision.detectedTag.ftcPose.yaw;
+                    double y = -FORWARD_GAIN * vision.detectedTag.ftcPose.range;
+                    double bearing = -ROTATION_GAIN * vision.detectedTag.ftcPose.bearing;
 
                     telemetry.addData("x: ", x);
                     telemetry.addData("y: ", y);
                     telemetry.addData("bearing: ", bearing);
 
-                    if(aprilTagsFunctions.detectedTag.ftcPose.range > TARGET_DISTANCE_TO_TAG){
+                    if(vision.detectedTag.ftcPose.range > TARGET_DISTANCE_TO_TAG){
 //                        y = Math.max(y,-0.05);
                         drivetrainFunctions.Move((float)x,(float)y,(float)bearing, 1);
                     } else{
@@ -175,6 +178,28 @@ public class DrivetrainAndAprilTag extends RoboMom {
                 } else {
                     controlsRelinquished = false;
                 }
+            }
+
+            touchpad1.CollectPreviousInput();
+            touchpad1.CollectCurrentInput();
+
+            if(vision.DetectAprilTag(-1) && touchpad1.getTouchpad()){
+                boolean down = touchpad1.getTouchpadDown();
+                boolean up = touchpad1.getTouchpadUp();
+                float xSwipe = touchpad1.getXSwipe();
+                float ySwipe = touchpad1.getYSwipe();
+                double rotation = -0.022 * vision.detectedTag.ftcPose.yaw;
+                double x = touchpad1.TOUCHPADXMULTIPLIER * xSwipe;
+                double y = touchpad1.TOUCHPADYMULTIPLIER * ySwipe;
+
+                telemetry.addData("Touchpad Down? ", down);
+                telemetry.addData("Touchpad Up? ", up);
+                telemetry.addData("Touchpad Swipe:  ", xSwipe);
+                telemetry.addData("Rotation: ", rotation);
+                telemetry.addData("Strafe: ", x);
+                telemetry.addData("Forward: ", y);
+
+                drivetrainFunctions.Move((float) x, (float) y, (float) rotation, 1);
             }
 
 

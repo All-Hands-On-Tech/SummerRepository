@@ -40,40 +40,72 @@ import org.firstinspires.ftc.robotcore.external.Telemetry;
 @TeleOp(name="Touchpad Test", group ="Concept")
 public class TouchpadTestOpMode extends LinearOpMode
 {
+
+    private double deadZone = 0.1;
     @Override
     public void runOpMode()
     {
-        TouchpadFunctions touchpad = new TouchpadFunctions(this, 1);
+        TouchpadFunctions touchpad1 = new TouchpadFunctions(this, 1);
+        VisionFunctions vision = new VisionFunctions(this);
+        DrivetrainFunctions drivetrainFunctions = new DrivetrainFunctions(this);
 
-        telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
+//        telemetry.setDisplayFormat(Telemetry.DisplayFormat.MONOSPACE);
 
         telemetry.addData(">", "Press Start");
         telemetry.update();
 
         waitForStart();
 
+        vision.startDetectingApriltags();
+
         while (opModeIsActive())
         {
             boolean finger = false;
 
-            // Display finger 1 x & y position if finger detected
-            if(touchpad.getTouchpad())
-            {
-                finger = true;
-                telemetry.addLine(String.format("Finger 1: x=%5.2f y=%5.2f\n", gamepad1.touchpad_finger_1_x, gamepad1.touchpad_finger_1_y));
+            touchpad1.CollectPreviousInput();
+            touchpad1.CollectCurrentInput();
+
+            if(vision.DetectAprilTag(-1)) {
+                telemetry.addData("yaw ", vision.detectedTag.ftcPose.yaw);
+                if (touchpad1.getTouchpad()) {
+                    boolean down = touchpad1.getTouchpadDown();
+                    boolean up = touchpad1.getTouchpadUp();
+                    float xSwipe = touchpad1.getXSwipe();
+                    float ySwipe = touchpad1.getYSwipe();
+                    double rotation = -0.022 * vision.detectedTag.ftcPose.yaw;
+                    double x = touchpad1.TOUCHPADXMULTIPLIER * xSwipe;
+                    double y = -touchpad1.TOUCHPADYMULTIPLIER * ySwipe;
+
+
+                    telemetry.addData("Touchpad Down? ", down);
+                    telemetry.addData("Touchpad Up? ", up);
+                    telemetry.addData("Touchpad Swipe:  ", xSwipe);
+                    telemetry.addData("Rotation: ", rotation);
+                    telemetry.addData("Strafe: ", x);
+                    telemetry.addData("Forward: ", y);
+
+                    double rotationDir = rotation / Math.abs(rotation);
+
+                    if(Math.abs(rotation) > 0.5){
+                        rotation = 0.5 * rotationDir;
+                    }
+
+                    if(Math.abs(rotation) < 0.15){
+                        rotation = 0.15 * rotationDir;
+                    }
+
+                    drivetrainFunctions.Move((float) x, (float) y, (float) rotation, 1);
+                } else {
+                    drivetrainFunctions.Move(0, 0, 0, 1);
+                }
             }
 
-            // Display finger 2 x & y position if finger detected
-            if(gamepad1.touchpad_finger_2)
-            {
-                finger = true;
-                telemetry.addLine(String.format("Finger 2: x=%5.2f y=%5.2f\n", gamepad1.touchpad_finger_2_x, gamepad1.touchpad_finger_2_y));
+            if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone) {
+                drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, 1);
+            } else {
+                drivetrainFunctions.Stop();
             }
 
-            if(!finger)
-            {
-                telemetry.addLine("No fingers");
-            }
 
             telemetry.update();
             sleep(10);

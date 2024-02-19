@@ -6,8 +6,8 @@ import com.qualcomm.robotcore.hardware.Gamepad;
 
 @Disabled
 public class TouchpadFunctions {
-    public static final double TOUCHPADXMULTIPLIER = 0.05;
-    public static final double TOUCHPADYMULTIPLIER = 0.01;
+    public static final double TOUCHPADXMULTIPLIER = 0.5;
+    public static final double TOUCHPADYMULTIPLIER = 0.1;
     private Gamepad prevGamepad;
     private Gamepad currentGamepad;
 
@@ -31,6 +31,8 @@ public class TouchpadFunctions {
 
 
     private void Initialize(){
+        currentGamepad = new Gamepad();
+        prevGamepad = new Gamepad();
         if(gamepadNum == 1){
             gamepad = linearOpMode.gamepad1;
         } else {
@@ -47,8 +49,6 @@ public class TouchpadFunctions {
     }
 
     public boolean getTouchpadDown(){
-         gamepad.copy(currentGamepad);
-
          if(prevGamepad != null && !prevGamepad.touchpad_finger_1 && currentGamepad.touchpad_finger_1){
              //DOWN
              onPressX = currentGamepad.touchpad_finger_1_x;
@@ -60,7 +60,6 @@ public class TouchpadFunctions {
     }
 
     public boolean getTouchpadUp(){
-        gamepad.copy(currentGamepad);
         if(prevGamepad != null && prevGamepad.touchpad_finger_1 && !currentGamepad.touchpad_finger_1){
             //UP
             return true;
@@ -73,8 +72,12 @@ public class TouchpadFunctions {
         return gamepad.touchpad_finger_1;
     }
 
-    public void updateTouchpadStateAtEndOfLoop(){
-        gamepad.copy(prevGamepad);
+    public void CollectPreviousInput(){
+        prevGamepad.copy(currentGamepad);
+    }
+
+    public void CollectCurrentInput(){
+        currentGamepad.copy(gamepad);
     }
 
     public float getXSwipe(){
