@@ -20,7 +20,7 @@ import org.openftc.easyopencv.OpenCvCameraRotation;
 public class BlueLandingZone extends AutonomousOpmode {
 
     //logan was here
-    Pose2d startPose = new Pose2d(-63, -38, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-64, -38, Math.toRadians(0));
 
     private static Pose2d endPose = new Pose2d(-34, 34, Math.toRadians(90));
 

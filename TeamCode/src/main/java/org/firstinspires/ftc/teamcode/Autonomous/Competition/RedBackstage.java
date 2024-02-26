@@ -26,7 +26,7 @@ public class RedBackstage extends AutonomousOpmode {
 
     SampleMecanumDrive drive;
 
-    Pose2d startPose = new Pose2d(63, 14.5, Math.toRadians(180));
+    Pose2d startPose = new Pose2d(64, 14.5, Math.toRadians(180));
 
     private static Pose2d endPose = new Pose2d(34, 38, Math.toRadians(90));
 
