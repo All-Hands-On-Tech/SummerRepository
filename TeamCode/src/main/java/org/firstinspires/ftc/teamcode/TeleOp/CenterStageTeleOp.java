@@ -37,6 +37,7 @@ import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
+import org.firstinspires.ftc.teamcode.LEDFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
@@ -82,6 +83,7 @@ public class CenterStageTeleOp extends RoboMom {
     private IntakeFunctions intakeFunctions;
 
     private DrivetrainFunctions drivetrainFunctions;
+    private LEDFunctions lEDFunctions;
 
     private DroneLauncherFunctions droneLauncherFunctions;
 
@@ -145,6 +147,7 @@ public class CenterStageTeleOp extends RoboMom {
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
         droneLauncherFunctions = new DroneLauncherFunctions(this);
+        lEDFunctions = new LEDFunctions(this);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -176,6 +179,8 @@ public class CenterStageTeleOp extends RoboMom {
                 drivetrainFunctions.Reinitialize();
             if (droneLauncherFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 droneLauncherFunctions.Reinitialize();
+            if (lEDFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
+                lEDFunctions.Reinitialize();
 
             if (hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
@@ -208,9 +213,9 @@ public class CenterStageTeleOp extends RoboMom {
             if (gamepad1.a){
                 LEDExtras = "";
             }
-            drivetrainFunctions.setLEDColor(deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
+            lEDFunctions.setLEDColor(deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
             telemetry.addData("Color sensors", "%s %s %s", deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
-            telemetry.addData("Current Pattern", "%s", drivetrainFunctions.getLEDColor());
+            
             if(gamepad1.dpad_left){
                 targetTagIDRed = aprilTagsFunctions.RED_1_TAG;
                 targetTagIDBlue = aprilTagsFunctions.BLUE_1_TAG;
