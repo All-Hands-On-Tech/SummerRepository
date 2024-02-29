@@ -18,8 +18,6 @@ public class DrivetrainFunctions {
     public DcMotor rightBackDrive = null;
     public DcMotor leftBackDrive = null;
 
-    RevBlinkinLedDriver blinkinLedDriver;
-    RevBlinkinLedDriver.BlinkinPattern pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;
 
     public IMU imu;
     private LinearOpMode linearOpMode;
@@ -64,7 +62,6 @@ public class DrivetrainFunctions {
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-            blinkinLedDriver = linearOpMode.hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
         }catch(NullPointerException e){
             initAttempts++;
             linearOpMode.telemetry.addData("Couldn't find motors.       Attempt: ", initAttempts);
@@ -86,7 +83,6 @@ public class DrivetrainFunctions {
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
-            blinkinLedDriver = linearOpMode.hardwareMap.get(RevBlinkinLedDriver.class, "blinkin");
             isDisabled = false;
         }catch(NullPointerException e){
             initAttempts++;
@@ -161,39 +157,6 @@ public class DrivetrainFunctions {
                 || leftFrontDrive.getPower() != 0
                 || rightBackDrive.getPower() != 0
                 || leftBackDrive.getPower() != 0;
-    }
-
-    public void setLEDColor (String colorFront, String colorBack, String extras) {
-        if (extras == "BACK") {
-            if (colorBack == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.GRAY;}
-            if (colorBack == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
-            if (colorBack == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorBack == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
-            if (colorBack == "NONE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;}
-        } else if (extras == "PARTY") {
-            pattern = RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;
-        } else if (colorBack == "NONE") {
-            if (colorFront == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorFront == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.RED;}
-            if (colorFront == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorFront == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
-            if (colorFront == "NONE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLACK;}
-        } else if (colorFront == "NONE") {
-            if (colorBack == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.GRAY;}
-            if (colorBack == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
-            if (colorBack == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorBack == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.BLUE;}
-        } else {
-            if (colorFront == "WHITE") {pattern = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY;}
-            if (colorFront == "YELLOW") {pattern = RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE;}
-            if (colorFront == "GREEN") {pattern = RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;}
-            if (colorFront == "PURPLE") {pattern = RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;}
-        }
-        blinkinLedDriver.setPattern(pattern);
-    }
-
-    public String getLEDColor() {
-        return pattern.toString();
     }
 
 
