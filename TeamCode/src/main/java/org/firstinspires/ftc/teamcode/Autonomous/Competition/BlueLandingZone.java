@@ -70,11 +70,11 @@ public class BlueLandingZone extends AutonomousOpmode {
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToConstantHeading(new Vector2d(-41, 52))
+                .lineToConstantHeading(new Vector2d(-43.6, 52))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToConstantHeading(new Vector2d(-36.5, 52.25))
+                .lineToConstantHeading(new Vector2d(-36.6, 52.25))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
@@ -120,7 +120,7 @@ public class BlueLandingZone extends AutonomousOpmode {
                 telemetry.addLine("center");
                 telemetry.update();
                 drive.followTrajectorySequence(center);
-                deliveryFunctions.Lift(250);
+                deliveryFunctions.Lift(200);
                 drive.followTrajectorySequence(centerScore);
 //                MoveToTagForSeconds(targetApriltagID, 5, 1);
                 deliveryFunctions.Dump(0);

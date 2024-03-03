@@ -79,7 +79,7 @@ public class BlueBackstage extends AutonomousOpmode {
                 .build();
 
         TrajectorySequence corner = drive.trajectorySequenceBuilder(new Pose2d(-59, 50, Math.toRadians(90)))
-                .lineToConstantHeading(new Vector2d(-62, 56))
+                .lineToConstantHeading(new Vector2d(-62, 60))
                 .build();
 
 //        webcam.openCameraDeviceAsync(new OpenCvCamera.AsyncCameraOpenListener(){

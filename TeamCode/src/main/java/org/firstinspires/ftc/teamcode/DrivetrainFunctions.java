@@ -62,6 +62,7 @@ public class DrivetrainFunctions {
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
+
         }catch(NullPointerException e){
             initAttempts++;
             linearOpMode.telemetry.addData("Couldn't find motors.       Attempt: ", initAttempts);
@@ -82,6 +83,7 @@ public class DrivetrainFunctions {
             leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+
 
             isDisabled = false;
         }catch(NullPointerException e){
