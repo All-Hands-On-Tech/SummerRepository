@@ -38,7 +38,7 @@ public class RedLandingZone extends AutonomousOpmode {
                 .waitSeconds(4)
                 .lineToConstantHeading(new Vector2d(50, -36))
                 .lineToConstantHeading(new Vector2d(11.5, -36))
-                .lineToConstantHeading(new Vector2d(11.5, 30))
+                .lineToConstantHeading(new Vector2d(11.5, 20))
                 .splineToLinearHeading(endPose, Math.toRadians(90))
                 .build();
 
@@ -49,7 +49,7 @@ public class RedLandingZone extends AutonomousOpmode {
                 .lineToConstantHeading(new Vector2d(21.67, -55.08))
                 .waitSeconds(4)
                 .lineToLinearHeading(new Pose2d(11, -48.84, Math.toRadians(90.00)))
-                .splineToConstantHeading(new Vector2d(11.5, 35.00), Math.toRadians(85.00))
+                .splineToConstantHeading(new Vector2d(11.5, 20.00), Math.toRadians(90.00))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
@@ -61,22 +61,22 @@ public class RedLandingZone extends AutonomousOpmode {
                 .waitSeconds(4)
                 .lineToConstantHeading(new Vector2d(34, -45.13))
                 .lineToLinearHeading(new Pose2d(10.39, -44.68, Math.toRadians(90.00)))
-                .lineTo(new Vector2d(10.84, 39.34))
+                .lineTo(new Vector2d(10.84, 20))
                 .splineToLinearHeading(endPose, Math.toRadians(90.00))
                 .build();
 
 
 
         TrajectorySequence leftScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToConstantHeading(new Vector2d(31.5, 51))
+                .lineToConstantHeading(new Vector2d(28, 52))
                 .build();
 
         TrajectorySequence centerScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToConstantHeading(new Vector2d(36.25, 51))
+                .lineToConstantHeading(new Vector2d(36.6, 52))
                 .build();
 
         TrajectorySequence rightScore = drive.trajectorySequenceBuilder(endPose)
-                .lineToConstantHeading(new Vector2d(42, 51.4))
+                .lineToConstantHeading(new Vector2d(43.8, 52))
                 .build();
 
 
