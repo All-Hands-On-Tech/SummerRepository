@@ -473,6 +473,10 @@ public class DeliveryFunctions {
 
     }
 
+    public double getSlidePos(){
+        return (rightSlide.getCurrentPosition()+leftSlide.getCurrentPosition())/2;
+    }
+
     public void OpenHolderServoByIndex(int i){
         if(i == 0){
             holder1.setPosition(HOLDER_OPEN);
