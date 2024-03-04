@@ -219,8 +219,10 @@ public abstract class RoboMom extends LinearOpMode {
         }
 
         double range = aprilTag.ftcPose.range;
-        double yaw = -Math.toRadians(aprilTag.ftcPose.yaw);
-        double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
+        double yaw = aprilTag.ftcPose.yaw;
+        double bearing = aprilTag.ftcPose.bearing;
+
+        double effectiveAngle = Math.toRadians(yaw - bearing + tagAngle);
 
         //add stuff here based on camera position relative to center of robot
         double x1 = 2;
@@ -228,9 +230,9 @@ public abstract class RoboMom extends LinearOpMode {
         tagX-=x1*Math.cos(yaw)-y1*Math.sin(yaw);
         tagY-=x1*Math.sin(yaw)+y1*Math.cos(yaw);
 
-        double x = tagX + range * Math.sin(yaw + bearing);
-        double y = tagY - range * Math.cos(yaw + bearing);
-        double angle = Math.toDegrees(yaw) + 90;
+        double x = tagX + range * Math.sin(effectiveAngle);
+        double y = tagY - range * Math.cos(effectiveAngle);
+        double angle = yaw + 90;
 
         return new Pose2d(x, y, Math.toRadians(angle));
     }
