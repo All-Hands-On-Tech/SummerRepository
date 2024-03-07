@@ -423,12 +423,35 @@ public class DeliveryFunctions {
         wrist.setPosition(servoDodge);
 
         //Waiting for servo to move
-        while(time.seconds() > 1){
+        while(time.seconds() < 0.5){
             linearOpMode.telemetry.addLine("Waiting to Retract");
             linearOpMode.telemetry.update();
         }
-
         int tempTarget = leftSlide.getCurrentPosition();
+        while(((leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0) || time.seconds() > RETRACT_TIMEOUT) && tempTarget > CARRIAGE_DODGE){
+            tempTarget -= 10;
+
+            setSlidesTargetPosition(tempTarget);
+
+            setSlidesPower(0.5);
+        }
+//        tempTarget = leftSlide.getCurrentPosition();
+        setSlidesTargetPosition(tempTarget);
+        while(leftSlide.getCurrentPosition() > CARRIAGE_DODGE){
+
+        }
+        time.reset();
+        while(time.seconds() < 0.3){
+            linearOpMode.telemetry.addLine("Waiting to Fully Retract");
+            linearOpMode.telemetry.update();
+        }
+        wrist.setPosition(servoIn);
+        time.reset();
+        while(time.seconds() < 0.25){
+            linearOpMode.telemetry.addLine("Waiting to Fully Retract");
+            linearOpMode.telemetry.update();
+        }
+        tempTarget = leftSlide.getCurrentPosition();
         //RETRACT
         while((leftSlide.getCurrentPosition() > 0 || rightSlide.getCurrentPosition() > 0) || time.seconds() > RETRACT_TIMEOUT){
             tempTarget -= 5;

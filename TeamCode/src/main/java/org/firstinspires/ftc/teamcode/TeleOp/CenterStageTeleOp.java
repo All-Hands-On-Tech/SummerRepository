@@ -450,7 +450,8 @@ public class CenterStageTeleOp extends RoboMom {
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
                 if(deliveryFunctions.getSlidePos() < deliveryFunctions.CARRIAGE_DODGE) {
-                    deliveryFunctions.setSlidesTargetPosition(10);
+                    deliveryFunctions.setSlidesTargetPosition(70);
+                    deliveryFunctions.setSlidesPower(0.75);
                 }
             } else if(!dumping && !secondDumping && !(gamepad2.left_trigger >= 0.05)){
                 intakeFunctions.StopIntakeMotor();

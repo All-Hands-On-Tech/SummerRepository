@@ -19,7 +19,6 @@ public class Score extends LinearOpMode {
         if (isStopRequested()) return;
 
         deliveryFunctions.Score(100);
-        sleep(5000);
         deliveryFunctions.Retract();
 
     }
