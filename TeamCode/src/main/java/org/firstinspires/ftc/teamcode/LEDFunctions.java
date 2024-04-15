@@ -52,7 +52,9 @@ public class LEDFunctions {
     }
 
     public void setLEDColor (String colorFront, String colorBack, String extras) {
-        if (extras == "BACK") {
+        if (extras == "OFF") {
+            blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.BLACK);
+        } else if (extras == "BACK") {
             if (colorBack == "WHITE") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GRAY);}
             if (colorBack == "YELLOW") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.YELLOW);}
             if (colorBack == "GREEN") {blinkinLedDriver.setPattern(RevBlinkinLedDriver.BlinkinPattern.GREEN);}

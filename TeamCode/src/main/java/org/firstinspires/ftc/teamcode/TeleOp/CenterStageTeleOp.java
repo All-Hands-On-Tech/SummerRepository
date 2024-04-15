@@ -203,7 +203,6 @@ public class CenterStageTeleOp extends RoboMom {
                     droneLauncherFunctions.ReleaseDrone();
             }
 
-
             if(gamepad1.x) {
                 LEDExtras = "BACK";
             }
@@ -450,7 +449,7 @@ public class CenterStageTeleOp extends RoboMom {
                 deliveryFunctions.OpenHolderServoByIndex(0);
                 deliveryFunctions.OpenHolderServoByIndex(1);
                 if(deliveryFunctions.getSlidePos() < deliveryFunctions.CARRIAGE_DODGE) {
-                    deliveryFunctions.setSlidesTargetPosition(70);
+//                    deliveryFunctions.setSlidesTargetPosition(20);
                     deliveryFunctions.setSlidesPower(0.75);
                 }
             } else if(!dumping && !secondDumping && !(gamepad2.left_trigger >= 0.05)){

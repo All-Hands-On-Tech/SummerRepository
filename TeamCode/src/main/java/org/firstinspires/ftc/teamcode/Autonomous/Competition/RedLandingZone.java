@@ -21,7 +21,7 @@ public class RedLandingZone extends AutonomousOpmode {
     //logan was here
 
     SampleMecanumDrive drive;
-    Pose2d startPose = new Pose2d(64, -38, Math.toRadians(180));
+    Pose2d startPose = new Pose2d(63, -38, Math.toRadians(180));
     private static Pose2d endPose = new Pose2d(34, 38, Math.toRadians(90));
     private String spikePosition = "center";
 

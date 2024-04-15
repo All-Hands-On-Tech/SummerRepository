@@ -15,7 +15,7 @@ public class BlueBackstage extends AutonomousOpmode {
 
     //logan was here
     SampleMecanumDrive drive;
-    Pose2d startPose = new Pose2d(-64, 14.5, Math.toRadians(0));
+    Pose2d startPose = new Pose2d(-63, 14.5, Math.toRadians(0));
     private static Pose2d endPose = new Pose2d(-34, 38, Math.toRadians(90));
     private String spikePosition = "center";
 

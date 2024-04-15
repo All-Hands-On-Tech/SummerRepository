@@ -29,10 +29,10 @@ public class DeliveryFunctions {
     private double HOLDER_OPEN = 0;
     private double HOLDER_CLOSE = 1;
 
-    public final double servoIn = 0.719;
-    private final double servoOut = 0.767;//0.77
+    public final double servoIn = 0.25;
+    private final double servoOut = 0.53699999;//0.77
 
-    public final double servoDodge = 0.71;//0.421
+    public final double servoDodge = 0.189;//0.421
 
     private int targetPosition;
     private double currentPosition;
@@ -64,7 +64,7 @@ public class DeliveryFunctions {
 
     double yellow = 86;
     double green = 125;
-    double white = 173;
+    double white = 155;
     double purple = 206;
     double distance = 1.8;
 
@@ -175,13 +175,13 @@ public class DeliveryFunctions {
         colorsFront = sensorFront.getNormalizedColors();
         Color.colorToHSV(colorsFront.toColor(), HSVValuesFront);
         if (((DistanceSensor) sensorFront).getDistance(DistanceUnit.CM) < distance) {
-            if (HSVValuesFront[0] > yellow-10 && HSVValuesFront[0] < yellow+10) {
+            if (HSVValuesFront[0] > yellow-15 && HSVValuesFront[0] < yellow+15) {
                 return "YELLOW";
-            } else if (HSVValuesFront[0] > green-10 && HSVValuesFront[0] < green+10) {
+            } else if (HSVValuesFront[0] > green-15 && HSVValuesFront[0] < green+15) {
                 return "GREEN";
-            } else if (HSVValuesFront[0] > white-10 && HSVValuesFront[0] < white+10) {
+            } else if (HSVValuesFront[0] > white-20 && HSVValuesFront[0] < white+20) {
                 return "WHITE";
-            } else if (HSVValuesFront[0] > purple-10 && HSVValuesFront[0] < purple+10) {
+            } else if (HSVValuesFront[0] > purple-15 && HSVValuesFront[0] < purple+15) {
                 return "PURPLE";
             }
         }
