@@ -31,7 +31,8 @@ package org.firstinspires.ftc.teamcode;
 
 import android.util.Size;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Rotation2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -251,7 +252,7 @@ public class testingAprilTags extends LinearOpMode {
                 telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
                 Pose2d cameraPose = absolutePositionFromAprilTag(detection);
-                telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.getX(), cameraPose.getY(), cameraPose.getHeading()));
+                telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.position.x, cameraPose.position.y, cameraPose.heading));
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
