@@ -93,12 +93,10 @@ public class VisionFunctions {
         // Make sure camera is streaming before we try to set the exposure controls
         if (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING) {
             linearOpMode.telemetry.addData("Camera", "Waiting");
-            linearOpMode.telemetry.update();
             while (time.seconds() < TIMEOUT && !linearOpMode.isStopRequested() && (visionPortal.getCameraState() != VisionPortal.CameraState.STREAMING)) {
                 linearOpMode.sleep(20);
             }
             linearOpMode.telemetry.addData("Camera", "Ready");
-            linearOpMode.telemetry.update();
         }
         // Set camera controls unless we are stopping.
         if (!linearOpMode.isStopRequested())
@@ -145,7 +143,6 @@ public class VisionFunctions {
                 linearOpMode.telemetry.addData("Unknown", "Tag ID %d is not in TagLibrary", detection.id);
             }
         }
-        linearOpMode.telemetry.update();
         return targetFound;
     }
 

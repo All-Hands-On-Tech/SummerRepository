@@ -29,9 +29,13 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.acmerobotics.roadrunner.geometry.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
+import com.acmerobotics.roadrunner.geometry.Pose2d;
+
+import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequence;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
@@ -40,8 +44,10 @@ import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
 import org.firstinspires.ftc.teamcode.LEDFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
+import org.firstinspires.ftc.teamcode.RoadRunner.trajectorysequence.TrajectorySequenceRunner;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
+import com.acmerobotics.roadrunner.trajectory.Trajectory;
 
 import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.StandardTrackingWheelLocalizer;
@@ -91,13 +97,14 @@ public class TestingTeleop extends RoboMom {
 
     private ElapsedTime hardwareCheckTimer = new ElapsedTime();
 
-    StandardTrackingWheelLocalizer myLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
+    StandardTrackingWheelLocalizer myLocalizer;
 
 
     @Override
     public void runOpMode() {
         super.runOpMode();
 
+        myLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
         drive = new SampleMecanumDrive(hardwareMap);
 
         aprilTagsFunctions = new VisionFunctions(this);
@@ -117,6 +124,8 @@ public class TestingTeleop extends RoboMom {
         aprilTagsFunctions.startDetectingApriltags();
 
 
+        myLocalizer.setPoseEstimate(new Pose2d(10, 10, Math.toRadians(90)));
+
         waitForStart();
 
 
@@ -124,7 +133,13 @@ public class TestingTeleop extends RoboMom {
         String LEDExtras = "";
 
         while (opModeIsActive()) {
+            myLocalizer.update();
 
+            Pose2d poseEstimate = myLocalizer.getPoseEstimate();
+
+            telemetry.addData("x", poseEstimate.getX());
+            telemetry.addData("y", poseEstimate.getY());
+            telemetry.addData("heading", poseEstimate.getHeading());
 
             if (hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
@@ -167,14 +182,6 @@ public class TestingTeleop extends RoboMom {
                     controlsRelinquished = false;
                 }
 
-            } else {          //align to point (pose of aprilTag)
-                controlsRelinquished = false;
-            }
-
-            telemetry.update();
-
-
-            //slow down power if bumper is pressed
             if (gamepad1.left_bumper) {
                 speedScalar = 0.5;
             } else if (gamepad1.right_bumper) {
@@ -183,7 +190,23 @@ public class TestingTeleop extends RoboMom {
                 speedScalar = 1;
             }
 
-            //Gamepad 2
+            if(gamepad1.start){
+                myLocalizer = new StandardTrackingWheelLocalizer(hardwareMap);
+//                myLocalizer.setPoseEstimate(new Pose2d(myLocalizer.getPoseEstimate().getX(), myLocalizer.getPoseEstimate().getY(), 0));
+                telemetry.addLine("Reset Pose Estimate");
+            }
+
+            if(gamepad1.back){
+                Trajectory traj = drive.trajectoryBuilder(myLocalizer.getPoseEstimate())
+                        .lineTo(new Vector2d(0, 0))
+                        .build();
+
+                drive.followTrajectoryAsync(traj);
+            }
+
+            telemetry.update();
+            }
+
 
 
     }
