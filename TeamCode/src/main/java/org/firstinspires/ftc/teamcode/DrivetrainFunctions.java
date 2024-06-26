@@ -161,7 +161,9 @@ public class DrivetrainFunctions {
                 || leftBackDrive.getPower() != 0;
     }
 
-
+    public LinearOpMode getLinearOpMode(){
+        return linearOpMode;
+    }
 
 
 }
