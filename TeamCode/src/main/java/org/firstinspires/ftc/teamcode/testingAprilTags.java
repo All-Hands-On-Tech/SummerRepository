@@ -33,6 +33,7 @@ import android.util.Size;
 
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Rotation2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -68,8 +69,7 @@ import java.util.List;
  * Use Android Studio to Copy this Class, and Paste it into your team's code folder with a new name.
  * Remove or comment out the @Disabled line to add this OpMode to the Driver Station OpMode list.
  */
-@TeleOp(name = "Concept: AprilTag", group = "Concept")
-@Disabled
+@TeleOp(name = "2D experement", group = "Concept")
 public class testingAprilTags extends LinearOpMode {
 
     private static final boolean USE_WEBCAM = true;  // true for webcam, false for phone camera
@@ -230,9 +230,10 @@ public class testingAprilTags extends LinearOpMode {
         //putting it all together
         double x = tagX + range * Math.sin(bearing - yaw + tagAngle);
         double y = tagY - range * Math.cos(bearing - yaw + tagAngle);
-        double angle = Math.toDegrees(yaw) + 90;
+        double angle = yaw + Math.PI/2;
 
-        return new Pose2d(x, y, Math.toRadians(angle));
+
+        return new Pose2d(x,y, angle);
     }
 
     /**
@@ -247,12 +248,12 @@ public class testingAprilTags extends LinearOpMode {
         for (AprilTagDetection detection : currentDetections) {
             if (detection.metadata != null) {
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
-                telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                //telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                //telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                //telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
                 Pose2d cameraPose = absolutePositionFromAprilTag(detection);
-                telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.position.x, cameraPose.position.y, cameraPose.heading));
+                telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.position.x, cameraPose.position.y, Math.toDegrees(cameraPose.heading.real)));
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
