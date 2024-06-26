@@ -1,5 +1,6 @@
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
@@ -7,9 +8,9 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
-@TeleOp(name="DriveTrainOnly", group="AAA")
-public class TankDrive extends RoboMom {
-    private DrivetrainFunctions drivetrainFunctions;
+@TeleOp(name="Tank Drive", group="AAA")
+public class TankDrive extends LinearOpMode {
+    //private DrivetrainFunctions drivetrainFunctions;
 
 
     private static final double HARDWARECHECK_DELAY = 1;
@@ -26,28 +27,29 @@ public class TankDrive extends RoboMom {
 
     @Override
     public void runOpMode() {
-        super.runOpMode();
-
-
-        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        waitForStart();
+//        super.runOpMode();
 
         leftMotor = hardwareMap.get(DcMotor.class, "left");
         rightMotor = hardwareMap.get(DcMotor.class, "right");
 
+        waitForStart();
+
+        leftMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        rightMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
         while (opModeIsActive()) {
 
-            if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone || Math.abs(gamepad1.right_stick_y) > deadZone*2) {
-                if(Math.abs(gamepad1.right_stick_y) > deadZone*2) {
-                    double y = -gamepad1.left_stick_y; // Remember, Y stick is reversed!
-                    double rx = gamepad1.right_stick_x;
+            if (Math.abs(gamepad1.left_stick_x) > deadZone || Math.abs(gamepad1.left_stick_y) > deadZone || Math.abs(gamepad1.right_stick_x) > deadZone || Math.abs(gamepad1.right_stick_y) > deadZone) {
+                double y = -gamepad1.left_stick_y; // Remember, Y stick is reversed!
+                double rx = gamepad1.right_stick_x;
+                if(Math.abs(gamepad1.right_stick_x) > deadZone) {
 
-                    leftMotor.setPower((y + rx) * speedScalar);
+
+                    leftMotor.setPower(-(y + rx) * speedScalar);
                     rightMotor.setPower((y - rx) * speedScalar);
                 }else{
-
+                    leftMotor.setPower((-y) * speedScalar);
+                    rightMotor.setPower((y) * speedScalar);
                 }
             } else {
                 leftMotor.setPower(0);
