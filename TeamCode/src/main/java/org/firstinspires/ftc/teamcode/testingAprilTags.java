@@ -37,6 +37,8 @@ import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.qualcomm.robotcore.util.ElapsedTime;
+
 import org.firstinspires.ftc.robotcore.external.hardware.camera.BuiltinCameraDirection;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
@@ -84,6 +86,8 @@ public class testingAprilTags extends LinearOpMode {
      */
     private VisionPortal visionPortal;
 
+    private ElapsedTime runtime = new ElapsedTime();
+
     @Override
     public void runOpMode() {
 
@@ -97,11 +101,13 @@ public class testingAprilTags extends LinearOpMode {
 
         if (opModeIsActive()) {
             while (opModeIsActive()) {
-
+                runtime.reset();
                 telemetryAprilTag();
+                telemetry.addLine(String.format("time %6.1 (ms)", runtime.milliseconds()));
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
+
 
                 // Save CPU resources; can resume streaming when needed.
                 if (gamepad1.dpad_down) {
