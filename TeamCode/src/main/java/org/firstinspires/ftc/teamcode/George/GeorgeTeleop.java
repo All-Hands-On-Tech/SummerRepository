@@ -59,10 +59,13 @@ public class GeorgeTeleop extends RoboMom {
     private double scoreSpeedScalar = 0.2;
 
     private DrivetrainFunctions drivetrainFunctions;
+    private FlyWheels flyWheels;
 
     static SampleMecanumDrive drive;
 
     private static final double HARDWARECHECK_DELAY = 1;
+
+    private static final double FIREDEADZONE = 0.075;
 
     private ElapsedTime hardwareCheckTimer = new ElapsedTime();
 
@@ -75,6 +78,8 @@ public class GeorgeTeleop extends RoboMom {
 
 
         drivetrainFunctions = new XDrivetrainFunctions(this);
+
+        flyWheels = new FlyWheels(this);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -110,6 +115,13 @@ public class GeorgeTeleop extends RoboMom {
                 }
             } else {
                 drivetrainFunctions.Stop();
+            }
+
+
+            if(gamepad1.right_trigger >= FIREDEADZONE){
+                flyWheels.Power(gamepad1.right_trigger);
+            }else{
+                flyWheels.Power(0);
             }
 
 
