@@ -147,6 +147,15 @@ public class testingAprilTags extends LinearOpMode {
                 // to load a predefined calibration for your camera.
                 //.setLensIntrinsics(822.317, 822.317, 319.495, 242.502)
                 //.setLensIntrinsics(634.978, 634.978, 367.089, 217.395)
+                //.setLensIntrinsics(665.637, 665.637, 356.269, 228.173)
+                //.setLensIntrinsics(956.563, 956.563, 174.975, 166.787)
+                //.setLensIntrinsics(1456.69, 1456.69, 935.976, 528.022)
+                //.setLensIntrinsics(1488.70, 1488.70, 930.141, 517.979)
+                //.setLensIntrinsics(1495.88, 1495.88, 957.474, 531.878)
+                //.setLensIntrinsics()
+                //.setLensIntrinsics()
+                //.setLensIntrinsics()
+
                 // ... these parameters are fx, fy, cx, cy.
 
                 .build();
