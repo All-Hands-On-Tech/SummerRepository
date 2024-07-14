@@ -103,7 +103,7 @@ public class testingAprilTags extends LinearOpMode {
             while (opModeIsActive()) {
                 runtime.reset();
                 telemetryAprilTag();
-                telemetry.addLine(String.format("time %6.1 (ms)", runtime.milliseconds()));
+                telemetry.addData("time (ms)", runtime.milliseconds());
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
@@ -145,7 +145,8 @@ public class testingAprilTags extends LinearOpMode {
                 // == CAMERA CALIBRATION ==
                 // If you do not manually specify calibration parameters, the SDK will attempt
                 // to load a predefined calibration for your camera.
-                .setLensIntrinsics(822.317, 822.317, 319.495, 242.502)
+                //.setLensIntrinsics(822.317, 822.317, 319.495, 242.502)
+                //.setLensIntrinsics(634.978, 634.978, 367.089, 217.395)
                 // ... these parameters are fx, fy, cx, cy.
 
                 .build();
@@ -171,6 +172,7 @@ public class testingAprilTags extends LinearOpMode {
 
         // Choose a camera resolution. Not all cameras support all resolutions.
         builder.setCameraResolution(new Size(640, 480));
+        //builder.setCameraResolution(new Size(1920, 1080));
 
         // Enable the RC preview (LiveView).  Set "false" to omit camera monitoring.
         //builder.enableLiveView(true);
@@ -255,11 +257,11 @@ public class testingAprilTags extends LinearOpMode {
             if (detection.metadata != null) {
                 telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
                 telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
-                telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
-                telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+                //telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                //telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
 
                 Pose2d cameraPose = absolutePositionFromAprilTag(detection);
-                telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.position.x, cameraPose.position.y, Math.toDegrees(cameraPose.heading.real)));
+                //telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.position.x, cameraPose.position.y, Math.toDegrees(cameraPose.heading.real)));
             } else {
                 telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
                 telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
