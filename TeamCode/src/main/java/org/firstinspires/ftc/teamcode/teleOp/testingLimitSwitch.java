@@ -26,22 +26,32 @@ public class testingLimitSwitch extends LinearOpMode {
 
         touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
+        boolean stop = false;
+        double slidePower = 0;
+
         waitForStart();
 
         while (opModeIsActive()) {
-            double slidePower = gamepad1.left_stick_y/3;
+            if (!stop) {
+             stop = touchSensor.isPressed();
+            }
             boolean override = gamepad1.a;
 
-            telemetry.addData("Motor Power", "(%.2f)", slidePower);
-            telemetry.addData("100 Counts", "(%3.2f)", slideMotor.getCurrentPosition()/100);
-            telemetry.addData("Touch Sensor Is Pressed:", touchSensor.isPressed());
-            telemetry.update();
-
-            if (touchSensor.isPressed() && !override) {
-                slideMotor.setPower(0);
+            if (stop && !override) {
+                slidePower = 0;
             } else {
-                slideMotor.setPower(slidePower);
+                slidePower = gamepad1.left_stick_y / 3;
             }
+
+
+            telemetry.addData("Motor Power", "(%1.2f)", slidePower);
+            telemetry.addData("100 Counts", slideMotor.getCurrentPosition());
+            if (touchSensor.isPressed()) {
+                telemetry.addLine("Touch Sensor Is Pressed");
+            } else {
+                telemetry.addLine("Touch Sensor Is Not Pressed");
+            }
+            telemetry.update();
 
         }
     }
