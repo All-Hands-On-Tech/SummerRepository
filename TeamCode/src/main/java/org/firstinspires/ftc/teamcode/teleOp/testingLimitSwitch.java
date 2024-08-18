@@ -34,18 +34,19 @@ public class testingLimitSwitch extends LinearOpMode {
 
         while (opModeIsActive()) {
             int slidePosition = slideMotor.getCurrentPosition();
-            if (touchSensor.isPressed()) {
+            boolean override = gamepad1.a;
+
+            if (touchSensor.isPressed() && !stop) {
                 stop = true;
                 basePosition = slidePosition;
             }
-            boolean override = gamepad1.a;
+            if (stop && slidePosition > basePosition) {
+                stop = false;
+            }
 
             if (!stop || override) {slidePower = gamepad1.left_stick_y / 3;}
             else                   {slidePower = Math.max(0, gamepad1.left_stick_y / 3);}
 
-            if (stop && slidePosition > basePosition) {
-                stop = false;
-            }
 
             telemetry.addData("Motor Power", "(%1.2f)", slidePower);
             telemetry.addData("100 Counts", slideMotor.getCurrentPosition());
