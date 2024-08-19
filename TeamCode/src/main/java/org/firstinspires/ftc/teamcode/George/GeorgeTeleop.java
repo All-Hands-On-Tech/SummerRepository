@@ -118,8 +118,8 @@ public class GeorgeTeleop extends RoboMom {
             }
 
 
-            if(gamepad1.right_trigger >= FIREDEADZONE){
-                flyWheels.Power(gamepad1.right_trigger);
+            if(gamepad1.right_trigger >= FIREDEADZONE || gamepad1.left_trigger >= FIREDEADZONE){
+                flyWheels.Power((gamepad1.right_trigger - gamepad1.left_trigger));
             }else{
                 flyWheels.Power(0);
             }
