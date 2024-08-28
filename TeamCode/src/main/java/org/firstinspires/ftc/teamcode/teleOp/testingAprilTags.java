@@ -102,8 +102,24 @@ public class testingAprilTags extends LinearOpMode {
         if (opModeIsActive()) {
             while (opModeIsActive()) {
                 runtime.reset();
-                telemetryAprilTag();
                 telemetry.addData("time (ms)", runtime.milliseconds());
+
+                List<AprilTagDetection> currentDetections = aprilTag.getDetections();
+                telemetry.addData("# AprilTags Detected", currentDetections.size());
+                for (AprilTagDetection detection : currentDetections) {
+                    if (detection.metadata != null) {
+                        telemetry.addLine(String.format("\n==== (ID %d) %s", detection.id, detection.metadata.name));
+                        telemetry.addLine(String.format("XYZ %6.1f %6.1f %6.1f  (inch)", detection.ftcPose.x, detection.ftcPose.y, detection.ftcPose.z));
+                        //telemetry.addLine(String.format("PRY %6.1f %6.1f %6.1f  (deg)", detection.ftcPose.pitch, detection.ftcPose.roll, detection.ftcPose.yaw));
+                        //telemetry.addLine(String.format("RBE %6.1f %6.1f %6.1f  (inch, deg, deg)", detection.ftcPose.range, detection.ftcPose.bearing, detection.ftcPose.elevation));
+
+                        Pose2d cameraPose = absolutePositionFromAprilTag(detection);
+                        //telemetry.addLine(String.format("XYH %6.1f %6.1f %6.1f  (inch, inch, deg)", cameraPose.position.x, cameraPose.position.y, Math.toDegrees(cameraPose.heading.real)));
+                    } else {
+                        telemetry.addLine(String.format("\n==== (ID %d) Unknown", detection.id));
+                        telemetry.addLine(String.format("Center %6.0f %6.0f   (pixels)", detection.center.x, detection.center.y));
+                    }
+                }
 
                 // Push telemetry to the Driver Station.
                 telemetry.update();
@@ -206,7 +222,9 @@ public class testingAprilTags extends LinearOpMode {
     }   // end method initAprilTag()
 
     /**
-     * Initialize the AprilTag processor.
+     * This is a method for converting the camera centric pose of an AprilTagDetection to a field centric pose
+     * @param  aprilTag  An AprilTagDetection, that can be gotten directly out of the list of aprilTag.getDetections()
+     * @return           Field centric Pose2d of the robot
      */
     private Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {
         double tagX = 0;
