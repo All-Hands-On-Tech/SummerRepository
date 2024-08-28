@@ -27,35 +27,46 @@ public class testingLimitSwitch extends LinearOpMode {
         touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
         boolean stop = false;
-        int basePosition = 0;
+        int basePosition;
         double slidePower = 0;
+        int ticks = 0;
 
         waitForStart();
 
         while (opModeIsActive()) {
+            ticks++;
             int slidePosition = slideMotor.getCurrentPosition();
             boolean override = gamepad1.a;
 
-            if (touchSensor.isPressed() && !stop) {
+            if (touchSensor.isPressed() && stop == false) {
                 stop = true;
                 basePosition = slidePosition;
             }
-            if (stop && slidePosition > basePosition) {
+            if (stop == true && slidePosition < basePosition-100) {
                 stop = false;
             }
 
-            if (!stop || override) {slidePower = gamepad1.left_stick_y / 3;}
-            else                   {slidePower = Math.max(0, gamepad1.left_stick_y / 3);}
+            double pow = 1;
+            if (gamepad1.b) {
+                pow = 5;
+            } else {
+                pow = 1;
+            }
 
+            if (stop == false || override == true) {slidePower = gamepad1.left_stick_y/pow;}
+            else                   {slidePower = Math.min(gamepad1.left_stick_y/pow, 0);}
 
             telemetry.addData("Motor Power", "(%1.2f)", slidePower);
-            telemetry.addData("100 Counts", slideMotor.getCurrentPosition());
+            telemetry.addData("Base Position", basePosition);
+            telemetry.addData("Slide Position", slidePosition);
             if (touchSensor.isPressed()) {
                 telemetry.addLine("Touch Sensor Is Pressed");
             } else {
                 telemetry.addLine("Touch Sensor Is Not Pressed");
             }
             telemetry.update();
+
+            slideMotor.setPower(slidePower);
 
         }
     }
