@@ -32,10 +32,22 @@ public class kiwiDriveBasic extends LinearOpMode {
         while (opModeIsActive()) {
             double driveX = gamepad1.left_stick_x;
             double driveY = gamepad1.left_stick_y;
-            double turn  =  gamepad1.right_stick_y;
-            motor1.setPower(driveX+turn);
-            motor2.setPower(-0.5*driveX + 0.866*driveY + turn);
-            motor2.setPower(-0.5*driveX - 0.866*driveY + turn);
+            double turn  =  gamepad1.right_stick_x * -0.3;
+
+            double power1 = driveX+turn;
+            double power2 = -0.5*driveX + 0.866*driveY + turn;
+            double power3 = -0.5*driveX - 0.866*driveY + turn;
+            double max = Math.max(Math.abs(power1), Math.max(Math.abs(power2), Math.abs(power3)));
+
+            if (max<1) {max = 1;}
+
+            telemetry.addData("Power 1: ", power1);
+            telemetry.addData("Power 2: ", power2);
+            telemetry.addData("Power 3: ", power3);
+
+            motor1.setPower(power1/max);
+            motor2.setPower(power2/max);
+            motor3.setPower(power3/max);
         }
     }
 }

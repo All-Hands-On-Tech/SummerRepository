@@ -27,7 +27,7 @@ public class testingLimitSwitch extends LinearOpMode {
         touchSensor = hardwareMap.get(TouchSensor.class, "touch");
 
         boolean stop = false;
-        int basePosition;
+        int basePosition = 0;
         double slidePower = 0;
         int ticks = 0;
 
