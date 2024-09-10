@@ -17,8 +17,11 @@ public class DeadRobotTeleOp extends RoboMom {
 
         drivetrainFunctions = new DrivetrainFunctions(this);
 
+
         waitForStart();
 
-        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, 1);
+        while (opModeIsActive()) {
+            drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, 1);
+        }
     }
 }

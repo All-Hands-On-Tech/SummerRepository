@@ -5,12 +5,14 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 
+import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
+
 
 //TeleOp annotation labels the opmode, and sorts it aphabetically based on group
-@TeleOp(name = "DEMO Teleop", group = "DEMO")
+@TeleOp(name = "SIMPLE Teleop", group = "Summer")
 
 //class header extends LinearOpMode
-public class DemoTeleOp extends LinearOpMode {
+public class SimpleTeleop extends LinearOpMode {
 
     //Motor object variable declaration
     private DcMotor rightFrontMotor;
@@ -18,10 +20,14 @@ public class DemoTeleOp extends LinearOpMode {
     private DcMotor leftFrontMotor;
     private DcMotor leftBackMotor;
 
+    private DrivetrainFunctions drivetrainFunctions;
+
     //runOpMode is executed after driver presses INIT
     @Override
-    public void runOpMode (){
+    public void runOpMode() {
         //The following code executes ONCE when the driver presses INIT
+
+        drivetrainFunctions = new DrivetrainFunctions(this);
 
         //Get motor objects from config file
         rightFrontMotor = hardwareMap.get(DcMotor.class, "rightFront");
@@ -46,29 +52,7 @@ public class DemoTeleOp extends LinearOpMode {
 
         while(opModeIsActive()) {
             //control motors
-            if (-gamepad1.left_stick_y > 0.05) {
-                rightFrontMotor.setPower(-gamepad1.left_stick_y);
-                rightBackMotor.setPower(-gamepad1.left_stick_y);
-                leftFrontMotor.setPower(-gamepad1.left_stick_y);
-                leftBackMotor.setPower(-gamepad1.left_stick_y);
-            } else if (gamepad1.left_stick_x > 0.05) {
-                rightFrontMotor.setPower(-gamepad1.left_stick_x);
-                rightBackMotor.setPower(gamepad1.left_stick_x);
-                leftFrontMotor.setPower(gamepad1.left_stick_x);
-                leftBackMotor.setPower(-gamepad1.left_stick_x);
-            } else if (gamepad1.right_stick_x > 0.05) {
-                rightFrontMotor.setPower(-gamepad1.left_stick_x);
-                rightBackMotor.setPower(-gamepad1.left_stick_x);
-                leftFrontMotor.setPower(gamepad1.left_stick_x);
-                leftBackMotor.setPower(gamepad1.left_stick_x);
-            } else {
-                rightFrontMotor.setPower(0);
-                rightBackMotor.setPower(0);
-                leftFrontMotor.setPower(0);
-                leftBackMotor.setPower(0);
-            }
+            drivetrainFunctions.Move(-gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, 1);
         }
     }
 }
-
-//Team #18127 All Hands On Tech
