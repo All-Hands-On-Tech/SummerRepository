@@ -13,10 +13,17 @@ import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 @Disabled
 public class DrivetrainFunctions {
-    public DcMotor rightFrontDrive = null;
     public DcMotor leftFrontDrive = null;
-    public DcMotor rightBackDrive = null;
+    public double leftFrontPower = 0;
+
     public DcMotor leftBackDrive = null;
+    public double leftBackPower = 0;
+
+    public DcMotor rightFrontDrive = null;
+    public double rightFrontPower = 0;
+
+    public DcMotor rightBackDrive = null;
+    public double rightBackPower = 0;
 
 
     public IMU imu;
@@ -106,16 +113,41 @@ public class DrivetrainFunctions {
 
     }
 
+    public void setLeftFrontPower(double power) {
+        if (Math.abs(power-leftFrontPower) > 0.02) {
+            leftFrontPower = power;
+            leftFrontDrive.setPower(power);
+        }
+    }
+    public void setLeftBackPower(double power) {
+        if (Math.abs(power-leftBackPower) > 0.02) {
+            leftBackPower = power;
+            leftBackDrive.setPower(power);
+        }
+    }
+    public void setRightFrontPower(double power) {
+        if (Math.abs(power-rightFrontPower) > 0.02) {
+            rightFrontPower = power;
+            rightFrontDrive.setPower(power);
+        }
+    }
+    public void setRightBackPower(double power) {
+        if (Math.abs(power-rightBackPower) > 0.02) {
+            rightBackPower = power;
+            rightBackDrive.setPower(power);
+        }
+    }
+
     public void Move(float x, float y, float rx, double speedScalar){
         if(isDisabled)
             return;
         y = -y;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        leftFrontDrive.setPower(((y + x + rx) / denominator) * speedScalar);
-        leftBackDrive.setPower(((y - x + rx) / denominator) * speedScalar);
-        rightFrontDrive.setPower(((y - x - rx) / denominator) * speedScalar);
-        rightBackDrive.setPower(((y + x - rx) / denominator) * speedScalar);
+        setLeftFrontPower(((y + x + rx) / denominator) * speedScalar);
+        setLeftBackPower(((y - x + rx) / denominator) * speedScalar);
+        setRightFrontPower(((y - x - rx) / denominator) * speedScalar);
+        setRightBackPower(((y + x - rx) / denominator) * speedScalar);
     }
 
     public void MoveFieldOriented (float x, float y, float rx, double speedScalar){
@@ -132,17 +164,24 @@ public class DrivetrainFunctions {
         rotX = rotX * 1.1;
 
         double denominator = Math.max(Math.abs(rotY) + Math.abs(rotX) + Math.abs(rx), 1);
-        leftFrontDrive.setPower((rotX + rotY + rx) / denominator * speedScalar);
-        leftBackDrive.setPower((rotX - rotY + rx) / denominator * speedScalar);
-        rightFrontDrive.setPower((rotX - rotY - rx) / denominator * speedScalar);
-        rightBackDrive.setPower((rotX + rotY - rx) / denominator * speedScalar);
+        setLeftFrontPower((rotX + rotY + rx) / denominator * speedScalar);
+        setLeftBackPower((rotX - rotY + rx) / denominator * speedScalar);
+        setRightFrontPower((rotX - rotY - rx) / denominator * speedScalar);
+        setRightBackPower((rotX + rotY - rx) / denominator * speedScalar);
     }
 
     public void Stop(){
         leftFrontDrive.setPower(0);
+        leftFrontPower = 0;
+
         leftBackDrive.setPower(0);
+        leftBackPower = 0;
+
         rightFrontDrive.setPower(0);
+        rightFrontPower = 0;
+
         rightBackDrive.setPower(0);
+        rightBackPower = 0;
     }
 
     public void ResetIMU(){
@@ -155,10 +194,10 @@ public class DrivetrainFunctions {
         if(isDisabled)
             return false;
 
-        return rightFrontDrive.getPower() != 0
-                || leftFrontDrive.getPower() != 0
-                || rightBackDrive.getPower() != 0
-                || leftBackDrive.getPower() != 0;
+        return rightFrontPower != 0
+                || leftFrontPower != 0
+                || rightBackPower != 0
+                || leftBackPower != 0;
     }
 
 
