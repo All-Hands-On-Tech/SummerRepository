@@ -6,7 +6,6 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.vision.apriltag.AprilTagDetection;
 
 public abstract class RoboMom extends LinearOpMode {
 
@@ -146,103 +145,9 @@ public abstract class RoboMom extends LinearOpMode {
         driveInDirection(0, "STOP");
     }
 
-    //units are in inches!!!!!!!
-    public Pose2d relativePositionFromAprilTag(AprilTagDetection aprilTag) {
-        double range = aprilTag.ftcPose.range;
-        double yaw = -Math.toRadians(aprilTag.ftcPose.yaw);
-        double bearing = Math.toRadians(aprilTag.ftcPose.bearing);
 
-        double x = range * Math.sin(yaw + bearing);
-        double y = -range * Math.cos(yaw + bearing);
-        double angle = Math.toDegrees(yaw) + 90;
 
-        return new Pose2d(x, y, Math.toRadians(angle));
-    }
 
-    public Pose2d absolutePositionFromAprilTag(AprilTagDetection aprilTag) {
-        double tagX = 0;
-        double tagY = 0;
-        double tagAngle = 0;
-
-        //add stuff here based on tag number
-        //Needs to be checked
-        switch (aprilTag.id) {
-            case 1:
-                tagX = -41.40;
-                tagY = 62.01;
-                tagAngle = -90;
-                break;
-            case 2:
-                tagX = -35.40;
-                tagY = 62.01;
-                tagAngle = -90;
-                break;
-            case 3:
-                tagX = -29.40;
-                tagY = 62.01;
-                tagAngle = -90;
-                break;
-            case 4:
-                tagX = 29.48;
-                tagY = 62.01;
-                tagAngle = -90;
-                break;
-            case 5:
-                tagX = 35.48;
-                tagY = 62.01;
-                tagAngle = -90;
-                break;
-            case 6:
-                tagX = 41.48;
-                tagY = 62.01;
-                tagAngle = -90;
-                break;
-            case 7:
-                tagX = 40.93;
-                tagY = -70.58;
-                tagAngle = -90;
-                break;
-            case 8:
-                tagX = 35.43;
-                tagY = -70.58;
-                tagAngle = -90;
-                break;
-            case 9:
-                tagX = -35.51;
-                tagY = -70.58;
-                tagAngle = -90;
-            case 10:
-                tagX = -41.01;
-                tagY = -70.58;
-                tagAngle = -90;
-                break;
-        }
-
-        double range = aprilTag.ftcPose.range;
-        double yaw = aprilTag.ftcPose.yaw;
-        double bearing = aprilTag.ftcPose.bearing;
-
-        double effectiveAngle = Math.toRadians(yaw - bearing + tagAngle);
-
-        //add stuff here based on camera position relative to center of robot
-        double x1 = 2;
-        double y1 = 7.5;
-        tagX-=x1*Math.cos(yaw)-y1*Math.sin(yaw);
-        tagY-=x1*Math.sin(yaw)+y1*Math.cos(yaw);
-
-        double x = tagX + range * Math.sin(effectiveAngle);
-        double y = tagY - range * Math.cos(effectiveAngle);
-        double angle = yaw + 90;
-
-        return new Pose2d(x, y, Math.toRadians(angle));
-    }
-
-    public boolean areMotorsOn() {
-        return rightFrontDrive.getPower()!=0
-                || leftFrontDrive.getPower()!=0
-                || rightBackDrive.getPower()!=0
-                || leftBackDrive.getPower()!=0;
-    }
 
     public RevBlinkinLedDriver.BlinkinPattern setLEDColor (String colorFront, String colorBack, boolean displayBack) {
         //color 1 is yellow

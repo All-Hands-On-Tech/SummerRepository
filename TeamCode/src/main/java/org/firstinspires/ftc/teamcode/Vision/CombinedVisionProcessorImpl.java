@@ -361,7 +361,7 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
     // We cannot use runAprilTagDetectorSimple because we cannot assume tags are all the same size
     ArrayList<AprilTagDetection> runAprilTagDetectorForMultipleTagSizes(long captureTimeNanos)
     {
-        long ptrDetectionArray = AprilTagDetectorJNI.runApriltagDetector(nativeApriltagPtr, grey.dataAddr(), grey.width(), grey.height());
+        /*long ptrDetectionArray = AprilTagDetectorJNI.runApriltagDetector(nativeApriltagPtr, grey.dataAddr(), grey.width(), grey.height());
         if (ptrDetectionArray != 0)
         {
             long[] detectionPointers = ApriltagDetectionJNI.getDetectionPointers(ptrDetectionArray);
@@ -470,6 +470,9 @@ public class CombinedVisionProcessorImpl extends CombinedVisionProcessor
         }
 
         return new ArrayList<>();
+
+         */
+        return null;
     }
 
     private final Object drawSync = new Object();

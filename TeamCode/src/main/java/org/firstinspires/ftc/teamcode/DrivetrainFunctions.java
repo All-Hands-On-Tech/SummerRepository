@@ -138,15 +138,15 @@ public class DrivetrainFunctions {
         }
     }
 
-    public void Move(float x, float y, float rx, double speedScalar){
+    public void Move(float x, float y, float rx, double speedScalar){ //x is forward/backward
         if(isDisabled)
             return;
-        y = -y;
+        x = -x;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        setLeftFrontPower(((y + x + rx) / denominator) * speedScalar);
-        setLeftBackPower(((y - x + rx) / denominator) * speedScalar);
-        setRightFrontPower(((y - x - rx) / denominator) * speedScalar);
+        setLeftFrontPower(((-y + x + rx) / denominator) * speedScalar);
+        setLeftBackPower(((y + x + rx) / denominator) * speedScalar);
+        setRightFrontPower(((-y + x - rx) / denominator) * speedScalar);
         setRightBackPower(((y + x - rx) / denominator) * speedScalar);
     }
 

@@ -56,7 +56,7 @@ public class AprilTagComparison extends RoboMom {
 
             // Step through the list of detections and display info for each one.
             for (AprilTagDetection detection : currentDetections) {
-                Pose2d location = absolutePositionFromAprilTag(detection);
+                Pose2d location = null;//absolutePositionFromAprilTag(detection); FIXME: BROKEN INTO THE DEEP
                 AprilTagX += location.getX();
                 AprilTagY += location.getY();
                 AprilTagAngle += location.getHeading();

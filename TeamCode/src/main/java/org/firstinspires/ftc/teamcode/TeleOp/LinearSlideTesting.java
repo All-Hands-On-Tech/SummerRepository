@@ -31,6 +31,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
@@ -40,25 +41,21 @@ import org.firstinspires.ftc.teamcode.RoboMom;
 
 public class LinearSlideTesting extends RoboMom {
 
-    private DeliveryFunctions deliveryFunctions;
+    private Delivery delivery;
 
-    private int leftMotorPosition;
-    private int rightMotorPosition;
+    private int slideMotorPosition;
 
     @Override
     public void runOpMode() {
         super.runOpMode();
-        deliveryFunctions = new DeliveryFunctions(this, false);
+        delivery = new Delivery(this, false);
 
         waitForStart();
 
         while (opModeIsActive()) {
-            leftMotorPosition = deliveryFunctions.getMotorPositionByIndex(0);
-            rightMotorPosition = deliveryFunctions.getMotorPositionByIndex(1);
+            slideMotorPosition = delivery.getMotorPosition();
 
-            telemetry.addData("Left Ticks:", leftMotorPosition);
-            telemetry.addData("Right Ticks:", rightMotorPosition);
-            telemetry.addData("Servo Position: ", deliveryFunctions.getWristPosition());
+            telemetry.addData("Slide Ticks:", slideMotorPosition);
             telemetry.update();
         }
 
