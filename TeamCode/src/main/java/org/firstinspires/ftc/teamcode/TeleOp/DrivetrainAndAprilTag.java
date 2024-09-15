@@ -33,7 +33,6 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.TouchpadFunctions;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
@@ -87,8 +86,6 @@ public class DrivetrainAndAprilTag extends RoboMom {
 
         vision = new VisionFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
-
-        TouchpadFunctions touchpad1 = new TouchpadFunctions(this, 1);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -178,28 +175,6 @@ public class DrivetrainAndAprilTag extends RoboMom {
                 } else {
                     controlsRelinquished = false;
                 }
-            }
-
-            touchpad1.CollectPreviousInput();
-            touchpad1.CollectCurrentInput();
-
-            if(vision.DetectAprilTag(-1) && touchpad1.getTouchpad()){
-                boolean down = touchpad1.getTouchpadDown();
-                boolean up = touchpad1.getTouchpadUp();
-                float xSwipe = touchpad1.getXSwipe();
-                float ySwipe = touchpad1.getYSwipe();
-                double rotation = -0.022 * vision.detectedTag.ftcPose.yaw;
-                double x = touchpad1.TOUCHPADXMULTIPLIER * xSwipe;
-                double y = touchpad1.TOUCHPADYMULTIPLIER * ySwipe;
-
-                telemetry.addData("Touchpad Down? ", down);
-                telemetry.addData("Touchpad Up? ", up);
-                telemetry.addData("Touchpad Swipe:  ", xSwipe);
-                telemetry.addData("Rotation: ", rotation);
-                telemetry.addData("Strafe: ", x);
-                telemetry.addData("Forward: ", y);
-
-                drivetrainFunctions.Move((float) x, (float) y, (float) rotation, 1);
             }
 
 
