@@ -1,6 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import com.acmerobotics.roadrunner.geometry.Pose2d;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -143,80 +142,6 @@ public abstract class RoboMom extends LinearOpMode {
         driveInDirection(power, direction);
         sleep((long)time);
         driveInDirection(0, "STOP");
-    }
-
-
-
-
-
-    public RevBlinkinLedDriver.BlinkinPattern setLEDColor (String colorFront, String colorBack, boolean displayBack) {
-        //color 1 is yellow
-        //color 2 is green
-
-        if (displayBack) {
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.BLUE;}
-            if (colorBack == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.BLACK;}
-        }
-        if (colorFront == "PARTY") {return RevBlinkinLedDriver.BlinkinPattern.RAINBOW_RAINBOW_PALETTE;}
-
-        if (colorBack == "NONE") {
-            if (colorFront == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorFront == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
-            if (colorFront == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorFront == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.BLUE;}
-            if (colorFront == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.BLACK;}
-        } else if (colorFront == "NONE") {
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.YELLOW;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.GREEN;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.BLUE;}
-        } else {
-            if (colorFront == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_GRAY;}
-            if (colorFront == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.CP1_LIGHT_CHASE;}
-            if (colorFront == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.CP2_LIGHT_CHASE;}
-            if (colorFront == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.LIGHT_CHASE_BLUE;}
-        }
-
-
-        //Beware scary!!!!!!!!!!
-        /*
-        if (colorFront == "NONE") {
-            if (colorBack == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.BLACK;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.DARK_RED;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN;}
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE;}
-        } else if (colorFront == "YELLOW") {
-            if (colorBack == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_RED;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.SHOT_RED;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.BREATH_RED;}
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.HOT_PINK;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.LARSON_SCANNER_RED;}
-        } else if (colorFront == "GREEN") {
-            if (colorBack == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GREEN;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.CP1_SHOT;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.CP1_BREATH_SLOW;}
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.LIME;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.CP1_LARSON_SCANNER;}
-        } else if (colorFront == "WHITE") {
-            if (colorBack == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_GRAY;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.SHOT_WHITE;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.BREATH_GRAY;}
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.WHITE;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.LARSON_SCANNER_GRAY;}
-        } else if (colorFront == "PURPLE") {
-            if (colorBack == "NONE") {return RevBlinkinLedDriver.BlinkinPattern.DARK_BLUE;}
-            if (colorBack == "YELLOW") {return RevBlinkinLedDriver.BlinkinPattern.CP2_SHOT;}
-            if (colorBack == "GREEN") {return RevBlinkinLedDriver.BlinkinPattern.CP2_BREATH_SLOW;}
-            if (colorBack == "WHITE") {return RevBlinkinLedDriver.BlinkinPattern.SKY_BLUE;}
-            if (colorBack == "PURPLE") {return RevBlinkinLedDriver.BlinkinPattern.CP2_LARSON_SCANNER;}
-        }
-        */
-
-        return RevBlinkinLedDriver.BlinkinPattern.BLACK;
     }
 
 }

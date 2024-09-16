@@ -8,7 +8,6 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 
 
 @Disabled
@@ -35,8 +34,6 @@ public class DrivetrainFunctions {
     public boolean odometryIsDisabled = false;
 
     private double initAttempts = 0;
-
-    public static SampleMecanumDrive drive;
 
     public DrivetrainFunctions(LinearOpMode l)
     {

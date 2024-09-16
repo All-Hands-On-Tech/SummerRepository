@@ -35,7 +35,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.VisionFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
 
@@ -72,7 +71,6 @@ public class DrivetrainAndAprilTag extends RoboMom {
     private DrivetrainFunctions drivetrainFunctions;
 
 
-    static SampleMecanumDrive drive;
 
      private static final double HARDWARECHECK_DELAY = 1;
 
@@ -81,8 +79,6 @@ public class DrivetrainAndAprilTag extends RoboMom {
     @Override
     public void runOpMode() {
         super.runOpMode();
-
-        drive = new SampleMecanumDrive(hardwareMap);
 
         vision = new VisionFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);

@@ -35,10 +35,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
-import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
-import org.firstinspires.ftc.teamcode.LEDFunctions;
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
 
@@ -83,9 +80,6 @@ public class CenterStageTeleOp extends RoboMom {
     private IntakeFunctions intakeFunctions;
 
     private DrivetrainFunctions drivetrainFunctions;
-    private LEDFunctions lEDFunctions;
-
-    private DroneLauncherFunctions droneLauncherFunctions;
 
     private DeliveryState deliveryState = DeliveryState.DELIVERY_START;
 
@@ -127,7 +121,6 @@ public class CenterStageTeleOp extends RoboMom {
     ElapsedTime queueBufferTimer = new ElapsedTime();
     static DcMotor[] motors;
 
-    static SampleMecanumDrive drive;
 
      private static final double HARDWARECHECK_DELAY = 1;
 
@@ -140,14 +133,11 @@ public class CenterStageTeleOp extends RoboMom {
     public void runOpMode() {
         super.runOpMode();
 
-        drive = new SampleMecanumDrive(hardwareMap);
 
         aprilTagsFunctions = new VisionFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
-        droneLauncherFunctions = new DroneLauncherFunctions(this);
-        lEDFunctions = new LEDFunctions(this);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -177,10 +167,6 @@ public class CenterStageTeleOp extends RoboMom {
                 deliveryFunctions.Reinitialize();
             if (drivetrainFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 drivetrainFunctions.Reinitialize();
-            if (droneLauncherFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
-                droneLauncherFunctions.Reinitialize();
-            if (lEDFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
-                lEDFunctions.Reinitialize();
 
             if (hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
@@ -199,8 +185,6 @@ public class CenterStageTeleOp extends RoboMom {
                 } else {
                     drivetrainFunctions.Stop();
                 }
-                if (gamepad1.b)
-                    droneLauncherFunctions.ReleaseDrone();
             }
 
             if(gamepad1.x) {
@@ -212,7 +196,6 @@ public class CenterStageTeleOp extends RoboMom {
             if (gamepad1.a){
                 LEDExtras = "";
             }
-            lEDFunctions.setLEDColor(deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
             telemetry.addData("Color sensors", "%s %s %s", deliveryFunctions.detectFrontPixelColor(), deliveryFunctions.detectBackPixelColor(), LEDExtras);
             
             if(gamepad1.dpad_left){

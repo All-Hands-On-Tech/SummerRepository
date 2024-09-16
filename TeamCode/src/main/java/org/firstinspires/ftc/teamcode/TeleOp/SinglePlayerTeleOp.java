@@ -36,9 +36,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DeliveryFunctions;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
-import org.firstinspires.ftc.teamcode.DroneLauncherFunctions;
 import org.firstinspires.ftc.teamcode.IntakeFunctions;
-import org.firstinspires.ftc.teamcode.RoadRunner.drive.SampleMecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 import org.firstinspires.ftc.teamcode.VisionFunctions;
 
@@ -82,8 +80,6 @@ public class SinglePlayerTeleOp extends RoboMom {
 
     private DrivetrainFunctions drivetrainFunctions;
 
-    private DroneLauncherFunctions droneLauncherFunctions;
-
     private DeliveryState deliveryState = DeliveryState.DELIVERY_START;
 
     private final int LIFT_HIGH = 750;
@@ -122,7 +118,6 @@ public class SinglePlayerTeleOp extends RoboMom {
     ElapsedTime OpModeTimer = new ElapsedTime();
     static DcMotor[] motors;
 
-    static SampleMecanumDrive drive;
 
      private static final double HARDWARECHECK_DELAY = 1;
 
@@ -137,13 +132,10 @@ public class SinglePlayerTeleOp extends RoboMom {
     public void runOpMode() {
         super.runOpMode();
 
-        drive = new SampleMecanumDrive(hardwareMap);
-
         aprilTagsFunctions = new VisionFunctions(this);
         deliveryFunctions = new DeliveryFunctions(this, true);
         intakeFunctions = new IntakeFunctions(this);
         drivetrainFunctions = new DrivetrainFunctions(this);
-        droneLauncherFunctions = new DroneLauncherFunctions(this);
 
         leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -173,8 +165,6 @@ public class SinglePlayerTeleOp extends RoboMom {
                 deliveryFunctions.Reinitialize();
             if (drivetrainFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
                 drivetrainFunctions.Reinitialize();
-            if (droneLauncherFunctions.isDisabled && hardwareCheckTimer.seconds() == HARDWARECHECK_DELAY)
-                droneLauncherFunctions.Reinitialize();
 
             if (hardwareCheckTimer.seconds() >= HARDWARECHECK_DELAY)
                 hardwareCheckTimer.reset();
@@ -193,8 +183,6 @@ public class SinglePlayerTeleOp extends RoboMom {
                 } else {
                     drivetrainFunctions.Stop();
                 }
-                if (gamepad1.dpad_up)
-                    droneLauncherFunctions.ReleaseDrone();
             }
 
             if(gamepad1.dpad_left){
@@ -243,9 +231,6 @@ public class SinglePlayerTeleOp extends RoboMom {
                 speedScalar = 1;
             }
 
-            if (gamepad1.dpad_up) {
-                droneLauncherFunctions.ReleaseDrone();
-            }
 
             //Gamepad 2
 
