@@ -29,12 +29,17 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Vector2d;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
+
+import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 
 /*
@@ -64,6 +69,12 @@ public class RRTeleOp extends LinearOpMode {
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             runtime.reset();
+
+            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+            Action trajectoryAction1;
+            trajectoryAction1 = drive.actionBuilder(drive.pose)
+                    .splineToSplineHeading(new Pose2d(24,24, Math.PI/2),0)
+                    .build();
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.milliseconds());
             telemetry.update();
