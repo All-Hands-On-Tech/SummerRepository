@@ -55,9 +55,9 @@ public class MrKrabsTeleOp extends RoboMom {
 
                 if (Math.abs(gamepad1.left_stick_x) > DRIVE_DEADZONE || Math.abs(gamepad1.left_stick_y) > DRIVE_DEADZONE || Math.abs(gamepad1.right_stick_x) > DRIVE_DEADZONE || Math.abs(gamepad1.right_stick_y) > DRIVE_DEADZONE*2) {
                     if(Math.abs(gamepad1.right_stick_y) > DRIVE_DEADZONE*2) {
-                        drivetrainFunctions.Move(gamepad1.left_stick_y, gamepad1.right_stick_x, gamepad1.right_stick_x, speedScalar);
+                        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.right_stick_y, gamepad1.right_stick_x, speedScalar);
                     }else{
-                        drivetrainFunctions.Move(gamepad1.left_stick_y, gamepad1.left_stick_x, gamepad1.right_stick_x, speedScalar);
+                        drivetrainFunctions.Move(gamepad1.left_stick_x, gamepad1.left_stick_y, gamepad1.right_stick_x, speedScalar);
                     }
                 } else {
                     drivetrainFunctions.Stop();
