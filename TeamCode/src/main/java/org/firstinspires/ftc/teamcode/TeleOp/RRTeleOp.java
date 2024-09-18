@@ -66,11 +66,12 @@ public class RRTeleOp extends LinearOpMode {
         waitForStart();
         runtime.reset();
 
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             runtime.reset();
 
-            MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
             Action trajectoryAction1;
             trajectoryAction1 = drive.actionBuilder(drive.pose)
                     .splineToSplineHeading(new Pose2d(24,24, Math.PI/2),0)
