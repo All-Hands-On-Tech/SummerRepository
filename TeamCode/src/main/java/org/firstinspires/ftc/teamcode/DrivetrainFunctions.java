@@ -66,6 +66,11 @@ public class DrivetrainFunctions {
             rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
             rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
+            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
 
         }catch(NullPointerException e){
             initAttempts++;
@@ -135,7 +140,7 @@ public class DrivetrainFunctions {
         }
     }
 
-    public void Move(float x, float y, float rx, double speedScalar){ //x is forward/backward
+    public void Move(float y, float x, float rx, double speedScalar){ //x is forward/backward
         if(isDisabled)
             return;
         x = -x;

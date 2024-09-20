@@ -162,6 +162,12 @@ public class MrKrabsTeleOp extends RoboMom {
                 }
             }
 
+            if(gamepad2.right_bumper){
+                delivery.clawClose();
+            }else{
+                delivery.clawOpen();
+            }
+
             targetPosition = Math.max(delivery.BOTTOM_POSITION, Math.min(delivery.TOP_POSITION, targetPosition));
             delivery.setSlidesTargetPosition(targetPosition);
 

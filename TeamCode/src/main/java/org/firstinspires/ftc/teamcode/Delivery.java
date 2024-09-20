@@ -16,6 +16,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 @Disabled
 public class Delivery {
     private DcMotor slide = null;
+    private Servo claw = null;
 
 
     private LinearOpMode linearOpMode;
@@ -68,6 +69,8 @@ public class Delivery {
     private void Initialize(){//4mm
         try {
             slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
+            claw = linearOpMode.hardwareMap.get(Servo.class, "claw");
+            claw.scaleRange(0.4, 0.5);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -147,6 +150,16 @@ public class Delivery {
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
         linearOpMode.telemetry.update();
+    }
+
+    public void setClawPosition(double p){ // 0-1
+        claw.setPosition(p);
+    }
+    public void clawOpen(){
+        setClawPosition(1);
+    }
+    public void clawClose(){
+        setClawPosition(0);
     }
 /*
 
