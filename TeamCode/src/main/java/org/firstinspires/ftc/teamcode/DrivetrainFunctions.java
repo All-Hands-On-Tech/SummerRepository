@@ -24,14 +24,10 @@ public class DrivetrainFunctions {
     public DcMotor rightBackDrive = null;
     public double rightBackPower = 0;
 
-
-    public IMU imu;
     private LinearOpMode linearOpMode;
     private double CLICKS_PER_METER = 2492.788;
 
     public boolean isDisabled = false;
-
-    public boolean odometryIsDisabled = false;
 
     private double initAttempts = 0;
 
@@ -39,11 +35,6 @@ public class DrivetrainFunctions {
     {
         linearOpMode = l;
         Initialize();
-        try {
-            InitIMU(RevHubOrientationOnRobot.LogoFacingDirection.RIGHT, RevHubOrientationOnRobot.UsbFacingDirection.FORWARD);
-        }catch(NullPointerException e){
-            linearOpMode.telemetry.addLine("IMU not found");
-        }
     }
 
 
@@ -102,19 +93,6 @@ public class DrivetrainFunctions {
         }
     }
 
-    private void InitIMU(RevHubOrientationOnRobot.LogoFacingDirection logoOrientation, RevHubOrientationOnRobot.UsbFacingDirection usbOrientation){
-        if(!isDisabled)
-            return;
-
-        imu = linearOpMode.hardwareMap.get(IMU.class, "imu");
-
-        IMU.Parameters parameters = new IMU.Parameters(new RevHubOrientationOnRobot(
-                logoOrientation,
-                usbOrientation));
-        imu.initialize(parameters);
-
-    }
-
     public void setLeftFrontPower(double power) {
         if (Math.abs(power-leftFrontPower) > 0.02) {
             leftFrontPower = power;
@@ -140,6 +118,13 @@ public class DrivetrainFunctions {
         }
     }
 
+    /**
+     * This code drives the robot relative to the robot itself
+     * @param  x  joy stick x
+     * @param  y  joy stick y
+     * @param  rx  joy stick rotation
+     * @param  speedScalar speed multiplier
+     */
     public void Move(float y, float x, float rx, double speedScalar){ //x is forward/backward
         if(isDisabled)
             return;
@@ -152,13 +137,19 @@ public class DrivetrainFunctions {
         setRightBackPower(((y + x - rx) / denominator) * speedScalar);
     }
 
-    public void MoveFieldOriented (float x, float y, float rx, double speedScalar){
+    /**
+     * This code drives the robot relative to is position on the field
+     * @param  x  joy stick x
+     * @param  y  joy stick y
+     * @param  rx  joy stick rotation
+     * @param  speedScalar speed multiplier
+     * @param  botHeading  the current heading of the robot (in radians)
+     */
+    public void MoveFieldOriented (float x, float y, float rx, double speedScalar, double botHeading){
         if(isDisabled)
             return;
 
         y = -y;
-
-        double botHeading = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
         double rotY = y * Math.sin(-botHeading) + x * Math.cos(-botHeading);
         double rotX = y * Math.cos(-botHeading) - x * Math.sin(-botHeading);
@@ -173,23 +164,10 @@ public class DrivetrainFunctions {
     }
 
     public void Stop(){
-        leftFrontDrive.setPower(0);
-        leftFrontPower = 0;
-
-        leftBackDrive.setPower(0);
-        leftBackPower = 0;
-
-        rightFrontDrive.setPower(0);
-        rightFrontPower = 0;
-
-        rightBackDrive.setPower(0);
-        rightBackPower = 0;
-    }
-
-    public void ResetIMU(){
-        if(isDisabled)
-            return;
-        imu.resetYaw();
+        setLeftFrontPower(0);
+        setLeftBackPower(0);
+        setRightFrontPower(0);
+        setRightBackPower(0);
     }
 
     public boolean areMotorsOn() {
