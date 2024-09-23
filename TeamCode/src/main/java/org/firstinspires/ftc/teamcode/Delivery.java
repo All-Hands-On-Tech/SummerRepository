@@ -70,7 +70,7 @@ public class Delivery {
         try {
             slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
             claw = linearOpMode.hardwareMap.get(Servo.class, "claw");
-            claw.scaleRange(0.4, 0.5);
+            claw.scaleRange(0.0, 0.25);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
