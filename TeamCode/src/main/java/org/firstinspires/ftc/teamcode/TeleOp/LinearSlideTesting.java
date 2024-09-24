@@ -56,6 +56,7 @@ public class LinearSlideTesting extends RoboMom {
             slideMotorPosition = delivery.getMotorPosition();
 
             telemetry.addData("Slide Ticks:", slideMotorPosition);
+            telemetry.addData("Slide Height (in): ", delivery.getMotorPositionInches());
             telemetry.update();
         }
 
