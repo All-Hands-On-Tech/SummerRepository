@@ -20,5 +20,7 @@ dependencies {
 
     implementation 'com.acmerobotics.dashboard:dashboard:0.4.5'
     implementation 'org.firstinspires.ftc:Vision:8.2.0'
+
+    implementation 'com.github.NoahBres:MeepMeep:2.0.3'
 }
 

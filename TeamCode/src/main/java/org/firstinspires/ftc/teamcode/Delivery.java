@@ -23,6 +23,7 @@ public class Delivery {
 
     private double slidePowerMultiplier = 0.8;
     private double CLICKS_PER_METER = 2492.788;
+    private double CLICKS_PER_INCH = 63.317;
     private final int MM_PER_METER = 1000;
     private int targetPosition;
     private double currentPosition;
@@ -131,9 +132,13 @@ public class Delivery {
 
     public int getMotorPosition(){ return slide.getCurrentPosition(); }
 
+    public double getMotorPositionInches(){ return getMotorPosition() / CLICKS_PER_INCH; }
+
     public int getMotorTargetPosition(){
         return targetPosition;
     }
+
+    public double getMotorTargetPositionInches() { return (double)getMotorTargetPosition() / CLICKS_PER_INCH; }
 
     public DcMotor.RunMode getRunMode(){
         return slide.getMode();
