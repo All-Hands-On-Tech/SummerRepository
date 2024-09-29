@@ -29,16 +29,18 @@ public class BlueNet extends LinearOpMode {
         Action trajectoryAction1;
 
         trajectoryAction1 = drive.actionBuilder(drive.pose)
-                .lineToYSplineHeading(33, Math.toRadians(0))
-                .waitSeconds(2)
-                .setTangent(Math.toRadians(90))
-                .lineToY(48)
-                .setTangent(Math.toRadians(0))
-                .lineToX(32)
-                .strafeTo(new Vector2d(44.5, 30))
-                .turn(Math.toRadians(180))
-                .lineToX(47.5)
-                .waitSeconds(3)
+                .strafeTo(new Vector2d(-10, -34))
+//               //score specimen
+                .strafeTo(new Vector2d(-26, -40))
+                .setTangent(110)
+                .splineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)), Math.toRadians(-120))
+                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(45)), Math.toRadians(225))
+                .strafeTo(new Vector2d( -40, -27))
+                .splineToLinearHeading(new Pose2d(-57.00, -14, Math.toRadians(90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(60)), Math.toRadians(240))
+                .strafeTo(new Vector2d( -50, -27))
+                .splineToLinearHeading(new Pose2d(-62.00, -24, Math.toRadians(0)), Math.toRadians(180))
+                .strafeTo(new Vector2d(-62, -55))
                 .build();
 
         waitForStart();
