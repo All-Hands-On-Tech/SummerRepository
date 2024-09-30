@@ -120,8 +120,8 @@ public class DrivetrainFunctions {
 
     /**
      * This code drives the robot relative to the robot itself
-     * @param  x  joy stick x
-     * @param  y  joy stick y
+     * @param  x  joy stick y
+     * @param  y  joy stick x
      * @param  rx  joy stick rotation
      * @param  speedScalar speed multiplier
      */
@@ -139,8 +139,8 @@ public class DrivetrainFunctions {
 
     /**
      * This code drives the robot relative to is position on the field
-     * @param  x  joy stick x
-     * @param  y  joy stick y
+     * @param  x  joy stick y
+     * @param  y  joy stick x
      * @param  rx  joy stick rotation
      * @param  speedScalar speed multiplier
      * @param  botHeading  the current heading of the robot (in radians)

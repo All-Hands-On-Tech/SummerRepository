@@ -20,15 +20,19 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
-@Autonomous(name = "BLUE_TEST_AUTO_PIXEL", group = "Autonomous")
+@Autonomous(name = "Blue Net", group = "Autonomous")
 public class BlueNet extends LinearOpMode {
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-14, -62, Math.toRadians(90)));
 
         Action trajectoryAction1;
+        Action trajectoryAction2;
+
+        //FIXME:    SPLIT trajectoryAction1 INTO MULTIPLE ACTIONS SO DELIVERY ACTIONS CAN BE IMPLEMENTED IN PARALLEL / SEQUENTIALLY
 
         trajectoryAction1 = drive.actionBuilder(drive.pose)
+
                 .strafeTo(new Vector2d(-10, -34))
 //               //score specimen
                 .strafeTo(new Vector2d(-26, -40))

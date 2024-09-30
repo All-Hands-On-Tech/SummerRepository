@@ -98,7 +98,7 @@ public class MrKrabsTeleOp extends RoboMom {
                     }
                     if (gamepad2.x) {
                         deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;
-                        targetPosition = 4120;//hook onto high bar;
+                        targetPosition = 4120;//hook onto high bar
                     }
                     if (gamepad2.y) {
                         deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;

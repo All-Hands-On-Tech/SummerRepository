@@ -41,7 +41,7 @@ public class BasicAuto extends LinearOpMode {
 
                 double pos = lift.getCurrentPosition();
                 packet.put("liftPos", pos);
-                if (pos < 3000.0) {
+                if (pos < 4120 /*hook onto high bar*/) {
                     return true;
                 } else {
                     lift.setPower(0);
@@ -51,6 +51,32 @@ public class BasicAuto extends LinearOpMode {
         }
         public Action liftUp() {
             return new LiftUp();
+        }
+
+        public class ScoreOnBar implements Action {
+            private boolean initialized = false;
+            private double initPos = 0;
+
+            @Override
+            public boolean run(@NonNull TelemetryPacket packet) {
+                if (!initialized) {
+                    lift.setPower(-0.4);
+                    initPos = lift.getCurrentPosition();
+                    initialized = true;
+                }
+
+                double pos = lift.getCurrentPosition();
+                packet.put("liftPos", pos);
+                if (pos > initPos - 50 /*FIXME: Verify if this works*/) {
+                    return true;
+                } else {
+                    lift.setPower(0);
+                    return false;
+                }
+            }
+        }
+        public Action ScoreOnBar() {
+            return new ScoreOnBar();
         }
 
         public class LiftDown implements Action {
