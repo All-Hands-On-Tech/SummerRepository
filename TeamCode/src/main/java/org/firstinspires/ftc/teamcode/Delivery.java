@@ -2,6 +2,10 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Color;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -12,6 +16,7 @@ import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
+import org.firstinspires.ftc.teamcode.Autonomous.BasicAuto;
 
 @Disabled
 public class Delivery {
@@ -259,4 +264,30 @@ public class Delivery {
         slidePowerMultiplier = 0.75;
     }
     */
+
+    public class ScoreOnBar implements Action {
+        private boolean initialized = false;
+        private double initPos = 0;
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                slide.setPower(-0.4);
+                initPos = slide.getCurrentPosition();
+                initialized = true;
+            }
+
+            double pos = slide.getCurrentPosition();
+            packet.put("liftPos", pos);
+            if (pos > initPos - 50 /*FIXME: Verify if this works*/) {
+                return true;
+            } else {
+                slide.setPower(0);
+                return false;
+            }
+        }
+    }
+    public Action ScoreOnBar() {
+        return new Delivery.ScoreOnBar();
+    }
 }
