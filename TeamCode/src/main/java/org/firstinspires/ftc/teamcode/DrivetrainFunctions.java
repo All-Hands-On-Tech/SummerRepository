@@ -40,10 +40,10 @@ public class DrivetrainFunctions {
 
     private void Initialize(){
         try {
-            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftFrontAndRightEncoder");
-            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
-            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
-            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
+            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LFRE");
+            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LBLE");
+            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RFBE");
+            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RB");
 
 
 //            try{
@@ -62,6 +62,7 @@ public class DrivetrainFunctions {
             rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
+            //RB, RF, LB, LF
 
         }catch(NullPointerException e){
             initAttempts++;
@@ -72,10 +73,10 @@ public class DrivetrainFunctions {
 
     public void Reinitialize(){
         try {
-            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftFrontAndRightEncoder");
-            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "leftRearAndLeftEncoder");
-            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightFrontAndFrontEncoder");
-            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "rightRear");
+            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LFRE");
+            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LBLE");
+            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RFBE");
+            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RB");
 
 
 
