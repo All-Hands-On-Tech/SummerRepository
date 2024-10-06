@@ -201,7 +201,7 @@ public class MrKrabsTeleOp extends RoboMom {
             targetPosition = Math.max(delivery.BOTTOM_POSITION, Math.min(delivery.TOP_POSITION, targetPosition));
             delivery.setSlidesTargetPosition(targetPosition);
 
-            delivery.PControlPower();
+            delivery.PControlPower(1);
 
             //telemetry.addData("Target Position: ", targetPosition);
             telemetry.addData("Slide Motor Position (in): ", String.format( "%.2f", delivery.getMotorPositionInches()) );

@@ -21,21 +21,20 @@ public class Net extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-14, -62, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-15.2, -62, Math.toRadians(90)));
         delivery = new Delivery(this, false);
 
-        Action trajectoryAction1;
-        Action trajectoryAction2;
+        Action trajToSubmersable;
+        Action trajToScoreSamplesInNet;
+        Action trajToPark;
 
         //FIXME:    SPLIT trajectoryAction1 INTO MULTIPLE ACTIONS SO DELIVERY ACTIONS CAN BE IMPLEMENTED IN PARALLEL / SEQUENTIALLY
 
-        trajectoryAction1 = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(-10, -34))
-//               //score specimen
-
+        trajToSubmersable = drive.actionBuilder(drive.pose)
+                .strafeTo(new Vector2d(-7, -34))
                 .build();
 
-        trajectoryAction2 = drive.actionBuilder(drive.pose)
+        trajToScoreSamplesInNet = drive.actionBuilder(new Pose2d(-10, -34, Math.toRadians(90)))
                 .strafeTo(new Vector2d(-26, -40))
                 .setTangent(110)
                 .splineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)), Math.toRadians(-120))
@@ -48,16 +47,36 @@ public class Net extends LinearOpMode {
                 .strafeTo(new Vector2d(-62, -55))
                 .build();
 
+        trajToPark = drive.actionBuilder(new Pose2d(-62, -55, Math.toRadians(0)))
+                .strafeTo(new Vector2d(-40, -55))
+                .strafeTo(new Vector2d(-40, -10))
+                .strafeTo(new Vector2d(-20, -10))
+                .build();
+
+        delivery.clawClose();
         waitForStart();
 
         if (isStopRequested()) return;
 
-        Actions.runBlocking(
-                new ParallelAction(
-                        trajectoryAction1,
-                        delivery.ScoreOnBar()
-                )
-        );
-        Actions.runBlocking(trajectoryAction2);
+        delivery.setSlidesTargetPosition(4000);
+        while (Math.abs(delivery.getMotorTargetPosition() - delivery.getMotorPosition()) > 20) {
+            delivery.PControlPower(2);
+        }
+        sleep(500);
+
+        Actions.runBlocking(trajToSubmersable);
+
+        delivery.setSlidesTargetPosition(3100);
+        while (Math.abs(delivery.getMotorTargetPosition() - delivery.getMotorPosition()) > 20) {
+            delivery.PControlPower(3);
+        }
+        delivery.clawOpen();
+        sleep(1000);
+
+        Actions.runBlocking(trajToScoreSamplesInNet);
+
+        delivery.clawClose();
+
+        Actions.runBlocking(trajToPark);
     }
 }

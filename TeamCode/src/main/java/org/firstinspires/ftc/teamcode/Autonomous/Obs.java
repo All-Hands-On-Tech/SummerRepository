@@ -9,23 +9,29 @@ import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
+import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
 @Autonomous(name = "Obs", group = "Autonomous")
 public class Obs extends LinearOpMode {
+    Delivery delivery = null;
+
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(25, -62, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15.2, -62, Math.toRadians(90)));
+        delivery = new Delivery(this, false);
 
-        Action trajectoryAction1;
-        Action trajectoryAction2;
+        Action trajToSubmersible;
+        Action trajToCollectSamples;
 
         //FIXME:    SPLIT trajectoryAction1 INTO MULTIPLE ACTIONS SO DELIVERY ACTIONS CAN BE IMPLEMENTED IN PARALLEL / SEQUENTIALLY
 
-        trajectoryAction1 = drive.actionBuilder(drive.pose)
-                .strafeTo(new Vector2d(10, -34))
-                //score specimen
+        trajToSubmersible = drive.actionBuilder(drive.pose)
+                .strafeTo(new Vector2d(7, -34))
+                .build();
+
+        trajToCollectSamples = drive.actionBuilder(new Pose2d(10, -34, Math.toRadians(90)))
                 .strafeTo(new Vector2d(20, -45))
                 .setTangent(-45)
                 .splineToLinearHeading(new Pose2d(45, -14, Math.toRadians(90)), Math.toRadians(-70))
@@ -38,14 +44,26 @@ public class Obs extends LinearOpMode {
                 .strafeTo(new Vector2d(62, -62))
                 .build();
 
+        delivery.clawClose();
         waitForStart();
 
         if (isStopRequested()) return;
 
-        Actions.runBlocking(
-                new SequentialAction(
-                        trajectoryAction1
-                )
-        );
+        delivery.setSlidesTargetPosition(4000);
+        while (Math.abs(delivery.getMotorTargetPosition() - delivery.getMotorPosition()) > 20) {
+            delivery.PControlPower(2);
+        }
+        sleep(500);
+
+        Actions.runBlocking(trajToSubmersible);
+
+        delivery.setSlidesTargetPosition(3100);
+        while (Math.abs(delivery.getMotorTargetPosition() - delivery.getMotorPosition()) > 20) {
+            delivery.PControlPower(3);
+        }
+        delivery.clawOpen();
+        sleep(1000);
+
+        Actions.runBlocking(trajToCollectSamples);
     }
 }

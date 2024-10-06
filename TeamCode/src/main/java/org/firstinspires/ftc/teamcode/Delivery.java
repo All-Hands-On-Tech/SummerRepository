@@ -47,19 +47,6 @@ public class Delivery {
 
     private double initAttempts = 0;
 
-    NormalizedColorSensor sensorFront;
-    NormalizedRGBA colorsFront;
-    final float[] HSVValuesFront = new float[3];
-    NormalizedColorSensor sensorBack;
-    NormalizedRGBA colorsBack;
-    final float[] HSVValuesBack = new float[3];
-
-    double yellow = 86;
-    double green = 125;
-    double white = 155;
-    double purple = 206;
-    double distance = 1.8;
-
     private ElapsedTime time = new ElapsedTime();
 
 
@@ -77,32 +64,6 @@ public class Delivery {
             slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
             claw = linearOpMode.hardwareMap.get(Servo.class, "claw");
             claw.scaleRange(0.0, 0.25);
-            slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-
-            slide.setTargetPosition(slide.getCurrentPosition());
-
-            if (slidesRunToPosition) {
-                slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-            } else {
-                slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
-            }
-
-            slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
-
-
-            slide.setDirection(DcMotor.Direction.REVERSE);
-
-        }catch(NullPointerException e){
-            initAttempts++;
-            linearOpMode.telemetry.addData("Couldn't find delivery.       Attempt: ", initAttempts);
-            isDisabled = true;
-        }
-    }
-
-    public void Reinitialize(){//4mm
-        try {
-            slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
@@ -150,13 +111,13 @@ public class Delivery {
     }
     public void setRunMode(DcMotor.RunMode mode){ slide.setMode(mode); }
 
-    public void PControlPower(){
+    public void PControlPower(double powerMultiplier){
         double error = targetPosition - slide.getCurrentPosition();
         double power = (Math.abs(error) / TICK_LOW_POWER_DISTANCE);
 
         power = Math.max(0, Math.min(1, power));
 
-        slide.setPower(power * slidePowerMultiplier);
+        slide.setPower(power * slidePowerMultiplier * powerMultiplier);
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
         linearOpMode.telemetry.update();
@@ -166,10 +127,10 @@ public class Delivery {
         claw.setPosition(p);
     }
     public void clawOpen(){
-        setClawPosition(1);
+        setClawPosition(0);
     }
     public void clawClose(){
-        setClawPosition(0);
+        setClawPosition(1);
     }
 /*
 
@@ -272,17 +233,17 @@ public class Delivery {
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                slide.setPower(-0.4);
                 initPos = slide.getCurrentPosition();
+                slide.setPower(-0.7);
                 initialized = true;
             }
 
             double pos = slide.getCurrentPosition();
             packet.put("liftPos", pos);
-            if (pos > initPos - 50 /*FIXME: Verify if this works*/) {
+            if (pos > initPos - 500 /*FIXME: Verify if this works*/) {
                 return true;
             } else {
-                slide.setPower(0);
+                setSlidesPower(0);
                 return false;
             }
         }
