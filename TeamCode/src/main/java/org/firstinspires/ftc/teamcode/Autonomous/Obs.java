@@ -32,7 +32,7 @@ public class Obs extends LinearOpMode {
                 .build();
 
         trajToCollectSamples = drive.actionBuilder(new Pose2d(10, -34, Math.toRadians(90)))
-                .strafeTo(new Vector2d(20, -45))
+                .strafeTo(new Vector2d(25, -45))
                 .setTangent(-45)
                 .splineToLinearHeading(new Pose2d(45, -14, Math.toRadians(90)), Math.toRadians(-70))
                 .strafeTo(new Vector2d(45, -59))
