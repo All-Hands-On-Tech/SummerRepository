@@ -140,8 +140,8 @@ public class DrivetrainFunctions {
 
     /**
      * This code drives the robot relative to is position on the field
-     * @param  x  joy stick y
-     * @param  y  joy stick x
+     * @param  x  joy stick y (Forward/Backward)
+     * @param  y  joy stick x (Left/Right)
      * @param  rx  joy stick rotation
      * @param  speedScalar speed multiplier
      * @param  botHeading  the current heading of the robot (in radians)
@@ -150,10 +150,10 @@ public class DrivetrainFunctions {
         if(isDisabled)
             return;
 
-        y = -y;
+        x = -x;
 
-        double rotY = y * Math.sin(-botHeading) + x * Math.cos(-botHeading);
-        double rotX = y * Math.cos(-botHeading) - x * Math.sin(-botHeading);
+        double rotY = y * Math.cos(-botHeading) + x * Math.sin(-botHeading);
+        double rotX = y * Math.sin(-botHeading) - x * Math.cos(-botHeading);
 
         rotX = rotX * 1.1;
 

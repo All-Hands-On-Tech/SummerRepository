@@ -29,9 +29,15 @@
 
 package org.firstinspires.ftc.teamcode.TeleOp;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
@@ -39,7 +45,12 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.util.Range;
 
+import org.firstinspires.ftc.teamcode.Delivery;
+import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
+
+import java.util.ArrayList;
+import java.util.List;
 
 
 /*
@@ -61,21 +72,133 @@ public class RRTeleOp extends LinearOpMode {
     // Declare OpMode members.
     private ElapsedTime runtime = new ElapsedTime();
 
+    private ElapsedTime deliveryTimer = new ElapsedTime();
+
+    DrivetrainFunctions drivetrainFunctions = null;
+    Delivery delivery = null;
+    public enum DeliveryState{
+        DELIVERY_START,
+        DELIVERY_LIFT,
+        DELIVERY_RETRACT
+    }
+    private MrKrabsTeleOp.DeliveryState deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_START;
+    private int slidePosition = 0;
+
+    private int targetPosition = 0;
+
+    private boolean controlsRelinquished = false;
+    private final double DRIVE_DEADZONE = 0.05;
+    private final double SCORE_SPEED_SCALAR = 0.2;
+
+    private double speedScalar = 1;
+
+    //This is the code to add rr actions
+    private FtcDashboard dash = FtcDashboard.getInstance();
+    private List<Action> runningActions = new ArrayList<>();
+
     @Override
     public void runOpMode() {
+
+        delivery = new Delivery(this, false);
+
+        drivetrainFunctions = new DrivetrainFunctions(this);
+
         waitForStart();
+
         runtime.reset();
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, 0));
+
+//        Action trajectoryAction1;
+//        trajectoryAction1 = drive.actionBuilder(drive.pose)
+//                .splineToSplineHeading(new Pose2d(24,24, Math.PI/2),0)
+//                .build();
+//
+        Action trajectoryAction2;
+        trajectoryAction2 = drive.actionBuilder(drive.pose)
+//                .splineToSplineHeading(new Pose2d(0,0, 0),0)
+                .build();
+
+        Action test;
+        test = new Action() {
+            @Override
+            public boolean run(@NonNull TelemetryPacket telemetryPacket) {
+                return false;
+            }
+        };
 
         // run until the end of the match (driver presses STOP)
         while (opModeIsActive()) {
             runtime.reset();
 
-            Action trajectoryAction1;
-            trajectoryAction1 = drive.actionBuilder(drive.pose)
-                    .splineToSplineHeading(new Pose2d(24,24, Math.PI/2),0)
-                    .build();
+            drive.updatePoseEstimate();
+            Pose2d currentPose = drive.pose;
+            TelemetryPacket packet = new TelemetryPacket();
+
+            // updated based on gamepads
+
+            //driver 1
+            //slow down power if bumper is pressed
+            if (gamepad1.left_bumper) {
+                speedScalar = 0.5;
+            } else if (gamepad1.right_bumper) {
+                speedScalar = 0.8;
+            } else {
+                speedScalar = 1;
+            }
+
+            if (!controlsRelinquished) {
+                float leftX = gamepad1.left_stick_x;
+                float leftY = gamepad1.left_stick_y;
+                float rightX = gamepad1.right_stick_x;
+                float rightY = gamepad1.right_stick_y;
+//                if (Math.abs(leftX) > DRIVE_DEADZONE || Math.abs(leftY) > DRIVE_DEADZONE || Math.abs(rightX) > DRIVE_DEADZONE || Math.abs(rightY) > DRIVE_DEADZONE*2) {
+//                    if(Math.abs(rightY) > DRIVE_DEADZONE*2) {
+//                        drivetrainFunctions.Move(leftX, rightY, rightX, speedScalar);
+//                    }else{
+//                        drivetrainFunctions.Move(leftX, leftY, rightX, speedScalar);
+//                    }
+//                } else {
+//                    drivetrainFunctions.Stop();
+//                }
+                if (Math.abs(leftX) > DRIVE_DEADZONE || Math.abs(leftY) > DRIVE_DEADZONE || Math.abs(rightX) > DRIVE_DEADZONE || Math.abs(rightY) > DRIVE_DEADZONE*2) {
+                    if(Math.abs(rightY) > DRIVE_DEADZONE*2) {
+                        drivetrainFunctions.MoveFieldOriented(leftY, rightX, rightX, speedScalar, drive.pose.heading.real);
+                    }else{
+                        drivetrainFunctions.MoveFieldOriented(leftY, leftX, rightX, speedScalar, drive.pose.heading.real);
+                    }
+                } else {
+                    drivetrainFunctions.Stop();
+                }
+            }
+
+            //run to 0, 0, 0 at tangent of 0
+            if(gamepad1.x){
+                runningActions.add(test);
+            }
+            if(gamepad1.a){
+                runningActions.add(trajectoryAction2);
+            }
+            if(gamepad1.b){
+
+            }
+
+
+
+
+
+            // update running actions
+            List<Action> newActions = new ArrayList<>();
+            for (Action action : runningActions) {
+                action.preview(packet.fieldOverlay());
+                if (action.run(packet)) {
+                    newActions.add(action);
+                }
+            }
+            runningActions = newActions;
+
+            dash.sendTelemetryPacket(packet);
+
             // Show the elapsed game time and wheel power.
             telemetry.addData("Status", "Run Time: " + runtime.milliseconds());
             telemetry.update();
