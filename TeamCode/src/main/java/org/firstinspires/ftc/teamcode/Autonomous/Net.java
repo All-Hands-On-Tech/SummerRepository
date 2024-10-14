@@ -75,7 +75,11 @@ public class Net extends LinearOpMode {
 
         Actions.runBlocking(trajToScoreSamplesInNet);
 
-        delivery.clawClose();
+
+        delivery.setSlidesTargetPosition(0);
+        while (Math.abs(delivery.getMotorTargetPosition() - delivery.getMotorPosition()) > 20) {
+            delivery.PControlPower(3);
+        }
 
         Actions.runBlocking(trajToPark);
     }

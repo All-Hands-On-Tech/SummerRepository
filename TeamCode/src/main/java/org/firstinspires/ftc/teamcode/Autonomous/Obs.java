@@ -65,5 +65,10 @@ public class Obs extends LinearOpMode {
         sleep(1000);
 
         Actions.runBlocking(trajToCollectSamples);
+
+        delivery.setSlidesTargetPosition(0);
+        while (Math.abs(delivery.getMotorTargetPosition() - delivery.getMotorPosition()) > 20) {
+            delivery.PControlPower(3);
+        }
     }
 }
