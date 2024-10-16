@@ -8,6 +8,7 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,15 +19,19 @@ public class Intake {
     private Servo extensionServo = null;
     private Servo intakeServo = null;
 
+    private final int PITCH_ZERO = 150; // angle in degrees from coordinate zero
 
     private LinearOpMode linearOpMode;
 
-    private final double CLICKS_PER_DEGREE = 2.0883333333333;
+    private final double CLICKS_PER_DEGREE = 2.0883333333333/5;
     private final double CLICKS_PER_METER = 2492.788;
     private final int MM_PER_METER = 1000;
 
-    private final double MIN_EXTENSION = 0.0;
-    private final double MAX_EXTENSION = 1.0;
+    private final double MIN_EXTENSION = 0.5327;
+    private final double MAX_EXTENSION = 0.853;
+
+    private final int MIN_ANGLE = -1700;
+    private final int MAX_ANGLE = 0;
 
     private final double PITCH_POWER_MULTIPIER = 0.8;
 
@@ -61,6 +66,7 @@ public class Intake {
             intakeServo = linearOpMode.hardwareMap.get(Servo.class, "intakeEndEffector");
             extensionServo.scaleRange(0.0, 0.25);
             pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
 
@@ -88,7 +94,8 @@ public class Intake {
 
     private void setTargetAngle(double theta){
         targetAngleDegrees = theta;
-        targetAngle = (int)(targetAngleDegrees * CLICKS_PER_DEGREE);
+        targetAngle = (int)((targetAngleDegrees - PITCH_ZERO) * CLICKS_PER_DEGREE);
+        targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
     }
 
     private void setTargetLength(double cm){
