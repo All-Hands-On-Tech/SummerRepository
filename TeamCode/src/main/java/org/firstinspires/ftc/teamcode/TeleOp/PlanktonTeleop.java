@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
@@ -18,7 +19,7 @@ import java.util.List;
 
 
 @TeleOp(name="Plankton Teleop", group="AAA")
-public class PlanktonTeleop extends RoboMom {
+public class PlanktonTeleop extends LinearOpMode {
 
     private ElapsedTime deliveryTimer = new ElapsedTime();
 
@@ -47,18 +48,18 @@ public class PlanktonTeleop extends RoboMom {
     private List<Action> runningActions = new ArrayList<>();
     @Override
     public void runOpMode() {
-        super.runOpMode();
+        //super.runOpMode();
 
-        drivetrainFunctions = new DrivetrainFunctions(this);
+        //drivetrainFunctions = new DrivetrainFunctions(this);
         intake = new Intake(this);
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
+        //MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
 
         waitForStart();
 
         while (opModeIsActive()){
-            drive.updatePoseEstimate();
-            Pose2d currentPose = drive.pose;
+            //drive.updatePoseEstimate();
+            //Pose2d currentPose = drive.pose;
             TelemetryPacket packet = new TelemetryPacket();
 
             //driver 1
@@ -78,12 +79,12 @@ public class PlanktonTeleop extends RoboMom {
                 float rightY = gamepad1.right_stick_y;
                 if (Math.abs(leftX) > DRIVE_DEADZONE || Math.abs(leftY) > DRIVE_DEADZONE || Math.abs(rightX) > DRIVE_DEADZONE || Math.abs(rightY) > DRIVE_DEADZONE*2) {
                     if(Math.abs(rightY) > DRIVE_DEADZONE*2) {
-                        drivetrainFunctions.Move(leftX, rightY, rightX, speedScalar);
+                        //drivetrainFunctions.Move(leftX, rightY, rightX, speedScalar);
                     }else{
-                        drivetrainFunctions.Move(leftX, leftY, rightX, speedScalar);
+                        //drivetrainFunctions.Move(leftX, leftY, rightX, speedScalar);
                     }
                 } else {
-                    drivetrainFunctions.Stop();
+                    //drivetrainFunctions.Stop();
                 }
             }
 
@@ -98,7 +99,13 @@ public class PlanktonTeleop extends RoboMom {
                     xOffset += leftY/10;
                     yOffset += rightY/10;
                 }
+
             }
+
+            telemetry.addData("Cartesian X:", STORE_X + xOffset);
+            telemetry.addData("Cartesian Y:", STORE_Y + yOffset);
+            telemetry.update();
+
 
             intake.setCartesianTarget(STORE_X + xOffset, STORE_Y + yOffset);
             intake.updateArmPosition();

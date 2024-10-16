@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode.TeleOp;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IntegratingGyroscope;
 import com.qualcomm.robotcore.hardware.Servo;
 
@@ -42,6 +43,8 @@ import org.firstinspires.ftc.teamcode.RoboMom;
 
 
 public class HuyIntakeTest extends LinearOpMode {
+
+    //50,-20
     double deadZone = 0.5;
 
     double MAX_EXTENSION =1;
@@ -58,6 +61,7 @@ public class HuyIntakeTest extends LinearOpMode {
         //super.runOpMode();
 
         pitchMotor = hardwareMap.get(DcMotor.class, "intakePitch");
+        pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         extensionServo = hardwareMap.get(Servo.class, "intakeExtension");
         intakeServo = hardwareMap.get(Servo.class, "intakeEndEffector");
 
@@ -78,11 +82,13 @@ public class HuyIntakeTest extends LinearOpMode {
 
             if (Math.abs(rightY) > deadZone) {
                 extension += rightY/10;
-                extension = Math.max(39.5, Math.min(59, extension));
+                extension = Math.max(41.5, Math.min(58.5, extension));
                 double servoPosition = solveForServoPosition(extension);
+                telemetry.addData("servoPosition:", servoPosition);
                 if(servoPosition == 0){break;}
                 extensionServo.setPosition(servoPosition);
                 telemetry.addData("extension:",extension);
+                telemetry.addData("Ticks:", pitchMotor.getCurrentPosition());
                 telemetry.update();
             }
 
@@ -101,9 +107,9 @@ public class HuyIntakeTest extends LinearOpMode {
     }
 
     public static Double solveForServoPosition(double extension) {
-        double a = -78.26;
-        double b = 43.63;
-        double c = 58.52 - extension;
+        double a = -114.8;
+        double b = 106;
+        double c = 34.61 - extension;
 
         double discriminant = b * b - 4 * a * c;
 
