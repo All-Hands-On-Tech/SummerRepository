@@ -23,7 +23,7 @@ public class Intake {
 
     private LinearOpMode linearOpMode;
 
-    private final double CLICKS_PER_DEGREE = 2.0883333333333/5;
+    private final double CLICKS_PER_DEGREE = 3.5;
     private final double CLICKS_PER_METER = 2492.788;
     private final int MM_PER_METER = 1000;
 
@@ -68,6 +68,7 @@ public class Intake {
             pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
 
         }catch(NullPointerException e){
@@ -88,11 +89,11 @@ public class Intake {
     }
 
     private void updatePolarTarget(){
-        setTargetAngle(Math.atan(targetPositionY/targetPositionX));
+        setTargetAngle(Math.toDegrees(Math.atan(targetPositionY/targetPositionX)));
         setTargetLength(Math.sqrt(Math.pow(targetPositionX, 2) + Math.pow(targetPositionY, 2))); // sqrt( x^2 + y^2  )
     }
 
-    private void setTargetAngle(double theta){
+    public void setTargetAngle(double theta){
         targetAngleDegrees = theta;
         targetAngle = (int)((targetAngleDegrees - PITCH_ZERO) * CLICKS_PER_DEGREE);
         targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
@@ -104,7 +105,7 @@ public class Intake {
         targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
     }
 
-    private void updateAngle(){
+    public void updateAngle(){
         PControlPower();
     }
 
@@ -154,7 +155,7 @@ public class Intake {
         pitchMotor.setPower(power * PITCH_POWER_MULTIPIER);
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
-        linearOpMode.telemetry.update();
+//        linearOpMode.telemetry.update();
     }
 
 }
