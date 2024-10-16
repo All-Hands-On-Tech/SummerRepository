@@ -50,7 +50,7 @@ public class Net extends LinearOpMode {
         trajToPark = drive.actionBuilder(new Pose2d(-62, -55, Math.toRadians(0)))
                 .strafeTo(new Vector2d(-40, -55))
                 .strafeTo(new Vector2d(-40, -10))
-                .strafeTo(new Vector2d(-20, -10))
+                .strafeTo(new Vector2d(-24, -10))
                 .build();
 
         delivery.clawClose();
