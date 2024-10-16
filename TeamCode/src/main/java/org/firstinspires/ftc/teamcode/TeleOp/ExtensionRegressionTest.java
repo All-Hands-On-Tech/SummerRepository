@@ -39,13 +39,13 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 // relating a servo rotation to its subsequent linear extension from a linkage
 
 
-@TeleOp(name="IntakeTest", group="Z")
+@TeleOp(name="Extension Regression points", group="Z")
 
 
 public class ExtensionRegressionTest extends LinearOpMode {
 
-    double MAX_EXTENSION =1;
-    double MIN_EXTENSION = 0;
+    double MAX_EXTENSION = 0.8505;
+    double MIN_EXTENSION = 0.5205;
     double extension = 0;
 
     int dataPoints = 10;
@@ -79,14 +79,60 @@ public class ExtensionRegressionTest extends LinearOpMode {
             //press a to move onto next data point
             //measure extension between each data point and input into scatterplot
             if(gamepad1.a && inputBuffer.seconds() > BUFFER){
+                telemetry.addData("Iteration:", iteration);
+                telemetry.addData("Extension:", extension);
                 iteration++;
                 extension += EXTENSION_ITERATION;
                 extensionServo.setPosition(extension);
                 inputBuffer.reset();
+                telemetry.update();
             }
 
         }
 
         //run sinusoidal regression on scatterplot to get motion profile
     }
+
+    public static Double solveForServoPosition(double extension) {
+        double a = -78.26;
+        double b = 43.63;
+        double c = 58.52 - extension;
+
+        double discriminant = b * b - 4 * a * c;
+
+        if (discriminant < 0) {
+            // No real solutions
+            return null;
+        } else if (discriminant == 0) {
+            // One solution
+            double x = -b / (2 * a);
+            return x >= 0 ? x : null; // Return if it's positive
+        } else {
+            // Two solutions
+            double sqrtDiscriminant = Math.sqrt(discriminant);
+            double x1 = (-b + sqrtDiscriminant) / (2 * a);
+            return x1;
+        }
+    }
+
 }
+
+
+
+// extension, distance
+
+//.05205, 59.5
+//0.5535, 58.75
+//0.5865, 57
+//0.6195, 55.5
+//0.6525, 54
+//0.6855, 51
+//0.7185, 50
+//0.7515, 48
+//0.7845, 43.5
+//0.8175, 41.5
+//0.8505, 39.5
+//0.8835, 39.75
+//0.9165, 38.75
+//0.9495, 36.5
+//0.9825, 36.5

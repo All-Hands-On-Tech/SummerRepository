@@ -77,9 +77,11 @@ public class HuyIntakeTest extends LinearOpMode {
             }
 
             if (Math.abs(rightY) > deadZone) {
-                extension += rightY/1000;
-                extension = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, extension));
-                extensionServo.setPosition(extension);
+                extension += rightY/10;
+                extension = Math.max(39.5, Math.min(59, extension));
+                double servoPosition = solveForServoPosition(extension);
+                if(servoPosition == 0){break;}
+                extensionServo.setPosition(servoPosition);
                 telemetry.addData("extension:",extension);
                 telemetry.update();
             }
@@ -96,5 +98,27 @@ public class HuyIntakeTest extends LinearOpMode {
                 intakeServo.setPosition(0.5);
             }
             }
+    }
+
+    public static Double solveForServoPosition(double extension) {
+        double a = -78.26;
+        double b = 43.63;
+        double c = 58.52 - extension;
+
+        double discriminant = b * b - 4 * a * c;
+
+        if (discriminant < 0) {
+            // No real solutions
+            return 0.0;
+        } else if (discriminant == 0) {
+            // One solution
+            double x = -b / (2 * a);
+            return x >= 0 ? x : null; // Return if it's positive
+        } else {
+            // Two solutions
+            double sqrtDiscriminant = Math.sqrt(discriminant);
+            double x1 = (-b - sqrtDiscriminant) / (2 * a);
+            return x1;
+        }
     }
 }
