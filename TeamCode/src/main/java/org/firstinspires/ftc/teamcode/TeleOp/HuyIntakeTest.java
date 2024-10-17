@@ -69,7 +69,7 @@ public class HuyIntakeTest extends LinearOpMode {
         waitForStart();
 
         while (opModeIsActive()) {
-            /**GAMEPAD 1**/
+            /*GAMEPAD 1*/
 
             double rightY = gamepad1.right_stick_y;
 

@@ -8,11 +8,9 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
-import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
-import org.firstinspires.ftc.teamcode.RoboMom;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,6 +25,7 @@ public class PlanktonTeleop extends LinearOpMode {
 
     Intake intake = null;
 
+    private final double CLICKS_PER_CM = 24.92788;
 
     private final double HOME_X = 50;
     private final double HOME_Y = -20;
@@ -36,6 +35,15 @@ public class PlanktonTeleop extends LinearOpMode {
 
     private double xOffset = 0.0;
     private double yOffset = 0.0;
+
+    private Pose2d initPose = new Pose2d(11.8, 61.7, Math.toRadians(90));
+    private Pose2d prevPoseEstimate = new Pose2d(0,0,0);
+    private Pose2d poseEstimate = new Pose2d(0,0,0);
+
+    private boolean isGlobalTargeting = false;
+    private double prevEncoderX = 0.0;
+    private double encoderX = 0.0;
+    private double deltaX = 0.0;
 
     private boolean controlsRelinquished = false;
     private final double DRIVE_DEADZONE = 0.05;
@@ -48,18 +56,20 @@ public class PlanktonTeleop extends LinearOpMode {
     private List<Action> runningActions = new ArrayList<>();
     @Override
     public void runOpMode() {
-        //super.runOpMode();
 
         //drivetrainFunctions = new DrivetrainFunctions(this);
         intake = new Intake(this);
 
-        //MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
+//        MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
 
         waitForStart();
 
         while (opModeIsActive()){
-            //drive.updatePoseEstimate();
-            //Pose2d currentPose = drive.pose;
+//            drive.updatePoseEstimate();
+//            poseEstimate = drive.pose;
+            encoderX = drivetrainFunctions.getX();
+            deltaX = encoderX - prevEncoderX;
+
             TelemetryPacket packet = new TelemetryPacket();
 
             //driver 1
@@ -102,13 +112,20 @@ public class PlanktonTeleop extends LinearOpMode {
 
             }
 
+
             telemetry.addData("Cartesian X:", STORE_X + xOffset);
             telemetry.addData("Cartesian Y:", STORE_Y + yOffset);
             telemetry.update();
 
+            if(gamepad2.a){
+                isGlobalTargeting = true;
+            }else{
+                isGlobalTargeting = false;
+            }
 
+            if(isGlobalTargeting) intake.inputDeltaX(deltaX);
             intake.setCartesianTarget(STORE_X + xOffset, STORE_Y + yOffset);
-            intake.updateArmPosition();
+            intake.updateArmPosition(isGlobalTargeting);
 
 
 
@@ -125,6 +142,8 @@ public class PlanktonTeleop extends LinearOpMode {
 
             dash.sendTelemetryPacket(packet);
 
+//            prevPoseEstimate = poseEstimate;
+            prevEncoderX = encoderX;
         }
     }
 }

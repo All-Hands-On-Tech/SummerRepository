@@ -1,10 +1,6 @@
 package org.firstinspires.ftc.teamcode;
 
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -24,7 +20,7 @@ public class Intake {
     private LinearOpMode linearOpMode;
 
     private final double CLICKS_PER_DEGREE = 3.5;
-    private final double CLICKS_PER_METER = 2492.788;
+    private final double CLICKS_PER_CM = 24.92788;
     private final int MM_PER_METER = 1000;
 
     private final double MIN_EXTENSION = 0.5327;
@@ -43,10 +39,13 @@ public class Intake {
     private double targetLength;
     private double targetPositionX;
     private double targetPositionY;
+    private double postProcessTargetX;
     private double currentPosition;
 
+    private double robotDeltaX = 0.0;
+    private double globalTargetOffsetX = 0.0;
+
     public final double TICK_STOP_THRESHOLD = 20;
-    public final int BOTTOM_POSITION = (int)(2 / MM_PER_METER * CLICKS_PER_METER); //2mm
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -89,8 +88,8 @@ public class Intake {
     }
 
     private void updatePolarTarget(){
-        setTargetAngle(Math.toDegrees(Math.atan(targetPositionY/targetPositionX)));
-        setTargetLength(Math.sqrt(Math.pow(targetPositionX, 2) + Math.pow(targetPositionY, 2))); // sqrt( x^2 + y^2  )
+        setTargetAngle(Math.toDegrees(Math.atan(targetPositionY/postProcessTargetX)));
+        setTargetLength(Math.sqrt(Math.pow(postProcessTargetX, 2) + Math.pow(targetPositionY, 2))); // sqrt( x^2 + y^2  )
     }
 
     public void setTargetAngle(double theta){
@@ -113,9 +112,20 @@ public class Intake {
         extensionServo.setPosition(targetLength);
     }
 
-    public void updateArmPosition(){
+    public void updateArmPosition(boolean globalTargeting){
+        if(globalTargeting){
+            globalTargetOffsetX += robotDeltaX / CLICKS_PER_CM;
+            postProcessTargetX += globalTargetOffsetX;
+        }else{
+            robotDeltaX = 0.0;
+            postProcessTargetX = targetPositionX;
+        }
         updateAngle();
         updateLength();
+    }
+
+    public void inputDeltaX(double deltaX){
+        this.robotDeltaX = deltaX;
     }
 
     public int getPitchMotorPosition(){ return pitchMotor.getCurrentPosition(); }
