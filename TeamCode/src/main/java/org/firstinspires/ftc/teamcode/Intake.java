@@ -88,7 +88,7 @@ public class Intake {
     }
 
     private void updatePolarTarget(){
-        setTargetAngle(Math.toDegrees(Math.atan(targetPositionY/postProcessTargetX)));
+        setTargetAngle(Math.toDegrees(Math.atan2(targetPositionY/postProcessTargetX)));
         setTargetLength(Math.sqrt(Math.pow(postProcessTargetX, 2) + Math.pow(targetPositionY, 2))); // sqrt( x^2 + y^2  )
     }
 
@@ -118,10 +118,19 @@ public class Intake {
             postProcessTargetX += globalTargetOffsetX;
         }else{
             robotDeltaX = 0.0;
-            postProcessTargetX = targetPositionX;
+            postProcessTargetX = targetPositionX; //FIXME: Determine whether or not to keep this line
+            /*
+
+            If this line is removed the target position will not return to the inputted relative position, it will stay wherever the global targeting process has left it.
+
+            */
         }
         updateAngle();
         updateLength();
+    }
+
+    public void resetGlobalOffset(){
+        postProcessTargetX = targetPositionX;
     }
 
     public void inputDeltaX(double deltaX){
