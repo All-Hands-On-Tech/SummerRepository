@@ -119,6 +119,10 @@ public class DrivetrainFunctions {
         }
     }
 
+    public double getX(){
+        return (leftFrontDrive.getCurrentPosition() + leftBackDrive.getCurrentPosition())/2.0;
+    }
+
     /**
      * This code drives the robot relative to the robot itself
      * @param  x  joy stick y

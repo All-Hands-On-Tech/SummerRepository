@@ -57,7 +57,7 @@ public class PlanktonTeleop extends LinearOpMode {
     @Override
     public void runOpMode() {
 
-        //drivetrainFunctions = new DrivetrainFunctions(this);
+//        drivetrainFunctions = new DrivetrainFunctions(this);
         intake = new Intake(this);
 
 //        MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
@@ -67,7 +67,7 @@ public class PlanktonTeleop extends LinearOpMode {
         while (opModeIsActive()){
 //            drive.updatePoseEstimate();
 //            poseEstimate = drive.pose;
-            encoderX = drivetrainFunctions.getX();
+//            encoderX = drivetrainFunctions.getX();
             deltaX = encoderX - prevEncoderX;
 
             TelemetryPacket packet = new TelemetryPacket();
