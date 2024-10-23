@@ -19,7 +19,7 @@ public class Intake {
 
     private LinearOpMode linearOpMode;
 
-    private final double CLICKS_PER_DEGREE = 3.5;
+    public final double CLICKS_PER_DEGREE = 3.5;
     private final double CLICKS_PER_CM = 24.92788;
     private final int MM_PER_METER = 1000;
 
@@ -87,9 +87,18 @@ public class Intake {
         updatePolarTarget();
     }
 
+    public double getCartesianTargetXFromPolar(){
+        return targetLength * Math.cos(targetAngleDegrees);
+    }
+    public double getCartesianTargetYFromPolar(){
+        return targetLength * Math.sin(targetAngleDegrees);
+    }
+
     private void updatePolarTarget(){
-        setTargetAngle(Math.toDegrees(Math.atan2(targetPositionY/postProcessTargetX)));
+        setTargetAngle(Math.toDegrees(Math.atan2(targetPositionY, postProcessTargetX)));
         setTargetLength(Math.sqrt(Math.pow(postProcessTargetX, 2) + Math.pow(targetPositionY, 2))); // sqrt( x^2 + y^2  )
+        linearOpMode.telemetry.addData("Target length: ",targetLength);
+        linearOpMode.telemetry.addData("Target angle: ",targetAngleDegrees);
     }
 
     public void setTargetAngle(double theta){
@@ -98,7 +107,7 @@ public class Intake {
         targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
     }
 
-    private void setTargetLength(double cm){
+    public void setTargetLength(double cm){
         targetLengthCM = cm;
         targetLength = CMToServoExtenderPosition(targetLengthCM);
         targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
@@ -141,6 +150,15 @@ public class Intake {
 
     public double getTargetAngle(){
         return targetAngleDegrees;
+    }
+
+    private static Double XYToTheta(double y, double x){    //Domain: all reals Range: -pi/2 to 3pi/2
+        if(x>=0) {
+            return Math.atan(y / x);
+        }
+        else {
+            return Math.atan(y / x) + Math.PI;
+        }
     }
 
     private static Double CMToServoExtenderPosition(double extension) {
