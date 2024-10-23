@@ -19,6 +19,7 @@ public class MeepMeepTesting {
                 .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
                 .build();
 
+        //Meet 0 - Observation Zone
 //        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(25, -62, Math.toRadians(90)))
 //                .strafeTo(new Vector2d(10, -34))
 //                //score specimen
@@ -34,19 +35,35 @@ public class MeepMeepTesting {
 //                .strafeTo(new Vector2d(62, -62))
 //                .build());
 
-        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(-14, -62, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-10, -34))
-//               //score specimen
-                .strafeTo(new Vector2d(-26, -40))
-                .setTangent(110)
-                .splineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)), Math.toRadians(-120))
-                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(45)), Math.toRadians(225))
-                .strafeTo(new Vector2d( -40, -27))
-                .splineToLinearHeading(new Pose2d(-57.00, -14, Math.toRadians(90)), Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(60)), Math.toRadians(240))
-                .strafeTo(new Vector2d( -50, -27))
-                .splineToLinearHeading(new Pose2d(-62.00, -24, Math.toRadians(0)), Math.toRadians(180))
-                .strafeTo(new Vector2d(-62, -55))
+        //Meet 0 - Net Zone
+//        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(-14, -62, Math.toRadians(90)))
+//                .strafeTo(new Vector2d(-10, -34))
+////               //score specimen
+//                .strafeTo(new Vector2d(-26, -40))
+//                .setTangent(110)
+//                .splineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)), Math.toRadians(-120))
+//                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(45)), Math.toRadians(225))
+//                .strafeTo(new Vector2d( -40, -27))
+//                .splineToLinearHeading(new Pose2d(-57.00, -14, Math.toRadians(90)), Math.toRadians(-90))
+//                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(60)), Math.toRadians(240))
+//                .strafeTo(new Vector2d( -50, -27))
+//                .splineToLinearHeading(new Pose2d(-62.00, -24, Math.toRadians(0)), Math.toRadians(180))
+//                .strafeTo(new Vector2d(-62, -55))
+//                .build());
+
+        //Meet 1 - Observation Zone
+        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(15.2, -62, Math.toRadians(90)))
+                .strafeTo(new Vector2d(7, -34))
+                //score specimin
+                .strafeTo(new Vector2d(25, -40))
+                .setTangent(Math.toRadians(0))
+                .splineToSplineHeading(new Pose2d(36, -15,Math.toRadians(90)), Math.toRadians(90))
+                .setTangent(Math.toRadians(30))
+                .splineToLinearHeading(new Pose2d(44, -58, Math.toRadians(90)), Math.toRadians(-90))
+                .setTangent(Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(42, -12, Math.toRadians(180)), Math.toRadians(90))
+                .setTangent(Math.toRadians(0))
+                .splineTo(new Vector2d(55, -58), Math.toRadians(-90))
                 .build());
 
 
