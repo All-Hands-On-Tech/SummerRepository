@@ -115,6 +115,7 @@ public class Delivery {
         linearOpMode.telemetry.update();
     }
 
+    public double getClawPosition() {return claw.getPosition();}
     public void setClawPosition(double p){ // 0-1
         claw.setPosition(p);
     }
