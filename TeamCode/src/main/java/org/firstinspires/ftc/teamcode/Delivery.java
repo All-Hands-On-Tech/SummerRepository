@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode;
 
-import android.graphics.Color;
-
 import androidx.annotation.NonNull;
 
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
@@ -9,14 +7,8 @@ import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DistanceSensor;
-import com.qualcomm.robotcore.hardware.NormalizedColorSensor;
-import com.qualcomm.robotcore.hardware.NormalizedRGBA;
 import com.qualcomm.robotcore.hardware.Servo;
 import com.qualcomm.robotcore.util.ElapsedTime;
-
-import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
-import org.firstinspires.ftc.teamcode.Autonomous.BasicAuto;
 
 @Disabled
 public class Delivery {
@@ -132,6 +124,20 @@ public class Delivery {
     public void clawClose(){
         setClawPosition(1);
     }
+
+    /**clawToTarget moves the claw to a specfic hieght with a given power
+     * High Rung = 4000 ticks |
+     * Score On High Rung = 3100 ticks |
+     * Collect Specimin From Wall = 2000 ticks? |
+     * Ground = 0 ticks
+     * @param targetHieghtInTicks
+     */
+    public void clawToTarget(int targetHieghtInTicks, double power) {
+        setSlidesTargetPosition(targetHieghtInTicks);
+        while (Math.abs(getMotorTargetPosition() - getMotorPosition()) > 20) {
+            PControlPower(power);
+        }
+    }
 /*
 
     public void Lift(int ticksFromOutsideChassis){
@@ -226,21 +232,26 @@ public class Delivery {
     }
     */
 
-    public class ScoreOnBar implements Action {
+    /*FIXME: Verify if this works*/
+    public class SlideToHeightRR implements Action {
         private boolean initialized = false;
-        private double initPos = 0;
+        private int targetHeight;
+
+        public SlideToHeightRR(int TargetHeight) {
+            targetHeight = TargetHeight;
+        }
 
         @Override
         public boolean run(@NonNull TelemetryPacket packet) {
             if (!initialized) {
-                initPos = slide.getCurrentPosition();
-                slide.setPower(-0.7);
+                setSlidesTargetPosition(targetHeight);
                 initialized = true;
             }
 
             double pos = slide.getCurrentPosition();
             packet.put("liftPos", pos);
-            if (pos > initPos - 500 /*FIXME: Verify if this works*/) {
+            if (Math.abs(pos - targetHeight) > 20) {
+                PControlPower(2);
                 return true;
             } else {
                 setSlidesPower(0);
@@ -248,7 +259,7 @@ public class Delivery {
             }
         }
     }
-    public Action ScoreOnBar() {
-        return new Delivery.ScoreOnBar();
+    public Action SlideToHeightAction(int heightInTicks) {
+        return new Delivery.SlideToHeightRR(heightInTicks);
     }
 }
