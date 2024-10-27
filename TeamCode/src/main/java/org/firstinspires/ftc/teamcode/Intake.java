@@ -101,6 +101,10 @@ public class Intake {
         linearOpMode.telemetry.addData("Target angle: ",targetAngleDegrees);
     }
 
+    public void setEndEffectorSpeed(float speed){
+        intakeServo.setPosition(speed);
+    }
+
     public void setTargetAngle(double theta){
         targetAngleDegrees = theta;
         targetAngle = (int)((targetAngleDegrees - PITCH_ZERO) * CLICKS_PER_DEGREE);
@@ -113,11 +117,16 @@ public class Intake {
         targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
     }
 
+    public void incrementTargetAngleTicks(int ticks){
+        targetAngle += ticks;
+        targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
+    }
+
     public void updateAngle(){
         PControlPower();
     }
 
-    private void updateLength(){
+    public void updateLength(){
         extensionServo.setPosition(targetLength);
     }
 

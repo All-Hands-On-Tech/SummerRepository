@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
+import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
@@ -22,6 +23,7 @@ public class MrKrabsTeleOp extends RoboMom {
     private ElapsedTime deliveryTimer = new ElapsedTime();
 
     DrivetrainFunctions drivetrainFunctions = null;
+    Intake intake = null;
     Delivery delivery = null;
     public enum DeliveryState{
         DELIVERY_START,
@@ -32,6 +34,10 @@ public class MrKrabsTeleOp extends RoboMom {
     private int slidePosition = 0;
 
     private int targetPosition = 0;
+
+    private int targetPitch = 0;
+    private double extension = 0;
+    private int PITCH_INCREMENT = 1;
 
     private boolean controlsRelinquished = false;
     private final double DRIVE_DEADZONE = 0.05;
@@ -49,6 +55,8 @@ public class MrKrabsTeleOp extends RoboMom {
         delivery = new Delivery(this, false);
 
         drivetrainFunctions = new DrivetrainFunctions(this);
+
+        intake = new Intake(this);
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
 
@@ -192,10 +200,39 @@ public class MrKrabsTeleOp extends RoboMom {
                 }
             }
 
+            if (Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE || Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE) {
+                if(gamepad2.right_stick_y > 0){
+                    intake.incrementTargetAngleTicks(PITCH_INCREMENT);
+                } else if(gamepad2.right_stick_y < 0){
+                    intake.incrementTargetAngleTicks(-PITCH_INCREMENT);
+                }
+            }
+
+            float rightTrigger = gamepad2.right_trigger;
+            float leftTrigger = gamepad2.left_trigger;
+            if(rightTrigger > 0){
+                extension += rightTrigger/10;
+                extension = Math.max(41.5, Math.min(58.5, extension));
+                intake.setTargetLength(extension);
+            } else if(leftTrigger > 0){
+                extension -= leftTrigger/10;
+                extension = Math.max(41.5, Math.min(58.5, extension));
+                intake.setTargetLength(extension);
+            }
+
+            intake.updateAngle();
+            intake.updateLength();
+
             if(gamepad2.right_bumper){
                 delivery.clawClose();
             }else{
                 delivery.clawOpen();
+            }
+
+            if(gamepad2.left_bumper){
+                intake.setEndEffectorSpeed(1);
+            }else{
+                intake.setEndEffectorSpeed(0);
             }
 
             targetPosition = Math.max(delivery.BOTTOM_POSITION, Math.min(delivery.TOP_POSITION, targetPosition));
