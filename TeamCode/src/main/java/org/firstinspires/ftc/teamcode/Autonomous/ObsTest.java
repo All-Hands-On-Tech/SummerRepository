@@ -9,17 +9,20 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Delivery;
+import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
-@Autonomous(name = "Obs Test", group = "Testing")
+@Autonomous(name = "Obs Meet1", group = "Testing")
 public class ObsTest extends LinearOpMode {
     Delivery delivery = null;
+    Intake intake = null;
 
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15.2, -62, Math.toRadians(90)));
         delivery = new Delivery(this, false);
+        intake = new Intake(this);
 
         delivery.clawClose();
 
@@ -53,7 +56,7 @@ public class ObsTest extends LinearOpMode {
                 .splineTo(new Vector2d(36, -49), Math.toRadians(-90))
                 .build();
 
-        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(55, -58, Math.toRadians(-90)))
+        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(36, -49, Math.toRadians(-90)))
                 //Scores a second specimin
                 /*sleep*/
                 .strafeTo(new Vector2d(36, -55))
@@ -89,38 +92,39 @@ public class ObsTest extends LinearOpMode {
                 .splineTo(new Vector2d(40, -57), Math.toRadians(-45))
                 .build();
 
-        delivery.clawToTarget(4000, 2);
         waitForStart();
+        delivery.clawToTarget(2000, 2);
 
         //This code scores preloaded specimin
         Actions.runBlocking(trajToScoreFirstSample);
-        delivery.clawToTarget(3100, 3);
+        delivery.clawToTarget(1650, 3);
         delivery.clawOpen();
 
         //This code brings two samples to the Obersvation Zone
         Actions.runBlocking(trajToCollectSamples);
-        delivery.clawToTarget(2000, 2);
+        delivery.clawToTarget(1000, 2);
+        sleep(1000);
 
         //This code collects and scores a second specimin
         Actions.runBlocking(trajToCollectSecondSample);
         delivery.clawClose();
         sleep(500);
-        delivery.clawToTarget(4000, 2);
+        delivery.clawToTarget(2000, 2);
 
         Actions.runBlocking(trajToScoreSecondSample);
-        delivery.clawToTarget(3100, 3);
+        delivery.clawToTarget(1650, 3);
         delivery.clawOpen();
 
         //This code collects and scores the third specimin
 //        Actions.runBlocking(trajToCollectThirdSample1);
-//        delivery.clawToTarget(2000, 2);
+//        delivery.clawToTarget(1000, 2);
 //
 //        Actions.runBlocking(trajToCollectThirdSample2);
 //        delivery.clawClose();
 //        sleep(500);
 //
 //        Actions.runBlocking(trajToScoreSecondSample);
-//        delivery.clawToTarget(3100, 3);
+//        delivery.clawToTarget(1650, 3);
 //        delivery.clawOpen();
 
         //This code parks
