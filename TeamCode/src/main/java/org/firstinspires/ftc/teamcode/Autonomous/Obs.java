@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
-@Autonomous(name = "Obs", group = "Autonomous")
+@Autonomous(name = "Obs Meet0", group = "Autonomous")
 public class Obs extends LinearOpMode {
     Delivery delivery = null;
 

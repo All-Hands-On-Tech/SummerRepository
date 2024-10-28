@@ -126,13 +126,6 @@ public class Delivery {
         setClawPosition(1);
     }
 
-    /**clawToTarget moves the claw to a specfic hieght with a given power
-     * High Rung = 4000 ticks |
-     * Score On High Rung = 3100 ticks |
-     * Collect Specimin From Wall = 2000 ticks? |
-     * Ground = 0 ticks
-     * @param targetHieghtInTicks
-     */
     public void clawToTarget(int targetHieghtInTicks, double power) {
         setSlidesTargetPosition(targetHieghtInTicks);
         while (Math.abs(getMotorTargetPosition() - getMotorPosition()) > 20) {
