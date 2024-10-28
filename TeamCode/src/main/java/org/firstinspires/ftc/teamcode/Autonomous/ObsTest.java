@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -59,10 +61,10 @@ public class ObsTest extends LinearOpMode {
         trajToCollectSecondSample = drive.actionBuilder(new Pose2d(36, -49, Math.toRadians(-90)))
                 //Scores a second specimin
                 /*sleep*/
-                .strafeTo(new Vector2d(36, -55))
+                .strafeTo(new Vector2d(36, -60))
                 .build();
 
-        trajToScoreSecondSample = drive.actionBuilder(new Pose2d(36, -55, Math.toRadians(-90)))
+        trajToScoreSecondSample = drive.actionBuilder(new Pose2d(36, -60, Math.toRadians(-90)))
                 /*grab specimin*/
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(6, -34, Math.toRadians(90)), Math.toRadians(90))
@@ -76,11 +78,11 @@ public class ObsTest extends LinearOpMode {
                 .build();
 
         trajToCollectThirdSample2 = drive.actionBuilder(new Pose2d(36, -49, Math.toRadians(-90)))
-                .strafeTo(new Vector2d(36, -55))
+                .strafeTo(new Vector2d(36, -60))
                 .build();
                 /*grab specimin*/
 
-        trajToScoreThirdSample = drive.actionBuilder(new Pose2d(36, -55, Math.toRadians(-90)))
+        trajToScoreThirdSample = drive.actionBuilder(new Pose2d(36, -60, Math.toRadians(-90)))
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(6, -34,Math.toRadians(90)), Math.toRadians(90))
                 /*score specimin*/
@@ -93,43 +95,77 @@ public class ObsTest extends LinearOpMode {
                 .build();
 
         waitForStart();
-        delivery.clawToTarget(2000, 2);
 
-        //This code scores preloaded specimin
-        Actions.runBlocking(trajToScoreFirstSample);
+        //This code scores preloaded specimen
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToScoreFirstSample,
+                        delivery.SlideToHeightAction(2000)
+                )
+        );
         delivery.clawToTarget(1650, 3);
         delivery.clawOpen();
 
+
         //This code brings two samples to the Obersvation Zone
-        Actions.runBlocking(trajToCollectSamples);
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToCollectSamples,
+                        delivery.SlideToHeightAction(0)
+                )
+        );
+
+
+        //This code collects the second specimen
         delivery.clawToTarget(1000, 2);
         sleep(1000);
-
-        //This code collects and scores a second specimin
         Actions.runBlocking(trajToCollectSecondSample);
         delivery.clawClose();
         sleep(500);
-        delivery.clawToTarget(2000, 2);
 
-        Actions.runBlocking(trajToScoreSecondSample);
+        //This code scores the second specimen
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToScoreSecondSample,
+                        delivery.SlideToHeightAction(2000)
+                )
+        );
         delivery.clawToTarget(1650, 3);
         delivery.clawOpen();
+        sleep(500);
 
-        //This code collects and scores the third specimin
-//        Actions.runBlocking(trajToCollectThirdSample1);
+        //Cut for time, add if there is time remaining
+//        //This code collects the third specimen
+//        Actions.runBlocking(
+//                new SequentialAction(
+//                        trajToCollectThirdSample1,
+//                        delivery.SlideToHeightAction(0)
+//                )
+//        );
 //        delivery.clawToTarget(1000, 2);
-//
 //        Actions.runBlocking(trajToCollectThirdSample2);
 //        delivery.clawClose();
 //        sleep(500);
 //
-//        Actions.runBlocking(trajToScoreSecondSample);
+//        //This code scores the third specimen
+//        Actions.runBlocking(
+//                new ParallelAction(
+//                        trajToScoreThirdSample,
+//                        delivery.SlideToHeightAction(2000)
+//                )
+//        );
 //        delivery.clawToTarget(1650, 3);
 //        delivery.clawOpen();
+//        sleep(500);
+
 
         //This code parks
-        Actions.runBlocking(trajToPark);
-        delivery.clawToTarget(0, 2);
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToPark,
+                        delivery.SlideToHeightAction(0)
+                )
+        );
 
         if (isStopRequested()) return;
 

@@ -16,7 +16,7 @@ public class MeepMeepTesting {
                 // We set this bot to be red
                 //bot is 18x18 box
                 .setColorScheme(new ColorSchemeRedDark())
-                .setConstraints(30, 60, Math.toRadians(180), Math.toRadians(180), 15)
+                .setConstraints(50, 50, Math.PI, Math.PI, 18)
                 .build();
 
         //Meet 0 - Observation Zone
@@ -72,7 +72,7 @@ public class MeepMeepTesting {
                 .setTangent(Math.toRadians(90))
                 .splineTo(new Vector2d(36, -49), Math.toRadians(-90))
                 /*sleep*/
-                .strafeTo(new Vector2d(36, -55))
+                .strafeTo(new Vector2d(36, -60))
                 /*grab specimin*/
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(6, -34, Math.toRadians(90)), Math.toRadians(90))
@@ -82,7 +82,7 @@ public class MeepMeepTesting {
 //                .strafeTo(new Vector2d(10, -40))
 //                .splineToLinearHeading(new Pose2d(36, -49, Math.toRadians(-90)), Math.toRadians(-90))
 //                /*sleep*/
-//                .strafeTo(new Vector2d(36, -55))
+//                .strafeTo(new Vector2d(36, -60))
 //                /*grab specimin*/
 //                .setTangent(Math.toRadians(90))
 //                .splineToLinearHeading(new Pose2d(6, -34,Math.toRadians(90)), Math.toRadians(90))
