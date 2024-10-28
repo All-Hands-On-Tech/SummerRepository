@@ -63,11 +63,12 @@ public class Intake {
             pitchMotor = linearOpMode.hardwareMap.get(DcMotor.class, "intakePitch");
             extensionServo = linearOpMode.hardwareMap.get(Servo.class, "intakeExtension");
             intakeServo = linearOpMode.hardwareMap.get(Servo.class, "intakeEndEffector");
-            extensionServo.scaleRange(0.0, 0.25);
+            extensionServo.scaleRange(0.0, 1.0);
             pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 //            pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+
 
 
         }catch(NullPointerException e){
@@ -119,7 +120,7 @@ public class Intake {
 
     public void setTargetLengthServo(double pos){
         targetLength = pos;
-        targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
+//        targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
     }
 
     public void incrementTargetAngleTicks(int ticks){
@@ -129,10 +130,12 @@ public class Intake {
 
     public void updateAngle(){
         PControlPower();
+        linearOpMode.telemetry.addData("Intake Pitch: ", targetAngle);
     }
 
     public void updateLength(){
         extensionServo.setPosition(targetLength);
+        linearOpMode.telemetry.addData("Intake Length: ", targetLength);
     }
 
     public void updateArmPosition(boolean globalTargeting){
