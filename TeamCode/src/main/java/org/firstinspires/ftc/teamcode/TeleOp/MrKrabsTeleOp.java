@@ -36,7 +36,7 @@ public class MrKrabsTeleOp extends RoboMom {
     private int targetPosition = 0;
 
     private int targetPitch = 0;
-    private double extension = 0;
+    private double extension = 0.25;
     private int PITCH_INCREMENT = 10;
 
     private boolean controlsRelinquished = false;
@@ -190,33 +190,41 @@ public class MrKrabsTeleOp extends RoboMom {
             dash.sendTelemetryPacket(packet);
 
             //MANUAL
-            if (Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE || Math.abs(gamepad2.left_stick_y) >= DRIVE_DEADZONE) {
+            if (Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE) {
                 deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_START;
 
                 if (slidePosition > delivery.LOW_POSITION) {
-                    targetPosition -= gamepad2.left_stick_y * 35;
+                    targetPosition -= gamepad2.right_stick_y * 35;
                 } else {
-                    targetPosition -= gamepad2.left_stick_y * 25;
+                    targetPosition -= gamepad2.right_stick_y * 25;
                 }
             }
 
-            if (Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE || Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE) {
-                if(gamepad2.right_stick_y > 0){
-                    intake.incrementTargetAngleTicks(PITCH_INCREMENT);
-                } else if(gamepad2.right_stick_y < 0){
+            if (Math.abs(gamepad2.left_stick_y) >= DRIVE_DEADZONE) {
+                if(gamepad2.left_stick_y > 0){
                     intake.incrementTargetAngleTicks(-PITCH_INCREMENT);
+                } else if(gamepad2.left_stick_y < 0){
+                    intake.incrementTargetAngleTicks(+PITCH_INCREMENT);
                 }
+            }
+
+            if(gamepad2.dpad_left){
+                intake.setTargetAngleTicks(0);
+            }
+
+            if(gamepad2.dpad_right){
+                intake.setTargetAngleTicks(750);
             }
 
             float rightTrigger = gamepad2.right_trigger;
             float leftTrigger = gamepad2.left_trigger;
             if(rightTrigger > 0){
-                extension += rightTrigger/100;
-//                extension = Math.max(41.5, Math.min(58.5, extension));
+                extension -= rightTrigger/100;
+                extension = Math.max(0.01, Math.min(0.25, extension));
                 intake.setTargetLengthServo(extension);
             } else if(leftTrigger > 0){
-                extension -= leftTrigger/100;
-//                extension = Math.max(41.5, Math.min(58.5, extension));
+                extension += leftTrigger/100;
+                extension = Math.max(0.01, Math.min(0.25, extension));
                 intake.setTargetLengthServo(extension);
             }
 
