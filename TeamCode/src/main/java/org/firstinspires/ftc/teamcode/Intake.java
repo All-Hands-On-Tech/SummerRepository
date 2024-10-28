@@ -96,7 +96,7 @@ public class Intake {
     }
 
     private void updatePolarTarget(){
-        setTargetAngle(Math.toDegrees(Math.atan2(targetPositionY, postProcessTargetX)));
+        setTargetAngle(Math.toDegrees(XYToTheta(targetPositionY, postProcessTargetX)));
         setTargetLength(Math.sqrt(Math.pow(postProcessTargetX, 2) + Math.pow(targetPositionY, 2))); // sqrt( x^2 + y^2  )
         linearOpMode.telemetry.addData("Target length: ",targetLength);
         linearOpMode.telemetry.addData("Target angle: ",targetAngleDegrees);
