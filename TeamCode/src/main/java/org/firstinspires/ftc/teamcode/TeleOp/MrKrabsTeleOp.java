@@ -102,19 +102,19 @@ public class MrKrabsTeleOp extends RoboMom {
                 case DELIVERY_START:
                     if (gamepad2.a) {
                         deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;
-                        targetPosition = 1470;//Intake from observation wall;
+                        targetPosition = 1470;//Intake from observation wall; FIXME: VALUE IS WRONG
                     }
                     if (gamepad2.x) {
-                        deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;
-                        targetPosition = 4120;//hook onto high bar
+//                        deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;
+//                        targetPosition = 4120;//hook onto high bar
                     }
                     if (gamepad2.y) {
-                        deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;
-                        targetPosition = 300;//SET_3_HEIGHT;
+//                        deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_LIFT;
+//                        targetPosition = 300;//SET_3_HEIGHT;
                     }
                     if (gamepad2.b) {
-                        deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_RETRACT;
-                        deliveryTimer.reset();
+//                        deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_RETRACT;
+//                        deliveryTimer.reset();
                     }
 
 //                    if (gamepad2.right_bumper && !dumped && deliveryFunctions.getMotorPositionByIndex(0) > deliveryFunctions.CARRIAGE_OUTSIDE_CHASSIS) {
@@ -229,10 +229,12 @@ public class MrKrabsTeleOp extends RoboMom {
                 delivery.clawOpen();
             }
 
-            if(gamepad2.left_bumper){
-                intake.setEndEffectorSpeed(1);
+            if(gamepad2.x){
+                intake.setEndEffectorSpeed(0);//in
+            }else if(gamepad2.b){
+                intake.setEndEffectorSpeed(1);//out
             }else{
-                intake.setEndEffectorSpeed(0);
+                intake.setEndEffectorSpeed(0.5f);//stop
             }
 
             targetPosition = Math.max(delivery.BOTTOM_POSITION, Math.min(delivery.TOP_POSITION, targetPosition));

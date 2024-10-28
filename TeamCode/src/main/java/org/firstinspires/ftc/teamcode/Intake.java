@@ -23,8 +23,8 @@ public class Intake {
     private final double CLICKS_PER_CM = 24.92788;
     private final int MM_PER_METER = 1000;
 
-    private final double MIN_EXTENSION = 0.5327;
-    private final double MAX_EXTENSION = 0.853;
+    private final double MIN_EXTENSION = 0.01;
+    private final double MAX_EXTENSION = 0.3;
 
     private final int MIN_ANGLE = -1700;
     private final int MAX_ANGLE = 0;
@@ -120,7 +120,7 @@ public class Intake {
 
     public void setTargetLengthServo(double pos){
         targetLength = pos;
-//        targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
+        targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
     }
 
     public void incrementTargetAngleTicks(int ticks){
