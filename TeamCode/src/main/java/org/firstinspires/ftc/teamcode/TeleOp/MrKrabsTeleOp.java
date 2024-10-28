@@ -37,7 +37,7 @@ public class MrKrabsTeleOp extends RoboMom {
 
     private int targetPitch = 0;
     private double extension = 0;
-    private int PITCH_INCREMENT = 1;
+    private int PITCH_INCREMENT = 10;
 
     private boolean controlsRelinquished = false;
     private final double DRIVE_DEADZONE = 0.05;
@@ -211,13 +211,13 @@ public class MrKrabsTeleOp extends RoboMom {
             float rightTrigger = gamepad2.right_trigger;
             float leftTrigger = gamepad2.left_trigger;
             if(rightTrigger > 0){
-                extension += rightTrigger/10;
-                extension = Math.max(41.5, Math.min(58.5, extension));
-                intake.setTargetLength(extension);
+                extension += rightTrigger/100;
+//                extension = Math.max(41.5, Math.min(58.5, extension));
+                intake.setTargetLengthServo(extension);
             } else if(leftTrigger > 0){
-                extension -= leftTrigger/10;
-                extension = Math.max(41.5, Math.min(58.5, extension));
-                intake.setTargetLength(extension);
+                extension -= leftTrigger/100;
+//                extension = Math.max(41.5, Math.min(58.5, extension));
+                intake.setTargetLengthServo(extension);
             }
 
             intake.updateAngle();

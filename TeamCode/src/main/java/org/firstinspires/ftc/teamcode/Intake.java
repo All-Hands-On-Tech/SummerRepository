@@ -65,7 +65,7 @@ public class Intake {
             intakeServo = linearOpMode.hardwareMap.get(Servo.class, "intakeEndEffector");
             extensionServo.scaleRange(0.0, 0.25);
             pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
+//            pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
             pitchMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             pitchMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -114,6 +114,11 @@ public class Intake {
     public void setTargetLength(double cm){
         targetLengthCM = cm;
         targetLength = CMToServoExtenderPosition(targetLengthCM);
+        targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
+    }
+
+    public void setTargetLengthServo(double pos){
+        targetLength = pos;
         targetLength = Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, targetLength));
     }
 
