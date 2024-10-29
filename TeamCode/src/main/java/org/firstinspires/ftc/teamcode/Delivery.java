@@ -18,6 +18,7 @@ public class Delivery {
 
     private LinearOpMode linearOpMode;
 
+    private double currentSlidePower = 0;
     private double slidePowerMultiplier = 0.8;
     private double CLICKS_PER_METER = 2492.788;
     private double CLICKS_PER_INCH = 63.317;
@@ -85,7 +86,10 @@ public class Delivery {
     }
 
     public void setSlidesPower(double power){
-        slide.setPower(power);
+        if (Math.abs(power-currentSlidePower) > 0.03 || (power == 0 && currentSlidePower != 0)) {
+            currentSlidePower = power;
+            slide.setPower(currentSlidePower);
+        }
     }
 
     public int getMotorPosition(){ return slide.getCurrentPosition(); }
@@ -109,7 +113,7 @@ public class Delivery {
 
         power = Math.max(0, Math.min(1, power));
 
-        slide.setPower(power * slidePowerMultiplier * powerMultiplier);
+        setSlidesPower(power * slidePowerMultiplier * powerMultiplier);
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
         linearOpMode.telemetry.update();
@@ -131,6 +135,7 @@ public class Delivery {
         while (Math.abs(getMotorTargetPosition() - getMotorPosition()) > 20) {
             PControlPower(power);
         }
+        setSlidesPower(0);
     }
 /*
 
