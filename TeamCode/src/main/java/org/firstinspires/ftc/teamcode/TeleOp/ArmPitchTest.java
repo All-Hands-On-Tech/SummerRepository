@@ -32,6 +32,9 @@ public class ArmPitchTest extends LinearOpMode {
             telemetry.addLine();
             telemetry.addData("L:", 30);
             telemetry.addData("theta:", intake.getTargetAngle());
+            telemetry.addLine();
+            telemetry.addLine();
+            telemetry.addData("Pitch Ticks:", intake.getPitchMotorPosition());
 
             telemetry.update();
 

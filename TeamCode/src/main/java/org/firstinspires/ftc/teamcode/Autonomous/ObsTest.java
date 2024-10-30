@@ -35,6 +35,10 @@ public class ObsTest extends LinearOpMode {
         Action trajToScoreThirdSample;
         Action trajToPark;
 
+        private void pitchIntakeUp(){
+            intake.setTargetAngle();
+        }
+
         trajToScoreFirstSample = drive.actionBuilder(drive.pose)
                 //Scores pre set specimin
                 .strafeTo(new Vector2d(7, -34))
