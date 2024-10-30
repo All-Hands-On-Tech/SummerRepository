@@ -219,11 +219,11 @@ public class MrKrabsTeleOp extends RoboMom {
             float rightTrigger = gamepad2.right_trigger;
             float leftTrigger = gamepad2.left_trigger;
             if(rightTrigger > 0){
-                extension -= rightTrigger/100;
+                extension += rightTrigger/100;
                 extension = Math.max(0.01, Math.min(0.25, extension));
                 intake.setTargetLengthServo(extension);
             } else if(leftTrigger > 0){
-                extension += leftTrigger/100;
+                extension -= leftTrigger/100;
                 extension = Math.max(0.01, Math.min(0.25, extension));
                 intake.setTargetLengthServo(extension);
             }

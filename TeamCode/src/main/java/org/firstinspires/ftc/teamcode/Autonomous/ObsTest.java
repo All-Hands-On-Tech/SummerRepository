@@ -41,11 +41,11 @@ public class ObsTest extends LinearOpMode {
 
         trajToScoreFirstSample = drive.actionBuilder(drive.pose)
                 //Scores pre set specimin
-                .strafeTo(new Vector2d(7, -33.5))
+                .strafeTo(new Vector2d(7, -33))
                 /*score specimin*/
                 .build();
 
-        trajToCollectSamples = drive.actionBuilder(new Pose2d(7, -33.5, Math.toRadians(90)))
+        trajToCollectSamples = drive.actionBuilder(new Pose2d(7, -33, Math.toRadians(90)))
                 //Brings two samples to observation zone
                 .strafeTo(new Vector2d(25, -40))
                 .setTangent(Math.toRadians(0))
@@ -63,13 +63,13 @@ public class ObsTest extends LinearOpMode {
         trajToCollectSecondSample = drive.actionBuilder(new Pose2d(36, -49, Math.toRadians(-90)))
                 //Scores a second specimin
                 /*sleep*/
-                .strafeTo(new Vector2d(36, -60))
+                .strafeTo(new Vector2d(36, -60.5))
                 .build();
 
         trajToScoreSecondSample = drive.actionBuilder(new Pose2d(36, -60, Math.toRadians(-90)))
                 /*grab specimin*/
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(6, -34, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(0, -34, Math.toRadians(90)), Math.toRadians(90))
                 /*score specimin*/
                 .build();
 
@@ -98,18 +98,20 @@ public class ObsTest extends LinearOpMode {
 
         waitForStart();
 
-        intake.setTargetLengthServo();
+        intake.setTargetLengthServo(0.2);
 
         //This code scores preloaded specimen
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreFirstSample,
-                        delivery.SlideToHeightAction(2000),
-                        intake.pitchToAngleAction(-235)
+                        delivery.SlideToHeightAction(2100),
+                        intake.pitchToAngleAction(-250)
                 )
         );
-        delivery.clawToTarget(1650, 3);
+        delivery.clawToTarget(1600, 5);
         delivery.clawOpen();
+        sleep(300);
+        delivery.clawToTarget(1850, 3);
 
 
         //This code brings two samples to the Obersvation Zone
@@ -117,13 +119,13 @@ public class ObsTest extends LinearOpMode {
                 new ParallelAction(
                         trajToCollectSamples,
                         delivery.SlideToHeightAction(0),
-                        intake.pitchToAngleAction(-235)
+                        intake.pitchToAngleAction(-250)
                 )
         );
 
 
         //This code collects the second specimen
-        delivery.clawToTarget(1000, 2);
+        delivery.clawToTarget(800, 2);
         sleep(1000);
         Actions.runBlocking(trajToCollectSecondSample);
         delivery.clawClose();
@@ -134,7 +136,7 @@ public class ObsTest extends LinearOpMode {
                 new ParallelAction(
                         trajToScoreSecondSample,
                         delivery.SlideToHeightAction(2000),
-                        intake.pitchToAngleAction(-235)
+                        intake.pitchToAngleAction(-250)
                 )
         );
         delivery.clawToTarget(1650, 3);
