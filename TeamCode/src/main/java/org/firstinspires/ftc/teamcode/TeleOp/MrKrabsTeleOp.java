@@ -256,6 +256,10 @@ public class MrKrabsTeleOp extends RoboMom {
 
             telemetry.addData("Target Position in DeliveryFunctions: ", delivery.getMotorTargetPosition());
             telemetry.addData("Slide Motor Position: ", slidePosition);
+
+            telemetry.addLine();
+            telemetry.addLine();
+            telemetry.addData("Intake Extension: ", intake.getExtensionServoPosition());
         }
     }
 }

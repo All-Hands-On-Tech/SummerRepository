@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -112,11 +116,6 @@ public class Intake {
         targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
     }
 
-    public void setTargetAngleTicks(int ticks){
-        targetAngle = ticks;
-//        targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
-    }
-
     public void setTargetLength(double cm){
         targetLengthCM = cm;
         targetLength = CMToServoExtenderPosition(targetLengthCM);
@@ -175,6 +174,8 @@ public class Intake {
 
     public int getPitchMotorPosition(){ return pitchMotor.getCurrentPosition(); }
 
+    public double getExtensionServoPosition(){ return extensionServo.getPosition(); }
+
     public double getTargetAngle(){
         return targetAngleDegrees;
     }
@@ -220,6 +221,35 @@ public class Intake {
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
 //        linearOpMode.telemetry.update();
+    }
+
+    public class PitchToAngleRR implements Action {
+        private boolean initialized = false;
+        private int targetHeight;
+
+        public PitchToAngleRR(int TargetHeight) {
+            targetHeight = TargetHeight;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                setTargetAngleTicks(targetHeight);
+                initialized = true;
+            }
+
+            double pos = pitchMotor.getCurrentPosition();
+            packet.put("pitchPos:", pos);
+            if (Math.abs(pos - targetHeight) > 3) {
+                updateAngle();
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    public Action pitchToAngleAction (int heightInTicks) {
+        return new Intake.PitchToAngleRR(heightInTicks);
     }
 
 }

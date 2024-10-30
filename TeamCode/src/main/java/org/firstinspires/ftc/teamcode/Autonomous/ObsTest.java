@@ -37,17 +37,15 @@ public class ObsTest extends LinearOpMode {
         Action trajToScoreThirdSample;
         Action trajToPark;
 
-        private void pitchIntakeUp(){
-            intake.setTargetAngle();
-        }
+
 
         trajToScoreFirstSample = drive.actionBuilder(drive.pose)
                 //Scores pre set specimin
-                .strafeTo(new Vector2d(7, -34))
+                .strafeTo(new Vector2d(7, -33.5))
                 /*score specimin*/
                 .build();
 
-        trajToCollectSamples = drive.actionBuilder(new Pose2d(7, -34, Math.toRadians(90)))
+        trajToCollectSamples = drive.actionBuilder(new Pose2d(7, -33.5, Math.toRadians(90)))
                 //Brings two samples to observation zone
                 .strafeTo(new Vector2d(25, -40))
                 .setTangent(Math.toRadians(0))
@@ -100,11 +98,14 @@ public class ObsTest extends LinearOpMode {
 
         waitForStart();
 
+        intake.setTargetLengthServo();
+
         //This code scores preloaded specimen
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreFirstSample,
-                        delivery.SlideToHeightAction(2000)
+                        delivery.SlideToHeightAction(2000),
+                        intake.pitchToAngleAction(-235)
                 )
         );
         delivery.clawToTarget(1650, 3);
@@ -115,7 +116,8 @@ public class ObsTest extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToCollectSamples,
-                        delivery.SlideToHeightAction(0)
+                        delivery.SlideToHeightAction(0),
+                        intake.pitchToAngleAction(-235)
                 )
         );
 
@@ -131,7 +133,8 @@ public class ObsTest extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreSecondSample,
-                        delivery.SlideToHeightAction(2000)
+                        delivery.SlideToHeightAction(2000),
+                        intake.pitchToAngleAction(-235)
                 )
         );
         delivery.clawToTarget(1650, 3);
