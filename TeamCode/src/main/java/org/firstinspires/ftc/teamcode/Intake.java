@@ -214,7 +214,7 @@ public class Intake {
         double error = targetAngle - pitchMotor.getCurrentPosition();
         double power = (Math.abs(error) / TICK_LOW_POWER_DISTANCE);
 
-        power = Math.max(0, Math.min(1, power));
+        power = Math.max(0.1, Math.min(1, power));
         if(error < 0) power *= -1;
 
         pitchMotor.setPower(power * PITCH_POWER_MULTIPIER);
@@ -239,8 +239,10 @@ public class Intake {
             }
 
             double pos = pitchMotor.getCurrentPosition();
+            packet.addLine("In RR action");
+            packet.addLine("intake:");
             packet.put("pitchPos:", pos);
-            if (Math.abs(pos - targetHeight) > 3) {
+            if (Math.abs(pos - targetHeight) > 10) {
                 updateAngle();
                 return true;
             } else {

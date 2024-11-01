@@ -31,7 +31,8 @@ public class ObsTest extends LinearOpMode {
         Action trajToScoreFirstSample;
         Action trajToCollectSamples;
         Action trajToCollectSecondSample;
-        Action trajToScoreSecondSample;
+        Action trajToScoreSecondSample1;
+        Action trajToScoreSecondSample2;
         Action trajToCollectThirdSample1;
         Action trajToCollectThirdSample2;
         Action trajToScoreThirdSample;
@@ -41,11 +42,11 @@ public class ObsTest extends LinearOpMode {
 
         trajToScoreFirstSample = drive.actionBuilder(drive.pose)
                 //Scores pre set specimin
-                .strafeTo(new Vector2d(7, -33))
+                .strafeTo(new Vector2d(9, -33))
                 /*score specimin*/
                 .build();
 
-        trajToCollectSamples = drive.actionBuilder(new Pose2d(7, -33, Math.toRadians(90)))
+        trajToCollectSamples = drive.actionBuilder(new Pose2d(9, -33, Math.toRadians(90)))
                 //Brings two samples to observation zone
                 .strafeTo(new Vector2d(25, -40))
                 .setTangent(Math.toRadians(0))
@@ -57,19 +58,27 @@ public class ObsTest extends LinearOpMode {
                 .setTangent(Math.toRadians(0))
                 .splineTo(new Vector2d(55, -58), Math.toRadians(-90))
                 .setTangent(Math.toRadians(90))
-                .splineTo(new Vector2d(36, -49), Math.toRadians(-90))
+                .splineTo(new Vector2d(39, -49), Math.toRadians(-90))
+                .turnTo(Math.toRadians(-80))
                 .build();
 
-        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(36, -49, Math.toRadians(-90)))
+        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(39, -49, Math.toRadians(-90)))
                 //Scores a second specimin
                 /*sleep*/
-                .strafeTo(new Vector2d(36, -60.5))
+                .strafeTo(new Vector2d(40.5, -61.5))
                 .build();
 
-        trajToScoreSecondSample = drive.actionBuilder(new Pose2d(36, -60, Math.toRadians(-90)))
+        trajToScoreSecondSample1 = drive.actionBuilder(new Pose2d(40.5, -61.5, Math.toRadians(-90)))
                 /*grab specimin*/
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(0, -34, Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(6, -50, Math.toRadians(95)), Math.toRadians(90))
+                /*score specimin*/
+                .build();
+
+        trajToScoreSecondSample2 = drive.actionBuilder(new Pose2d(6, -50, Math.toRadians(95)))
+                /*grab specimin*/
+                .setTangent(Math.toRadians(90))
+                .strafeTo(new Vector2d(6, -33))
                 /*score specimin*/
                 .build();
 
@@ -90,7 +99,7 @@ public class ObsTest extends LinearOpMode {
                 /*score specimin*/
                 .build();
 
-        trajToPark = drive.actionBuilder(new Pose2d(6, -34,Math.toRadians(90)))
+        trajToPark = drive.actionBuilder(new Pose2d(6, -33,Math.toRadians(90)))
                 //Returns to observation zone
                 .setTangent(Math.toRadians(-90))
                 .splineTo(new Vector2d(40, -57), Math.toRadians(-45))
@@ -108,7 +117,8 @@ public class ObsTest extends LinearOpMode {
                         intake.pitchToAngleAction(-250)
                 )
         );
-        delivery.clawToTarget(1600, 5);
+        intake.updateAngle();
+        delivery.clawToTarget(1650, 5);
         delivery.clawOpen();
         sleep(300);
         delivery.clawToTarget(1850, 3);
@@ -118,13 +128,14 @@ public class ObsTest extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToCollectSamples,
-                        delivery.SlideToHeightAction(0),
+                        delivery.SlideToHeightAction(30),
                         intake.pitchToAngleAction(-250)
                 )
         );
 
 
         //This code collects the second specimen
+        intake.updateAngle();
         delivery.clawToTarget(800, 2);
         sleep(1000);
         Actions.runBlocking(trajToCollectSecondSample);
@@ -134,11 +145,18 @@ public class ObsTest extends LinearOpMode {
         //This code scores the second specimen
         Actions.runBlocking(
                 new ParallelAction(
-                        trajToScoreSecondSample,
-                        delivery.SlideToHeightAction(2000),
+                        trajToScoreSecondSample1,
+                        delivery.SlideToHeightAction(2200),
                         intake.pitchToAngleAction(-250)
                 )
         );
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToScoreSecondSample2,
+                        delivery.SlideToHeightAction(2200)
+                )
+        );
+        intake.updateAngle();
         delivery.clawToTarget(1650, 3);
         delivery.clawOpen();
         sleep(500);

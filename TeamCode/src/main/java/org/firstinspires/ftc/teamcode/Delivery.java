@@ -30,7 +30,7 @@ public class Delivery {
     public final int BOTTOM_POSITION = (int)(2 / MM_PER_METER * CLICKS_PER_METER); //2mm
     public final int TOP_POSITION = 4300;
     public final int LOW_POSITION = 50; // low-to-ground position used to slow slides when low to ground
-    public final double TICK_LOW_POWER_DISTANCE = 200;
+    public final double TICK_LOW_POWER_DISTANCE = 75;
 
     public final double RETRACT_TIMEOUT = 7;
 
@@ -86,10 +86,10 @@ public class Delivery {
     }
 
     public void setSlidesPower(double power){
-        if (Math.abs(power-currentSlidePower) > 0.03 || (power == 0 && currentSlidePower != 0)) {
+        //if (Math.abs(power-currentSlidePower) > 0.03 || (power == 0 && currentSlidePower != 0)) {
             currentSlidePower = power;
             slide.setPower(currentSlidePower);
-        }
+        //}
     }
 
     public int getMotorPosition(){ return slide.getCurrentPosition(); }
@@ -111,7 +111,7 @@ public class Delivery {
         double error = targetPosition - slide.getCurrentPosition();
         double power = (Math.abs(error) / TICK_LOW_POWER_DISTANCE);
 
-        power = Math.max(0, Math.min(1, power));
+        power = Math.max(0.1, Math.min(1, power));
 
         setSlidesPower(power * slidePowerMultiplier * powerMultiplier);
         linearOpMode.telemetry.addData("Power: ",power);
@@ -248,9 +248,11 @@ public class Delivery {
             }
 
             double pos = slide.getCurrentPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
             packet.put("liftPos", pos);
             if (Math.abs(pos - targetHeight) > 20) {
-                PControlPower(2);
+                PControlPower(3);
                 return true;
             } else {
                 setSlidesPower(0);
