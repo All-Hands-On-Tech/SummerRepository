@@ -60,6 +60,8 @@ public class MrKrabsTeleOp extends RoboMom {
 
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(11.8, 61.7, Math.toRadians(90)));
 
+        intake.unbrakePitch();
+
         waitForStart();
 
         while (opModeIsActive()){

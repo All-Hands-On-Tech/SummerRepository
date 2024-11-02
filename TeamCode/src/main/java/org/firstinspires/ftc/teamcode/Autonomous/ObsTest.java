@@ -99,11 +99,13 @@ public class ObsTest extends LinearOpMode {
                 /*score specimin*/
                 .build();
 
-        trajToPark = drive.actionBuilder(new Pose2d(6, -33,Math.toRadians(90)))
+        trajToPark = drive.actionBuilder(new Pose2d(6, -34,Math.toRadians(90)))
                 //Returns to observation zone
                 .setTangent(Math.toRadians(-90))
                 .splineTo(new Vector2d(40, -57), Math.toRadians(-45))
                 .build();
+
+        intake.brakePitch();
 
         waitForStart();
 
@@ -117,7 +119,7 @@ public class ObsTest extends LinearOpMode {
                         intake.pitchToAngleAction(-250)
                 )
         );
-        intake.updateAngle();
+//        intake.updateAngle();
         delivery.clawToTarget(1650, 5);
         delivery.clawOpen();
         sleep(300);
@@ -135,12 +137,12 @@ public class ObsTest extends LinearOpMode {
 
 
         //This code collects the second specimen
-        intake.updateAngle();
+//        intake.updateAngle();
         delivery.clawToTarget(800, 2);
-        sleep(1000);
+        sleep(900);
         Actions.runBlocking(trajToCollectSecondSample);
         delivery.clawClose();
-        sleep(500);
+        sleep(400);
 
         //This code scores the second specimen
         Actions.runBlocking(
@@ -156,10 +158,11 @@ public class ObsTest extends LinearOpMode {
                         delivery.SlideToHeightAction(2200)
                 )
         );
-        intake.updateAngle();
+//        intake.updateAngle();
         delivery.clawToTarget(1650, 3);
         delivery.clawOpen();
-        sleep(500);
+        sleep(450);
+        sleep(50);
 
         //Cut for time, add if there is time remaining
 //        //This code collects the third specimen
@@ -190,9 +193,12 @@ public class ObsTest extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToPark,
-                        delivery.SlideToHeightAction(0)
+                        delivery.SlideToHeightAction(1500)
                 )
         );
+        delivery.clawToTarget(0, 5);
+
+        intake.unbrakePitch();
 
         if (isStopRequested()) return;
 

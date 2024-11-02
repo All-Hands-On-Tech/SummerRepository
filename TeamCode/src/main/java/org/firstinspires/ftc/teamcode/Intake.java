@@ -116,6 +116,15 @@ public class Intake {
         targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
     }
 
+    public void brakePitch(){
+        pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        pitchMotor.setPower(0);
+    }
+
+    public void unbrakePitch(){
+        pitchMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+    }
+
     public void setTargetLength(double cm){
         targetLengthCM = cm;
         targetLength = CMToServoExtenderPosition(targetLengthCM);
