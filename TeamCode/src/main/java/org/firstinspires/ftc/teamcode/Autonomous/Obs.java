@@ -32,9 +32,6 @@ public class Obs extends LinearOpMode {
         Action trajToCollectSecondSample;
         Action trajToScoreSecondSample1;
         Action trajToScoreSecondSample2;
-        Action trajToCollectThirdSample1;
-        Action trajToCollectThirdSample2;
-        Action trajToScoreThirdSample;
         Action trajToPark;
 
 
@@ -64,7 +61,7 @@ public class Obs extends LinearOpMode {
         trajToCollectSecondSample = drive.actionBuilder(new Pose2d(39, -49, Math.toRadians(-90)))
                 //Scores a second specimin
                 /*sleep*/
-                .strafeTo(new Vector2d(40.5, -61.5))
+                .splineToConstantHeading(new Vector2d(40.5, -61.5), Math.toRadians(-90))
                 .build();
 
         trajToScoreSecondSample1 = drive.actionBuilder(new Pose2d(40.5, -61.5, Math.toRadians(-90)))
@@ -77,24 +74,7 @@ public class Obs extends LinearOpMode {
         trajToScoreSecondSample2 = drive.actionBuilder(new Pose2d(6, -50, Math.toRadians(95)))
                 /*grab specimin*/
                 .setTangent(Math.toRadians(90))
-                .strafeTo(new Vector2d(6, -33))
-                /*score specimin*/
-                .build();
-
-        trajToCollectThirdSample1 = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
-                //This scores a third specimin, add if theres time
-                .strafeTo(new Vector2d(10, -40))
-                .splineToLinearHeading(new Pose2d(36, -49, Math.toRadians(-90)), Math.toRadians(-90))
-                .build();
-
-        trajToCollectThirdSample2 = drive.actionBuilder(new Pose2d(36, -49, Math.toRadians(-90)))
-                .strafeTo(new Vector2d(36, -60))
-                .build();
-                /*grab specimin*/
-
-        trajToScoreThirdSample = drive.actionBuilder(new Pose2d(36, -60, Math.toRadians(-90)))
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(6, -34,Math.toRadians(90)), Math.toRadians(90))
+                .splineToConstantHeading(new Vector2d(6, -33), Math.toRadians(-90))
                 /*score specimin*/
                 .build();
 
@@ -162,33 +142,7 @@ public class Obs extends LinearOpMode {
         delivery.clawOpen();
         sleep(450);
         sleep(50);
-
-        //Cut for time, add if there is time remaining
-//        //This code collects the third specimen
-//        Actions.runBlocking(
-//                new SequentialAction(
-//                        trajToCollectThirdSample1,
-//                        delivery.SlideToHeightAction(0)
-//                )
-//        );
-//        delivery.clawToTarget(1000, 2);
-//        Actions.runBlocking(trajToCollectThirdSample2);
-//        delivery.clawClose();
-//        sleep(500);
-//
-//        //This code scores the third specimen
-//        Actions.runBlocking(
-//                new ParallelAction(
-//                        trajToScoreThirdSample,
-//                        delivery.SlideToHeightAction(2000)
-//                )
-//        );
-//        delivery.clawToTarget(1650, 3);
-//        delivery.clawOpen();
-//        sleep(500);
-
-
-        //This code parks
+        
         Actions.runBlocking(
                 new ParallelAction(
                         trajToPark,
