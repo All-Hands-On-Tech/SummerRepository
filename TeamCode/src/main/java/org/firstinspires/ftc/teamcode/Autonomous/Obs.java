@@ -1,6 +1,9 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
+import androidx.annotation.NonNull;
+
 import com.acmerobotics.dashboard.config.Config;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
@@ -18,6 +21,8 @@ import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 public class Obs extends LinearOpMode {
     Delivery delivery = null;
     Intake intake = null;
+
+    private static final int VERTICAL_INTAKE_POS = -230;
 
     @Override
     public void runOpMode() {
@@ -55,7 +60,7 @@ public class Obs extends LinearOpMode {
                 .splineTo(new Vector2d(55, -58), Math.toRadians(-90))
                 .setTangent(Math.toRadians(90))
                 .splineTo(new Vector2d(39, -49), Math.toRadians(-90))
-                .turnTo(Math.toRadians(-80))
+                //.turnTo(Math.toRadians(-80))
                 .build();
 
         trajToCollectSecondSample = drive.actionBuilder(new Pose2d(39, -49, Math.toRadians(-90)))
@@ -94,30 +99,32 @@ public class Obs extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreFirstSample,
-                        delivery.SlideToHeightAction(2100),
-                        intake.pitchToAngleAction(-250)
+                        SlideToHeightAndIntakeToAngleAction(2100, VERTICAL_INTAKE_POS)
                 )
         );
 //        intake.updateAngle();
-        delivery.clawToTarget(1650, 5);
+//        delivery.clawToTarget(1650, 5);
+        intakeAndDeliveryToPosition(1650, 5, VERTICAL_INTAKE_POS);
         delivery.clawOpen();
         sleep(300);
-        delivery.clawToTarget(1850, 3);
+//        delivery.clawToTarget(1850, 3);
+        intakeAndDeliveryToPosition(1850, 3, VERTICAL_INTAKE_POS);
 
 
         //This code brings two samples to the Obersvation Zone
         Actions.runBlocking(
                 new ParallelAction(
                         trajToCollectSamples,
-                        delivery.SlideToHeightAction(30),
-                        intake.pitchToAngleAction(-250)
+                        SlideToHeightAndIntakeToAngleAction(30, VERTICAL_INTAKE_POS)
+
                 )
         );
 
 
         //This code collects the second specimen
 //        intake.updateAngle();
-        delivery.clawToTarget(800, 2);
+//        delivery.clawToTarget(800, 2);
+        intakeAndDeliveryToPosition(800, 2, VERTICAL_INTAKE_POS);
         sleep(900);
         Actions.runBlocking(trajToCollectSecondSample);
         delivery.clawClose();
@@ -127,18 +134,18 @@ public class Obs extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreSecondSample1,
-                        delivery.SlideToHeightAction(2200),
-                        intake.pitchToAngleAction(-250)
+                        SlideToHeightAndIntakeToAngleAction(2200, VERTICAL_INTAKE_POS)
                 )
         );
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreSecondSample2,
-                        delivery.SlideToHeightAction(2200)
+                        SlideToHeightAndIntakeToAngleAction(2200, VERTICAL_INTAKE_POS)
                 )
         );
 //        intake.updateAngle();
-        delivery.clawToTarget(1650, 3);
+//        delivery.clawToTarget(1650, 3);
+        intakeAndDeliveryToPosition(1650, 3, VERTICAL_INTAKE_POS);
         delivery.clawOpen();
         sleep(450);
         sleep(50);
@@ -146,14 +153,64 @@ public class Obs extends LinearOpMode {
         Actions.runBlocking(
                 new ParallelAction(
                         trajToPark,
-                        delivery.SlideToHeightAction(1500)
+                        SlideToHeightAndIntakeToAngleAction(1500, VERTICAL_INTAKE_POS)
                 )
         );
-        delivery.clawToTarget(0, 5);
-
+//        delivery.clawToTarget(0, 5);
+        intakeAndDeliveryToPosition(0, 5, VERTICAL_INTAKE_POS);
         intake.unbrakePitch();
 
         if (isStopRequested()) return;
 
+    }
+    private void intakeAndDeliveryToPosition(int heightTarget, double heightPower, int pitchTarget){
+        delivery.setSlidesTargetPosition(heightTarget);
+        intake.setTargetAngleTicks(pitchTarget);
+
+        while(delivery.clawIsFarFromTarget()){
+            delivery.PControlPower(heightPower);
+            intake.updateAngle();
+        }
+
+        delivery.setSlidesPower(0);
+        intake.brakePitch();
+    }
+
+    public class SlideToHeightAndIntakeToAngleRR implements Action {
+        private boolean initialized = false;
+        private int targetHeight;
+        private int targetPitch;
+
+        public SlideToHeightAndIntakeToAngleRR(int TargetHeight, int TargetPitch) {
+            targetHeight = TargetHeight;
+            targetPitch = TargetPitch;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                delivery.setSlidesTargetPosition(targetHeight);
+                intake.setTargetAngleTicks(targetPitch);
+                initialized = true;
+            }
+
+            double pos = delivery.getMotorPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
+            packet.put("liftPos", pos);
+            if (Math.abs(pos - targetHeight) > 20) {
+                delivery.PControlPower(3);
+                intake.setTargetAngleTicks(targetPitch);
+                intake.updateAngle();
+                return true;
+            } else {
+                delivery.setSlidesPower(0);
+                intake.brakePitch();
+                return false;
+            }
+        }
+    }
+    public Action SlideToHeightAndIntakeToAngleAction(int heightInTicks, int angleInTicks) {
+        return new Obs.SlideToHeightAndIntakeToAngleRR(heightInTicks, angleInTicks);
     }
 }

@@ -137,6 +137,10 @@ public class Delivery {
         }
         setSlidesPower(0);
     }
+
+    public boolean clawIsFarFromTarget(){
+        return Math.abs(getMotorTargetPosition() - getMotorPosition()) > 20;
+    }
 /*
 
     public void Lift(int ticksFromOutsideChassis){
