@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -19,22 +20,22 @@ public class Testing extends LinearOpMode {
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(90)));
 
-        Action traj1;
-        Action traj2;
+        Action goingForward;
+        Action goingBackward;
 
-        traj1 = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
+        goingForward = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
                 .strafeTo(new Vector2d(0, 24))
                 .build();
-        traj2 = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
-                .strafeTo(new Vector2d(0, 48))
+        goingBackward = drive.actionBuilder(new Pose2d(0, 24, Math.toRadians(90)))
+                .strafeTo(new Vector2d(0, 0))
                 .build();
 
         waitForStart();
 
-        //This code scores preloaded specimin
-        Actions.runBlocking(traj1);
-        sleep(2000);
-        Actions.runBlocking(traj2);
+        Actions.runBlocking(goingForward);
+        Actions.runBlocking(goingBackward);
+        Actions.runBlocking(goingForward);
+        Actions.runBlocking(goingBackward);
 
         if (isStopRequested()) return;
 
