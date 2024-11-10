@@ -195,7 +195,7 @@ public class MrKrabsTeleOp extends RoboMom {
             if (Math.abs(gamepad2.right_stick_y) >= DRIVE_DEADZONE) {
                 deliveryState = MrKrabsTeleOp.DeliveryState.DELIVERY_START;
 
-                if (slidePosition > delivery.LOW_POSITION) {
+                if (slidePosition > delivery.lowPosition) {
                     targetPosition -= gamepad2.right_stick_y * 35;
                 } else {
                     targetPosition -= gamepad2.right_stick_y * 25;
@@ -247,7 +247,7 @@ public class MrKrabsTeleOp extends RoboMom {
                 intake.setEndEffectorSpeed(0.5f);//stop
             }
 
-            targetPosition = Math.max(delivery.BOTTOM_POSITION, Math.min(delivery.TOP_POSITION, targetPosition));
+            targetPosition = Math.max(delivery.bottomPosition, Math.min(delivery.topDelta, targetPosition));
             delivery.setSlidesTargetPosition(targetPosition);
 
             delivery.PControlPower(1);

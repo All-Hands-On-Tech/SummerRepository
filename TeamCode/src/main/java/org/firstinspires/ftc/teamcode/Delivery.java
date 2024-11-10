@@ -8,12 +8,14 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.Servo;
+import com.qualcomm.robotcore.hardware.TouchSensor;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 @Disabled
 public class Delivery {
     private DcMotor slide = null;
     private Servo claw = null;
+    private TouchSensor limitSwitch = null;
 
 
     private LinearOpMode linearOpMode;
@@ -27,9 +29,9 @@ public class Delivery {
     private double currentPosition;
 
     public final double TICK_STOP_THRESHOLD = 20;
-    public final int BOTTOM_POSITION = (int)(2 / MM_PER_METER * CLICKS_PER_METER); //2mm
-    public final int TOP_POSITION = 4300;
-    public final int LOW_POSITION = 50; // low-to-ground position used to slow slides when low to ground
+    public int bottomPosition = (int)(2 / MM_PER_METER * CLICKS_PER_METER); //2mm
+    public int topDelta = 4300;
+    public int lowPosition = 50; // low-to-ground position used to slow slides when low to ground
     public final double TICK_LOW_POWER_DISTANCE = 75;
 
     public final double RETRACT_TIMEOUT = 7;
@@ -56,6 +58,8 @@ public class Delivery {
         try {
             slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
             claw = linearOpMode.hardwareMap.get(Servo.class, "claw");
+            limitSwitch = linearOpMode.hardwareMap.get(TouchSensor.class, "DSwitch");
+            
             claw.scaleRange(0.0, 0.25);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
