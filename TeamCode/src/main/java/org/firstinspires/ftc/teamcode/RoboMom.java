@@ -27,10 +27,10 @@ public abstract class RoboMom extends LinearOpMode {
 //        rightBackDrive = hardwareMap.get(DcMotor.class, "rightRear");
         //SAUCY BOI CONFIG
 
-        leftFrontDrive = hardwareMap.get(DcMotor.class, "LFRE");
+        leftFrontDrive = hardwareMap.get(DcMotor.class, "LF");
         leftBackDrive = hardwareMap.get(DcMotor.class, "LBLE");
         rightFrontDrive = hardwareMap.get(DcMotor.class, "RFBE");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "RB");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "RBRE");
 
         leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
         leftBackDrive.setDirection(DcMotor.Direction.REVERSE);

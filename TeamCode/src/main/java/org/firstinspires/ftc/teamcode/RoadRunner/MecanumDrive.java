@@ -60,16 +60,16 @@ public class MecanumDrive {
         public RevHubOrientationOnRobot.LogoFacingDirection logoFacingDirection =
                 RevHubOrientationOnRobot.LogoFacingDirection.UP;
         public RevHubOrientationOnRobot.UsbFacingDirection usbFacingDirection =
-                RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
+                RevHubOrientationOnRobot.UsbFacingDirection.RIGHT;
 
         // drive model parameters
         public double inPerTick = 0.00197456;
         public double lateralInPerTick = 0.0015745366874616964;
-        public double trackWidthTicks = 7502.8461647551;
+        public double trackWidthTicks = 7107.2;
 
         // feedforward parameters (in tick units)
-        public double kS = 0.7368779486250013;
-        public double kV = 0.00036050861405155903;
+        public double kS = 0.880;
+        public double kV = 0.000376;
         public double kA = 7.1e-5;
 
         // path profile parameters (in inches)
@@ -159,10 +159,10 @@ public class MecanumDrive {
             if (!initialized) {
                 initialized = true;
 
-                lastLeftFrontPos = leftFrontPosVel.position;
-                lastLeftBackPos = leftBackPosVel.position;
-                lastRightBackPos = rightBackPosVel.position;
-                lastRightFrontPos = rightFrontPosVel.position;
+                lastLeftFrontPos = (int) leftFrontPosVel.position;
+                lastLeftBackPos = (int) leftBackPosVel.position;
+                lastRightBackPos = (int) rightBackPosVel.position;
+                lastRightFrontPos = (int) rightFrontPosVel.position;
 
                 lastHeading = heading;
 
@@ -192,10 +192,10 @@ public class MecanumDrive {
                     }).times(PARAMS.inPerTick)
             ));
 
-            lastLeftFrontPos = leftFrontPosVel.position;
-            lastLeftBackPos = leftBackPosVel.position;
-            lastRightBackPos = rightBackPosVel.position;
-            lastRightFrontPos = rightFrontPosVel.position;
+            lastLeftFrontPos = (int) leftFrontPosVel.position;
+            lastLeftBackPos = (int) leftBackPosVel.position;
+            lastRightBackPos = (int) rightBackPosVel.position;
+            lastRightFrontPos = (int) rightFrontPosVel.position;
 
             lastHeading = heading;
 
@@ -218,8 +218,8 @@ public class MecanumDrive {
         // TODO: make sure your config has motors with these names (or change them)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         leftFront = hardwareMap.get(DcMotorEx.class, "LBLE");
-        leftBack = hardwareMap.get(DcMotorEx.class, "LFRE");
-        rightBack = hardwareMap.get(DcMotorEx.class, "RB");
+        leftBack = hardwareMap.get(DcMotorEx.class, "LF");
+        rightBack = hardwareMap.get(DcMotorEx.class, "RBRE");
         rightFront = hardwareMap.get(DcMotorEx.class, "RFBE");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

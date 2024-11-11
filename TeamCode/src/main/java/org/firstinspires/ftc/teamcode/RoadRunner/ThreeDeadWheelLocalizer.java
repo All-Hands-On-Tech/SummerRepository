@@ -39,7 +39,7 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         //   the encoders should be plugged into the slot matching the named motor
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         par0 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "LBLE")));
-        par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "LFRE")));
+        par1 = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "RBRE")));
         perp = new OverflowEncoder(new RawEncoder(hardwareMap.get(DcMotorEx.class, "RFBE")));
 
         // TODO: reverse encoder directions if needed
@@ -62,9 +62,9 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
         if (!initialized) {
             initialized = true;
 
-            lastPar0Pos = par0PosVel.position;
-            lastPar1Pos = par1PosVel.position;
-            lastPerpPos = perpPosVel.position;
+            lastPar0Pos = (int) par0PosVel.position;
+            lastPar1Pos = (int) par1PosVel.position;
+            lastPerpPos = (int) perpPosVel.position;
 
             return new Twist2dDual<>(
                     Vector2dDual.constant(new Vector2d(0.0, 0.0), 2),
@@ -72,9 +72,9 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
             );
         }
 
-        int par0PosDelta = par0PosVel.position - lastPar0Pos;
-        int par1PosDelta = par1PosVel.position - lastPar1Pos;
-        int perpPosDelta = perpPosVel.position - lastPerpPos;
+        int par0PosDelta = (int) par0PosVel.position - lastPar0Pos;
+        int par1PosDelta = (int) par1PosVel.position - lastPar1Pos;
+        int perpPosDelta = (int) perpPosVel.position - lastPerpPos;
 
         Twist2dDual<Time> twist = new Twist2dDual<>(
                 new Vector2dDual<>(
@@ -93,9 +93,9 @@ public final class ThreeDeadWheelLocalizer implements Localizer {
                 })
         );
 
-        lastPar0Pos = par0PosVel.position;
-        lastPar1Pos = par1PosVel.position;
-        lastPerpPos = perpPosVel.position;
+        lastPar0Pos = (int) par0PosVel.position;
+        lastPar1Pos = (int) par1PosVel.position;
+        lastPerpPos = (int) perpPosVel.position;
 
         return twist;
     }
