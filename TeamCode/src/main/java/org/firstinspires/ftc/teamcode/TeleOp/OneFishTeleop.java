@@ -135,6 +135,10 @@ public class OneFishTeleop extends LinearOpMode {
                     intake.setTargetLength(intake.MIN_EXTENSION);
                 }
 
+                if(gamepad2.dpad_up){
+                    intake.resetEncoder();
+                }
+
                 switch (intakeState){
                     case INTAKE:
                         intake.runPower();

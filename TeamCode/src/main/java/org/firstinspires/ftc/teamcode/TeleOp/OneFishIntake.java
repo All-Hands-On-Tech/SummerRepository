@@ -29,7 +29,7 @@ public class OneFishIntake {
     private final double MIN_PITCH = 0;
     private final double MAX_PITCH = 1;
 
-    private final int TICK_LOW_POWER_DISTANCE = 200;
+    private final int TICK_LOW_POWER_DISTANCE = 50;
 
     private double targetLengthCM;
     private int targetLength;
@@ -81,10 +81,24 @@ public class OneFishIntake {
     }
 
     public void setExtensionPower(double power){
+        int error = 0;
+        int errorMult = 0;
+        int current = extension.getCurrentPosition();
         extension.setPower(power);
-        if((extension.getCurrentPosition() - MIN_EXTENSION) < TICK_STOP_THRESHOLD){
-            extension.setPower(power/5);
+
+        if(current > MAX_EXTENSION/2){
+            error = (current - MAX_EXTENSION);
+        } else {
+            error = (current-MIN_EXTENSION);
         }
+
+        errorMult = error/(TICK_LOW_POWER_DISTANCE*2);
+
+        if(Math.abs(error) < TICK_LOW_POWER_DISTANCE){
+            extension.setPower(power * errorMult);
+            linearOpMode.telemetry.addLine("BRAKING");
+        }
+        linearOpMode.telemetry.addData("Intake Current: ", current);
     }
 
     public void runToPosition(){
@@ -92,6 +106,11 @@ public class OneFishIntake {
     }
 
     public void runPower(){
+        extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+    }
+
+    public void resetEncoder(){
+        extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
         extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void updateLength(){
