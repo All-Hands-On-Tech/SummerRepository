@@ -107,15 +107,15 @@ public class OneFishTeleop extends LinearOpMode {
                 float rightY = -gamepad2.right_stick_y;
 
                 if(Math.abs(leftY) > DRIVE_DEADZONE){
-                    targetExtention += (int)leftY;
+                    targetExtention += (int)leftY * 3;
                 }
 
                 if(gamepad2.x){
                     intake.setIntakePower(1);
-                }
-                if(gamepad2.b){
+                }else{
                     intake.setIntakePower(0);
                 }
+
                 intake.setTargetLength(targetExtention);
                 intake.updateLength();
 

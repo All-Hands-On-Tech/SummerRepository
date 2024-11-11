@@ -35,7 +35,7 @@ public class OneFishIntake {
     private int targetLength;
     private double currentPosition;
 
-    public final double TICK_STOP_THRESHOLD = 20;
+    public final double TICK_STOP_THRESHOLD = 2;
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -54,14 +54,15 @@ public class OneFishIntake {
             extension.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             extension.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+            extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
             intake = linearOpMode.hardwareMap.get(DcMotor.class, "intake");
             intake.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
             intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            pitch = linearOpMode.hardwareMap.get(Servo.class, "pitch");
-            pitch.scaleRange(0.0, 1.0);
+//            pitch = linearOpMode.hardwareMap.get(Servo.class, "pitch");
+//            pitch.scaleRange(0.0, 1.0);
 
 //            pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
 
@@ -80,6 +81,7 @@ public class OneFishIntake {
     }
     public void updateLength(){
         linearOpMode.telemetry.addData("Intake Length: ", targetLength);
+        linearOpMode.telemetry.addData("Intake Current: ", extension.getCurrentPosition());
         if(Math.abs(extension.getCurrentPosition() - extension.getTargetPosition()) > TICK_STOP_THRESHOLD){
             extension.setPower(1);
         } else{
@@ -91,8 +93,8 @@ public class OneFishIntake {
         intake.setPower(power);
     }
 
-    public void setPitch(float position){
-        pitch.setPosition(position);
-    }
+//    public void setPitch(float position){
+//        pitch.setPosition(position);
+//    }
 
 }

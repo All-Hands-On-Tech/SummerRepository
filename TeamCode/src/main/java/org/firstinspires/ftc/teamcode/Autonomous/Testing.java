@@ -2,14 +2,15 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
-import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Delivery;
+import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
@@ -19,23 +20,30 @@ public class Testing extends LinearOpMode {
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(90)));
+        Action traj1;
+        Action traj2;
 
-        Action goingForward;
-        Action goingBackward;
-
-        goingForward = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
-                .strafeTo(new Vector2d(0, 24))
+        traj1 = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
+                //Scores pre set specimin
+                .setTangent(Math.toRadians(180))
+                .splineToLinearHeading(new Pose2d(-30, 30, Math.toRadians(180)), Math.toRadians(90))
+                .setTangent(Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(-0, 0, Math.toRadians(90)), Math.toRadians(-90))
+                /*score specimin*/
                 .build();
-        goingBackward = drive.actionBuilder(new Pose2d(0, 24, Math.toRadians(90)))
-                .strafeTo(new Vector2d(0, 0))
+
+        traj2 = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
+                .strafeTo(new Vector2d(-10, 30))
+                .strafeTo(new Vector2d(-30, 10))
+                .strafeTo(new Vector2d(-0, 0))
+                .turn(Math.PI*10)
                 .build();
 
         waitForStart();
 
-        Actions.runBlocking(goingForward);
-        Actions.runBlocking(goingBackward);
-        Actions.runBlocking(goingForward);
-        Actions.runBlocking(goingBackward);
+        //This code scores preloaded specimen
+        Actions.runBlocking(traj1);
+//
 
         if (isStopRequested()) return;
 
