@@ -4,6 +4,7 @@ import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.noahbres.meepmeep.MeepMeep;
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueDark;
+import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeBlueLight;
 import com.noahbres.meepmeep.core.colorscheme.scheme.ColorSchemeRedDark;
 import com.noahbres.meepmeep.roadrunner.DefaultBotBuilder;
 import com.noahbres.meepmeep.roadrunner.entity.RoadRunnerBotEntity;
@@ -16,6 +17,13 @@ public class MeepMeepTesting {
                 // We set this bot to be red
                 //bot is 18x18 box
                 .setColorScheme(new ColorSchemeRedDark())
+                .setConstraints(50, 50, Math.PI, Math.PI, 18)
+                .build();
+
+        RoadRunnerBotEntity khaiBot = new DefaultBotBuilder(meepMeep)
+                // We set this bot to be red
+                //bot is 18x18 box
+                .setColorScheme(new ColorSchemeBlueLight())
                 .setConstraints(50, 50, Math.PI, Math.PI, 18)
                 .build();
 
@@ -93,12 +101,48 @@ public class MeepMeepTesting {
                 .splineTo(new Vector2d(40, -57), Math.toRadians(-45))
                 .build());
 
+        //Meet2 Khai messing around - Obs
+        khaiBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(12, -62, Math.toRadians(90)))
+                //Scores pre set specimin
+                .lineToY(-34)
+                /*score specimin*/
+
+                //Brings two samples to observation zone
+                .setReversed(true)
+                .splineTo(new Vector2d(28, -40), Math.toRadians(45))
+                .splineTo(new Vector2d(36, -15), Math.toRadians(90))
+//                .setTangent(Math.toRadians(0))
+//                .splineToSplineHeading(new Pose2d(36, -15,Math.toRadians(90)), Math.toRadians(90))
+//                .setTangent(Math.toRadians(30))
+//                .splineToLinearHeading(new Pose2d(44, -58, Math.toRadians(90)), Math.toRadians(-90))
+//                .setTangent(Math.toRadians(90))
+//                .splineToLinearHeading(new Pose2d(42, -12, Math.toRadians(180)), Math.toRadians(90))
+//                .setTangent(Math.toRadians(0))
+//                .splineTo(new Vector2d(55, -58), Math.toRadians(-90))
+
+                //Scores a second specimin
+//                .setTangent(Math.toRadians(90))
+//                .splineTo(new Vector2d(36, -49), Math.toRadians(-90))
+//                /*sleep*/
+//                .strafeTo(new Vector2d(36, -60))
+//                /*grab specimin*/
+//                .setTangent(Math.toRadians(90))
+//                .splineToLinearHeading(new Pose2d(6, -34, Math.toRadians(90)), Math.toRadians(90))
+                /*score specimin*/
+
+//
+                //Returns to observation zone
+                .setTangent(Math.toRadians(-90))
+                .splineTo(new Vector2d(40, -57), Math.toRadians(-45))
+                .build());
+
 
         meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 // Add both of our declared bot entities
                 .addEntity(mySecondBot)
+                .addEntity(khaiBot)
                 .start();
     }
 }
