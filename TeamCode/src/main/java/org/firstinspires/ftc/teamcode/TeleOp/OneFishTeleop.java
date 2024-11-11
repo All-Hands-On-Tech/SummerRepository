@@ -53,6 +53,13 @@ public class OneFishTeleop extends LinearOpMode {
 
     private double speedScalar = 1;
 
+    private enum IntakeState{
+        EXTEND,
+        INTAKE
+    }
+
+    IntakeState intakeState = IntakeState.INTAKE;
+
     //This is the code to add rr actions
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
@@ -107,17 +114,41 @@ public class OneFishTeleop extends LinearOpMode {
                 float rightY = -gamepad2.right_stick_y;
 
                 if(Math.abs(leftY) > DRIVE_DEADZONE){
-                    targetExtention += (int)leftY * 3;
+                    intakeState = IntakeState.INTAKE;
                 }
 
                 if(gamepad2.x){
                     intake.setIntakePower(1);
+                }else if(gamepad2.b){
+                    intake.setIntakePower(-1);
                 }else{
                     intake.setIntakePower(0);
                 }
 
-                intake.setTargetLength(targetExtention);
-                intake.updateLength();
+                if(gamepad2.y){
+                    intakeState = IntakeState.EXTEND;
+                    intake.setTargetLength(intake.MAX_EXTENSION);
+                }
+
+                if(gamepad2.a){
+                    intakeState = IntakeState.EXTEND;
+                    intake.setTargetLength(intake.MIN_EXTENSION);
+                }
+
+                switch (intakeState){
+                    case INTAKE:
+                        intake.runPower();
+                        if(Math.abs(leftY) > DRIVE_DEADZONE){
+                            intake.setExtensionPower(leftY);
+                        }else{
+                            intake.setExtensionPower(0);
+                        }
+                    break;
+
+                    case EXTEND:
+                        intake.runToPosition();
+                        intake.updateLength();
+                }
 
 
             }

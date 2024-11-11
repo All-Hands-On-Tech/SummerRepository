@@ -24,8 +24,8 @@ public class OneFishIntake {
     private final double CLICKS_PER_CM = 24.92788;
     private final int MM_PER_METER = 1000;
 
-    private final int MIN_EXTENSION = 0;
-    private final int MAX_EXTENSION = 1000;
+    public final int MIN_EXTENSION = 0;
+    public final int MAX_EXTENSION = 1300;
     private final double MIN_PITCH = 0;
     private final double MAX_PITCH = 1;
 
@@ -35,7 +35,7 @@ public class OneFishIntake {
     private int targetLength;
     private double currentPosition;
 
-    public final double TICK_STOP_THRESHOLD = 2;
+    public final double TICK_STOP_THRESHOLD = 5;
 
     private ElapsedTime time = new ElapsedTime();
 
@@ -77,7 +77,22 @@ public class OneFishIntake {
 
     public void setTargetLength(int ticks){
         targetLength = ticks;
-        extension.setTargetPosition(targetLength);
+        extension.setTargetPosition(Math.max(MIN_EXTENSION, Math.min(MAX_EXTENSION, ticks)));
+    }
+
+    public void setExtensionPower(double power){
+        extension.setPower(power);
+        if((extension.getCurrentPosition() - MIN_EXTENSION) < TICK_STOP_THRESHOLD){
+            extension.setPower(power/5);
+        }
+    }
+
+    public void runToPosition(){
+        extension.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void runPower(){
+        extension.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void updateLength(){
         linearOpMode.telemetry.addData("Intake Length: ", targetLength);
