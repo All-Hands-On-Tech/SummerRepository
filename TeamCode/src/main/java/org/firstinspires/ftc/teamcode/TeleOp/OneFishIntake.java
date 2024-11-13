@@ -123,12 +123,20 @@ public class OneFishIntake {
         }
     }
 
+
     public void setIntakePower(float power){
         intake.setPower(power);
     }
 
-//    public void setPitch(float position){
-//        pitch.setPosition(position);
-//    }
+    public void setPitch(float position){
+        pitch.setPosition(position);
+    }
+
+    public void pitchUp(){
+        pitch.setPosition(MAX_PITCH);
+    }
+    public void pitchDown(){
+        pitch.setPosition(MIN_PITCH);
+    }
 
 }
