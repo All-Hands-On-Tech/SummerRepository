@@ -9,8 +9,8 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
-import org.firstinspires.ftc.teamcode.Intake;
-import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
+import org.firstinspires.ftc.teamcode.OneFishIntake;
+import org.firstinspires.ftc.teamcode.OneFishSampleDelivery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +22,7 @@ public class OneFishTeleop extends LinearOpMode {
     private ElapsedTime deliveryTimer = new ElapsedTime();
 
     DrivetrainFunctions drivetrainFunctions = null;
+    OneFishSampleDelivery sampleDelivery = null;
 
     OneFishIntake intake = null;
 
@@ -52,6 +53,8 @@ public class OneFishTeleop extends LinearOpMode {
     private final double SCORE_SPEED_SCALAR = 0.2;
 
     private double speedScalar = 1;
+    private int sampleDeliveryHeight;
+    private final int HEIGHT_INCREMENT = 2;
 
     private enum IntakeState{
         EXTEND,
@@ -68,6 +71,7 @@ public class OneFishTeleop extends LinearOpMode {
 
         drivetrainFunctions = new DrivetrainFunctions(this);
         intake = new OneFishIntake(this);
+        sampleDelivery = new OneFishSampleDelivery(this, true);
 
 //        MecanumDrive drive = new MecanumDrive(hardwareMap, initPose);
 
@@ -145,6 +149,28 @@ public class OneFishTeleop extends LinearOpMode {
                 if(gamepad2.dpad_right){
                     intake.pitchUp();
                 }
+
+                if(gamepad2.dpad_up){
+                    sampleDelivery.pitchToDeliver();
+                }
+                if(gamepad2.dpad_down){
+                    sampleDelivery.pitchToTransfer();
+                }
+                if(gamepad2.a){
+                    sampleDelivery.clawClose();
+                } else{
+                    sampleDelivery.clawOpen();
+                }
+
+
+                if(Math.abs(rightY) > DRIVE_DEADZONE){
+                    sampleDeliveryHeight += HEIGHT_INCREMENT * (int)rightY;
+                }
+
+                sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
+                sampleDelivery.PControlPower(1);
+
+
 
                 switch (intakeState){
                     case INTAKE:

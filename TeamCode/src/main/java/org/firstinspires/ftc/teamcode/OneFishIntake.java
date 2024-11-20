@@ -1,10 +1,6 @@
-package org.firstinspires.ftc.teamcode.TeleOp;
+package org.firstinspires.ftc.teamcode;
 
 
-import androidx.annotation.NonNull;
-
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -61,13 +57,10 @@ public class OneFishIntake {
             intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-//            pitch = linearOpMode.hardwareMap.get(Servo.class, "pitch");
-//            pitch.scaleRange(0.0, 1.0);
+            pitch = linearOpMode.hardwareMap.get(Servo.class, "pitch");
+            pitch.scaleRange(0, 0.4);
 
-//            pitchMotor.setDirection(DcMotorSimple.Direction.REVERSE);
-
-
-
+            extension.setTargetPosition(extension.getCurrentPosition());
 
         }catch(NullPointerException e){
             linearOpMode.telemetry.addLine("Couldn't find intake");
