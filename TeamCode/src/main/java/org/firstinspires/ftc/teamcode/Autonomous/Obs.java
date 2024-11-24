@@ -50,12 +50,12 @@ public class Obs extends LinearOpMode {
                 .build();
 
         trajToCollectSamples = drive.actionBuilder(new Pose2d(9, -33, Math.toRadians(90)))
-                .setTangent(Math.toRadians(-100))
+                .setTangent(Math.toRadians(-70))
                 .splineToLinearHeading(new Pose2d(25, -37, Math.toRadians(90)), Math.toRadians(0))
-                .setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(36, -15,Math.toRadians(90)), Math.toRadians(90))
+                .setTangent(Math.toRadians(-45))
+                .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90))
                 .setTangent(Math.toRadians(30))
-                .splineToLinearHeading(new Pose2d(44, -58, Math.toRadians(90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(40, -58, Math.toRadians(90)), Math.toRadians(-90))
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(42, -12, Math.toRadians(180)), Math.toRadians(90))
                 .setTangent(Math.toRadians(0))
@@ -65,17 +65,17 @@ public class Obs extends LinearOpMode {
                 .build();
 
         trajToCollectAdditionalSample = drive.actionBuilder(new Pose2d(39, -49, Math.toRadians(-90)))
-                .splineToConstantHeading(new Vector2d(40.5, -61.5), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(40.5, -60), Math.toRadians(-90))
                 .build();
-        trajToPrepareAdditionalSample = drive.actionBuilder(new Pose2d(40.5, -61.5, Math.toRadians(-90)))
+        trajToPrepareAdditionalSample = drive.actionBuilder(new Pose2d(40.5, -60, Math.toRadians(-90)))
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(6, -50, Math.toRadians(95)), Math.toRadians(90))
                 .build();
-        trajToScoreAdditionalSample = drive.actionBuilder(new Pose2d(6, -50, Math.toRadians(95)))
+        trajToScoreAdditionalSample = drive.actionBuilder(new Pose2d(6, -50, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(6, -33), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(6, -32), Math.toRadians(-90))
                 .build();
-        trajToReturnAfterAdditionalSample = drive.actionBuilder(new Pose2d(6, -33, Math.toRadians(95)))
+        trajToReturnAfterAdditionalSample = drive.actionBuilder(new Pose2d(6, -32, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(39, -49, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
@@ -102,7 +102,7 @@ public class Obs extends LinearOpMode {
 //        delivery.clawToTarget(1650, 5);
         intakeAndDeliveryToPosition(CLAW_SCORE, 5, VERTICAL_INTAKE_POS);
         delivery.clawOpen();
-        sleep(500);
+        sleep(300);
 //        delivery.clawToTarget(1850, 3);
         intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
 
@@ -153,15 +153,6 @@ public class Obs extends LinearOpMode {
 
 
         //take tres
-        Actions.runBlocking(trajToPrepareAdditionalSample);
-        Actions.runBlocking(trajToScoreAdditionalSample);
-//          intake.updateAngle();
-//          delivery.clawToTarget(1650, 3);
-        intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
-        delivery.clawOpen();
-        sleep(400);
-        Actions.runBlocking(trajToReturnAfterAdditionalSample);
-
 
         
         Actions.runBlocking(
