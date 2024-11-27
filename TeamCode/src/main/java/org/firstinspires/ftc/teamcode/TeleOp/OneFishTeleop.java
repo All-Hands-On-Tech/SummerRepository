@@ -11,6 +11,8 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.OneFishIntake;
 import org.firstinspires.ftc.teamcode.OneFishSampleDelivery;
+import org.firstinspires.ftc.teamcode.OneFishSpecimenDelivery;
+import org.firstinspires.ftc.teamcode.OneFishSpecimenDelivery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,10 +25,10 @@ public class OneFishTeleop extends LinearOpMode {
 
     DrivetrainFunctions drivetrainFunctions = null;
     OneFishSampleDelivery sampleDelivery = null;
+    OneFishSpecimenDelivery specimenDelivery = null;
 
     OneFishIntake intake = null;
 
-    private final double CLICKS_PER_CM = 24.92788;
 
     private final double HOME_X = 50;
     private final double HOME_Y = -20;
@@ -68,6 +70,8 @@ public class OneFishTeleop extends LinearOpMode {
     private List<Action> runningActions = new ArrayList<>();
     @Override
     public void runOpMode() {
+
+        specimenDelivery = new OneFishSpecimenDelivery(this);
 
         drivetrainFunctions = new DrivetrainFunctions(this);
         intake = new OneFishIntake(this);
@@ -139,9 +143,9 @@ public class OneFishTeleop extends LinearOpMode {
                     intake.setTargetLength(intake.MIN_EXTENSION);
                 }
 
-                if(gamepad2.dpad_up){
-                    intake.resetEncoder();
-                }
+//                if(gamepad2.dpad_up){
+//                    intake.resetEncoder();
+//                }
 
                 if(gamepad2.dpad_left){
                     intake.pitchDown();
@@ -160,6 +164,20 @@ public class OneFishTeleop extends LinearOpMode {
                     sampleDelivery.clawClose();
                 } else{
                     sampleDelivery.clawOpen();
+                }
+
+                if(gamepad2.left_bumper){
+                    specimenDelivery.pitchToIntake();
+                }
+                if(gamepad2.right_bumper){
+                    specimenDelivery.pitchToDelivery();
+                }
+
+                if(gamepad2.right_trigger > 0.05){
+                    specimenDelivery.clawClose();
+                }
+                if(gamepad2.left_trigger > 0.05){
+                    specimenDelivery.clawOpen();
                 }
 
 
