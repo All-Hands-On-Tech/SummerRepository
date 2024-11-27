@@ -57,7 +57,7 @@ public class OneFishIntake {
             intake.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
-            pitch = linearOpMode.hardwareMap.get(Servo.class, "pitch");
+            pitch = linearOpMode.hardwareMap.get(Servo.class, "intakePitch");
             pitch.scaleRange(0, 0.4);
 
             extension.setTargetPosition(extension.getCurrentPosition());

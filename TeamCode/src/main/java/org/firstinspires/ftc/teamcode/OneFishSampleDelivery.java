@@ -59,7 +59,7 @@ public class OneFishSampleDelivery {
     private void Initialize(){//4mm
         try {
             slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
-            pitch = linearOpMode.hardwareMap.get(Servo.class, "pitch");
+            pitch = linearOpMode.hardwareMap.get(Servo.class, "deliveryPitch");
             claw = linearOpMode.hardwareMap.get(Servo.class, "claw");
             claw.scaleRange(0.0, 0.25);
             pitch.scaleRange(0.0, 1);
