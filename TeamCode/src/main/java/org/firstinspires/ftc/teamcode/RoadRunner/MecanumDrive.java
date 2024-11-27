@@ -63,14 +63,14 @@ public final class MecanumDrive {
                 RevHubOrientationOnRobot.UsbFacingDirection.FORWARD;
 
         // drive model parameters
-        public double inPerTick = 0.00197456;
+        public double inPerTick = 0.0019646;
         public double lateralInPerTick = 0.0015745366874616964;
-        public double trackWidthTicks = 7502.8461647551;
+        public double trackWidthTicks = 6897.6;
 
         // feedforward parameters (in tick units)
-        public double kS = 0.7368779486250013;
-        public double kV = 0.00036050861405155903;
-        public double kA = 7.1e-5;
+        public double kS = 0.74620;
+        public double kV = 0.00039176;
+        public double kA = 1e-9;
 
         // path profile parameters (in inches)
         public double maxWheelVel = 50;
@@ -218,8 +218,8 @@ public final class MecanumDrive {
         // TODO: make sure your config has motors with these names (or change them)
         //   see https://ftc-docs.firstinspires.org/en/latest/hardware_and_software_configuration/configuring/index.html
         leftFront = hardwareMap.get(DcMotorEx.class, "LBLE");
-        leftBack = hardwareMap.get(DcMotorEx.class, "LFRE");
-        rightBack = hardwareMap.get(DcMotorEx.class, "RB");
+        leftBack = hardwareMap.get(DcMotorEx.class, "LF");
+        rightBack = hardwareMap.get(DcMotorEx.class, "RBRE");
         rightFront = hardwareMap.get(DcMotorEx.class, "RFBE");
 
         leftFront.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);

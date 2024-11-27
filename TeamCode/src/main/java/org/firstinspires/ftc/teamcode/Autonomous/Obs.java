@@ -22,7 +22,7 @@ public class Obs extends LinearOpMode {
     Delivery delivery = null;
     Intake intake = null;
 
-    private static final int VERTICAL_INTAKE_POS = -230;
+    private static final int VERTICAL_INTAKE_POS = -330;
     private static final int CLAW_FLOOR = 0;
     private static final int CLAW_COLLECT = 800;
     private static final int CLAW_SCORE = 1650;
@@ -45,18 +45,17 @@ public class Obs extends LinearOpMode {
         Action trajToPark;
 
 
-
         trajToScoreFirstSample = drive.actionBuilder(drive.pose)
                 .splineTo(new Vector2d(9, -33), Math.toRadians(90))
                 .build();
 
         trajToCollectSamples = drive.actionBuilder(new Pose2d(9, -33, Math.toRadians(90)))
-                .setTangent(Math.toRadians(0))
+                .setTangent(Math.toRadians(-70))
                 .splineToLinearHeading(new Pose2d(25, -37, Math.toRadians(90)), Math.toRadians(0))
-                .setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(36, -15,Math.toRadians(90)), Math.toRadians(90))
+                .setTangent(Math.toRadians(-45))
+                .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90))
                 .setTangent(Math.toRadians(30))
-                .splineToLinearHeading(new Pose2d(44, -58, Math.toRadians(90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(40, -58, Math.toRadians(90)), Math.toRadians(-90))
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(42, -12, Math.toRadians(180)), Math.toRadians(90))
                 .setTangent(Math.toRadians(0))
@@ -66,17 +65,17 @@ public class Obs extends LinearOpMode {
                 .build();
 
         trajToCollectAdditionalSample = drive.actionBuilder(new Pose2d(39, -49, Math.toRadians(-90)))
-                .splineToConstantHeading(new Vector2d(40.5, -61.5), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(40.5, -60), Math.toRadians(-90))
                 .build();
-        trajToPrepareAdditionalSample = drive.actionBuilder(new Pose2d(40.5, -61.5, Math.toRadians(-90)))
+        trajToPrepareAdditionalSample = drive.actionBuilder(new Pose2d(40.5, -60, Math.toRadians(-90)))
                 .setTangent(Math.toRadians(90))
                 .splineToLinearHeading(new Pose2d(6, -50, Math.toRadians(95)), Math.toRadians(90))
                 .build();
-        trajToScoreAdditionalSample = drive.actionBuilder(new Pose2d(6, -50, Math.toRadians(95)))
+        trajToScoreAdditionalSample = drive.actionBuilder(new Pose2d(6, -50, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(6, -33), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(6, -32), Math.toRadians(-90))
                 .build();
-        trajToReturnAfterAdditionalSample = drive.actionBuilder(new Pose2d(6, -33, Math.toRadians(95)))
+        trajToReturnAfterAdditionalSample = drive.actionBuilder(new Pose2d(6, -32, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(39, -49, Math.toRadians(-90)), Math.toRadians(-90))
                 .build();
@@ -103,7 +102,7 @@ public class Obs extends LinearOpMode {
 //        delivery.clawToTarget(1650, 5);
         intakeAndDeliveryToPosition(CLAW_SCORE, 5, VERTICAL_INTAKE_POS);
         delivery.clawOpen();
-        sleep(200);
+        sleep(300);
 //        delivery.clawToTarget(1850, 3);
         intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
 
@@ -117,41 +116,44 @@ public class Obs extends LinearOpMode {
                 )
         );
 
-        for (int i = 0; i>2; i++) {
-            //This code collects another specimen
+        //This code collects another specimen
 //          intake.updateAngle();
 //          delivery.clawToTarget(800, 2);
-            intakeAndDeliveryToPosition(CLAW_COLLECT, 2, VERTICAL_INTAKE_POS);
-            sleep(400);
-            Actions.runBlocking(trajToCollectAdditionalSample);
-            delivery.clawClose();
-            sleep(200);
+        intakeAndDeliveryToPosition(CLAW_COLLECT, 2, VERTICAL_INTAKE_POS);
+        sleep(400);
+        Actions.runBlocking(trajToCollectAdditionalSample);
+        delivery.clawClose();
+        sleep(400);
 
-            //This code scores another specimen
-            Actions.runBlocking(
-                    new ParallelAction(
-                            trajToPrepareAdditionalSample,
-                            SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
-                    )
-            );
-            Actions.runBlocking(
-                    new ParallelAction(
-                            trajToScoreAdditionalSample,
-                            SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
-                    )
-            );
+
+        //This code scores another specimen
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToPrepareAdditionalSample,
+                        SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
+                )
+        );
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToScoreAdditionalSample,
+                        SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
+                )
+        );
 //          intake.updateAngle();
 //          delivery.clawToTarget(1650, 3);
-            intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
-            delivery.clawOpen();
-            sleep(200);
-            Actions.runBlocking(
-                    new ParallelAction(
-                            trajToReturnAfterAdditionalSample,
-                            SlideToHeightAndIntakeToAngleAction(CLAW_COLLECT, VERTICAL_INTAKE_POS)
-                    )
-            );
-        }
+        intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
+        delivery.clawOpen();
+        sleep(400);
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToReturnAfterAdditionalSample,
+                        SlideToHeightAndIntakeToAngleAction(CLAW_COLLECT, VERTICAL_INTAKE_POS)
+                )
+        );
+
+
+        //take tres
+
         
         Actions.runBlocking(
                 new ParallelAction(
