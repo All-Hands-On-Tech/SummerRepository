@@ -22,8 +22,9 @@ public class OneFishIntake {
 
     public final int MIN_EXTENSION = 0;
     public final int MAX_EXTENSION = 1300;
-    private final double MIN_PITCH = 0;
-    private final double MAX_PITCH = 1;
+    private final double MIN_PITCH = 0.5;
+    private final double TRANSFER_PITCH = 0.0;
+    private final double MAX_PITCH = 1.0;
 
     private final int TICK_LOW_POWER_DISTANCE = 50;
 
@@ -58,7 +59,7 @@ public class OneFishIntake {
             intake.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
             pitch = linearOpMode.hardwareMap.get(Servo.class, "intakePitch");
-            pitch.scaleRange(0, 0.4);
+            pitch.scaleRange(0.6, 0.715);
 
             extension.setTargetPosition(extension.getCurrentPosition());
 
@@ -131,5 +132,7 @@ public class OneFishIntake {
     public void pitchDown(){
         pitch.setPosition(MIN_PITCH);
     }
+
+    public void pitchToTransfer(){pitch.setPosition(0.0);}
 
 }

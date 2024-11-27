@@ -57,7 +57,7 @@ public class OneFishSpecimenDelivery {
         claw.setPosition(p);
     }
     public void clawOpen(){
-        setClawPosition(0);
+        setClawPosition(0.5);
     }
     public void clawClose(){
         setClawPosition(1);

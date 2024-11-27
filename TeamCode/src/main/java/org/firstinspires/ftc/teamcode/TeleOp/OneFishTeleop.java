@@ -56,7 +56,7 @@ public class OneFishTeleop extends LinearOpMode {
 
     private double speedScalar = 1;
     private int sampleDeliveryHeight;
-    private final int HEIGHT_INCREMENT = 2;
+    private final int HEIGHT_INCREMENT = 1;
 
     private enum IntakeState{
         EXTEND,
@@ -160,10 +160,10 @@ public class OneFishTeleop extends LinearOpMode {
                 if(gamepad2.dpad_down){
                     sampleDelivery.pitchToTransfer();
                 }
-                if(gamepad2.a){
-                    sampleDelivery.clawClose();
+                if(gamepad2.right_trigger > 0.05){
+                    sampleDelivery.clawClose();//WIP Reversed
                 } else{
-                    sampleDelivery.clawOpen();
+                    sampleDelivery.clawOpen();//WIP Reversed
                 }
 
                 if(gamepad2.left_bumper){
@@ -186,7 +186,7 @@ public class OneFishTeleop extends LinearOpMode {
                 }
 
                 sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
-                sampleDelivery.PControlPower(1);
+                sampleDelivery.setSlidesPower(1);
 
 
 

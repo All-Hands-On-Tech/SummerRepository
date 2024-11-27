@@ -61,7 +61,7 @@ public class OneFishSampleDelivery {
             slide  = linearOpMode.hardwareMap.get(DcMotor.class, "deliverySlide");
             pitch = linearOpMode.hardwareMap.get(Servo.class, "deliveryPitch");
             claw = linearOpMode.hardwareMap.get(Servo.class, "claw");
-            claw.scaleRange(0.0, 0.25);
+            claw.scaleRange(0.25, 0.5);
             pitch.scaleRange(0.0, 1);
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
@@ -131,6 +131,9 @@ public class OneFishSampleDelivery {
         power = Math.max(0.1, Math.min(1, power));
 
         setSlidesPower(power * slidePowerMultiplier * powerMultiplier);
+        linearOpMode.telemetry.addData("Current Pos: ", getMotorPosition());
+        linearOpMode.telemetry.addData("Target Pos: ", getMotorTargetPosition());
+        linearOpMode.telemetry.addLine();linearOpMode.telemetry.addLine();linearOpMode.telemetry.addLine();
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
         linearOpMode.telemetry.update();
