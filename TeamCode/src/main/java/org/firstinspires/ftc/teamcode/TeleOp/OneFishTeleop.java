@@ -57,17 +57,29 @@ public class OneFishTeleop extends LinearOpMode {
     private double speedScalar = 1;
     private int sampleDeliveryHeight;
     private final int HEIGHT_INCREMENT = 1;
+    private final double INTAKE_EXTENSION_TIME = 1;
+    private final double DELIVER_PITCH_TIME = 0.7;
+    private final double TRANSFER_TIME = 0.25;
+    boolean transfered = false;
 
-    private enum IntakeState{
-        EXTEND,
-        INTAKE
+    private enum RobotState{
+        INTAKE_EXTEND,
+        INTAKE,
+        TRANSFER,
+        DELIVERY_EXTEND,
+        DELIVERY_DUMP,
+        SPECIMEN,
+        IDLE
     }
 
-    IntakeState intakeState = IntakeState.INTAKE;
+    RobotState state = RobotState.IDLE;
 
     //This is the code to add rr actions
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
+
+    private ElapsedTime timer = new ElapsedTime();
+    private ElapsedTime transferTimer = new ElapsedTime();
     @Override
     public void runOpMode() {
 
@@ -121,89 +133,189 @@ public class OneFishTeleop extends LinearOpMode {
                 float rightX = gamepad2.right_stick_x;
                 float rightY = -gamepad2.right_stick_y;
 
-                if(Math.abs(leftY) > DRIVE_DEADZONE){
-                    intakeState = IntakeState.INTAKE;
-                }
-
-                if(gamepad2.x){
-                    intake.setIntakePower(1);
-                }else if(gamepad2.b){
-                    intake.setIntakePower(-1);
-                }else{
-                    intake.setIntakePower(0);
-                }
-
-                if(gamepad2.y){
-                    intakeState = IntakeState.EXTEND;
-                    intake.setTargetLength(intake.MAX_EXTENSION);
-                }
-
-                if(gamepad2.a){
-                    intakeState = IntakeState.EXTEND;
-                    intake.setTargetLength(intake.MIN_EXTENSION);
-                }
-
-//                if(gamepad2.dpad_up){
-//                    intake.resetEncoder();
+//                if(Math.abs(leftY) > DRIVE_DEADZONE){
+//                     = IntakeState.INTAKE;
 //                }
+//
+//                if(gamepad2.x){
+//                    intake.setIntakePower(1);
+//                }else if(gamepad2.b){
+//                    intake.setIntakePower(-1);
+//                }else{
+//                    intake.setIntakePower(0);
+//                }
+//
+//                if(gamepad2.y){
+//                    intakeState = IntakeState.EXTEND;
+//                    intake.setTargetLength(intake.MAX_EXTENSION);
+//                }
+//
+//                if(gamepad2.a){
+//                    intakeState = IntakeState.EXTEND;
+//                    intake.setTargetLength(intake.MIN_EXTENSION);
+//                }
+//
+////                if(gamepad2.dpad_up){
+////                    intake.resetEncoder();
+////                }
+//
+//                if(gamepad2.dpad_left){
+//                    intake.pitchDown();
+//                }
+//                if(gamepad2.dpad_right){
+//                    intake.pitchToTransfer();
+//                }
+//
+//                if(gamepad2.dpad_up){
+//                    sampleDelivery.pitchToDeliver();
+//                }
+//                if(gamepad2.dpad_down){
+//                    sampleDelivery.pitchToTransfer();
+//                }
+//                if(gamepad2.right_trigger > 0.05){
+//                    sampleDelivery.clawClose();//WIP Reversed
+//                } else{
+//                    sampleDelivery.clawOpen();//WIP Reversed
+//                }
+//
+//                if(gamepad2.left_bumper){
+//                    specimenDelivery.pitchToIntake();
+//                }
+//                if(gamepad2.right_bumper){
+//                    specimenDelivery.pitchToDelivery();
+//                }
+//
+//                if(gamepad2.right_trigger > 0.05){
+//                    specimenDelivery.clawOpen();
+//                } else{
+//                    specimenDelivery.clawClose();
+//                }
+//
+//
+//                if(Math.abs(rightY) > DRIVE_DEADZONE){
+//                        sampleDeliveryHeight += gamepad2.right_stick_y * 35;
+//                }
+//
 
-                if(gamepad2.dpad_left){
-                    intake.pitchDown();
-                }
-                if(gamepad2.dpad_right){
-                    intake.pitchUp();
-                }
-
-                if(gamepad2.dpad_up){
-                    sampleDelivery.pitchToDeliver();
-                }
-                if(gamepad2.dpad_down){
-                    sampleDelivery.pitchToTransfer();
-                }
-                if(gamepad2.right_trigger > 0.05){
-                    sampleDelivery.clawClose();//WIP Reversed
-                } else{
-                    sampleDelivery.clawOpen();//WIP Reversed
-                }
-
-                if(gamepad2.left_bumper){
-                    specimenDelivery.pitchToIntake();
-                }
-                if(gamepad2.right_bumper){
-                    specimenDelivery.pitchToDelivery();
-                }
-
-                if(gamepad2.right_trigger > 0.05){
-                    specimenDelivery.clawClose();
-                }
-                if(gamepad2.left_trigger > 0.05){
-                    specimenDelivery.clawOpen();
-                }
 
 
-                if(Math.abs(rightY) > DRIVE_DEADZONE){
-                        sampleDeliveryHeight += gamepad2.right_stick_y * 25;
-                }
-
-                sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
-                sampleDelivery.PControlPower(1);
-
-
-
-                switch (intakeState){
+                switch (state){
                     case INTAKE:
+                        float intakePitch = (float) intake.getPitch();
                         intake.runPower();
+
+                        //slides
                         if(Math.abs(leftY) > DRIVE_DEADZONE){
                             intake.setExtensionPower(leftY);
                         }else{
                             intake.setExtensionPower(0);
                         }
+
+                        //Pitch
+                        if(Math.abs(rightY) > DRIVE_DEADZONE){
+                            intakePitch -= (float) (rightY*0.01);
+                            intake.setPitch(intakePitch);
+                        }
+                        telemetry.addData("Pitch: ", intakePitch);
+
+                        //Intake
+                        if(gamepad2.right_trigger> DRIVE_DEADZONE){
+                            intake.setIntakePower(-gamepad2.right_trigger);
+                        }
+                        if(gamepad2.left_trigger> DRIVE_DEADZONE){
+                            intake.setIntakePower(gamepad2.left_trigger);
+                        }
+                        if(gamepad2.right_trigger < DRIVE_DEADZONE && gamepad2.left_trigger < DRIVE_DEADZONE){
+                            intake.setIntakePower(0);
+                        }
+
+                        //TO INTAKE_EXTEND
+                        if(gamepad2.a){
+                            timer.reset();
+                            state = RobotState.INTAKE_EXTEND;
+                            intake.setTargetLength(intake.MIN_EXTENSION);
+                        }
+                        if(gamepad2.y){
+                            timer.reset();
+                            state = RobotState.INTAKE_EXTEND;
+                            intake.setTargetLength(intake.MAX_EXTENSION);
+                        }
                     break;
 
-                    case EXTEND:
+                    case INTAKE_EXTEND:
+                        intake.pitchUp();
                         intake.runToPosition();
                         intake.updateLength();
+
+                        //break condition
+                        if(timer.seconds() > INTAKE_EXTENSION_TIME){
+                            state = RobotState.IDLE;
+//                            intake.setIntakePower(0);
+                        }
+
+                        break;
+                    case TRANSFER:
+
+                        if(timer.seconds()>DELIVER_PITCH_TIME){
+                            if(!transfered){
+                                intake.pitchToTransfer();
+                            }
+                            if(gamepad2.a){
+                                sampleDelivery.clawOpen();
+                                transferTimer.reset();
+                                transfered = true;
+                            }
+                        }
+                        telemetry.addData("transferred: ", transfered);
+                        if(transferTimer.seconds() > TRANSFER_TIME && transfered){
+                            intake.pitchDown();
+                            //transfered = false;
+                            sampleDeliveryHeight = -2000;
+                            state = RobotState.DELIVERY_EXTEND;
+                            timer.reset();
+                        }
+
+                        break;
+                    case DELIVERY_EXTEND:
+                        transfered = false;
+                        sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
+                        sampleDelivery.PControlPower(1);
+                        if(timer.seconds() > INTAKE_EXTENSION_TIME){
+                            sampleDelivery.pitchToDeliver();
+                            if(gamepad2.right_trigger > DRIVE_DEADZONE){
+                                sampleDelivery.clawClose();
+                            }
+                        }
+
+                        break;
+
+                    case IDLE:
+                        //TO INTAKE_EXTEND
+                        if(gamepad2.a){
+                            timer.reset();
+                            state = RobotState.INTAKE_EXTEND;
+                            intake.setTargetLength(intake.MIN_EXTENSION);
+                        }
+                        if(gamepad2.y){
+                            timer.reset();
+                            state = RobotState.INTAKE_EXTEND;
+                            intake.setTargetLength(intake.MAX_EXTENSION);
+                        }
+                        if(gamepad2.right_trigger > DRIVE_DEADZONE){
+                            state = RobotState.INTAKE;
+                        }
+                        //TO TRANSFER
+                        if(gamepad2.x){
+                            timer.reset();
+                            state = RobotState.TRANSFER;
+                            sampleDelivery.pitchToTransfer();
+                            sampleDelivery.clawClose();
+                        }
+                        break;
                 }
+
+                telemetry.addData("STATE: ", state);
+                telemetry.addData("TRANSFERTIMER", transferTimer.seconds());
 
 
             }
