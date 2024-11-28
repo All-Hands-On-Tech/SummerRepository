@@ -66,7 +66,7 @@ public class OneFishSampleDelivery {
             slide.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
 
-            slide.setTargetPosition(slide.getCurrentPosition());
+            slide.setTargetPosition(0);
 
             if (slidesRunToPosition) {
                 slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
@@ -77,7 +77,7 @@ public class OneFishSampleDelivery {
             slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
 
 
-            slide.setDirection(DcMotor.Direction.REVERSE);
+            //slide.setDirection(DcMotor.Direction.REVERSE);
 
         }catch(NullPointerException e){
             initAttempts++;
@@ -136,7 +136,7 @@ public class OneFishSampleDelivery {
         linearOpMode.telemetry.addLine();linearOpMode.telemetry.addLine();linearOpMode.telemetry.addLine();
         linearOpMode.telemetry.addData("Power: ",power);
         linearOpMode.telemetry.addData("Error: ",error);
-        linearOpMode.telemetry.update();
+//        linearOpMode.telemetry.update();
     }
 
     public double getClawPosition() {return claw.getPosition();}

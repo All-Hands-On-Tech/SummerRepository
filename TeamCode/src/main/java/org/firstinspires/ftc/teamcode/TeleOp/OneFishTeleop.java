@@ -182,11 +182,11 @@ public class OneFishTeleop extends LinearOpMode {
 
 
                 if(Math.abs(rightY) > DRIVE_DEADZONE){
-                    sampleDeliveryHeight += HEIGHT_INCREMENT * (int)rightY;
+                        sampleDeliveryHeight += gamepad2.right_stick_y * 25;
                 }
 
                 sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
-                sampleDelivery.setSlidesPower(1);
+                sampleDelivery.PControlPower(1);
 
 
 
