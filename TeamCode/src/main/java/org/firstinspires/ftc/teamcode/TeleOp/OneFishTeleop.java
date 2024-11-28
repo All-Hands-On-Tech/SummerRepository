@@ -60,7 +60,11 @@ public class OneFishTeleop extends LinearOpMode {
     private final double INTAKE_EXTENSION_TIME = 1;
     private final double DELIVER_PITCH_TIME = 0.7;
     private final double TRANSFER_TIME = 0.25;
+    private final double DUMP_TIME = 0.25;
+    private final double DELIVERY_EXTENSION_TIME = 1.5;
     boolean transfered = false;
+    boolean dumped = false;
+    boolean retracted = false;
 
     private enum RobotState{
         INTAKE_EXTEND,
@@ -80,6 +84,7 @@ public class OneFishTeleop extends LinearOpMode {
 
     private ElapsedTime timer = new ElapsedTime();
     private ElapsedTime transferTimer = new ElapsedTime();
+    private ElapsedTime dumpTimer = new ElapsedTime();
     @Override
     public void runOpMode() {
 
@@ -282,10 +287,39 @@ public class OneFishTeleop extends LinearOpMode {
                         sampleDelivery.PControlPower(1);
                         if(timer.seconds() > INTAKE_EXTENSION_TIME){
                             sampleDelivery.pitchToDeliver();
-                            if(gamepad2.right_trigger > DRIVE_DEADZONE){
-                                sampleDelivery.clawClose();
-                            }
                         }
+                        if(timer.seconds() > DELIVERY_EXTENSION_TIME){
+                            state = RobotState.DELIVERY_DUMP;
+                        }
+
+                        break;
+
+                    case DELIVERY_DUMP:
+
+                        sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
+                        sampleDelivery.PControlPower(1);
+
+                        if(dumped && dumpTimer.seconds() > DUMP_TIME){
+                            sampleDeliveryHeight = 0;
+                            sampleDelivery.pitchToTransfer();
+                            timer.reset();
+                            retracted = true;
+                            dumped = false;
+                        }
+
+                        if(gamepad2.right_trigger > DRIVE_DEADZONE && !dumped){
+                            sampleDelivery.clawClose();
+                            dumpTimer.reset();
+                            dumped = true;
+                        }
+
+                        if(timer.seconds() > DELIVERY_EXTENSION_TIME && retracted){
+                            state = RobotState.IDLE;
+                            retracted = false;
+                        }
+
+                        telemetry.addData("Retracted: ", retracted);
+                        telemetry.addData("retract time: ", timer.seconds());
 
                         break;
 
@@ -312,6 +346,10 @@ public class OneFishTeleop extends LinearOpMode {
                             sampleDelivery.clawClose();
                         }
                         break;
+                }
+
+                if(gamepad2.back){
+                    state = RobotState.IDLE;
                 }
 
                 telemetry.addData("STATE: ", state);

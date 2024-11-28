@@ -5,6 +5,7 @@ import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -53,9 +54,9 @@ public class DrivetrainFunctions {
 //            }
 
             leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+//            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+            rightFrontDrive.setDirection(DcMotor.Direction.REVERSE);
+//            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
 
             leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
             leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
@@ -136,9 +137,9 @@ public class DrivetrainFunctions {
         x = -x;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
-        setLeftFrontPower(((-y + x + rx) / denominator) * speedScalar);
-        setLeftBackPower(((y + x + rx) / denominator) * speedScalar);
-        setRightFrontPower(((-y + x - rx) / denominator) * speedScalar);
+        setLeftFrontPower(((y + x + rx) / denominator) * speedScalar);
+        setLeftBackPower(((y + -x - rx) / denominator) * speedScalar);
+        setRightFrontPower(((y + -x + rx) / denominator) * speedScalar);
         setRightBackPower(((y + x - rx) / denominator) * speedScalar);
     }
 
