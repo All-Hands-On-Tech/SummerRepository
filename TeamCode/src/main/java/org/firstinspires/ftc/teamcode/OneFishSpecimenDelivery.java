@@ -14,8 +14,11 @@ public class OneFishSpecimenDelivery {
 
     private LinearOpMode linearOpMode;
 
-    private final double INTAKE_PITCH = 0.1;
-    private final double DELIVERY_PITCH = 0.0;
+    public final double INTAKE_PITCH = 0.1;
+    public final double DELIVERY_PITCH = 0.0;
+
+    public final double CLAW_CLOSE = 0.75;
+    public final double CLAW_OPEN = 1.0;
 
     private double targetPosition;
     private double currentPosition;
@@ -57,10 +60,10 @@ public class OneFishSpecimenDelivery {
         claw.setPosition(p);
     }
     public void clawOpen(){
-        setClawPosition(0.5);
+        setClawPosition(CLAW_OPEN);
     }
     public void clawClose(){
-        setClawPosition(1);
+        setClawPosition(CLAW_CLOSE);
     }
 
     public double getPivotPosition() {return pivot.getPosition();}
