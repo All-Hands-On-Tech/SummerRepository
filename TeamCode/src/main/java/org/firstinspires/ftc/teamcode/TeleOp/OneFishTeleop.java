@@ -58,7 +58,7 @@ public class OneFishTeleop extends LinearOpMode {
     private int sampleDeliveryHeight;
     private final int HEIGHT_INCREMENT = 1;
     private final double INTAKE_EXTENSION_TIME = 1;
-    private final double DELIVER_PITCH_TIME = 0.7;
+    private final double DELIVER_PITCH_TIME = 0.25;
     private final double TRANSFER_TIME = 0.25;
     private final double DUMP_TIME = 0.25;
     private final double DELIVERY_EXTENSION_TIME = 1.5;
@@ -206,6 +206,7 @@ public class OneFishTeleop extends LinearOpMode {
 
                 switch (state){
                     case INTAKE:
+                        sampleDelivery.pitchToTransfer();
                         float intakePitch = (float) intake.getPitch();
                         intake.runPower();
 
