@@ -261,7 +261,8 @@ public class OneFishTeleop extends LinearOpMode {
 
                         break;
                     case TRANSFER:
-
+                        sampleDelivery.setSlidesTargetPosition(0);
+                        sampleDelivery.PControlPower(1);
                         if(timer.seconds()>DELIVER_PITCH_TIME){
                             if(!transfered){
                                 intake.pitchToTransfer();
