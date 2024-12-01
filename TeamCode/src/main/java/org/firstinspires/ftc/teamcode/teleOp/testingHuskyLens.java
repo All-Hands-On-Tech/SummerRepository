@@ -17,6 +17,9 @@ public class testingHuskyLens extends LinearOpMode {
     ArrayList<HuskyLens.Block> redBlocks = new ArrayList<HuskyLens.Block>();
     ArrayList<HuskyLens.Block> blueBlocks = new ArrayList<HuskyLens.Block>();
 
+    final int centerX = 160;
+    final int centerY = 120;
+
     @Override
     public void runOpMode() {
         husky = hardwareMap.get(HuskyLens.class, "husky");
@@ -47,6 +50,25 @@ public class testingHuskyLens extends LinearOpMode {
                     return distanceToCenter(a) - distanceToCenter(b);
                 }
             });
+
+            if (yellowBlocks.get(0).x > centerX) {
+                telemetry.addLine("move back");
+            } else {
+                telemetry.addLine("move forward");
+            }
+
+            if (yellowBlocks.get(0).y > centerY) {
+                telemetry.addLine("move back");
+            } else {
+                telemetry.addLine("move forward");
+            }
+
+            telemetry.addLine("\n");
+            
+
+            for (HuskyLens.Block block : yellowBlocks) {
+                telemetry.addLine(block.toString());
+            }
             telemetry.update();
 
         }
@@ -57,8 +79,6 @@ public class testingHuskyLens extends LinearOpMode {
     }
 
     int distanceToCenter (HuskyLens.Block block) {
-        int centerX = 160;
-        int centerY = 120;
         return (int) Math.sqrt(Math.pow(block.x - centerX,2) + Math.pow(block.y - centerY,2));
     }
 
