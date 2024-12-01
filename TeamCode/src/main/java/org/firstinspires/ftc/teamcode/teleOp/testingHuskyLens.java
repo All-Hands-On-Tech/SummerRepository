@@ -34,14 +34,12 @@ public class testingHuskyLens extends LinearOpMode {
             HuskyLens.Block[] huskyBlocks = husky.blocks();
             telemetry.addData("Block count", huskyBlocks.length);
             for (HuskyLens.Block sample : huskyBlocks) {
-                if (aspectRatio(sample) > 0.9) {
-                    if (sample.id == 0) {
-                        yellowBlocks.add(sample);
-                    } else if (sample.id == 1) {
-                        redBlocks.add(sample);
-                    } else if (sample.id == 2) {
-                        blueBlocks.add(sample);
-                    }
+                if (sample.id == 0) {
+                    yellowBlocks.add(sample);
+                } else if (sample.id == 1) {
+                    redBlocks.add(sample);
+                } else if (sample.id == 2) {
+                    blueBlocks.add(sample);
                 }
             }
 
@@ -51,20 +49,16 @@ public class testingHuskyLens extends LinearOpMode {
                 }
             });
 
-            if (yellowBlocks.get(0).x > centerX) {
-                telemetry.addLine("move back");
-            } else {
-                telemetry.addLine("move forward");
-            }
-
-            if (yellowBlocks.get(0).y > centerY) {
-                telemetry.addLine("move back");
-            } else {
-                telemetry.addLine("move forward");
-            }
+            int deltaX = yellowBlocks.get(0).x-centerX;
+            int deltaY = yellowBlocks.get(0).y-centerY;
+            if (deltaX > 0) {telemetry.addData("move left", deltaX);}
+                else {telemetry.addData("move right", deltaX);}
+            if (deltaY > 0) {telemetry.addData("move back", deltaY);}
+                else {telemetry.addData("move forward", deltaY);}
+                
 
             telemetry.addLine("\n");
-            
+
 
             for (HuskyLens.Block block : yellowBlocks) {
                 telemetry.addLine(block.toString());
