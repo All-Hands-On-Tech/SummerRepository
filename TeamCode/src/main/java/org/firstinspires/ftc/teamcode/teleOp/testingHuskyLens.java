@@ -34,11 +34,11 @@ public class testingHuskyLens extends LinearOpMode {
             HuskyLens.Block[] huskyBlocks = husky.blocks();
             telemetry.addData("Block count", huskyBlocks.length);
             for (HuskyLens.Block sample : huskyBlocks) {
-                if (sample.id == 0) {
+                if (sample.id == 1) {
                     yellowBlocks.add(sample);
-                } else if (sample.id == 1) {
-                    redBlocks.add(sample);
                 } else if (sample.id == 2) {
+                    redBlocks.add(sample);
+                } else if (sample.id == 3) {
                     blueBlocks.add(sample);
                 }
             }
