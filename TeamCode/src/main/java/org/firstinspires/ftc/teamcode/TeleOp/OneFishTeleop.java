@@ -59,9 +59,11 @@ public class OneFishTeleop extends LinearOpMode {
     private final int HEIGHT_INCREMENT = 1;
     private final double INTAKE_EXTENSION_TIME = 1;
     private final double DELIVER_PITCH_TIME = 0.25;
-    private final double TRANSFER_TIME = 0.25;
+    private final double TRANSFER_TIME = 0.5;
     private final double DUMP_TIME = 0.25;
-    private final double DELIVERY_EXTENSION_TIME = 1.5;
+    private final double DELIVERY_EXTENSION_TIME = 2;
+    private final double PITCH_TO_DELIVER_TIME = 1;
+    private final double SHAKE_TIME = 0.5;
     boolean transfered = false;
     boolean dumped = false;
     boolean retracted = false;
@@ -287,7 +289,10 @@ public class OneFishTeleop extends LinearOpMode {
                         transfered = false;
                         sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
                         sampleDelivery.PControlPower(1);
-                        if(timer.seconds() > INTAKE_EXTENSION_TIME){
+                        if(timer.seconds() > PITCH_TO_DELIVER_TIME){
+                            sampleDelivery.pitchToShake();
+                        }
+                        if(timer.seconds() > PITCH_TO_DELIVER_TIME + SHAKE_TIME){
                             sampleDelivery.pitchToDeliver();
                         }
                         if(timer.seconds() > DELIVERY_EXTENSION_TIME){

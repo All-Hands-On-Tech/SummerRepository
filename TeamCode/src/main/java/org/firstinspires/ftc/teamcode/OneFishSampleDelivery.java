@@ -33,7 +33,8 @@ public class OneFishSampleDelivery {
     public final int LOW_POSITION = 50; // low-to-ground position used to slow slides when low to ground
 
     public final double TRANSFER_PITCH = 0.88;
-    public final double DELIVER_PITCH = 0;
+    public final double DELIVER_PITCH = 0.25;
+    public final double SHAKE_PITCH = 0;
     public final double TICK_LOW_POWER_DISTANCE = 75;
 
     public final double RETRACT_TIMEOUT = 7;
@@ -103,6 +104,10 @@ public class OneFishSampleDelivery {
 
     public void pitchToTransfer(){
         setPitch(TRANSFER_PITCH);
+    }
+
+    public void pitchToShake(){
+        setPitch(SHAKE_PITCH);
     }
 
     public void pitchToDeliver(){
