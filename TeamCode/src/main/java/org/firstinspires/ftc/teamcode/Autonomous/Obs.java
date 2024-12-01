@@ -1,11 +1,7 @@
 package org.firstinspires.ftc.teamcode.Autonomous;
 
-import androidx.annotation.NonNull;
-
 import com.acmerobotics.dashboard.config.Config;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
-import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
@@ -33,51 +29,58 @@ public class Obs extends LinearOpMode {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15.2, -62, Math.toRadians(90)));
 
         Action trajToScoreFirstSpecimen;
+        Action trajToCollectFirstSample;
         Action trajToCollectSecondSample;
-        Action trajToCollectThirdSample;
         Action trajToCollectSecondSpecimen;
         Action trajToScoreSecondSpecimen;
+        Action trajToPrepareThirdSpecimen;
         Action trajToCollectThirdSpecimen;
         Action trajToScoreThirdSpecimen;
         Action trajToPark;
 
         trajToScoreFirstSpecimen = drive.actionBuilder(new Pose2d(15.2, -62, Math.toRadians(90)))
+                .setTangent(Math.toRadians(90))
                 .splineTo(new Vector2d(6, -34), Math.toRadians(90))
                 .build();
 
-        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
+        trajToCollectFirstSample = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(48, -45), Math.toRadians(0))
                 .build();
 
-        trajToCollectThirdSample = drive.actionBuilder(new Pose2d(48, -45, Math.toRadians(90)))
+        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(48, -45, Math.toRadians(90)))
                 .setTangent(Math.toRadians(0))
                 .splineToConstantHeading(new Vector2d(58, -45), Math.toRadians(0))
                 .build();
 
         trajToCollectSecondSpecimen = drive.actionBuilder(new Pose2d(58, -45, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineToConstantHeading(new Vector2d(58, -62), Math.toRadians(0))
+                .splineToConstantHeading(new Vector2d(58, -59), Math.toRadians(90))
                 .build();
 
-        trajToScoreSecondSpecimen = drive.actionBuilder(new Pose2d(58, -62, Math.toRadians(90)))
+        trajToScoreSecondSpecimen = drive.actionBuilder(new Pose2d(58, -59, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
                 .splineTo(new Vector2d(6, -34), Math.toRadians(90))
                 .build();
 
-        trajToCollectThirdSpecimen = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
+        trajToPrepareThirdSpecimen = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineToConstantHeading(new Vector2d(45, -62), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(45, -47), Math.toRadians(-90))
                 .build();
 
-        trajToScoreThirdSpecimen = drive.actionBuilder(new Pose2d(45, -62, Math.toRadians(90)))
+        trajToCollectThirdSpecimen = drive.actionBuilder(new Pose2d(45, -47, Math.toRadians(90)))
+                .setTangent(Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(45, -59), Math.toRadians(-90))
+                .build();
+
+        trajToScoreThirdSpecimen = drive.actionBuilder(new Pose2d(45, -59, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
                 .splineTo(new Vector2d(6, -34), Math.toRadians(90))
                 .build();
 
         trajToPark = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineTo(new Vector2d(50, -50), Math.toRadians(-90))
+                .splineTo(new Vector2d(45, -55), Math.toRadians(-90))
                 .build();
 
         intake.brakePitch();
@@ -85,6 +88,24 @@ public class Obs extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+
+        Actions.runBlocking(trajToScoreFirstSpecimen);
+        //Add code to score a specimen
+        Actions.runBlocking(trajToCollectFirstSample);
+        //Add code to intake and outtake a sample
+        Actions.runBlocking(trajToCollectSecondSample);
+        //Add code to intake and outtake sample
+        Actions.runBlocking(trajToCollectSecondSpecimen);
+        //Add code to collect a specimen
+        Actions.runBlocking(trajToScoreSecondSpecimen);
+        //Add code to score a specimen
+        Actions.runBlocking(trajToPrepareThirdSpecimen);
+        //Add wait to help human player align to robot
+        Actions.runBlocking(trajToCollectThirdSpecimen);
+        //Add code to collect a specimen
+        Actions.runBlocking(trajToScoreThirdSpecimen);
+        //Add code to score a specimen
+        Actions.runBlocking(trajToPark);
 
     }
 }
