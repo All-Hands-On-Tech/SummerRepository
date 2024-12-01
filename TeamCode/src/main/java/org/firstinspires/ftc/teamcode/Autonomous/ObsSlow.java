@@ -5,9 +5,14 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.Arclength;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.Pose2dDual;
+import com.acmerobotics.roadrunner.PosePath;
+import com.acmerobotics.roadrunner.TranslationalVelConstraint;
 import com.acmerobotics.roadrunner.Vector2d;
+import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
@@ -17,8 +22,8 @@ import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
-@Autonomous(name = "Obs (Fast & Start Delay)", group = "Autonomous")
-public class Obs extends LinearOpMode {
+@Autonomous(name = "Obs (Slow)", group = "Autonomous")
+public class ObsSlow extends LinearOpMode {
     Delivery delivery = null;
     Intake intake = null;
 
@@ -44,39 +49,41 @@ public class Obs extends LinearOpMode {
         Action trajToReturnAfterAdditionalSample;
         Action trajToPark;
 
+        VelConstraint scoreVelConstraint = new TranslationalVelConstraint(17);
+        VelConstraint standardVelConstraint = new TranslationalVelConstraint(20);
 
         trajToScoreFirstSample = drive.actionBuilder(drive.pose)
-                .splineTo(new Vector2d(9, -33), Math.toRadians(90))
+                .splineTo(new Vector2d(9, -33), Math.toRadians(90), scoreVelConstraint)
                 .build();
 
         trajToCollectSamples = drive.actionBuilder(new Pose2d(9, -33, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(25, -37, Math.toRadians(90)), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(27, -37, Math.toRadians(90)), Math.toRadians(0), scoreVelConstraint)
                 .setTangent(Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90), standardVelConstraint)
                 .setTangent(Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(37, -58, Math.toRadians(90)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(40, -58, Math.toRadians(90)), Math.toRadians(-90), scoreVelConstraint)
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(43, -12, Math.toRadians(180)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(40, -12, Math.toRadians(180)), Math.toRadians(90), standardVelConstraint)
                 .setTangent(Math.toRadians(0))
-                .splineTo(new Vector2d(56, -58), Math.toRadians(-90))
+                .splineTo(new Vector2d(56, -58), Math.toRadians(-90), scoreVelConstraint)
                 .setTangent(Math.toRadians(90))
-                .splineTo(new Vector2d(39, -49), Math.toRadians(-90))
+                .splineTo(new Vector2d(39, -49), Math.toRadians(-90), scoreVelConstraint)
                 .build();
 
         trajToCollectAdditionalSample = drive.actionBuilder(new Pose2d(39, -49, Math.toRadians(-90)))
-                .splineToConstantHeading(new Vector2d(40.5, -59.8), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(40.5, -59.8), Math.toRadians(-90), scoreVelConstraint)
                 .build();
         trajToPrepareAdditionalSample = drive.actionBuilder(new Pose2d(40.5, -59.8, Math.toRadians(-90)))
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(6, -40, Math.toRadians(95)), Math.toRadians(90))
+                .splineToLinearHeading(new Pose2d(6, -35, Math.toRadians(95)), Math.toRadians(90), scoreVelConstraint)
                 .build();
-        trajToScoreAdditionalSample = drive.actionBuilder(new Pose2d(6, -40, Math.toRadians(90)))
+        trajToScoreAdditionalSample = drive.actionBuilder(new Pose2d(6, -35, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineToConstantHeading(new Vector2d(6, -32), Math.toRadians(-90))
+                .splineToConstantHeading(new Vector2d(6, -32.5), Math.toRadians(-90), scoreVelConstraint)
                 .build();
 
-        trajToPark = drive.actionBuilder(new Pose2d(6, -32, Math.toRadians(-90)))
+        trajToPark = drive.actionBuilder(new Pose2d(6, -32.5, Math.toRadians(-90)))
                 .setTangent(Math.toRadians(-90))
                 .splineTo(new Vector2d(45, -58), Math.toRadians(-100))
                 .build();
@@ -84,7 +91,6 @@ public class Obs extends LinearOpMode {
         intake.brakePitch();
 
         waitForStart();
-        sleep(2000);
 
         intake.setTargetLengthServo(0.2);
 
@@ -119,6 +125,7 @@ public class Obs extends LinearOpMode {
         intakeAndDeliveryToPosition(CLAW_COLLECT, 2, VERTICAL_INTAKE_POS);
         sleep(400);
         Actions.runBlocking(trajToCollectAdditionalSample);
+        intakeAndDeliveryToPosition(CLAW_COLLECT, 2, VERTICAL_INTAKE_POS);
         delivery.clawClose();
         sleep(400);
 
@@ -130,6 +137,7 @@ public class Obs extends LinearOpMode {
                         SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
                 )
         );
+        sleep(100);
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreAdditionalSample,
@@ -210,6 +218,6 @@ public class Obs extends LinearOpMode {
         }
     }
     public Action SlideToHeightAndIntakeToAngleAction(int heightInTicks, int angleInTicks) {
-        return new Obs.SlideToHeightAndIntakeToAngleRR(heightInTicks, angleInTicks);
+        return new ObsSlow.SlideToHeightAndIntakeToAngleRR(heightInTicks, angleInTicks);
     }
 }
