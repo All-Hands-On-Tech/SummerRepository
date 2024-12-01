@@ -239,12 +239,10 @@ public class MrKrabsTeleOp extends RoboMom {
                 delivery.clawOpen();
             }
 
-            if(gamepad2.x){
-                intake.setEndEffectorSpeed(0);//in
-            }else if(gamepad2.b){
-                intake.setEndEffectorSpeed(1);//out
-            }else{
-                intake.setEndEffectorSpeed(0.5f);//stop
+            if(gamepad2.left_bumper){
+                intake.setEndEffectorPosition(0.375f);//in
+            }else {
+                intake.setEndEffectorPosition(0.75f);//out
             }
 
             targetPosition = Math.max(delivery.BOTTOM_POSITION, Math.min(delivery.TOP_POSITION, targetPosition));
