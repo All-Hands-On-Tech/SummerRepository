@@ -106,8 +106,8 @@ public class Intake {
         linearOpMode.telemetry.addData("Target angle: ",targetAngleDegrees);
     }
 
-    public void setEndEffectorSpeed(float speed){
-        intakeServo.setPosition(speed);
+    public void setEndEffectorPosition(float position){
+        intakeServo.setPosition(position);
     }
 
     public void setTargetAngle(double theta){
