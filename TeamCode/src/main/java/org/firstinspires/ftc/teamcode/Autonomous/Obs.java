@@ -26,7 +26,7 @@ public class Obs extends LinearOpMode {
     private static final int CLAW_FLOOR = 0;
     private static final int CLAW_COLLECT = 790;
     private static final int CLAW_SCORE = 1650;
-    private static final int CLAW_HIGH_RUNG = 2200;
+    private static final int CLAW_HIGH_RUNG = 2060;
 
     @Override
     public void runOpMode() {

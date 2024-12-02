@@ -13,10 +13,9 @@ public class testingHuskyLens extends LinearOpMode {
 
     // Declare OpMode members.
     private HuskyLens husky;
-    ArrayList<HuskyLens.Block> yellowBlocks = new ArrayList<HuskyLens.Block>();
-    ArrayList<HuskyLens.Block> redBlocks = new ArrayList<HuskyLens.Block>();
-    ArrayList<HuskyLens.Block> blueBlocks = new ArrayList<HuskyLens.Block>();
 
+    final int imageWidth = 320;
+    final int imageHeight = 240;
     final int centerX = 160;
     final int centerY = 120;
 
@@ -32,6 +31,11 @@ public class testingHuskyLens extends LinearOpMode {
 
         while (opModeIsActive()) {
             HuskyLens.Block[] huskyBlocks = husky.blocks();
+
+            ArrayList<HuskyLens.Block> yellowBlocks = new ArrayList<HuskyLens.Block>();
+            ArrayList<HuskyLens.Block> redBlocks = new ArrayList<HuskyLens.Block>();
+            ArrayList<HuskyLens.Block> blueBlocks = new ArrayList<HuskyLens.Block>();
+
             telemetry.addData("Block count", huskyBlocks.length);
             for (HuskyLens.Block sample : huskyBlocks) {
                 if (sample.id == 1) {
@@ -43,34 +47,39 @@ public class testingHuskyLens extends LinearOpMode {
                 }
             }
 
-            Collections.sort(yellowBlocks, new Comparator<HuskyLens.Block>(){
-                public int compare(HuskyLens.Block a, HuskyLens.Block b){
-                    return distanceToCenter(a) - distanceToCenter(b);
+            if (!yellowBlocks.isEmpty()) {
+                Collections.sort(yellowBlocks, new Comparator<HuskyLens.Block>() {
+                    public int compare(HuskyLens.Block a, HuskyLens.Block b) {
+                        return distanceToCenter(a) - distanceToCenter(b);
+                    }
+                });
+
+                double deltaX = yellowBlocks.get(0).x - centerX;
+                double deltaY = yellowBlocks.get(0).y - centerY;
+                if (deltaX > 0) {
+                    telemetry.addData("move right", deltaX/imageWidth);
+                } else {
+                    telemetry.addData("move left", deltaX/imageWidth);
                 }
-            });
-
-            int deltaX = yellowBlocks.get(0).x-centerX;
-            int deltaY = yellowBlocks.get(0).y-centerY;
-            if (deltaX > 0) {telemetry.addData("move left", deltaX);}
-            else {telemetry.addData("move right", deltaX);}
-            if (deltaY > 0) {telemetry.addData("move back", deltaY);}
-            else {telemetry.addData("move forward", deltaY);}
+                if (deltaY > 0) {
+                    telemetry.addData("move back", deltaY/imageHeight);
+                } else {
+                    telemetry.addData("move forward", deltaY/imageHeight);
+                }
 
 
-            telemetry.addLine("\n");
+                telemetry.addLine("\n");
 
 
-            for (HuskyLens.Block block : yellowBlocks) {
-                telemetry.addLine(block.toString());
+                for (HuskyLens.Block block : yellowBlocks) {
+                    telemetry.addLine(block.toString());
+                }
             }
             telemetry.update();
 
         }
     }
 
-    double aspectRatio (HuskyLens.Block block) {
-        return block.width/block.height;
-    }
 
     int distanceToCenter (HuskyLens.Block block) {
         return (int) Math.sqrt(Math.pow(block.x - centerX,2) + Math.pow(block.y - centerY,2));

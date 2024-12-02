@@ -16,6 +16,7 @@ import com.acmerobotics.roadrunner.VelConstraint;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.Intake;
@@ -31,7 +32,9 @@ public class ObsSlow extends LinearOpMode {
     private static final int CLAW_FLOOR = 0;
     private static final int CLAW_COLLECT = 790;
     private static final int CLAW_SCORE = 1650;
-    private static final int CLAW_HIGH_RUNG = 2200;
+    private static final int CLAW_HIGH_RUNG = 2060;
+
+    private ElapsedTime idleTimer = new ElapsedTime();
 
     @Override
     public void runOpMode() {
@@ -46,7 +49,6 @@ public class ObsSlow extends LinearOpMode {
         Action trajToCollectAdditionalSample;
         Action trajToPrepareAdditionalSample;
         Action trajToScoreAdditionalSample;
-        Action trajToReturnAfterAdditionalSample;
         Action trajToPark;
 
         VelConstraint scoreVelConstraint = new TranslationalVelConstraint(17);
@@ -58,13 +60,13 @@ public class ObsSlow extends LinearOpMode {
 
         trajToCollectSamples = drive.actionBuilder(new Pose2d(9, -33, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(27, -37, Math.toRadians(90)), Math.toRadians(0), scoreVelConstraint)
+                .splineToLinearHeading(new Pose2d(27, -37, Math.toRadians(90)), Math.toRadians(0), standardVelConstraint)
                 .setTangent(Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90), standardVelConstraint)
+                .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90), scoreVelConstraint)
                 .setTangent(Math.toRadians(0))
-                .splineToLinearHeading(new Pose2d(40, -58, Math.toRadians(90)), Math.toRadians(-90), scoreVelConstraint)
+                .splineToLinearHeading(new Pose2d(40, -58, Math.toRadians(90)), Math.toRadians(-90), standardVelConstraint)
                 .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(40, -12, Math.toRadians(180)), Math.toRadians(90), standardVelConstraint)
+                .splineToLinearHeading(new Pose2d(40, -12, Math.toRadians(180)), Math.toRadians(90))
                 .setTangent(Math.toRadians(0))
                 .splineTo(new Vector2d(56, -58), Math.toRadians(-90), scoreVelConstraint)
                 .setTangent(Math.toRadians(90))
@@ -85,7 +87,7 @@ public class ObsSlow extends LinearOpMode {
 
         trajToPark = drive.actionBuilder(new Pose2d(6, -32.5, Math.toRadians(-90)))
                 .setTangent(Math.toRadians(-90))
-                .splineTo(new Vector2d(45, -58), Math.toRadians(-100))
+                .splineTo(new Vector2d(40, -55), Math.toRadians(-40))
                 .build();
 
         intake.brakePitch();
@@ -105,7 +107,8 @@ public class ObsSlow extends LinearOpMode {
 //        delivery.clawToTarget(1650, 5);
         intakeAndDeliveryToPosition(CLAW_SCORE, 5, VERTICAL_INTAKE_POS);
         delivery.clawOpen();
-        sleep(300);
+//        sleep(300);
+        Actions.runBlocking(IdleAndHoldAction(200, CLAW_SCORE, VERTICAL_INTAKE_POS));
 //        delivery.clawToTarget(1850, 3);
         intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
 
@@ -123,12 +126,13 @@ public class ObsSlow extends LinearOpMode {
 //          intake.updateAngle();
 //          delivery.clawToTarget(800, 2);
         intakeAndDeliveryToPosition(CLAW_COLLECT, 2, VERTICAL_INTAKE_POS);
-        sleep(400);
+//        sleep(400);
+        Actions.runBlocking(IdleAndHoldAction(300, CLAW_COLLECT, VERTICAL_INTAKE_POS));
         Actions.runBlocking(trajToCollectAdditionalSample);
         intakeAndDeliveryToPosition(CLAW_COLLECT, 2, VERTICAL_INTAKE_POS);
         delivery.clawClose();
-        sleep(400);
-
+//        sleep(400);
+        Actions.runBlocking(IdleAndHoldAction(300, CLAW_COLLECT, VERTICAL_INTAKE_POS));
 
         //This code scores another specimen
         Actions.runBlocking(
@@ -137,23 +141,26 @@ public class ObsSlow extends LinearOpMode {
                         SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
                 )
         );
-        sleep(100);
+//        sleep(100);
+        Actions.runBlocking(IdleAndHoldAction(100, CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS));
         Actions.runBlocking(
                 new ParallelAction(
                         trajToScoreAdditionalSample,
                         SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
                 )
         );
-        sleep(400);
+//        sleep(400);
+        Actions.runBlocking(IdleAndHoldAction(300, CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS));
 //          intake.updateAngle();
 //          delivery.clawToTarget(1650, 3);
         intakeAndDeliveryToPosition(CLAW_SCORE, 3, VERTICAL_INTAKE_POS);
         delivery.clawOpen();
-        sleep(400);
+//        sleep(400);
+        Actions.runBlocking(IdleAndHoldAction(300, CLAW_SCORE, VERTICAL_INTAKE_POS));
 
         //take tres
 
-        
+
         Actions.runBlocking(
                 new ParallelAction(
                         trajToPark,
@@ -169,8 +176,7 @@ public class ObsSlow extends LinearOpMode {
     }
 
 
-
-    private void intakeAndDeliveryToPosition(int heightTarget, double heightPower, int pitchTarget){
+    public void intakeAndDeliveryToPosition(int heightTarget, double heightPower, int pitchTarget){
         delivery.setSlidesTargetPosition(heightTarget);
         intake.setTargetAngleTicks(pitchTarget);
 
@@ -182,6 +188,8 @@ public class ObsSlow extends LinearOpMode {
         delivery.setSlidesPower(0);
         intake.brakePitch();
     }
+
+
 
     public class SlideToHeightAndIntakeToAngleRR implements Action {
         private boolean initialized = false;
@@ -219,5 +227,46 @@ public class ObsSlow extends LinearOpMode {
     }
     public Action SlideToHeightAndIntakeToAngleAction(int heightInTicks, int angleInTicks) {
         return new ObsSlow.SlideToHeightAndIntakeToAngleRR(heightInTicks, angleInTicks);
+    }
+
+    public class IdleAndHoldTargetsRR implements Action {
+        private boolean initialized = false;
+        private int targetHeight;
+        private int targetPitch;
+        private double idleTime;
+
+        public IdleAndHoldTargetsRR(double time, int TargetHeight, int TargetPitch) {
+            targetHeight = TargetHeight;
+            targetPitch = TargetPitch;
+            idleTime = time;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                delivery.setSlidesTargetPosition(targetHeight);
+                intake.setTargetAngleTicks(targetPitch);
+                idleTimer.reset();
+                initialized = true;
+            }
+
+            double pos = delivery.getMotorPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
+            packet.put("liftPos", pos);
+            if (idleTimer.milliseconds() <= idleTime) {
+                delivery.PControlPower(3);
+                intake.setTargetAngleTicks(targetPitch);
+                intake.updateAngle();
+                return true;
+            } else {
+                delivery.setSlidesPower(0);
+                intake.brakePitch();
+                return false;
+            }
+        }
+    }
+    public Action IdleAndHoldAction(double time, int heightInTicks, int angleInTicks) {
+        return new ObsSlow.IdleAndHoldTargetsRR(time, heightInTicks, angleInTicks);
     }
 }
