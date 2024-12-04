@@ -329,6 +329,23 @@ public class OneFishTeleop extends LinearOpMode {
                         telemetry.addData("retract time: ", timer.seconds());
 
                         break;
+                    case SPECIMEN:
+                        if(gamepad2.a) {
+                            specimenDelivery.pitchToIntake();
+                        }
+                        if(gamepad2.b) {
+                            specimenDelivery.pitchToDelivery();
+                        }
+                        if(gamepad2.y) {
+                            specimenDelivery.clawClose();
+                        }
+                        if(gamepad2.x) {
+                            specimenDelivery.clawOpen();
+                        }
+                        if(gamepad2.dpad_up) {
+                            state = RobotState.IDLE;
+                        }
+                        break;
 
                     case IDLE:
                         //TO INTAKE_EXTEND
@@ -351,6 +368,10 @@ public class OneFishTeleop extends LinearOpMode {
                             state = RobotState.TRANSFER;
                             sampleDelivery.pitchToTransfer();
                             sampleDelivery.clawClose();
+                        }
+                        //TO SPECIMEN
+                        if(gamepad2.b) {
+                            state = RobotState.SPECIMEN;
                         }
                         break;
                 }
