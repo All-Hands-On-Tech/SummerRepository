@@ -37,7 +37,7 @@ public class MrKrabsTeleOp extends RoboMom {
 
     private int targetPitch = 0;
     private double extension = 0.25;
-    private int PITCH_INCREMENT = 10;
+    private int PITCH_INCREMENT = 15;
 
     private boolean controlsRelinquished = false;
     private final double DRIVE_DEADZONE = 0.05;
@@ -202,6 +202,13 @@ public class MrKrabsTeleOp extends RoboMom {
                 }
             }
 
+            if (gamepad2.a) {
+                targetPosition = 790;//Intake from observation wall;
+            }
+            if (gamepad2.y) {
+                targetPosition = 2000;//Score on high chamber
+            }
+
             if (Math.abs(gamepad2.left_stick_y) >= DRIVE_DEADZONE) {
                 if(gamepad2.left_stick_y > 0){
                     intake.incrementTargetAngleTicks(-PITCH_INCREMENT);
@@ -211,11 +218,11 @@ public class MrKrabsTeleOp extends RoboMom {
             }
 
             if(gamepad2.dpad_left){
-                intake.setTargetAngleTicks(0);
+                intake.setTargetAngleTicks(-100);
             }
 
             if(gamepad2.dpad_right){
-                intake.setTargetAngleTicks(750);
+                intake.setTargetAngleTicks(-750);
             }
 
             float rightTrigger = gamepad2.right_trigger;
