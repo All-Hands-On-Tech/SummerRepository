@@ -64,6 +64,7 @@ public class OneFishTeleop extends LinearOpMode {
     private final double DELIVERY_EXTENSION_TIME = 2;
     private final double PITCH_TO_DELIVER_TIME = 1;
     private final double SHAKE_TIME = 0.5;
+    private final double SPECIMEN_SCORE_TIME = 0.75;
     boolean transfered = false;
     boolean dumped = false;
     boolean retracted = false;
@@ -75,6 +76,7 @@ public class OneFishTeleop extends LinearOpMode {
         DELIVERY_EXTEND,
         DELIVERY_DUMP,
         SPECIMEN,
+        SPECIMEN_SCORE,
         IDLE
     }
 
@@ -331,7 +333,9 @@ public class OneFishTeleop extends LinearOpMode {
                         break;
                     case SPECIMEN:
                         if(gamepad2.a) {
+                            timer.reset();
                             specimenDelivery.pitchToIntake();
+                            state = RobotState.SPECIMEN_SCORE;
                         }
                         if(gamepad2.b) {
                             specimenDelivery.pitchToDelivery();
@@ -343,6 +347,13 @@ public class OneFishTeleop extends LinearOpMode {
                             specimenDelivery.clawOpen();
                         }
                         if(gamepad2.dpad_up) {
+                            state = RobotState.IDLE;
+                        }
+                        break;
+
+                    case SPECIMEN_SCORE:
+                        if(timer.seconds() > SPECIMEN_SCORE_TIME){
+                            specimenDelivery.clawOpen();
                             state = RobotState.IDLE;
                         }
                         break;
@@ -370,7 +381,7 @@ public class OneFishTeleop extends LinearOpMode {
                             sampleDelivery.clawClose();
                         }
                         //TO SPECIMEN
-                        if(gamepad2.b) {
+                        if(gamepad2.dpad_up) {
                             state = RobotState.SPECIMEN;
                         }
                         break;
