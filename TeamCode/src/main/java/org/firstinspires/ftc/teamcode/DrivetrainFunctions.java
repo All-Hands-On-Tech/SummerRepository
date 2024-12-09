@@ -207,35 +207,43 @@ public class DrivetrainFunctions {
         setLeftBackPower(((y + x + rx) / denominator) * speedScalar);
         setRightFrontPower(((-y + x - rx) / denominator) * speedScalar);
         setRightBackPower(((y + x - rx) / denominator) * speedScalar);
+
+        ABSTimer.reset();
     }
 
     public void BrakeABS(){
-        brakePowerScalar = initialStopPower - (brakeCycleNum / TOTAL_BRAKE_CYCLES) * initialStopPower; // drop power down according to cycle num
+        if(ABSTimer.milliseconds() <= TOTAL_BRAKE_CYCLES * ((BRAKE_CYCLE + FLOAT_CYCLE))) {
+            brakePowerScalar = initialStopPower - (brakeCycleNum / TOTAL_BRAKE_CYCLES) * initialStopPower; // drop power down according to cycle num
 
-        if(ABSTimer.milliseconds() < brakeCycleNum * BRAKE_CYCLE){
-            Move(yIn, xIn, rxIn, brakePowerScalar);
+            if (ABSTimer.milliseconds() < brakeCycleNum * BRAKE_CYCLE) {
+                Move(yIn, xIn, rxIn, brakePowerScalar);
+            }
+
+            if (ABSTimer.milliseconds() < brakeCycleNum * (BRAKE_CYCLE + FLOAT_CYCLE) && !floatMode) {
+                floatMode = true;
+                brakeMode = false;
+                leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+                Stop();
+            }
+
+            if (ABSTimer.milliseconds() >= brakeCycleNum * (BRAKE_CYCLE + FLOAT_CYCLE)) {
+                brakeCycleNum++;
+            }
+
+            if (brakeCycleNum >= TOTAL_BRAKE_CYCLES && !brakeMode) {
+                brakeMode = true;
+                floatMode = false;
+                brakeCycleNum = 0;
+                leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+                rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            }
         }
-
-        if(ABSTimer.milliseconds() < brakeCycleNum * (BRAKE_CYCLE + FLOAT_CYCLE) && !floatMode){
-            floatMode = true;
-            brakeMode = false;
-            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-            Stop();
-            brakeCycleNum++;
-        }
-
-        if(brakeCycleNum >= TOTAL_BRAKE_CYCLES && !brakeMode){
-            brakeMode = true;
-            floatMode = false;
-            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-            rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        }
-
+        Stop();
     }
 
     public boolean areMotorsOn() {
