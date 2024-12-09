@@ -34,6 +34,7 @@ public class OneFishSampleDelivery {
 
     public final double TRANSFER_PITCH = 0.88;
     public final double DELIVER_PITCH = 0.25;
+    public final double AWAY_PITCH = 0.35;
     public final double SHAKE_PITCH = 0;
     public final double TICK_LOW_POWER_DISTANCE = 75;
 
@@ -112,6 +113,10 @@ public class OneFishSampleDelivery {
 
     public void pitchToDeliver(){
         setPitch(DELIVER_PITCH);
+    }
+
+    public void pitchToAway(){
+        setPitch(AWAY_PITCH);
     }
 
     public int getMotorPosition(){ return slide.getCurrentPosition(); }

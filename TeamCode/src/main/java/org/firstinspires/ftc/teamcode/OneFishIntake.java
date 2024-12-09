@@ -25,6 +25,7 @@ public class OneFishIntake {
     private final double MIN_PITCH = 0.5;
     private final double DOWN_PITCH = 1;
     private final double UP_PITCH = 0.5;
+    private final double AWAY_PITCH = 0.0;
     private final double TRANSFER_PITCH = 0.0;
     private final double MAX_PITCH = 1.0;
 
@@ -135,6 +136,7 @@ public class OneFishIntake {
     public void pitchDown(){
         pitch.setPosition(DOWN_PITCH);
     }
+    public void pitchAway(){pitch.setPosition(AWAY_PITCH);}
 
     public void pitchToTransfer(){pitch.setPosition(TRANSFER_PITCH);}
 
