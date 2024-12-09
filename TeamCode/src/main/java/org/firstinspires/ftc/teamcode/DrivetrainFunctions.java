@@ -6,6 +6,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -31,10 +32,26 @@ public class DrivetrainFunctions {
 
     private double initAttempts = 0;
 
+    private ElapsedTime ABSTimer;
+
+    private static final double BRAKE_CYCLE = 10;
+    private static final double FLOAT_CYCLE = 25;
+
+    private double brakePowerScalar = 0.9;
+    private int brakeCycleNum = 0;
+    private static final int TOTAL_BRAKE_CYCLES = 5;
+
+    private double initialStopPower = 1.0;
+    private float yIn,  xIn,  rxIn;
+
+    private boolean brakeMode = true;
+    private boolean floatMode = false;
+
     public DrivetrainFunctions(LinearOpMode l)
     {
         linearOpMode = l;
         Initialize();
+        ABSTimer = new ElapsedTime();
     }
 
 
@@ -173,6 +190,52 @@ public class DrivetrainFunctions {
         setLeftBackPower(0);
         setRightFrontPower(0);
         setRightBackPower(0);
+    }
+
+    public void MoveABS(float y, float x, float rx, double speedScalar){ //x is forward/backward
+        if(isDisabled)
+            return;
+        x = -x;
+
+        yIn = y;
+        xIn = x;
+        rxIn = rx;
+        initialStopPower = speedScalar;
+
+        double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
+        setLeftFrontPower(((-y + x + rx) / denominator) * speedScalar);
+        setLeftBackPower(((y + x + rx) / denominator) * speedScalar);
+        setRightFrontPower(((-y + x - rx) / denominator) * speedScalar);
+        setRightBackPower(((y + x - rx) / denominator) * speedScalar);
+    }
+
+    public void BrakeABS(){
+        brakePowerScalar = initialStopPower - (brakeCycleNum / TOTAL_BRAKE_CYCLES) * initialStopPower; // drop power down according to cycle num
+
+        if(ABSTimer.milliseconds() < brakeCycleNum * BRAKE_CYCLE){
+            Move(yIn, xIn, rxIn, brakePowerScalar);
+        }
+
+        if(ABSTimer.milliseconds() < brakeCycleNum * (BRAKE_CYCLE + FLOAT_CYCLE) && !floatMode){
+            floatMode = true;
+            brakeMode = false;
+            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
+            Stop();
+            brakeCycleNum++;
+        }
+
+        if(brakeCycleNum >= TOTAL_BRAKE_CYCLES && !brakeMode){
+            brakeMode = true;
+            floatMode = false;
+            leftFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            leftBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightFrontDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            rightBackDrive.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        }
+
     }
 
     public boolean areMotorsOn() {
