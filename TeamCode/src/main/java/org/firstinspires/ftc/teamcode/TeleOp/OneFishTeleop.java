@@ -291,12 +291,15 @@ public class OneFishTeleop extends LinearOpMode {
                         transfered = false;
                         sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
                         sampleDelivery.PControlPower(1);
-                        if(timer.seconds() > PITCH_TO_DELIVER_TIME){
+                        //pitch out to 90 to reorient sample
+                        if(timer.seconds() > PITCH_TO_DELIVER_TIME && timer.seconds() < PITCH_TO_DELIVER_TIME + SHAKE_TIME){
                             sampleDelivery.pitchToShake();
                         }
+                        //pitch back up to deliver to high basket
                         if(timer.seconds() > PITCH_TO_DELIVER_TIME + SHAKE_TIME){
                             sampleDelivery.pitchToDeliver();
                         }
+                        //Get ready to dump
                         if(timer.seconds() > DELIVERY_EXTENSION_TIME){
                             state = RobotState.DELIVERY_DUMP;
                         }
@@ -308,23 +311,26 @@ public class OneFishTeleop extends LinearOpMode {
                         sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
                         sampleDelivery.PControlPower(1);
 
+                        //Pitch back
                         if(dumped && dumpTimer.seconds() > DUMP_TIME){
                             sampleDeliveryHeight = 0;
                             sampleDelivery.pitchToTransfer();
                             timer.reset();
                             retracted = true;
-                            dumped = false;
                         }
 
+                        //wait for right trigger to score
                         if(gamepad2.right_trigger > DRIVE_DEADZONE && !dumped){
                             sampleDelivery.clawClose();
                             dumpTimer.reset();
                             dumped = true;
                         }
 
+                        //Switch to idle when retracted
                         if(timer.seconds() > DELIVERY_EXTENSION_TIME && retracted){
                             state = RobotState.IDLE;
                             retracted = false;
+                            dumped = false;
                         }
 
                         telemetry.addData("Retracted: ", retracted);
