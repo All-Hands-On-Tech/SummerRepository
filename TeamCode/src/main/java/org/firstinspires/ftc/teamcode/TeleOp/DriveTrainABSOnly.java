@@ -8,7 +8,7 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.RoboMom;
 
-@TeleOp(name="DriveTrainOnly", group="TEST")
+@TeleOp(name="DriveTrainABSOnly", group="TEST")
 public class DriveTrainABSOnly extends LinearOpMode {
     private DrivetrainFunctions drivetrainFunctions;
 

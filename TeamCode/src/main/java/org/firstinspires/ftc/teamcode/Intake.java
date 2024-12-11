@@ -146,6 +146,10 @@ public class Intake {
         targetAngle = Math.max(MIN_ANGLE, Math.min(MAX_ANGLE, targetAngle));
     }
 
+    public int getTargetAngleTicks() {
+        return targetAngle;
+    }
+
     public void updateAngle(){
         PControlPower();
         linearOpMode.telemetry.addData("Intake Pitch: ", targetAngle);

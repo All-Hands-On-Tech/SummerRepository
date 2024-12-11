@@ -33,6 +33,7 @@ public class testingHuskyLens extends LinearOpMode {
     private int targetPitch = 0;
     private double extension = 0.25;
     private int PITCH_INCREMENT = 15;
+    private int lowHeight = -300;
 
     // Declare OpMode members.
     private HuskyLens husky;
@@ -40,7 +41,7 @@ public class testingHuskyLens extends LinearOpMode {
     final int imageWidth = 320;
     final int imageHeight = 240;
     final int centerX = 160;
-    final int centerY = 200;
+    final int centerY = 180;
 
     private FtcDashboard dash = FtcDashboard.getInstance();
     private List<Action> runningActions = new ArrayList<>();
@@ -85,11 +86,11 @@ public class testingHuskyLens extends LinearOpMode {
             float leftTrigger = gamepad1.left_trigger;
             if(rightTrigger > 0){
                 extension += rightTrigger/100;
-                extension = Math.max(0.01, Math.min(0.25, extension));
+                extension = Math.max(-0.1, Math.min(0.25, extension));
                 intake.setTargetLengthServo(extension);
             } else if(leftTrigger > 0){
                 extension -= leftTrigger/100;
-                extension = Math.max(0.01, Math.min(0.25, extension));
+                extension = Math.max(-0.1, Math.min(0.25, extension));
                 intake.setTargetLengthServo(extension);
             }
 
@@ -108,7 +109,12 @@ public class testingHuskyLens extends LinearOpMode {
             } else if(gamepad1.dpad_down){
                 intake.incrementTargetAngleTicks(+PITCH_INCREMENT);
             } else if(gamepad1.dpad_left) {
-                intake.setTargetAngleTicks(-800);
+                intake.setTargetAngleTicks(lowHeight+50);
+                extension = 0.01;
+                intake.setTargetLengthServo(extension);
+                intake.setEndEffectorPosition(0.75f);
+            } else if(gamepad1.dpad_right) {
+                lowHeight = intake.getTargetAngleTicks();
             }
 
 
@@ -118,7 +124,7 @@ public class testingHuskyLens extends LinearOpMode {
             ArrayList<HuskyLens.Block> redBlocks = new ArrayList<HuskyLens.Block>();
             ArrayList<HuskyLens.Block> blueBlocks = new ArrayList<HuskyLens.Block>();
 
-            telemetry.addData("Block count", huskyBlocks.length);
+            //telemetry.addData("Block count", huskyBlocks.length);
             for (HuskyLens.Block sample : huskyBlocks) {
                 if (sample.id == 1) {
                     yellowBlocks.add(sample);
@@ -153,7 +159,7 @@ public class testingHuskyLens extends LinearOpMode {
                 }
 
                 if (toSample) {
-                    drivetrainFunctions.Move((float) -deltaX, (float) -deltaY, 0, 2*speedScalar);
+                    drivetrainFunctions.Move((float) -deltaX, (float) -deltaY, 0, speedScalar);
                 }
 
 
@@ -167,13 +173,13 @@ public class testingHuskyLens extends LinearOpMode {
 
             if (gamepad1.b) {
                 runningActions.add(new SequentialAction(
-                        new InstantAction(() ->  drivetrainFunctions.Move(0, 1, 0, speedScalar/3)),
-                        new SleepAction(0.1),
-                        new InstantAction(() -> drivetrainFunctions.Stop()),
+                        //new InstantAction(() ->  drivetrainFunctions.Move(0, 1, 0, speedScalar/3)),
+                        //new SleepAction(0.1),
+                        //new InstantAction(() -> drivetrainFunctions.Stop()),
                         new InstantAction(() -> extension = 0.25),
                         new InstantAction(() -> intake.setTargetLengthServo(extension)),
                         new SleepAction(1),
-                        new InstantAction(() -> intake.setTargetAngleTicks(-900)),
+                        new InstantAction(() -> intake.setTargetAngleTicks(lowHeight+30)),
                         new SleepAction(1),
                         new InstantAction(() -> intake.setEndEffectorPosition(0.375f))
 
