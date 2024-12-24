@@ -12,7 +12,6 @@ import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.OneFishIntake;
 import org.firstinspires.ftc.teamcode.OneFishSampleDelivery;
 import org.firstinspires.ftc.teamcode.OneFishSpecimenDelivery;
-import org.firstinspires.ftc.teamcode.OneFishSpecimenDelivery;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -59,11 +58,11 @@ public class OneFishTeleop extends LinearOpMode {
     private final int HEIGHT_INCREMENT = 1;
     private final double INTAKE_EXTENSION_TIME = 1;
     private final double DELIVER_PITCH_TIME = 0.25;
-    private final double TRANSFER_TIME = 0.5;
-    private final double DUMP_TIME = 0.25;
-    private final double DELIVERY_EXTENSION_TIME = 2;
     private final double PITCH_TO_DELIVER_TIME = 1;
     private final double SHAKE_TIME = 1.5;
+    private final double TRANSFER_TIME = 0.5;
+    private final double DUMP_TIME = 0.25;
+    private final double DELIVERY_EXTENSION_TIME = DELIVER_PITCH_TIME + SHAKE_TIME + 1;
     private final double SPECIMEN_SCORE_TIME = 0.75;
     boolean transfered = false;
     boolean dumped = false;
@@ -339,7 +338,7 @@ public class OneFishTeleop extends LinearOpMode {
                         break;
                     case SPECIMEN:
                         intake.pitchUp();
-                        sampleDelivery.pitchToAway();
+//                        sampleDelivery.pitchToAway();
                         if(gamepad2.a) {
                             timer.reset();
                             specimenDelivery.pitchToIntake();
@@ -347,6 +346,9 @@ public class OneFishTeleop extends LinearOpMode {
                         }
                         if(gamepad2.b) {
                             specimenDelivery.pitchToDelivery();
+                        }
+                        if(gamepad2.right_bumper){
+                            specimenDelivery.pitchToVertical();
                         }
                         if(gamepad2.y) {
                             specimenDelivery.clawClose();

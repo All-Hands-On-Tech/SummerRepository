@@ -135,6 +135,7 @@ public class DrivetrainFunctions {
         if(isDisabled)
             return;
         x = -x;
+        y *= 1.1f;
 
         double denominator = Math.max(Math.abs(y) + Math.abs(x) + Math.abs(rx), 1);
         setLeftFrontPower(((y + x + rx) / denominator) * speedScalar);
