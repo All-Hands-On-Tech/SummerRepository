@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.hardware.rev.RevBlinkinLedDriver;
 import com.qualcomm.hardware.rev.RevHubOrientationOnRobot;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
@@ -7,6 +11,7 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
+import com.qualcomm.robotcore.util.ElapsedTime;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
@@ -187,7 +192,39 @@ public class DrivetrainFunctions {
                 || leftBackPower != 0;
     }
 
+    public class DriveForTimeRR implements Action {
+        private boolean initialized = false;
+        private double time = 0.0;
+        private ElapsedTime timer = new ElapsedTime();
 
+        private double x, y;
 
+        public DriveForTimeRR(double targetTime, double xPower, double yPower) {
+            time = targetTime;
+            x = xPower;
+            y = yPower;
+        }
 
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                timer.reset();
+                initialized = true;
+            }
+
+            packet.addLine("In RR action");
+            packet.addLine("Drive For Time");
+            packet.put("Time Elapsed", timer.milliseconds());
+            if (timer.milliseconds() > time) {
+                Move((float)y, (float)x, 0, 1.0);
+                return true;
+            } else {
+                Stop();
+                return false;
+            }
+        }
+    }
+    public Action DriveForTimeAction(double targetTime, double xPower, double yPower) {
+        return new DrivetrainFunctions.DriveForTimeRR(targetTime, xPower, yPower);
+    }
 }

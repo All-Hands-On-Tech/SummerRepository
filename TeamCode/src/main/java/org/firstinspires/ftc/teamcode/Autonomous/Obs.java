@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Delivery;
+import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.Intake;
 import org.firstinspires.ftc.teamcode.OneFishIntake;
 import org.firstinspires.ftc.teamcode.OneFishSampleDelivery;
@@ -22,6 +23,8 @@ public class Obs extends LinearOpMode {
     OneFishIntake intake = null;
     OneFishSampleDelivery sampleDelivery = null;
 
+    DrivetrainFunctions driveTrain = null;
+
     private static final int VERTICAL_INTAKE_POS = -330;
     private static final int CLAW_FLOOR = 0;
     private static final int CLAW_COLLECT = 800;
@@ -31,6 +34,8 @@ public class Obs extends LinearOpMode {
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15.2, -62, Math.toRadians(90)));
+
+        driveTrain = new DrivetrainFunctions(this);
 
         specimenDelivery = new OneFishSpecimenDelivery(this);
         intake = new OneFishIntake(this);
@@ -48,10 +53,10 @@ public class Obs extends LinearOpMode {
 
         trajToScoreFirstSpecimen = drive.actionBuilder(new Pose2d(15.2, -62, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineTo(new Vector2d(6, -34), Math.toRadians(90))
+                .splineTo(new Vector2d(0, -34), Math.toRadians(90))
                 .build();
 
-        trajToCollectFirstSample = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
+        trajToCollectFirstSample = drive.actionBuilder(new Pose2d(0, -34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(48, -45), Math.toRadians(0))
                 .build();
