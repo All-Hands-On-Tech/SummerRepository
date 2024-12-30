@@ -67,6 +67,7 @@ public class OneFishTeleop extends LinearOpMode {
     boolean transfered = false;
     boolean dumped = false;
     boolean retracted = false;
+    boolean pitched = false;
 
     private enum RobotState{
         INTAKE_EXTEND,
@@ -311,11 +312,12 @@ public class OneFishTeleop extends LinearOpMode {
                         sampleDelivery.PControlPower(1);
 
                         //Pitch back
-                        if(dumped && dumpTimer.seconds() > DUMP_TIME){
+                        if(dumped && dumpTimer.seconds() > DUMP_TIME && !pitched){
                             sampleDeliveryHeight = 0;
                             sampleDelivery.pitchToTransfer();
                             timer.reset();
                             retracted = true;
+                            pitched = true;
                         }
 
                         //wait for right trigger to score
@@ -330,6 +332,7 @@ public class OneFishTeleop extends LinearOpMode {
                             state = RobotState.IDLE;
                             retracted = false;
                             dumped = false;
+                            pitched = false;
                         }
 
                         telemetry.addData("Retracted: ", retracted);

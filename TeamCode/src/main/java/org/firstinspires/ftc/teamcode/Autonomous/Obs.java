@@ -10,13 +10,17 @@ import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 
 import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.Intake;
+import org.firstinspires.ftc.teamcode.OneFishIntake;
+import org.firstinspires.ftc.teamcode.OneFishSampleDelivery;
+import org.firstinspires.ftc.teamcode.OneFishSpecimenDelivery;
 import org.firstinspires.ftc.teamcode.RoadRunner.MecanumDrive;
 
 @Config
 @Autonomous(name = "Obs OneFish", group = "Autonomous")
 public class Obs extends LinearOpMode {
-    Delivery delivery = null;
-    Intake intake = null;
+    OneFishSpecimenDelivery specimenDelivery = null;
+    OneFishIntake intake = null;
+    OneFishSampleDelivery sampleDelivery = null;
 
     private static final int VERTICAL_INTAKE_POS = -330;
     private static final int CLAW_FLOOR = 0;
@@ -27,6 +31,10 @@ public class Obs extends LinearOpMode {
     @Override
     public void runOpMode() {
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15.2, -62, Math.toRadians(90)));
+
+        specimenDelivery = new OneFishSpecimenDelivery(this);
+        intake = new OneFishIntake(this);
+        sampleDelivery = new OneFishSampleDelivery(this, true);
 
         Action trajToScoreFirstSpecimen;
         Action trajToCollectFirstSample;
@@ -83,29 +91,27 @@ public class Obs extends LinearOpMode {
                 .splineTo(new Vector2d(45, -55), Math.toRadians(-90))
                 .build();
 
-        intake.brakePitch();
-
         waitForStart();
 
         if (isStopRequested()) return;
 
         Actions.runBlocking(trajToScoreFirstSpecimen);
         //Add code to score a specimen
-        Actions.runBlocking(trajToCollectFirstSample);
-        //Add code to intake and outtake a sample
-        Actions.runBlocking(trajToCollectSecondSample);
-        //Add code to intake and outtake sample
-        Actions.runBlocking(trajToCollectSecondSpecimen);
-        //Add code to collect a specimen
-        Actions.runBlocking(trajToScoreSecondSpecimen);
-        //Add code to score a specimen
-        Actions.runBlocking(trajToPrepareThirdSpecimen);
-        //Add wait to help human player align to robot
-        Actions.runBlocking(trajToCollectThirdSpecimen);
-        //Add code to collect a specimen
-        Actions.runBlocking(trajToScoreThirdSpecimen);
-        //Add code to score a specimen
-        Actions.runBlocking(trajToPark);
+//        Actions.runBlocking(trajToCollectFirstSample);
+//        //Add code to intake and outtake a sample
+//        Actions.runBlocking(trajToCollectSecondSample);
+//        //Add code to intake and outtake sample
+//        Actions.runBlocking(trajToCollectSecondSpecimen);
+//        //Add code to collect a specimen
+//        Actions.runBlocking(trajToScoreSecondSpecimen);
+//        //Add code to score a specimen
+//        Actions.runBlocking(trajToPrepareThirdSpecimen);
+//        //Add wait to help human player align to robot
+//        Actions.runBlocking(trajToCollectThirdSpecimen);
+//        //Add code to collect a specimen
+//        Actions.runBlocking(trajToScoreThirdSpecimen);
+//        //Add code to score a specimen
+//        Actions.runBlocking(trajToPark);
 
     }
 }
