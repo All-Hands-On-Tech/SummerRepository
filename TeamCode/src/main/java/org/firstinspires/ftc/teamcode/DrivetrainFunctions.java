@@ -43,6 +43,11 @@ public class DrivetrainFunctions {
         Initialize();
     }
 
+    public DrivetrainFunctions(LinearOpMode l, boolean isAuto){
+        linearOpMode = l;
+        InitializeForAuto();
+    }
+
 
     private void Initialize(){
         try {
@@ -98,6 +103,13 @@ public class DrivetrainFunctions {
             linearOpMode.telemetry.addData("Couldn't find motors.       Attempt: ", initAttempts);
             isDisabled = true;
         }
+    }
+
+    private void InitializeForAuto(){
+            leftFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LF");
+            leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LBLE");
+            rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RFBE");
+            rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RBRE");
     }
 
     public void setLeftFrontPower(double power) {
@@ -215,8 +227,8 @@ public class DrivetrainFunctions {
             packet.addLine("In RR action");
             packet.addLine("Drive For Time");
             packet.put("Time Elapsed", timer.milliseconds());
-            if (timer.milliseconds() > time) {
-                Move((float)y, (float)x, 0, 1.0);
+            if (timer.milliseconds() < time) {
+                Move((float)x, (float)y, 0, 1.0);
                 return true;
             } else {
                 Stop();

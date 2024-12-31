@@ -2,7 +2,9 @@ package org.firstinspires.ftc.teamcode.Autonomous;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
+import com.acmerobotics.roadrunner.SequentialAction;
 import com.acmerobotics.roadrunner.Vector2d;
 import com.acmerobotics.roadrunner.ftc.Actions;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
@@ -33,9 +35,10 @@ public class Obs extends LinearOpMode {
 
     @Override
     public void runOpMode() {
+        driveTrain = new DrivetrainFunctions(this, true);
+
         MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(15.2, -62, Math.toRadians(90)));
 
-        driveTrain = new DrivetrainFunctions(this);
 
         specimenDelivery = new OneFishSpecimenDelivery(this);
         intake = new OneFishIntake(this);
@@ -43,7 +46,9 @@ public class Obs extends LinearOpMode {
 
         Action trajToScoreFirstSpecimen;
         Action trajToCollectFirstSample;
+        Action trajToOuttakeFirstSample;
         Action trajToCollectSecondSample;
+        Action trajToOuttakeSecondSample;
         Action trajToCollectSecondSpecimen;
         Action trajToScoreSecondSpecimen;
         Action trajToPrepareThirdSpecimen;
@@ -58,25 +63,34 @@ public class Obs extends LinearOpMode {
 
         trajToCollectFirstSample = drive.actionBuilder(new Pose2d(0, -34, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineToConstantHeading(new Vector2d(48, -45), Math.toRadians(0))
+                .splineToLinearHeading(new Pose2d(42, -45, Math.toRadians(60)), Math.toRadians(90))
                 .build();
 
-        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(48, -45, Math.toRadians(90)))
-                .setTangent(Math.toRadians(0))
-                .splineToConstantHeading(new Vector2d(58, -45), Math.toRadians(0))
+        trajToOuttakeFirstSample = drive.actionBuilder(new Pose2d(42, -45, Math.toRadians(60)))
+                .turnTo(Math.toRadians(-60))
                 .build();
 
-        trajToCollectSecondSpecimen = drive.actionBuilder(new Pose2d(58, -45, Math.toRadians(90)))
+        trajToCollectSecondSample = drive.actionBuilder(new Pose2d(42, -45, Math.toRadians(-60)))
+                .turnTo(Math.toRadians(60))
+                .splineToConstantHeading(new Vector2d(46, -45), Math.toRadians(0))
+                .build();
+
+        trajToOuttakeSecondSample = drive.actionBuilder(new Pose2d(46, -45, Math.toRadians(60)))
+                .turnTo(Math.toRadians(-75))
+                .build();
+
+        trajToCollectSecondSpecimen = drive.actionBuilder(new Pose2d(52, -45, Math.toRadians(-75)))
+                .turnTo(Math.toRadians(90))
                 .setTangent(Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(58, -59), Math.toRadians(90))
                 .build();
 
         trajToScoreSecondSpecimen = drive.actionBuilder(new Pose2d(58, -59, Math.toRadians(90)))
                 .setTangent(Math.toRadians(90))
-                .splineTo(new Vector2d(6, -34), Math.toRadians(90))
+                .splineTo(new Vector2d(0, -36), Math.toRadians(90))
                 .build();
 
-        trajToPrepareThirdSpecimen = drive.actionBuilder(new Pose2d(6, -34, Math.toRadians(90)))
+        trajToPrepareThirdSpecimen = drive.actionBuilder(new Pose2d(0, -36, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
                 .splineToConstantHeading(new Vector2d(45, -47), Math.toRadians(-90))
                 .build();
@@ -100,16 +114,33 @@ public class Obs extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-        Actions.runBlocking(trajToScoreFirstSpecimen);
+//        Actions.runBlocking(trajToScoreFirstSpecimen);
+        Actions.runBlocking(new SequentialAction(
+                new ParallelAction(trajToScoreFirstSpecimen, specimenDelivery.PrepScoreSpecimenAction(0, 2000)),
+                new SequentialAction(driveTrain.DriveForTimeAction(500, 0.25, 0.0), specimenDelivery.ScoreSpecimenAction(2000))
+        ));
         //Add code to score a specimen
-//        Actions.runBlocking(trajToCollectFirstSample);
+        Actions.runBlocking(trajToCollectFirstSample);
+        sleep(1000);
 //        //Add code to intake and outtake a sample
-//        Actions.runBlocking(trajToCollectSecondSample);
+        Actions.runBlocking(trajToOuttakeFirstSample);
+        sleep(1000);
+        Actions.runBlocking(trajToCollectSecondSample);
 //        //Add code to intake and outtake sample
-//        Actions.runBlocking(trajToCollectSecondSpecimen);
+        Actions.runBlocking(trajToOuttakeSecondSample);
+        sleep(500);
+        Actions.runBlocking(new SequentialAction(
+                trajToCollectSecondSpecimen,
+                driveTrain.DriveForTimeAction(750, -0.15, 0.0),
+                specimenDelivery.PrepScoreSpecimenAction(500, 1500)
+        ));
 //        //Add code to collect a specimen
-//        Actions.runBlocking(trajToScoreSecondSpecimen);
+        Actions.runBlocking(new SequentialAction(
+                new ParallelAction(trajToScoreSecondSpecimen, specimenDelivery.PrepScoreSpecimenAction(0, 2000)),
+                new SequentialAction(driveTrain.DriveForTimeAction(500, 0.25, 0.0), specimenDelivery.ScoreSpecimenAction(2000))
+        ));
 //        //Add code to score a specimen
+
 //        Actions.runBlocking(trajToPrepareThirdSpecimen);
 //        //Add wait to help human player align to robot
 //        Actions.runBlocking(trajToCollectThirdSpecimen);
