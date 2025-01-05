@@ -44,7 +44,8 @@ public class ObsSlow extends LinearOpMode {
 
         delivery.clawClose();
 
-        Action trajToScoreFirstSample;
+        Action trajToScoreFirstSampleA;
+        Action trajToScoreFirstSampleB;
         Action trajToCollectSamples;
         Action trajToCollectAdditionalSample;
         Action trajToPrepareAdditionalSample;
@@ -54,13 +55,18 @@ public class ObsSlow extends LinearOpMode {
         VelConstraint scoreVelConstraint = new TranslationalVelConstraint(17);
         VelConstraint standardVelConstraint = new TranslationalVelConstraint(20);
 
-        trajToScoreFirstSample = drive.actionBuilder(drive.pose)
+        trajToScoreFirstSampleA = drive.actionBuilder(drive.pose)
+                .splineTo(new Vector2d(9, -38), Math.toRadians(90), scoreVelConstraint)
+                .build();
+
+        trajToScoreFirstSampleB = drive.actionBuilder(new Pose2d(9, -38, Math.toRadians(90)))
                 .splineTo(new Vector2d(9, -33), Math.toRadians(90), scoreVelConstraint)
                 .build();
 
         trajToCollectSamples = drive.actionBuilder(new Pose2d(9, -33, Math.toRadians(90)))
                 .setTangent(Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(27, -37, Math.toRadians(90)), Math.toRadians(0), standardVelConstraint)
+                .splineTo(new Vector2d(12, -34), Math.toRadians(-40), scoreVelConstraint)
+                .splineToLinearHeading(new Pose2d(27, -38, Math.toRadians(90)), Math.toRadians(0), standardVelConstraint)
                 .setTangent(Math.toRadians(0))
                 .splineToLinearHeading(new Pose2d(34, -12,Math.toRadians(90)), Math.toRadians(90), scoreVelConstraint)
                 .setTangent(Math.toRadians(0))
@@ -99,10 +105,19 @@ public class ObsSlow extends LinearOpMode {
         //This code scores preloaded specimen
         Actions.runBlocking(
                 new ParallelAction(
-                        trajToScoreFirstSample,
+                        trajToScoreFirstSampleA,
                         SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
                 )
         );
+
+        Actions.runBlocking(IdleAndHoldAction(100, CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS));
+        Actions.runBlocking(
+                new ParallelAction(
+                        trajToScoreFirstSampleB,
+                        SlideToHeightAndIntakeToAngleAction(CLAW_HIGH_RUNG, VERTICAL_INTAKE_POS)
+                )
+        );
+
 //        intake.updateAngle();
 //        delivery.clawToTarget(1650, 5);
         intakeAndDeliveryToPosition(CLAW_SCORE, 5, VERTICAL_INTAKE_POS);
