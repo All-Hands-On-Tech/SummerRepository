@@ -33,6 +33,8 @@ public class Obs extends LinearOpMode {
     private static final int CLAW_SCORE = 1650;
     private static final int CLAW_HIGH_RUNG = 2200;
 
+    private boolean imuInitialized = false;
+
     @Override
     public void runOpMode() {
         driveTrain = new DrivetrainFunctions(this, true);
@@ -112,6 +114,8 @@ public class Obs extends LinearOpMode {
         specimenDelivery.clawClose();
         specimenDelivery.setPivotPosition(0.55);
 
+        imuInitialized = driveTrain.imu.initialize(driveTrain.myIMUparameters);
+
         waitForStart();
 
         if (isStopRequested()) return;
@@ -137,9 +141,13 @@ public class Obs extends LinearOpMode {
         intake.pitchUp();
 
 //        //Add code to intake and outtake a sample
+//        Actions.runBlocking(new ParallelAction(
+//                trajToOuttakeFirstSample,
+//                intake.RunToLengthAction(1250, 500)
+//        ));
         Actions.runBlocking(new ParallelAction(
-                trajToOuttakeFirstSample,
-                intake.RunToLengthAction(1250, 500)
+                driveTrain.TurnToAngleAction(-Math.PI/3, 250),
+                intake.RunToLengthAction(1250, 1000)
         ));
 
         Actions.runBlocking(intake.SpinIntakeAction(0.5,250));
@@ -161,9 +169,14 @@ public class Obs extends LinearOpMode {
         intake.pitchDown();
         Actions.runBlocking(intake.SpinIntakeAction(-1,750));
         intake.pitchUp();
+        sleep(50);
 
+//        Actions.runBlocking(new ParallelAction(
+//                trajToOuttakeSecondSample,
+//                intake.RunToLengthAction(1250, 1000)
+//        ));
         Actions.runBlocking(new ParallelAction(
-                trajToOuttakeSecondSample,
+                driveTrain.TurnToAngleAction(-Math.PI/3, 250),
                 intake.RunToLengthAction(1250, 1000)
         ));
 

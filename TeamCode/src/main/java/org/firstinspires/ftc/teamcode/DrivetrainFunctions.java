@@ -37,6 +37,10 @@ public class DrivetrainFunctions {
 
     private double initAttempts = 0;
 
+
+    public IMU imu;
+    public IMU.Parameters myIMUparameters;
+
     public DrivetrainFunctions(LinearOpMode l)
     {
         linearOpMode = l;
@@ -110,6 +114,15 @@ public class DrivetrainFunctions {
             leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LBLE");
             rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RFBE");
             rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RBRE");
+            imu = linearOpMode.hardwareMap.get(IMU.class, "IMU");
+
+            myIMUparameters = new IMU.Parameters(
+                    new RevHubOrientationOnRobot(
+                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
+                            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                    )
+            );
+
     }
 
     public void setLeftFrontPower(double power) {
@@ -238,5 +251,49 @@ public class DrivetrainFunctions {
     }
     public Action DriveForTimeAction(double targetTime, double xPower, double yPower) {
         return new DrivetrainFunctions.DriveForTimeRR(targetTime, xPower, yPower);
+    }
+
+    public class TurnToAngleRR implements Action {
+        private boolean initialized = false;
+        private double angle = 0.0;
+        private ElapsedTime timer = new ElapsedTime();
+        private double r = 0.0;
+        private double timeout = 0.0;
+        private double startAngle = 0.0;
+        private double error = 0.0;
+
+        public TurnToAngleRR(double targetAngle, double timeoutTime) {
+            timeout = timeoutTime;
+            angle = targetAngle;
+            r = 0.0;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                timer.reset();
+                initialized = true;
+                startAngle = imu.getRobotYawPitchRollAngles().getYaw();
+            }
+
+            packet.addLine("In RR action");
+            packet.addLine("Rotate To Angle");
+            packet.put("Time Elapsed", timer.milliseconds());
+
+            error = angle - (imu.getRobotYawPitchRollAngles().getYaw() - startAngle);
+
+            r = error / Math.PI;
+
+            if (timer.milliseconds() < timeout && error > 0.1) {
+                Move(0,0, (float)r, 1.0);
+                return true;
+            } else {
+                Stop();
+                return false;
+            }
+        }
+    }
+    public Action TurnToAngleAction(double targetAngle, double timeoutTime) {
+        return new DrivetrainFunctions.TurnToAngleRR(targetAngle, timeoutTime);
     }
 }
