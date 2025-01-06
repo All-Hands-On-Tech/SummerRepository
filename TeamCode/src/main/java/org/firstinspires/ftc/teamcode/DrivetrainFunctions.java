@@ -273,14 +273,14 @@ public class DrivetrainFunctions {
             if (!initialized) {
                 timer.reset();
                 initialized = true;
-                startAngle = imu.getRobotYawPitchRollAngles().getYaw();
+                startAngle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             }
 
             packet.addLine("In RR action");
             packet.addLine("Rotate To Angle");
             packet.put("Time Elapsed", timer.milliseconds());
 
-            error = angle - (imu.getRobotYawPitchRollAngles().getYaw() - startAngle);
+            error = angle - (imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - startAngle);
 
             r = error / Math.PI;
 
