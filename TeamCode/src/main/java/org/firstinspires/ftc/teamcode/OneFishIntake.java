@@ -1,6 +1,10 @@
 package org.firstinspires.ftc.teamcode;
 
 
+import androidx.annotation.NonNull;
+
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.acmerobotics.roadrunner.Action;
 import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
@@ -139,5 +143,86 @@ public class OneFishIntake {
     public void pitchAway(){pitch.setPosition(AWAY_PITCH);}
 
     public void pitchToTransfer(){pitch.setPosition(TRANSFER_PITCH);}
+
+    public int getExtensionTicks(){
+        return extension.getCurrentPosition();
+    }
+
+
+    public class RunToLengthRR implements Action {
+        private boolean initialized = false;
+        private int target = 0;
+        //timeout in MILLISECONDS
+        private double timeout = 0.0;
+
+        private ElapsedTime timer = new ElapsedTime();
+
+        public RunToLengthRR(int targetLength, double timeoutTime) {
+            target = targetLength;
+            timeout = timeoutTime;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                initialized = true;
+                setTargetLength(target);
+                timer.reset();
+            }
+
+            packet.addLine("In RR action");
+            packet.addLine("Drive For Time");
+            packet.put("Time Elapsed", timer.milliseconds());
+            if (Math.abs(extension.getCurrentPosition() - target) > 20 && timer.milliseconds() < timeout) {
+                updateLength();
+                return true;
+            } else {
+                setTargetLength(extension.getCurrentPosition());
+                return false;
+            }
+        }
+    }
+    public Action RunToLengthAction(int targetLength, double timeoutTime) {
+        return new OneFishIntake.RunToLengthRR(targetLength, timeoutTime);
+    }
+
+
+    public class SpinIntakeRR implements Action {
+        private boolean initialized = false;
+        //timeout in MILLISECONDS
+        private double timeout = 0.0;
+
+        private double power = 0.0;
+
+        private ElapsedTime timer = new ElapsedTime();
+
+        public SpinIntakeRR(double spinPower, double timeoutTime) {
+            timeout = timeoutTime;
+            power = spinPower;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                initialized = true;
+                setIntakePower((float)power);
+                timer.reset();
+            }
+
+            packet.addLine("In RR action");
+            packet.addLine("Drive For Time");
+            packet.put("Time Elapsed", timer.milliseconds());
+            if (timer.milliseconds() < timeout) {
+                return true;
+            } else {
+                setIntakePower(0);
+                return false;
+            }
+        }
+    }
+    public Action SpinIntakeAction(double spinPower, double timeoutTime) {
+        return new OneFishIntake.SpinIntakeRR(spinPower, timeoutTime);
+    }
+
 
 }
