@@ -95,12 +95,6 @@ public class DrivetrainFunctions {
 
 
 
-            leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-            leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
-            rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-            rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
-
-
             isDisabled = false;
         }catch(NullPointerException e){
             initAttempts++;
@@ -114,12 +108,12 @@ public class DrivetrainFunctions {
             leftBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "LBLE");
             rightFrontDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RFBE");
             rightBackDrive = linearOpMode.hardwareMap.get(DcMotor.class, "RBRE");
-            imu = linearOpMode.hardwareMap.get(IMU.class, "IMU");
+            imu = linearOpMode.hardwareMap.get(IMU.class, "imu");
 
             myIMUparameters = new IMU.Parameters(
                     new RevHubOrientationOnRobot(
-                            RevHubOrientationOnRobot.LogoFacingDirection.UP,
-                            RevHubOrientationOnRobot.UsbFacingDirection.FORWARD
+                            RevHubOrientationOnRobot.LogoFacingDirection.LEFT,
+                            RevHubOrientationOnRobot.UsbFacingDirection.UP
                     )
             );
 
@@ -273,19 +267,25 @@ public class DrivetrainFunctions {
             if (!initialized) {
                 timer.reset();
                 initialized = true;
-                startAngle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
             }
 
             packet.addLine("In RR action");
             packet.addLine("Rotate To Angle");
             packet.put("Time Elapsed", timer.milliseconds());
 
-            error = angle - (imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS) - startAngle);
+            error = angle - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-            r = error / Math.PI;
+            r = error / Math.PI * 4;
+            if(error > Math.PI/4) r = 1;
 
-            if (timer.milliseconds() < timeout && error > 0.1) {
-                Move(0,0, (float)r, 1.0);
+            r = r * Math.abs(r);
+
+            if (timer.milliseconds() < timeout /*&& error > 0.3*/) {
+                setLeftFrontPower(-r);
+                setLeftBackPower(-r);
+                setRightFrontPower(r);
+                setRightBackPower(r);
+
                 return true;
             } else {
                 Stop();

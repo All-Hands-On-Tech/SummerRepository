@@ -112,7 +112,7 @@ public class Obs extends LinearOpMode {
                 .build();
 
         specimenDelivery.clawClose();
-        specimenDelivery.setPivotPosition(0.55);
+        specimenDelivery.setPivotPosition(0.6);
 
         imuInitialized = driveTrain.imu.initialize(driveTrain.myIMUparameters);
 
@@ -137,51 +137,40 @@ public class Obs extends LinearOpMode {
                 intake.SpinIntakeAction(-1,500)
         ));
         intake.pitchDown();
-        Actions.runBlocking(intake.SpinIntakeAction(-1,750));
-        intake.pitchUp();
+        Actions.runBlocking(intake.SpinIntakeAction(-1,250));
 
-//        //Add code to intake and outtake a sample
-//        Actions.runBlocking(new ParallelAction(
-//                trajToOuttakeFirstSample,
-//                intake.RunToLengthAction(1250, 500)
-//        ));
         Actions.runBlocking(new ParallelAction(
-                driveTrain.TurnToAngleAction(-Math.PI/3, 250),
-                intake.RunToLengthAction(1250, 1000)
+                intake.SpinIntakeAction(-1,500),
+                driveTrain.TurnToAngleAction(Math.toRadians(-120), 500),
+                intake.RunToLengthAction(1200, 1000)
         ));
 
         Actions.runBlocking(intake.SpinIntakeAction(0.5,250));
-
+        intake.pitchUp();
 
 
         Actions.runBlocking(new ParallelAction(
                 trajToCollectSecondSample,
                 intake.SpinIntakeAction(0.5,500),
-                intake.RunToLengthAction(1250, 100)
+                intake.RunToLengthAction(1200, 100)
         ));
 //        //Add code to intake and outtake sample
 
-//        Actions.runBlocking(new ParallelAction(
-//                intake.RunToLengthAction(1250, 1000),
-//                intake.SpinIntakeAction(-1,100)
-//        ));
 
         intake.pitchDown();
-        Actions.runBlocking(intake.SpinIntakeAction(-1,750));
-        intake.pitchUp();
-        sleep(50);
+        Actions.runBlocking(intake.SpinIntakeAction(-1,250));
 
-//        Actions.runBlocking(new ParallelAction(
-//                trajToOuttakeSecondSample,
-//                intake.RunToLengthAction(1250, 1000)
-//        ));
         Actions.runBlocking(new ParallelAction(
-                driveTrain.TurnToAngleAction(-Math.PI/3, 250),
-                intake.RunToLengthAction(1250, 1000)
+                intake.SpinIntakeAction(-1,500),
+                driveTrain.TurnToAngleAction(Math.toRadians(-120), 500),
+                intake.RunToLengthAction(1200, 1000)
         ));
 
         Actions.runBlocking(intake.SpinIntakeAction(0.5,250));
 
+        intake.pitchUp();
+
+        specimenDelivery.pitchToIntake();
 
         Actions.runBlocking(new SequentialAction(
                 new ParallelAction(trajToCollectSecondSpecimen, intake.RunToLengthAction(0, 1000), intake.SpinIntakeAction(0.5,500)),
@@ -195,12 +184,13 @@ public class Obs extends LinearOpMode {
         ));
 //        //Add code to score a specimen
 
-//        Actions.runBlocking(trajToPrepareThirdSpecimen);
+        specimenDelivery.pitchToIntake();
+
 //        //Add wait to help human player align to robot
         Actions.runBlocking(new SequentialAction(
                 trajToCollectThirdSpecimen,
                 driveTrain.DriveForTimeAction(500, -0.25, 0.0),
-                specimenDelivery.PrepScoreSpecimenAction(500, 1000)
+                specimenDelivery.PrepScoreSpecimenAction(500, 1100)
         ));
 //        //Add code to collect a specimen
         Actions.runBlocking(new SequentialAction(

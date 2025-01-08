@@ -22,7 +22,7 @@ public class OneFishSpecimenDelivery {
     public final double DELIVERY_PITCH = 0.8;
     public final double VERTICAL_PITCH = 0.72;
 
-    private final double SPECIMEN_SCORE_TIME = 575;
+    private final double SPECIMEN_SCORE_TIME = 600;
 
     public final double CLAW_CLOSE = 0.45;
     public final double CLAW_OPEN = 0.9;
