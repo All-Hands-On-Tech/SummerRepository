@@ -18,14 +18,14 @@ public class OneFishSpecimenDelivery {
 
     private LinearOpMode linearOpMode;
 
-    public final double INTAKE_PITCH = 0.525;
+    public final double INTAKE_PITCH = 0.51;
     public final double DELIVERY_PITCH = 0.8;
     public final double VERTICAL_PITCH = 0.72;
 
-    private final double SPECIMEN_SCORE_TIME = 600;
+    private final double SPECIMEN_SCORE_TIME = 850;
 
     public final double CLAW_CLOSE = 0.45;
-    public final double CLAW_OPEN = 0.9;
+    public final double CLAW_OPEN = 0.7;
 
     private double targetPosition;
     private double currentPosition;

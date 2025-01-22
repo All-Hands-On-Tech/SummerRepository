@@ -125,7 +125,7 @@ public class Obs extends LinearOpMode {
 //        Actions.runBlocking(trajToScoreFirstSpecimen);
         Actions.runBlocking(new SequentialAction(
                 new ParallelAction(trajToScoreFirstSpecimen, specimenDelivery.PrepScoreSpecimenAction(0, 1250)),
-                new SequentialAction(driveTrain.DriveForTimeAction(500, 0.35, 0.0),
+                new SequentialAction(driveTrain.DriveForTimeAction(800, 0.25, 0.0),
                                      specimenDelivery.ScoreSpecimenAction(1000))
         ));
         //Add code to score a specimen
@@ -133,16 +133,16 @@ public class Obs extends LinearOpMode {
 
 
         Actions.runBlocking(new ParallelAction(
-                intake.RunToLengthAction(450, 1000),
+                intake.RunToLengthAction(340, 1000),
                 intake.SpinIntakeAction(-1,500)
         ));
         intake.pitchDown();
-        Actions.runBlocking(intake.SpinIntakeAction(-1,250));
+        Actions.runBlocking(intake.SpinIntakeAction(-1,500));
 
         Actions.runBlocking(new ParallelAction(
                 intake.SpinIntakeAction(-1,500),
                 driveTrain.TurnToAngleAction(Math.toRadians(-120), 500),
-                intake.RunToLengthAction(1200, 1000)
+                intake.RunToLengthAction(1080, 1000)
         ));
 
         Actions.runBlocking(intake.SpinIntakeAction(0.5,250));
@@ -152,18 +152,18 @@ public class Obs extends LinearOpMode {
         Actions.runBlocking(new ParallelAction(
                 trajToCollectSecondSample,
                 intake.SpinIntakeAction(0.5,500),
-                intake.RunToLengthAction(1200, 100)
+                intake.RunToLengthAction(1080, 100)
         ));
 //        //Add code to intake and outtake sample
 
 
         intake.pitchDown();
-        Actions.runBlocking(intake.SpinIntakeAction(-1,250));
+        Actions.runBlocking(intake.SpinIntakeAction(-1,500));
 
         Actions.runBlocking(new ParallelAction(
                 intake.SpinIntakeAction(-1,500),
                 driveTrain.TurnToAngleAction(Math.toRadians(-120), 500),
-                intake.RunToLengthAction(1200, 1000)
+                intake.RunToLengthAction(1080, 1000)
         ));
 
         Actions.runBlocking(intake.SpinIntakeAction(0.5,250));
@@ -180,7 +180,7 @@ public class Obs extends LinearOpMode {
 //        //Add code to collect a specimen
         Actions.runBlocking(new SequentialAction(
                 new ParallelAction(trajToScoreSecondSpecimen, specimenDelivery.PrepScoreSpecimenAction(0, 1000)),
-                new SequentialAction(driveTrain.DriveForTimeAction(500, 0.35, 0.0), specimenDelivery.ScoreSpecimenAction(1000))
+                new SequentialAction(driveTrain.DriveForTimeAction(800, 0.25, 0.0), specimenDelivery.ScoreSpecimenAction(1000))
         ));
 //        //Add code to score a specimen
 
@@ -195,7 +195,7 @@ public class Obs extends LinearOpMode {
 //        //Add code to collect a specimen
         Actions.runBlocking(new SequentialAction(
                 new ParallelAction(trajToScoreThirdSpecimen, specimenDelivery.PrepScoreSpecimenAction(0, 2000)),
-                new SequentialAction(driveTrain.DriveForTimeAction(400, 0.25, 0.0), specimenDelivery.ScoreSpecimenAction(1000))
+                new SequentialAction(driveTrain.DriveForTimeAction(800, 0.25, 0.0), specimenDelivery.ScoreSpecimenAction(1000))
         ));
 //        //Add code to score a specimen
 //        Actions.runBlocking(trajToPark);
