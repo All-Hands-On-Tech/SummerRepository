@@ -24,20 +24,20 @@ public class Testing extends LinearOpMode {
         Action traj2;
 
         traj1 = drive.actionBuilder(new Pose2d(0, -48, Math.toRadians(90)))
-                .splineTo(new Vector2d(-18, -24), Math.toRadians(90))
+                .splineTo(new Vector2d(-12, -24), Math.toRadians(90))
                 .splineTo(new Vector2d(0, 0), Math.toRadians(30))
-                .splineTo(new Vector2d(18, 24), Math.toRadians(90))
+                .splineTo(new Vector2d(12, 24), Math.toRadians(90))
                 .splineTo(new Vector2d(0, 48), Math.toRadians(150))
                 .build();
 
         traj2 = drive.actionBuilder(new Pose2d(0, 48, Math.toRadians(150)))
                 .turnTo(Math.toRadians(-90))
                 .setTangent(Math.toRadians(210))
-                .splineToLinearHeading(new Pose2d(-18, 24, Math.toRadians(-45)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-12, 24, Math.toRadians(-45)), Math.toRadians(-90))
                 .setTangent(-90)
                 .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(0)), Math.toRadians(-30))
                 .setTangent(Math.toRadians(-30))
-                .splineToLinearHeading(new Pose2d(18, -24, Math.toRadians(45)), Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(12, -24, Math.toRadians(45)), Math.toRadians(-90))
                 .setTangent(Math.toRadians(-90))
                 .splineToLinearHeading(new Pose2d(0, -48, Math.toRadians(90)), Math.toRadians(-90))
                 .build();
