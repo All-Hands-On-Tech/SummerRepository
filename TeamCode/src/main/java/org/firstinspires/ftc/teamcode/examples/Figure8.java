@@ -25,7 +25,7 @@ import org.firstinspires.ftc.teamcode.constants.LConstants;
  * @version 2.0, 11/28/2024
  */
 
-@Autonomous(name = "Example Auto Blue", group = "Examples")
+@Autonomous(name = "Figure 8 Testing", group = "A")
 public class Figure8 extends OpMode {
 
     private Follower follower;
@@ -45,26 +45,7 @@ public class Figure8 extends OpMode {
      * Lets assume the Robot is facing the human player and we want to score in the bucket */
 
     /** Start Pose of our robot */
-    private final Pose startPose = new Pose(9, 111, Math.toRadians(270));
-
-    /** Scoring Pose of our robot. It is facing the submersible at a -45 degree (315 degree) angle. */
-    private final Pose scorePose = new Pose(14, 129, Math.toRadians(315));
-
-    /** Lowest (First) Sample from the Spike Mark */
-    private final Pose pickup1Pose = new Pose(37, 121, Math.toRadians(0));
-
-    /** Middle (Second) Sample from the Spike Mark */
-    private final Pose pickup2Pose = new Pose(43, 130, Math.toRadians(0));
-
-    /** Highest (Third) Sample from the Spike Mark */
-    private final Pose pickup3Pose = new Pose(49, 135, Math.toRadians(0));
-
-    /** Park Pose for our robot, after we do all of the scoring. */
-    private final Pose parkPose = new Pose(60, 98, Math.toRadians(90));
-
-    /** Park Control Pose for our robot, this is used to manipulate the bezier curve that we will create for the parking.
-     * The Robot will not go to this pose, it is used a control point for our bezier curve. */
-    private final Pose parkControlPose = new Pose(60, 98, Math.toRadians(90));
+    private final Pose startPose = new Pose(24, 12, Math.toRadians(90));
 
     /* These are our Paths and PathChains that we will define in buildPaths() */
     private PathChain figure8;
@@ -96,14 +77,14 @@ public class Figure8 extends OpMode {
                         // Line 3
                         new BezierLine(
                                 new Point(24.000, 108.000, Point.CARTESIAN),
-                                new Point(24.000, 108.000, Point.CARTESIAN)
+                                new Point(25.000, 109.000, Point.CARTESIAN)
                         )
                 )
                 .setLinearHeadingInterpolation(Math.toRadians(90), Math.toRadians(220))
                 .addPath(
                         // Line 4
                         new BezierCurve(
-                                new Point(24.000, 108.000, Point.CARTESIAN),
+                                new Point(25.000, 109.000, Point.CARTESIAN),
                                 new Point(-12.000, 84.000, Point.CARTESIAN),
                                 new Point(24.000, 60.000, Point.CARTESIAN)
                         )
@@ -114,10 +95,18 @@ public class Figure8 extends OpMode {
                         new BezierCurve(
                                 new Point(24.000, 60.000, Point.CARTESIAN),
                                 new Point(60.000, 36.000, Point.CARTESIAN),
-                                new Point(24.000, 12.000, Point.CARTESIAN)
+                                new Point(25.000, 13.000, Point.CARTESIAN)
                         )
                 )
                 .setTangentHeadingInterpolation()
+                .addPath(
+                        // Line 3
+                        new BezierLine(
+                                new Point(25.000, 13, Point.CARTESIAN),
+                                new Point(25.000, 12., Point.CARTESIAN)
+                        )
+                )
+                .setLinearHeadingInterpolation(Math.toRadians(-120), Math.toRadians(90))
                 .build();
     }
 
