@@ -19,31 +19,33 @@ public class Testing extends LinearOpMode {
 
     @Override
     public void runOpMode() {
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, 0, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(0, -48, Math.toRadians(90)));
         Action traj1;
         Action traj2;
 
-        traj1 = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
-                //Scores pre set specimin
-                .setTangent(Math.toRadians(180))
-                .splineToLinearHeading(new Pose2d(-30, 30, Math.toRadians(180)), Math.toRadians(90))
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(-0, 0, Math.toRadians(90)), Math.toRadians(-90))
-                /*score specimin*/
+        traj1 = drive.actionBuilder(new Pose2d(0, -48, Math.toRadians(90)))
+                .splineTo(new Vector2d(-18, -24), Math.toRadians(90))
+                .splineTo(new Vector2d(0, 0), Math.toRadians(30))
+                .splineTo(new Vector2d(18, 24), Math.toRadians(90))
+                .splineTo(new Vector2d(0, 48), Math.toRadians(150))
                 .build();
 
-        traj2 = drive.actionBuilder(new Pose2d(0, 0, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-10, 30))
-                .strafeTo(new Vector2d(-30, 10))
-                .strafeTo(new Vector2d(-0, 0))
-                .turn(Math.PI*10)
+        traj2 = drive.actionBuilder(new Pose2d(0, 48, Math.toRadians(150)))
+                .turnTo(Math.toRadians(-90))
+                .setTangent(Math.toRadians(210))
+                .splineToLinearHeading(new Pose2d(-18, 24, Math.toRadians(-45)), Math.toRadians(-90))
+                .setTangent(-90)
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(0)), Math.toRadians(-30))
+                .setTangent(Math.toRadians(-30))
+                .splineToLinearHeading(new Pose2d(18, -24, Math.toRadians(45)), Math.toRadians(-90))
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(0, -48, Math.toRadians(90)), Math.toRadians(-90))
                 .build();
 
         waitForStart();
 
-        //This code scores preloaded specimen
         Actions.runBlocking(traj1);
-//
+        Actions.runBlocking(traj2);
 
         if (isStopRequested()) return;
 

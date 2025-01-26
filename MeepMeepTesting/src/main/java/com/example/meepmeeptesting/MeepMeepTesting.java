@@ -59,46 +59,22 @@ public class MeepMeepTesting {
 //                .strafeTo(new Vector2d(-62, -55))
 //                .build());
 
-        //Meet 1 - Observation Zone
-        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(15.2, -62, Math.toRadians(90)))
-                //Scores pre set specimin
-                .strafeTo(new Vector2d(7, -34))
-                /*score specimin*/
-
-                //Brings two samples to observation zone
-                .strafeTo(new Vector2d(25, -40))
-                .setTangent(Math.toRadians(0))
-                .splineToSplineHeading(new Pose2d(36, -15,Math.toRadians(90)), Math.toRadians(90))
-                .setTangent(Math.toRadians(30))
-                .splineToLinearHeading(new Pose2d(44, -58, Math.toRadians(90)), Math.toRadians(-90))
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(42, -12, Math.toRadians(180)), Math.toRadians(90))
-                .setTangent(Math.toRadians(0))
-                .splineTo(new Vector2d(55, -58), Math.toRadians(-90))
-
-                //Scores a second specimin
-                .setTangent(Math.toRadians(90))
-                .splineTo(new Vector2d(36, -49), Math.toRadians(-90))
-                /*sleep*/
-                .strafeTo(new Vector2d(36, -60))
-                /*grab specimin*/
-                .setTangent(Math.toRadians(90))
-                .splineToLinearHeading(new Pose2d(6, -34, Math.toRadians(90)), Math.toRadians(90))
-                /*score specimin*/
-
-//                //This scores a third specimin, add if theres time
-//                .strafeTo(new Vector2d(10, -40))
-//                .splineToLinearHeading(new Pose2d(36, -49, Math.toRadians(-90)), Math.toRadians(-90))
-//                /*sleep*/
-//                .strafeTo(new Vector2d(36, -60))
-//                /*grab specimin*/
-//                .setTangent(Math.toRadians(90))
-//                .splineToLinearHeading(new Pose2d(6, -34,Math.toRadians(90)), Math.toRadians(90))
-//                /*score specimin*/
-
-                //Returns to observation zone
+        //Figure 8 Test
+        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(0, -48, Math.toRadians(90)))
+                .splineTo(new Vector2d(-24, -24), Math.toRadians(90))
+                .splineTo(new Vector2d(0, 0), Math.toRadians(30))
+                .splineTo(new Vector2d(24, 24), Math.toRadians(90))
+                .splineTo(new Vector2d(0, 48), Math.toRadians(150))
+                .turnTo(Math.toRadians(-90))
+                .setTangent(Math.toRadians(210))
+                .splineToLinearHeading(new Pose2d(-24, 24, Math.toRadians(-45)), Math.toRadians(-90))
+                .setTangent(-90)
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(0)), Math.toRadians(-30))
+                .setTangent(Math.toRadians(-30))
+                .splineToLinearHeading(new Pose2d(24, -24, Math.toRadians(45)), Math.toRadians(-90))
                 .setTangent(Math.toRadians(-90))
-                .splineTo(new Vector2d(40, -57), Math.toRadians(-45))
+                .splineToLinearHeading(new Pose2d(0, -48, Math.toRadians(90)), Math.toRadians(-90))
+
                 .build());
 
         //Meet2 Khai messing around - Obs
@@ -142,7 +118,7 @@ public class MeepMeepTesting {
                 .setBackgroundAlpha(0.95f)
                 // Add both of our declared bot entities
                 .addEntity(mySecondBot)
-                .addEntity(khaiBot)
+                //.addEntity(khaiBot)
                 .start();
     }
 }
