@@ -34,23 +34,40 @@ public class MeepMeepTesting {
 //                .strafeTo(new Vector2d(62, -62))
 //                .build());
 
-        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(-14, -62, Math.toRadians(90)))
-                .strafeTo(new Vector2d(-10, -34))
-//               //score specimen
-                .strafeTo(new Vector2d(-26, -40))
-                .setTangent(110)
-                .splineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)), Math.toRadians(-120))
-                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(45)), Math.toRadians(225))
-                .strafeTo(new Vector2d( -40, -27))
-                .splineToLinearHeading(new Pose2d(-57.00, -14, Math.toRadians(90)), Math.toRadians(-90))
-                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(60)), Math.toRadians(240))
-                .strafeTo(new Vector2d( -50, -27))
-                .splineToLinearHeading(new Pose2d(-62.00, -24, Math.toRadians(0)), Math.toRadians(180))
-                .strafeTo(new Vector2d(-62, -55))
+//        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(-14, -62, Math.toRadians(90)))
+//                .strafeTo(new Vector2d(-10, -34))
+////               //score specimen
+//                .strafeTo(new Vector2d(-26, -40))
+//                .setTangent(110)
+//                .splineToLinearHeading(new Pose2d(-45, -14, Math.toRadians(90)), Math.toRadians(-120))
+//                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(45)), Math.toRadians(225))
+//                .strafeTo(new Vector2d( -40, -27))
+//                .splineToLinearHeading(new Pose2d(-57.00, -14, Math.toRadians(90)), Math.toRadians(-90))
+//                .splineToLinearHeading(new Pose2d(-58, -58, Math.toRadians(60)), Math.toRadians(240))
+//                .strafeTo(new Vector2d( -50, -27))
+//                .splineToLinearHeading(new Pose2d(-62.00, -24, Math.toRadians(0)), Math.toRadians(180))
+//                .strafeTo(new Vector2d(-62, -55))
+//                .build());
+
+        mySecondBot.runAction(mySecondBot.getDrive().actionBuilder(new Pose2d(-0, -48, Math.toRadians(90)))
+                .splineTo(new Vector2d(-24, -24), Math.toRadians(90))
+                .splineTo(new Vector2d(0, 0), Math.toRadians(30))
+                .splineTo(new Vector2d(24, 24), Math.toRadians(90))
+                .splineTo(new Vector2d(0, 48), Math.toRadians(150))
+                .turnTo(Math.toRadians(-90))
+                .setTangent(Math.toRadians(210))
+                .splineToLinearHeading(new Pose2d(-24, 24, Math.toRadians(-45)), Math.toRadians(-90))
+                .setTangent(-90)
+                .splineToLinearHeading(new Pose2d(0, 0, Math.toRadians(0)), Math.toRadians(-30))
+                .setTangent(Math.toRadians(-30))
+                .splineToLinearHeading(new Pose2d(24, -24, Math.toRadians(45)), Math.toRadians(-90))
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(0, -48, Math.toRadians(90)), Math.toRadians(-90))
+
                 .build());
 
 
-        meepMeep.setBackground(MeepMeep.Background.FIELD_INTO_THE_DEEP_JUICE_DARK)
+        meepMeep.setBackground(MeepMeep.Background.GRID_GRAY)
                 .setDarkMode(true)
                 .setBackgroundAlpha(0.95f)
                 // Add both of our declared bot entities
