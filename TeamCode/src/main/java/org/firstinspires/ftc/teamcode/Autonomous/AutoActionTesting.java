@@ -49,8 +49,16 @@ public class AutoActionTesting extends LinearOpMode {
 
         if (isStopRequested()) return;
 
-            Actions.runBlocking(driveTrain.TurnToAngleAction(Math.toRadians(-45), 1000));
-            telemetry.addData("Heading: ", driveTrain.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
-            telemetry.update();
+        for(int i = 0; i < 1; i++) {
+            sleep(1750);
+            Actions.runBlocking(sampleDelivery.PrepIntakeSpecimenAction());
+            sleep(750);
+            Actions.runBlocking(sampleDelivery.IntakeSpecimenAction());
+            sleep(750);
+            Actions.runBlocking(sampleDelivery.PrepDeliverSpecimenAction());
+            sleep(750);
+            Actions.runBlocking(sampleDelivery.DeliverSpecimenAction());
+        }
+
     }
 }

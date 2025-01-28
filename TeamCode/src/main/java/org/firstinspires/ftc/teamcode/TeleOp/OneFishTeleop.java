@@ -270,10 +270,12 @@ public class OneFishTeleop extends LinearOpMode {
                         if(timer.seconds()>DELIVER_PITCH_TIME){
                             if(!transfered){
                                 intake.pitchToTransfer();
+                                intake.setIntakePower(-0.25f);
                             }
                             if(gamepad2.a){
                                 sampleDelivery.clawOpen();
                                 transferTimer.reset();
+                                intake.setIntakePower(0);
                                 transfered = true;
                             }
                         }
@@ -292,11 +294,12 @@ public class OneFishTeleop extends LinearOpMode {
                         sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
                         sampleDelivery.PControlPower(1);
                         //pitch out to 90 to reorient sample
-                        if(timer.seconds() > PITCH_TO_DELIVER_TIME && timer.seconds() < PITCH_TO_DELIVER_TIME + SHAKE_TIME){
-                            sampleDelivery.pitchToShake();
-                        }
+//                        if(timer.seconds() > PITCH_TO_DELIVER_TIME && timer.seconds() < PITCH_TO_DELIVER_TIME + SHAKE_TIME){
+//                            sampleDelivery.pitchToShake();
+//                        }
                         //pitch back up to deliver to high basket
-                        if(timer.seconds() > PITCH_TO_DELIVER_TIME + SHAKE_TIME){
+//                        if(timer.seconds() > PITCH_TO_DELIVER_TIME + SHAKE_TIME){
+                        if(timer.seconds() > PITCH_TO_DELIVER_TIME){
                             sampleDelivery.pitchToDeliver();
                         }
                         //Get ready to dump
@@ -375,6 +378,11 @@ public class OneFishTeleop extends LinearOpMode {
 
                     case IDLE:
                         //TO INTAKE_EXTEND
+                        sampleDelivery.setSlidesTargetPosition(0);
+                        sampleDelivery.PControlPower(1);
+                        retracted = false;
+                        dumped = false;
+                        pitched = false;
                         if(gamepad2.a){
                             timer.reset();
                             state = RobotState.INTAKE_EXTEND;

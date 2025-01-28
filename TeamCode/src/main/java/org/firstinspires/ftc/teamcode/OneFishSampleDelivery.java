@@ -32,8 +32,21 @@ public class OneFishSampleDelivery {
     public final int TOP_POSITION = 4300;
     public final int LOW_POSITION = 50; // low-to-ground position used to slow slides when low to ground
 
-    public final double TRANSFER_PITCH = 0.83;
-    public final double DELIVER_PITCH = 0.23;
+    public final int INTAKE_HEIGHT = 250;
+    public final double GRAB_BUFFER_TIME = 350; //time for claw to grab specimen
+    public final double LIFT_BUFFER_TIME = 250; //time for specimen to clear wall before moving
+    public final double RESET_PITCH_BUFFER_TIME = 500; //time for pitching mechanism to make a full arc to target pitch
+    public final double RESET_HEIGHT_BUFFER_TIME = 500; //time for slides to make a full ascent/descent to target pitch
+    public final double SPECIMEN_SCORE_BUFFER_TIME = 500;
+    public final int DELIVER_HEIGHT = 500;
+    public final int CLEARANCE_HEIGHT = 500; //height where pitching will have 360 degree clearance
+
+    public final double SPECIMEN_DELIVER_PITCH = 0.43;
+    public final double SPECIMEN_INTAKE_PITCH = 0.2;
+    public final double VERTICAL_PITCH = 0.55;
+
+    public final double TRANSFER_PITCH = 0.83+0.1;
+    public final double DELIVER_PITCH = 0.23+0.17;
     public final double AWAY_PITCH = 0.35;
     public final double SHAKE_PITCH = 0;
     public final double TICK_LOW_POWER_DISTANCE = 75;
@@ -118,6 +131,16 @@ public class OneFishSampleDelivery {
     public void pitchToAway(){
         setPitch(AWAY_PITCH);
     }
+
+    public void pitchToSpecimenDeliver(){
+        setPitch(SPECIMEN_DELIVER_PITCH);
+    }
+
+    public void pitchToSpecimenIntake(){
+        setPitch(SPECIMEN_INTAKE_PITCH);
+    }
+
+    public void pitchToVertical() { setPitch(VERTICAL_PITCH); }
 
     public int getMotorPosition(){ return slide.getCurrentPosition(); }
 
@@ -285,5 +308,170 @@ public class OneFishSampleDelivery {
     }
     public Action SlideToHeightAction(int heightInTicks) {
         return new OneFishSampleDelivery.SlideToHeightRR(heightInTicks);
+    }
+
+    public class IntakeSpecimenRR implements Action {
+        private boolean initialized = false;
+        private int targetHeight;
+        private ElapsedTime timer = new ElapsedTime();
+
+        public IntakeSpecimenRR() {
+            targetHeight = INTAKE_HEIGHT;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                setSlidesTargetPosition(targetHeight);
+                initialized = true;
+            }
+
+            double pos = slide.getCurrentPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
+            packet.put("liftPos", pos);
+            if (timer.milliseconds() < GRAB_BUFFER_TIME) {
+                targetHeight = INTAKE_HEIGHT;
+                PControlPower(3);
+                clawClose();
+                return true;
+            } else if (timer.milliseconds() < GRAB_BUFFER_TIME + LIFT_BUFFER_TIME) {
+                clawClose();
+                targetHeight = CLEARANCE_HEIGHT;
+                PControlPower(3);
+                return true;
+            } else {
+                setSlidesPower(0);
+                pitchToSpecimenDeliver();
+                return false;
+            }
+        }
+    }
+    public Action IntakeSpecimenAction() {
+        return new OneFishSampleDelivery.IntakeSpecimenRR();
+    }
+
+    public class PrepIntakeSpecimenRR implements Action {
+        private boolean initialized = false;
+        private int targetHeight;
+        private ElapsedTime timer = new ElapsedTime();
+
+        public PrepIntakeSpecimenRR() {
+            targetHeight = INTAKE_HEIGHT;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                setSlidesTargetPosition(targetHeight);
+                initialized = true;
+            }
+
+            double pos = slide.getCurrentPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
+            packet.put("liftPos", pos);
+            if (timer.milliseconds() < RESET_PITCH_BUFFER_TIME) {
+                clawOpen();
+                pitchToSpecimenIntake();
+                return true;
+            } else if (timer.milliseconds() < RESET_PITCH_BUFFER_TIME + RESET_HEIGHT_BUFFER_TIME) {
+                clawOpen();
+                PControlPower(3);
+                return true;
+            } else {
+                setSlidesPower(0);
+                return false;
+            }
+        }
+    }
+    public Action PrepIntakeSpecimenAction() {
+        return new OneFishSampleDelivery.PrepIntakeSpecimenRR();
+    }
+
+    public class PrepDeliverSpecimenRR implements Action {
+
+        private boolean initialized = false;
+        private int targetHeight;
+        private ElapsedTime timer = new ElapsedTime();
+
+        public PrepDeliverSpecimenRR() {
+            targetHeight = DELIVER_HEIGHT;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                setSlidesTargetPosition(targetHeight);
+                initialized = true;
+            }
+
+            double pos = slide.getCurrentPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
+            packet.put("liftPos", pos);
+            if (timer.milliseconds() < RESET_HEIGHT_BUFFER_TIME) {
+                clawClose();
+                setSlidesTargetPosition(targetHeight);
+                PControlPower(3);
+                return true;
+            } else if (timer.milliseconds() < RESET_HEIGHT_BUFFER_TIME + RESET_PITCH_BUFFER_TIME) {
+                clawClose();
+                pitchToSpecimenDeliver();
+                return true;
+            } else {
+                setSlidesPower(0);
+                return false;
+            }
+        }
+    }
+
+    public Action PrepDeliverSpecimenAction() {
+        return new OneFishSampleDelivery.PrepDeliverSpecimenRR();
+    }
+
+    public class DeliverSpecimenRR implements Action {
+
+        private boolean initialized = false;
+        private int targetHeight;
+        private ElapsedTime timer = new ElapsedTime();
+
+        public DeliverSpecimenRR() {
+            targetHeight = DELIVER_HEIGHT;
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                setSlidesTargetPosition(targetHeight);
+                initialized = true;
+            }
+
+            double pos = slide.getCurrentPosition();
+            packet.addLine("In RR action");
+            packet.addLine("Claw height:");
+            packet.put("liftPos", pos);
+            if (timer.milliseconds() < SPECIMEN_SCORE_BUFFER_TIME) {
+                clawClose();
+                setSlidesTargetPosition(targetHeight);
+                PControlPower(3);
+                pitchToVertical();
+                return true;
+            } else if (timer.milliseconds() < SPECIMEN_SCORE_BUFFER_TIME + RESET_HEIGHT_BUFFER_TIME) {
+                clawOpen();
+                targetHeight = CLEARANCE_HEIGHT;
+                setSlidesTargetPosition(targetHeight);
+                PControlPower(3);
+                pitchToSpecimenIntake();
+                return true;
+            } else {
+                setSlidesPower(0);
+                return false;
+            }
+        }
+    }
+
+    public Action DeliverSpecimenAction() {
+        return new OneFishSampleDelivery.DeliverSpecimenRR();
     }
 }
