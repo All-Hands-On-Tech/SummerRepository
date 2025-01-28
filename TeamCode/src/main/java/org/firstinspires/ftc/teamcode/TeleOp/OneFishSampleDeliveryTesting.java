@@ -56,6 +56,8 @@ public class OneFishSampleDeliveryTesting extends LinearOpMode {
                 telemetry.addLine("   Delivery Slides Are Floating.");
                 telemetry.addLine();
                 telemetry.addData("      Height in ticks:", delivery.getMotorPosition());
+                telemetry.addLine();
+                telemetry.addData("      Pitching Servo Position: ", delivery.getPitchingServoPosition());
             }
 
             if(isManualHeightControl) {

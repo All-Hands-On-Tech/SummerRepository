@@ -157,6 +157,8 @@ public class OneFishSampleDelivery {
     }
     public void setRunMode(DcMotor.RunMode mode){ slide.setMode(mode); }
 
+    public double getPitchingServoPosition(){return pitch.getPosition();}
+
     public void PControlPower(double powerMultiplier){
         double error = targetPosition - slide.getCurrentPosition();
         double power = (Math.abs(error) / TICK_LOW_POWER_DISTANCE);
