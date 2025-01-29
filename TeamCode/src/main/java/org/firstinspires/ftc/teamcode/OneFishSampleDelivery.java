@@ -41,12 +41,12 @@ public class OneFishSampleDelivery {
     public final int DELIVER_HEIGHT = 500;
     public final int CLEARANCE_HEIGHT = 500; //height where pitching will have 360 degree clearance
 
-    public final double SPECIMEN_DELIVER_PITCH = 0.43;
-    public final double SPECIMEN_INTAKE_PITCH = 0.2;
-    public final double VERTICAL_PITCH = 0.55;
+    public final double SPECIMEN_DELIVER_PITCH = 0.6;
+    public final double SPECIMEN_INTAKE_PITCH = 0.0;
+    public final double VERTICAL_PITCH = 0.4;
 
     public final double TRANSFER_PITCH = 0.83+0.1;
-    public final double DELIVER_PITCH = 0.23+0.17;
+    public final double DELIVER_PITCH = 0.36;
     public final double AWAY_PITCH = 0.35;
     public final double SHAKE_PITCH = 0;
     public final double TICK_LOW_POWER_DISTANCE = 75;
@@ -461,10 +461,6 @@ public class OneFishSampleDelivery {
                 return true;
             } else if (timer.milliseconds() < SPECIMEN_SCORE_BUFFER_TIME + RESET_HEIGHT_BUFFER_TIME) {
                 clawOpen();
-                targetHeight = CLEARANCE_HEIGHT;
-                setSlidesTargetPosition(targetHeight);
-                PControlPower(3);
-                pitchToSpecimenIntake();
                 return true;
             } else {
                 setSlidesPower(0);

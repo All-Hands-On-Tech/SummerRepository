@@ -275,7 +275,7 @@ public class DrivetrainFunctions {
 
             error = angle - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.RADIANS);
 
-            r = error / Math.PI * 4;
+            r = error / Math.PI * 6;
             if(error > Math.PI/4) r = 1;
 
             r = r * Math.abs(r);

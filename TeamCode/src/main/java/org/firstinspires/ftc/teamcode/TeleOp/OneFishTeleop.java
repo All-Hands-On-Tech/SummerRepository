@@ -56,13 +56,13 @@ public class OneFishTeleop extends LinearOpMode {
     private double speedScalar = 1;
     private int sampleDeliveryHeight;
     private final int HEIGHT_INCREMENT = 1;
-    private final double INTAKE_EXTENSION_TIME = 1;
-    private final double DELIVER_PITCH_TIME = 0.25;
+    private final double INTAKE_EXTENSION_TIME = 0.25;
+    private final double DELIVER_PITCH_TIME = 0.2;
     private final double PITCH_TO_DELIVER_TIME = 1;
     private final double SHAKE_TIME = 1.5;
     private final double TRANSFER_TIME = 0.5;
     private final double DUMP_TIME = 0.25;
-    private final double DELIVERY_EXTENSION_TIME = DELIVER_PITCH_TIME + SHAKE_TIME + 1;
+    private final double DELIVERY_EXTENSION_TIME = DELIVER_PITCH_TIME + 1;
     private final double SPECIMEN_SCORE_TIME = 0.75;
     boolean transfered = false;
     boolean dumped = false;
@@ -283,7 +283,7 @@ public class OneFishTeleop extends LinearOpMode {
                         if(transferTimer.seconds() > TRANSFER_TIME && transfered){
                             intake.pitchDown();
                             //transfered = false;
-                            sampleDeliveryHeight = -2000;
+                            sampleDeliveryHeight = -2090;
                             state = RobotState.DELIVERY_EXTEND;
                             timer.reset();
                         }

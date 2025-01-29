@@ -25,7 +25,7 @@ public class OneFishSpecimenDelivery {
     private final double SPECIMEN_SCORE_TIME = 850;
 
     public final double CLAW_CLOSE = 0.45;
-    public final double CLAW_OPEN = 0.7;
+    public final double CLAW_OPEN = 0.85;
 
     private double targetPosition;
     private double currentPosition;

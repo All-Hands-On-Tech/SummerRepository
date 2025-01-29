@@ -81,11 +81,11 @@ public class OneFishSampleDeliveryTesting extends LinearOpMode {
                 telemetry.addLine();
                 telemetry.addLine("      Pitch Position: " + pitchPositionName);
 
-                if(gamepad1.right_trigger > 0.1){
-                    delivery.clawClose();
+                if(gamepad1.left_trigger > 0.1){
+                    delivery.clawClose();//swapped
                 }
                 if(gamepad1.right_trigger > 0.1){
-                    delivery.clawOpen();
+                    delivery.clawOpen();//swapped
                 }
                 if(gamepad1.dpad_up && inputTimer.milliseconds() > 500){
                     inputTimer.reset();
