@@ -112,6 +112,18 @@ public class OneFishSampleDelivery {
             slide.setPower(currentSlidePower);
         //}
     }
+
+    public void manualMove(double power){
+        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        slide.setPower(power);
+    }
+    public void setSlidesRunToPosition(){
+        slide.setMode(DcMotor.RunMode.RUN_TO_POSITION);
+    }
+
+    public void resetEncoder(){
+        slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+    }
     public void setPitch(double pitchPosition){
         pitch.setPosition(pitchPosition);
     }

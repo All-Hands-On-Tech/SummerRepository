@@ -55,6 +55,7 @@ public class OneFishTeleop extends LinearOpMode {
 
     private double speedScalar = 1;
     private int sampleDeliveryHeight;
+    private int slideTarget = 0;
     private final int HEIGHT_INCREMENT = 1;
     private final double INTAKE_EXTENSION_TIME = 0.25;
     private final double DELIVER_PITCH_TIME = 0.2;
@@ -283,7 +284,7 @@ public class OneFishTeleop extends LinearOpMode {
                         if(transferTimer.seconds() > TRANSFER_TIME && transfered){
                             intake.pitchDown();
                             //transfered = false;
-                            sampleDeliveryHeight = -2090;
+                            slideTarget = -2090;
                             state = RobotState.DELIVERY_EXTEND;
                             timer.reset();
                         }
@@ -291,7 +292,7 @@ public class OneFishTeleop extends LinearOpMode {
                         break;
                     case DELIVERY_EXTEND:
                         transfered = false;
-                        sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
+                        sampleDelivery.setSlidesTargetPosition(slideTarget);
                         sampleDelivery.PControlPower(1);
                         //pitch out to 90 to reorient sample
 //                        if(timer.seconds() > PITCH_TO_DELIVER_TIME && timer.seconds() < PITCH_TO_DELIVER_TIME + SHAKE_TIME){
@@ -307,16 +308,24 @@ public class OneFishTeleop extends LinearOpMode {
                             state = RobotState.DELIVERY_DUMP;
                         }
 
+                        if(gamepad2.y){
+                            state = RobotState.DELIVERY_DUMP;
+                            sampleDelivery.pitchToDeliver();
+                            slideTarget = sampleDelivery.getMotorPosition();
+                            sampleDelivery.setSlidesTargetPosition(slideTarget);
+
+                        }
+
                         break;
 
                     case DELIVERY_DUMP:
 
-                        sampleDelivery.setSlidesTargetPosition(sampleDeliveryHeight);
+                        sampleDelivery.setSlidesTargetPosition(slideTarget);
                         sampleDelivery.PControlPower(1);
 
                         //Pitch back
                         if(dumped && dumpTimer.seconds() > DUMP_TIME && !pitched){
-                            sampleDeliveryHeight = 0;
+                            slideTarget = 0;
                             sampleDelivery.pitchToTransfer();
                             timer.reset();
                             retracted = true;
@@ -337,6 +346,8 @@ public class OneFishTeleop extends LinearOpMode {
                             dumped = false;
                             pitched = false;
                         }
+
+                        slideTarget += (int)(gamepad2.left_stick_y * 0.1);
 
                         telemetry.addData("Retracted: ", retracted);
                         telemetry.addData("retract time: ", timer.seconds());
@@ -378,7 +389,16 @@ public class OneFishTeleop extends LinearOpMode {
 
                     case IDLE:
                         //TO INTAKE_EXTEND
-                        sampleDelivery.setSlidesTargetPosition(0);
+                        if(gamepad2.dpad_down){
+                            sampleDelivery.manualMove(-0.5);
+                            if(gamepad2.left_bumper && gamepad2.right_bumper){
+                                sampleDelivery.resetEncoder();
+                            }
+                        } else{
+                            sampleDelivery.setSlidesRunToPosition();
+                        }
+                        slideTarget = 0;
+                        sampleDelivery.setSlidesTargetPosition(slideTarget);
                         sampleDelivery.PControlPower(1);
                         retracted = false;
                         dumped = false;
@@ -412,6 +432,10 @@ public class OneFishTeleop extends LinearOpMode {
 
                 if(gamepad2.back){
                     state = RobotState.IDLE;
+                }
+
+                if(gamepad2.dpad_up && state != RobotState.SPECIMEN_SCORE){
+                    state = RobotState.SPECIMEN;
                 }
 
                 telemetry.addData("STATE: ", state);
