@@ -48,7 +48,7 @@ public class OneFishSampleDelivery {
     public final double TRANSFER_PITCH = 0.83+0.1;
     public final double DELIVER_PITCH = 0.36;
     public final double AWAY_PITCH = 0.35;
-    public final double SHAKE_PITCH = 0;
+    public final double SHAKE_PITCH = 0.15;
     public final double TICK_LOW_POWER_DISTANCE = 75;
 
     public final double RETRACT_TIMEOUT = 7;
@@ -123,6 +123,7 @@ public class OneFishSampleDelivery {
 
     public void resetEncoder(){
         slide.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+        slide.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
     }
     public void setPitch(double pitchPosition){
         pitch.setPosition(pitchPosition);

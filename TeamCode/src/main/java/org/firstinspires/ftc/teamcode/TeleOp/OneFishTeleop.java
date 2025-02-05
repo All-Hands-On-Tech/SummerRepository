@@ -390,7 +390,7 @@ public class OneFishTeleop extends LinearOpMode {
                     case IDLE:
                         //TO INTAKE_EXTEND
                         if(gamepad2.dpad_down){
-                            sampleDelivery.manualMove(-0.5);
+                            sampleDelivery.manualMove(0.5);
                             if(gamepad2.left_bumper && gamepad2.right_bumper){
                                 sampleDelivery.resetEncoder();
                             }

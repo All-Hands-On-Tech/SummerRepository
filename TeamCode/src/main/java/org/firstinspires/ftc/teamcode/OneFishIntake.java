@@ -30,7 +30,7 @@ public class OneFishIntake {
     private final double DOWN_PITCH = 1;
     private final double UP_PITCH = 0.5;
     private final double AWAY_PITCH = 0.0;
-    private final double TRANSFER_PITCH = 0.1;
+    private final double TRANSFER_PITCH = 0.11;
     private final double MAX_PITCH = 1.0;
 
     private final int TICK_LOW_POWER_DISTANCE = 50;
@@ -173,7 +173,7 @@ public class OneFishIntake {
             packet.addLine("In RR action");
             packet.addLine("Drive For Time");
             packet.put("Time Elapsed", timer.milliseconds());
-            if (Math.abs(extension.getCurrentPosition() - target) > 20 && timer.milliseconds() < timeout) {
+            if (Math.abs(extension.getCurrentPosition() - target) > 10 && timer.milliseconds() < timeout) {
                 updateLength();
                 return true;
             } else {

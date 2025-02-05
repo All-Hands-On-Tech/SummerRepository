@@ -5,6 +5,7 @@ import androidx.annotation.NonNull;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.acmerobotics.roadrunner.Action;
+import com.acmerobotics.roadrunner.AngularVelConstraint;
 import com.acmerobotics.roadrunner.ParallelAction;
 import com.acmerobotics.roadrunner.Pose2d;
 import com.acmerobotics.roadrunner.SequentialAction;
@@ -14,6 +15,8 @@ import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.util.ElapsedTime;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+import org.firstinspires.ftc.robotcore.external.navigation.AngularVelocity;
 import org.firstinspires.ftc.teamcode.Delivery;
 import org.firstinspires.ftc.teamcode.DrivetrainFunctions;
 import org.firstinspires.ftc.teamcode.OneFishIntake;
@@ -42,7 +45,7 @@ public class Net extends LinearOpMode {
     public void runOpMode() {
         driveTrain = new DrivetrainFunctions(this, true);
 
-        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-35.74, -62.12, Math.toRadians(90)));
+        MecanumDrive drive = new MecanumDrive(hardwareMap, new Pose2d(-36, -62.12, Math.toRadians(90)));
 
 
         specimenDelivery = new OneFishSpecimenDelivery(this);
@@ -50,7 +53,14 @@ public class Net extends LinearOpMode {
         sampleDelivery = new OneFishSampleDelivery(this, true);
 
         Action trajToNet;
-        Action turnToIntakeSampleOne;
+        Action trajToSampleOne;
+        Action returnToNet;
+        Action returnToNet2;
+        Action turnToSampleOne;
+        Action trajToSampleTwo;
+        Action trajToSampleThree;
+        Action returnToNet3;
+        Action turnToSampleTwo;
         Action turnToDeliverSampleOne;
         Action turnToIntakeSampleTwo;
         Action turnToDeliverSampleTwo;
@@ -59,10 +69,44 @@ public class Net extends LinearOpMode {
         Action trajToPark;
 
 
-        trajToNet = drive.actionBuilder(new Pose2d(-35.74, -62.12, Math.toRadians(90)))
-                .strafeToConstantHeading(new Vector2d(-61, -54))
+        trajToNet = drive.actionBuilder(new Pose2d(-36, -62.12, Math.toRadians(90)))
+                .strafeToLinearHeading(new Vector2d(-65, -55), Math.toRadians(10))
                 .build();
 
+        trajToSampleOne = drive.actionBuilder(new Pose2d(-65, -53, Math.toRadians(79)))
+                .strafeToLinearHeading(new Vector2d(-55, -46.5), Math.toRadians(79), new AngularVelConstraint(6))
+                .build();
+
+        turnToSampleOne = drive.actionBuilder(new Pose2d(-65, -53, Math.toRadians(10)))
+                .turnTo(Math.toRadians(79))
+                .build();
+
+        returnToNet = drive.actionBuilder(new Pose2d(-55, -47, Math.toRadians(77)))
+                .setTangent(Math.toRadians(-90))
+                .splineToLinearHeading(new Pose2d(-66, -60, Math.toRadians(10)), Math.toRadians(0))
+                .build();
+
+        trajToSampleTwo = drive.actionBuilder(new Pose2d(-66, -60, Math.toRadians(10)))
+                .strafeToLinearHeading(new Vector2d(-60, -51), Math.toRadians(120), new AngularVelConstraint(7))
+                .build();
+
+        turnToSampleTwo = drive.actionBuilder(new Pose2d(-63, -53, Math.toRadians(55)))
+                .turnTo(Math.toRadians(90))
+                .build();
+
+        returnToNet2 = drive.actionBuilder(new Pose2d(-60, -51, Math.toRadians(120)))
+                .strafeToLinearHeading(new Vector2d(-57.5, -57), Math.toRadians(55))
+                .build();
+
+        trajToSampleThree = drive.actionBuilder(new Pose2d(-57.5, -57, Math.toRadians(55)))
+                .strafeToLinearHeading(new Vector2d(-58, -51), Math.toRadians(139), new AngularVelConstraint(9))
+                .build();
+
+
+
+        returnToNet3 = drive.actionBuilder(new Pose2d(-58, -51, Math.toRadians(120)))
+                .strafeToLinearHeading(new Vector2d(-57.5, -57), Math.toRadians(30))
+                .build();
 
         trajToPark = drive.actionBuilder(new Pose2d(-62, -55, Math.toRadians(0)))
                 .strafeTo(new Vector2d(-40, -55))
@@ -74,11 +118,41 @@ public class Net extends LinearOpMode {
         waitForStart();
 
         if (isStopRequested()) return;
+        intake.pitchToTransfer();
+        sampleDelivery.pitchToVertical();
+        sleep(200);
+        sampleDelivery.pitchToTransfer();
+        Actions.runBlocking(new ParallelAction(trajToNet, TransferSampleAction(-2050)));
+        sleep(550);
+        Actions.runBlocking(new ParallelAction(DeliverSampleHighAction(), intake.RunToLengthAction(1200, 500)));
+        sleep(200);
+        Actions.runBlocking(new ParallelAction(ResetSampleAction(), turnToSampleOne));
+        intake.pitchDown();
+        Actions.runBlocking(new ParallelAction(trajToSampleOne, intake.RunToLengthAction(2000, 500), intake.SpinIntakeAction(-1,1000)));
+        Actions.runBlocking(new ParallelAction(returnToNet, intake.RunToLengthAction(-5, 900), intake.SpinIntakeAction(-1, 500)));
+        intake.pitchToTransfer();
+        sleep(100);
+        Actions.runBlocking(TransferSampleAction(-2050));
+        sleep(350);
+        Actions.runBlocking(new ParallelAction(DeliverSampleHighAction(), intake.RunToLengthAction(1200, 500)));
+        intake.pitchDown();
+//        Actions.runBlocking(turnToSampleTwo);
+        Actions.runBlocking(new ParallelAction(ResetSampleAction(), trajToSampleTwo, intake.RunToLengthAction(1300, 500), intake.SpinIntakeAction(-1,1000)));
+//
+        Actions.runBlocking(new ParallelAction(returnToNet, intake.RunToLengthAction(-5, 900), intake.SpinIntakeAction(-1, 500)));
+        intake.pitchToTransfer();
+        sleep(200);
+        Actions.runBlocking(new ParallelAction(TransferSampleAction(-1200), returnToNet2));
+        Actions.runBlocking(new ParallelAction(DeliverSampleAction(), intake.RunToLengthAction(1200, 500)));
+        intake.pitchDown();
+        Actions.runBlocking(new ParallelAction(ResetSampleAction(), trajToSampleThree, intake.RunToLengthAction(2000, 500), intake.SpinIntakeAction(-1,1000)));
 
-        Actions.runBlocking(new ParallelAction(trajToNet, TransferSampleAction(-750)));
-        Actions.runBlocking(DeliverSampleAction());
-        Actions.runBlocking(new ParallelAction());
-
+        Actions.runBlocking(new ParallelAction(returnToNet, intake.RunToLengthAction(-5, 900), intake.SpinIntakeAction(-1, 500)));
+        intake.pitchToTransfer();
+        sleep(200);
+        Actions.runBlocking(new ParallelAction(TransferSampleAction(-1200), returnToNet3));
+        Actions.runBlocking(new ParallelAction(DeliverSampleAction(), intake.RunToLengthAction(-5, 500)));
+        Actions.runBlocking(ResetSampleAction());
         //sampleDelivery.setSlidesTargetPosition(0);
         //                        sampleDelivery.PControlPower(1);
         //                        if(timer.seconds()>DELIVER_PITCH_TIME){
@@ -114,6 +188,8 @@ public class Net extends LinearOpMode {
         private final double GRAB_TIME = 250*2;
         private final double CLEARANCE_TIME = 250*2;
 
+
+
         public TransferSampleRR(int TargetHeight) {
             targetHeight = TargetHeight;
         }
@@ -128,14 +204,18 @@ public class Net extends LinearOpMode {
             }
 
             if (timer.milliseconds() < PREP_TIME) {
+                sampleDelivery.setSlidesTargetPosition(5);
+                sampleDelivery.PControlPower(3);
                 intake.pitchToTransfer();
-                intake.setIntakePower(-0.25f);
+                intake.setIntakePower(-0.5f);
+                sampleDelivery.pitchToTransfer();
                 sampleDelivery.clawClose();
                 return true;
             } else if (timer.milliseconds() > PREP_TIME && timer.milliseconds() < PREP_TIME + GRAB_TIME) {
                 sampleDelivery.clawOpen();
                 return true;
             } else if ((timer.milliseconds() > PREP_TIME + GRAB_TIME && timer.milliseconds() < PREP_TIME + GRAB_TIME + CLEARANCE_TIME)) {
+                sampleDelivery.setSlidesTargetPosition(targetHeight);
                 sampleDelivery.PControlPower(3);
                 return true;
             } else {
@@ -169,7 +249,7 @@ public class Net extends LinearOpMode {
             if (timer.milliseconds() < PREP_TIME) {
                 intake.pitchToTransfer();
                 sampleDelivery.clawOpen();
-                sampleDelivery.pitchToSpecimenDeliver();
+                sampleDelivery.pitchToShake();
                 return true;
             } else if (timer.milliseconds() > PREP_TIME && timer.milliseconds() < PREP_TIME + DROP_TIME) {
                 sampleDelivery.clawClose();
@@ -184,6 +264,44 @@ public class Net extends LinearOpMode {
     }
     public Action DeliverSampleAction() {
         return new Net.DeliverSampleRR();
+    }
+
+    public class DeliverSampleHighRR implements Action {
+        private boolean initialized = false;
+        private ElapsedTime timer = new ElapsedTime();
+        private final double PREP_TIME = 250*2;
+        private final double DROP_TIME = 250*2;
+        private final double CLEARANCE_TIME = 250*2;
+
+        public DeliverSampleHighRR() {
+
+        }
+
+        @Override
+        public boolean run(@NonNull TelemetryPacket packet) {
+            if (!initialized) {
+                initialized = true;
+                timer.reset();
+            }
+
+            if (timer.milliseconds() < PREP_TIME) {
+                intake.pitchToTransfer();
+                sampleDelivery.clawOpen();
+                sampleDelivery.pitchToDeliver();
+                return true;
+            } else if (timer.milliseconds() > PREP_TIME && timer.milliseconds() < PREP_TIME + DROP_TIME) {
+                sampleDelivery.clawClose();
+                return true;
+            } else if ((timer.milliseconds() > PREP_TIME + DROP_TIME && timer.milliseconds() < PREP_TIME + DROP_TIME + CLEARANCE_TIME)) {
+                sampleDelivery.pitchToVertical();
+                return true;
+            } else {
+                return false;
+            }
+        }
+    }
+    public Action DeliverSampleHighAction() {
+        return new Net.DeliverSampleHighRR();
     }
 
     public class ResetSampleRR implements Action {
@@ -206,7 +324,7 @@ public class Net extends LinearOpMode {
             }
 
             if (timer.milliseconds() < PREP_TIME) {
-                intake.pitchToTransfer();
+//                intake.pitchToTransfer();
                 sampleDelivery.clawClose();
                 sampleDelivery.pitchToTransfer();
                 return true;
